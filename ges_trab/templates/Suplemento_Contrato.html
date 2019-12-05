@@ -1,0 +1,313 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <style>
+        @page {
+            size: A4 portrait;
+            /* A4  21.0 x 29.7 cm */
+            /* A4  21.0 x 29.7 cm */
+        {#        @frame header_frame { /* Static frame */#}
+        {#        -pdf-frame-content: header_content;#}
+        {#        left: 1cm;#}
+        {#        width: 25.7cm;#}
+        {#        top: 0.5cm;#}
+        {#        height: 2cm;#}
+        {#            /* for debugging the layout */#}
+        {#        }#}
+            @frame col1_frame { /* Content frame 1 */
+            left: 1.2cm;
+            width: 19cm;
+            top: 0.5cm;
+            height: 28cm;
+            /* for debugging the layout */
+        }
+        @frame footer_frame {
+            /* Static frame */
+        -pdf-frame-content:footer_content;
+        left: 1cm; width: 19cm; top: 28cm; height: 2cm;
+            /* for debugging the layout */
+        }
+
+        }
+    </style>
+    <title>Suplemento al Contrato</title>
+    <style type="text/css">
+        body {
+            font-weight: 200;
+            font-size: 14px;
+            text-align: justify;
+            margin-right: 16px;
+            margin-left: 10px;
+        }
+
+        td {
+            border-width: 1px;
+            border: solid;
+            border-color: #0f0f0f;
+            margin-bottom: 2px;
+            border-collapse: collapse;
+        }
+
+        tr {
+            border-width: 1px;
+            border: solid;
+            border-color: #0f0f0f;
+            margin-bottom: 1px;
+        }
+
+        .logo {
+            margin-top: 20px;
+            width: 100px;
+            height: 40px;
+            margin-left: 20px;
+        }
+
+        .title {
+            font-size: 15px;
+            position: relative;
+            text-align: center;
+
+        }
+
+    </style>
+</head>
+<body>
+<div class="row">
+    <div class="col-sm-6 text-left" style="margin-top: 40px"><p>
+        _________________________________________________________________________<img
+            src="{% static 'images/LogoN_h.jpg' %}" class="logo" style="margin-right: auto"></div>
+    </p>
+</div>
+<br>
+<div class="title"><strong>SUPLEMENTO AL CONTRATO Y/O MOVIMIENTO DEL TRABAJADOR</strong></div>
+<p>A tenor de los preceptos establecidos por el Artículo 42 de la Ley No. 116 de fecha 20/12/2013 Código de Trabajo
+    procedemos de mutuo acuerdo:</p>
+<p><strong>DE UNA PARTE: El empleador
+    Lic. {{ director.primer_nombre }} {{ director.segundo_nombre }} {{ director.apellidos }}</strong>, a nombre y en
+    representación de la <strong>Empresa de Servicios de Ingeniería y Diseño de Holguín. VÉRTICE</strong>, que en lo
+    adelante será la Administración.</p>
+<p><strong>DE OTRA PARTE:</strong> El trabajador(a):
+    <strong>{{ trabajador.primer_nombre }} {{ trabajador.segundo_nombre }} {{ trabajador.apellidos }}</strong>
+    <br>Carné de Identidad: <strong>{{ trabajador.ci }}</strong></p>
+<p>Ambas partes convienen en modificar el contrato de trabajo en cuánto a: (&nbsp;&nbsp;&nbsp;) Puesto de trabajo, (&nbsp;&nbsp;&nbsp;)
+    Salario, (&nbsp;&nbsp;&nbsp;) Condiciones de trabajo, (&nbsp;&nbsp;&nbsp;) Pago por Antigüedad.</p>
+<p>Por tanto la situación del trabajador(a) variará de la siguiente forma:</p>
+
+<table border=0 cellpadding=2 cellspacing=0 width="500" align="center">
+    <tr>
+        <td>
+            <div align="Center" style="padding: 5px 10px;"><strong>CARGO ACTUAL</strong><br>{{ movimiento.cargo_ant }}
+            </div>
+        </td>
+        <td>
+            <div align="Center" style="padding: 5px 10px;"><strong>NUEVO CARGO</strong><br>{{ movimiento.cargo_act }}
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div align="Center"><strong>DESGLOSE DEL SALARIO</strong></div>
+        </td>
+        <td>
+            <div align="Center"><strong>DESGLOSE DEL SALARIO</strong></div>
+        </td>
+    </tr>
+</table>
+<table border=0 cellpadding=2 cellspacing=0 width="500" align="center">
+    <thead>
+    <td align="center" style="width: 40px">1</td>
+    <td style="width: auto"> Grupo Salarial </td>
+    <td align="center" style="width: 110px"><strong>{{ movimiento.escala_salarial_ant }}</strong></td>
+    <td align="center" style="width: 40px">1</td>
+    <td style="width: auto">Grupo Salarial</td>
+    <td align="center" style="width: 110px"><strong>{{ movimiento.escala_salarial_act }}</strong></td>
+    </thead>
+    <tr>
+        <td>
+            <div align="center">2</div>
+        </td>
+        <td>
+            <div>Categoría Ocupacional</div>
+        </td>
+        <td>
+            <div align="center"><strong>{{ movimiento.categoria_ant }}</strong></div>
+        </td>
+        <td>
+            <div align="center">2</div>
+        </td>
+        <td>
+            <div>Categoría Ocupacional</div>
+        </td>
+        <td>
+            <div align="center"><strong>{{ movimiento.categoria_act }}</strong></div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div align="center">3</div>
+        </td>
+        <td>
+            <div>Salario Escala</div>
+        </td>
+        <td>
+            <div align="center"><strong>${{ movimiento.salario_escala_ant }}</strong></div>
+        </td>
+        <td>
+            <div align="center">3</div>
+        </td>
+        <td>
+            <div>Salario Escala</div>
+        </td>
+        <td>
+            <div align="center"><strong>${{ movimiento.salario_escala_act }}</strong></div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div align="center">4</div>
+        </td>
+        <td>
+            <div>CIES</div>
+        </td>
+        <td>
+            <div align="center"><strong>${{ movimiento.cies_ant }}</strong></div>
+        </td>
+        <td>
+            <div align="center">4</div>
+        </td>
+        <td>
+            <div>CIES</div>
+        </td>
+        <td>
+            <div align="center"><strong>${{ movimiento.cies_act }}</strong></div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div align="center">5</div>
+        </td>
+        <td>
+            <div>Inc. Res / 30</div>
+        </td>
+        <td>
+            <div align="center"><strong>${{ movimiento.incre_res_ant }}</strong></div>
+        </td>
+        <td>
+            <div align="center">5</div>
+        </td>
+        <td>
+            <div>Inc. Res / 30</div>
+        </td>
+        <td>
+            <div align="center"><strong>${{ movimiento.incre_res_act }}</strong></div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div align="center">6</div>
+        </td>
+        <td>
+            <div>Antigüedad</div>
+        </td>
+        <td>
+            <div align="center"><strong>${{ movimiento.antiguedad_ant }}</strong></div>
+        </td>
+        <td>
+            <div align="center">6</div>
+        </td>
+        <td>
+            <div>Antigüedad</div>
+        </td>
+        <td>
+            <div align="center"><strong>${{ movimiento.antiguedad_act }}</strong></div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div align="center">7</div>
+        </td>
+        <td>
+            <div>Maestría</div>
+        </td>
+        <td>
+            <div align="center"><strong>${{ movimiento.sal_cat_cient_ant }}</strong></div>
+        </td>
+        <td>
+            <div align="center">7</div>
+        </td>
+        <td>
+            <div>Maestría</div>
+        </td>
+        <td>
+            <div align="center"><strong>${{ movimiento.sal_cat_cient_act }}</strong></div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div align="center">8</div>
+        </td>
+        <td>
+            <div>Otros</div>
+        </td>
+        <td>
+            <div align="center"><strong>${{ movimiento.sal_plus_ant }}</strong></div>
+        </td>
+        <td>
+            <div align="center">8</div>
+        </td>
+        <td>
+            <div>Otros</div>
+        </td>
+        <td>
+            <div align="center"><strong>${{ movimiento.sal_plus_act }}</strong></div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div align="center">&nbsp;</div>
+        </td>
+        <td>
+            <div align="center">&nbsp;</div>
+        </td>
+        <td>
+            <div align="center">&nbsp;</div>
+        </td>
+        <td>
+            <div align="center">&nbsp;</div>
+        </td>
+        <td>
+            <div align="center">&nbsp;</div>
+        </td>
+        <td>
+            <div align="center">&nbsp;</div>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <div><strong>TOTAL GENERAL</strong></div>
+        </td>
+        <td>
+            <div align="center"><strong>${{ movimiento.salario_total_ant }}</strong></div>
+        </td>
+        <td colspan="2">
+            <div><strong>TOTAL GENERAL</strong></div>
+        </td>
+        <td>
+            <div align="center"><strong>${{ movimiento.salario_total_ant }}</strong></div>
+        </td>
+    </tr>
+</table>
+<p>Motivo por el cual se modifica: <strong><u>{{ movimiento.tipo }}.</u></strong></p>
+<p>La cual se hace efectiva a partir del <strong><u>{{ dia }}</u></strong> de <strong><u>{{ mes }}</u></strong> del
+    <strong><u>{{ anno }}</u></strong>. </p>
+<p>Y para que conste, se firma la presente por los interesados:</p><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+_______________&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;____________<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Por el empleador&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;El
+Trabajador
+</body>
+</html>

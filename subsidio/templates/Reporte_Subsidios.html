@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Reporte Subsidios{% endblock %}
+{% block styles %}
+    <style type="text/css">
+        th {
+            padding: 10px 5px !important;
+        }
+    </style>
+{% endblock %}
+{% block migas %}
+    <ol class="breadcrumb" style="margin-top: 56px; opacity: 0.9; position: fixed;
+    top: 0; right: 0; left: 0; z-index: 1000;">
+        <li class="breadcrumb-item"><a href="/home/">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="/home/">Subsidios</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Vista previa Reporte Subsidios</li>
+    </ol>
+{% endblock %}
+{% block content %}
+    <div class=content align="center"><h3><strong>Control de certificados m&eacute;dicos recibidos de los Centros
+        Asistenciales</strong></h3></div>
+    <div class="container" role="main">
+        <div class="text-right" style="color: white;">
+            <form action="{% url 'exportarReporte' %}" method="post">
+                {% csrf_token %}
+                <input name="fecha_inic" value="{{ fecha_inic }}" type="hidden">
+                <input name="fecha_fin" value="{{ fecha_fin }}" type="hidden">
+                <button class="btn btn-success" type="submit"><i class="fa fa-download"></i> Exportar PDF</button>
+            </form>
+        </div>
+        <p></p>
+        <div class="row">
+            <div class="col-lg-12">
+                <table class="display table table-striped" cellspacing="0" width="100%" id="tabla">
+                    <thead>
+                    <tr>
+                        <th>Area</th>
+                        <th>Fecha inicial</th>
+                        <th>Fecha final</th>
+                        <th>Diagnóstico</th>
+                        <th>Centro Asistencial / Facultativo</th>
+                        <th style="width: auto;">No. Reg</th>
+                        <th>Fecha Reg.</th>
+                        <th style="width: auto;">Días </th>
+                        <th style="width: auto;">Tipo</th>
+                        <th style="width: auto;">Antes 72h</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for dep in departments %}
+                        <tr>
+                            <td colspan="10"
+                                style="font-weight: bold; text-align: left">
+                                {% filter upper %}{{ dep.codigo }} {{ dep.nombre }}{% endfilter %}</td>
+                        </tr>
+                        {% for person in dep.personas %}
+                            <tr>
+                                <td colspan="10"
+                                    style="font-weight: bold; text-align: left; padding-left: 30px !important;">
+                                    {% filter upper %}{{ person.codigo }} {{ person.nombre }}{% endfilter %}</td>
+                            </tr>
+                            {% for sub in person.subsidios %}
+                                <tr>
+                                    <td></td>
+                                    <td>{{ sub.desde|date:"d/m/Y" }}</td>
+                                    <td>{{ sub.hasta|date:"d/m/Y" }}</td>
+                                    <td>{{ sub.diagnostico }}</td>
+                                    <td>{% filter upper %}Dado en {{ sub.centro }} por
+                                        {{ sub.medico }}{% endfilter %}</td>
+                                    <td>{{ sub.no_reg }}</td>
+                                    <td>{{ sub.fecha|date:"d/m/Y" }}</td>
+                                    <td>{{ sub.dias }}</td>
+                                    <td>{{ sub.tipo }}</td>
+                                    <td>{{ sub.ent_72 }}</td>
+                                </tr>
+                            {% endfor %}
+                            <tr>
+                                <td colspan="10"
+                                    style="font-weight: bold; text-align: center">
+                                    Suma para el c&oacute;digo {{ person.codigo }}, que
+                                    tiene {{ person.cant_registros }}
+                                    registros en la Base de Datos&nbsp;&nbsp;&nbsp;&nbsp;{{ person.suma_cod }}</td>
+                            </tr>
+                        {% endfor %}
+                        <tr>
+                            <td colspan="10"
+                                style="font-weight: bold; text-align: center">
+                                Suma para el &Aacute;rea {{ dep.codigo }}, que tiene {{ dep.cant_registros }} registros
+                                en la Base de Datos&nbsp;&nbsp;&nbsp;&nbsp;{{ dep.suma_area }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <h5 style="text-align: right">Existen en total {{ cant_registros_bd }} registros en la Base de Datos
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Suma
+                    total: {{ total }}</h5>
+            </div>
+        </div>
+    </div>
+    <div id="popup" class="modal fade" role="dialog"></div>
+{% endblock %}
+{% block javascript %}{% endblock %}

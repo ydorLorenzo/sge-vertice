@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html>
+	<head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <style>
+        @page {
+            size: A4 portrait;
+            /* A4  21.0 x 29.7 cm */
+            /* A4  21.0 x 29.7 cm */
+        {#        @frame header_frame { /* Static frame */#}
+        {#        -pdf-frame-content: header_content;#}
+        {#        left: 1cm;#}
+        {#        width: 25.7cm;#}
+        {#        top: 0.5cm;#}
+        {#        height: 2cm;#}
+        {#            /* for debugging the layout */#}
+        {#        }#}
+            @frame col1_frame { /* Content frame 1 */
+            left: 1.2cm;
+            width: 19cm;
+            top: 1.2cm;
+            height: 28cm;
+            /* for debugging the layout */
+        }
+        @frame footer_frame {
+            /* Static frame */
+        -pdf-frame-content:footer_content;
+        left: 1cm; width: 19cm; top: 28cm; height: 2cm;
+            /* for debugging the layout */
+        }
+
+        }
+        </style>
+		<title>Acuerdo de confidencialidad</title>
+		<style type="text/css">
+			body{
+				font-weight:200;
+				font-size: 14px;
+                text-align: justify;
+			}
+
+            .logo {
+                width: 130px;
+                height: 45px;
+            }
+		</style>
+	</head>
+	<body style="font-size: 12px;">
+    ______________________________________________________________________________________<img src="{% static 'images/logoN_h.jpg' %}" class="logo">
+    <p align="center"><strong>Anexo: Acuerdo de Confidencialidad</strong></p>
+	Al efecto de suscribir el presente Acuerdo, con amplio, cumplido  y bastante, en cuanto a Derecho se requiere
+    y es necesario que tenga  toda la  fuerza legal, comparecen de una parte: <strong><u>Ana A Rodríguez Pérez</u></strong>, con el cargo
+    de:<strong><u> Directora de Gestión del Capital  Humano</u></strong>, nombrada mediante la Resolución 005 de fecha  13 de Agosto del 2004
+    del Director General de la Empresa <strong><u>Servicios de Ingeniería y Diseño de Holguín VERTICE </u></strong>, con Domicilio legal en:
+    Frexes número 300 Esq. Guiteras, Municipio: Holguín, Teléfono: 42 2231, Fax 262589, con el e-mail <u style="color: blue">vértice@vertice.cu</u>,
+    provincia del mismo nombre, a nombre y en representación de ésta, que en lo sucesivo y a los efectos del presente
+    contrato, se denominará la <strong>Administración</strong>:<br>
+    De otra parte <strong><u>{{trabajador.primer_nombre}}{{trabajador.segundo_nombre}}{{trabajador.apellidos}}</u></strong> &nbsp;&nbsp;&nbsp;&nbsp; No. Carne de Identidad: <strong><u>{{trabajador.ci}}</u></strong><br>
+    Fecha de de Nac.:<strong><u>&nbsp;{{ fecha_nac }}&nbsp;</u></strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Profesión u Oficio: <strong><u> {{trabajador.actividad}}</u></strong><br>
+    Dirección: <strong><u> {{trabajador.direccion}}</u></strong> &nbsp;&nbsp;&nbsp;&nbsp; Municipio: <strong><u>Holguín</u></strong>&nbsp;&nbsp; Provincia: <strong><u>Holguín</u></strong><br>
+    No. Expediente Laboral  <strong><u>{{trabajador.ci}}</u></strong> el que en lo sucesivo y a los efectos del presente documento se denominará. <strong><u> El trabajador</u></strong><br>
+    <strong>CONSIDERANDO:</strong> Que la Empresa de Servicios de Ingeniería y Diseño de Holguín VERTICE, tiene implantado un Sistema de Gestión de Seguridad de la Información basado en la NC ISO 27001/2007 y un Sistema Interno de Propiedad Intelectual (abarca a la Propiedad Industrial y al  Derecho de Autor) y  en el que los trabajadores juegan un papel fundamental por ser parte activa del mismo en el desempeño de sus funciones laborales, ya que pueden lograr o crear de forma independiente o como parte de un grupo, multidisciplinario o no, resultados de índole científica, técnica, tecnológica, comercial, financiera, estadística, sin que esta enumeración sea taxativa y con la finalidad de proteger los conocimientos,  los diseños, las  construcciones o informaciones secretas o clasificadas, los medios o formas de la distribución o comercialización de productos o prestación del servicio, la transferencia tecnológica, las invenciones, las tareas de: desarrollo, investigación o innovación y dentro de ella los diferentes resultados informáticos, así como las de  generalización, que se elaboran u obtienen a través de  las diversas vías que propicia la entidad, los que constituyen activos patrimoniales intangibles de la entidad  y deseando definir sus derechos y obligaciones respecto a lo relacionado anteriormente en la  cual la Empresa es legítima propietaria, administradora y/o custodio, que son necesarios darle protección legal.<br>
+    <strong>CONSIDERANDO:</strong> Que en la Entidad, se presentan y elaboran trabajos de los señalados en el Considerando precedente, se establece el siguiente:
+    <p align="center"><strong>ACUERDO DE CONFIDENCIALIDAD:</strong></p>
+    <strong>1.&nbsp;&nbsp;</strong>El trabajador no revelará ni tramitará a tercera persona, interna o externa de la Empresa sobre los resultados que obtenga en el &nbsp;&nbsp;&nbsp;&nbsp;desempeño de su trabajo conforme a las actividades descritas anteriormente hasta que sea autorizado por la Dirección de la &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Empresa, ya sea en territorio cubano o países foráneos.<br>
+    <strong>2.&nbsp;&nbsp;</strong>La Dirección de la Empresa garantizará desde su inicio que el trabajador conozca sobre el carácter secreto o clasificado de las &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;informaciones, diseños o construcciones  en que participe el mismo.<br>
+    <strong>3.&nbsp;&nbsp;</strong>La Empresa determina que las invenciones, tareas de: desarrollo, innovación y generalización, que elabore son secretas hasta &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;que se presente a la Comisión Evaluadora y determine si son comercializables o no, siendo responsable de su protección legal.<br>
+    <strong>4.&nbsp;&nbsp;</strong>Sin perjuicio de las obligaciones supramencionadas el trabajador no tendrá responsabilidad legal como custodio personal de las &nbsp;&nbsp;&nbsp;actividades relacionadas anteriormente en la medida que la información o cualquier parte de la misma se haga pública de &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cualquier manera por causas ajenas a su actuar o sea de dominio público o evidente para un técnico en la materia como se puede &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;demostrar mediante documentación suficiente.<br>
+    <strong>5.&nbsp;&nbsp;</strong>La ruptura del vínculo laboral del trabajador con la Empresa no destruye las obligaciones pactadas mediante el presente Acuerdo.<br>
+    <strong>6.&nbsp;</strong>El incumplimiento por el trabajador de las obligaciones establecidas en este Acuerdo conllevará a la exigencia de la &nbsp;&nbsp;responsabilidad que en material, civil, administrativa, laboral o penal, que corresponda según lo previsto en las leyes o &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reglamentos, vigentes en el país.<br><br>
+    Y para que así conste se firme el presente Acuerdo de Confidencialidad, en la sede de la Empresa de Servicios de Ingeniería y Diseño de Holguín VERTICE, en la Ciudad de Holguín,  a los <strong><u>{{dia}}</u></strong> días del mes de <strong><u>&nbsp;{{mes}}&nbsp;</u></strong> del año <strong><u>&nbsp;{{anno}}&nbsp;</u></strong>.<br><br><br>
+
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; _______________&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;____________<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Por el empleador&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;El Trabajador
+	</body>
+</html>

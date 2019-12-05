@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Gestionar Alimentaci&oacute;n{% endblock %}
+{% block styles %}
+    <style type="text/css">
+        .has-error {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+        }
+    </style>
+{% endblock %}
+{% block migas %}
+    <ol class="breadcrumb" style="margin-top: 56px; opacity: 0.9; position: fixed;
+    top: 0; right: 0; left: 0; z-index: 1000;">
+        <li class="breadcrumb-item"><a href="/home/">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="/home/">Datos Pren&oacute;mina</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Gestionar Alimentaci&oacute;n</li>
+    </ol>
+{% endblock %}
+{% block content %}
+    <div class=content align="center"><h5><strong>Gestionar Alimentaci&oacute;n</strong></h5></div>
+    <div class="container" role="main" style="font-size: smaller; width: 900px">
+        <div class="text-right" style="color: white;"><a id="addButtonAlimentacion" class="btn btn-success"><i
+                class="fa fa-plus"></i> Adicionar</a></div>
+        <br>
+        <div class="row">
+            <div class="col-lg-12">
+                <table class="display" cellspacing="0" width="100%" id="tabla_sub">
+                    <thead>
+                    <tr>
+                        <th style="width: 180px">Código Trab.</th>
+                        <th style="width: 40px" class="text-center">Fecha inicio</th>
+                        <th style="width: 40px" class="text-center">Fecha fin</th>
+                        <th style="width: 40px" class="text-center">Cantidad de d&iacute;as</th>
+                        <th style="width: 40px" class="text-center">D&iacute;as dieta</th>
+                        <th style="width: 40px" class="text-center">Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for i in list_alimentacion reversed %}
+                        <tr>
+                            <td>{{ i.codigo_trab.codigo_interno }} {{ i.codigo_trab.primer_nombre }} {{ i.codigo_trab.apellidos }}</td>
+                            <td align="center">{{ i.desde|date:"d/m/Y" }}</td>
+                            <td align="center">{{ i.hasta|date:"d/m/Y" }}</td>
+                            <td align="center">{{ i.cant_dias }}</td>
+                            <td align="center">{{ i.cant_dias_dieta }}</td>
+                            <td>
+                                <div class="icon-acciones" align="center">
+                                    <a href="{% url 'editarAlimentacion' i.pk %}" class="badge badge-pill badge-primary">
+                                        <i class="fa fa-edit" title="Editar Alimentaci&oacute;n"
+                                           style="color: white;"></i>
+                                    </a>
+                                    <a onclick=" return abrir_modal('{% url 'eliminarAlimentacion' i.pk %}')"
+                                       class="badge badge-pill badge-danger">
+                                        <i class="fa fa-trash-o" title="Eliminar Alimentaci&oacute;n"
+                                           style="color: white;"></i>
+                                    </a>
+                                    <a onclick=" return abrir_modal('{% url 'detalleAlimentacion' i.pk %}')"
+                                       class="badge badge-pill badge-warning">
+                                        <i class="fa fa-eye" title="Visualizar Alimentaci&oacute;n"
+                                           style="color: white;"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                    <th style="padding: 6px 6px !important;">código Trab</th>
+                    <th style="padding: 6px 6px !important;">inicio</th>
+                    <th style="padding: 6px 6px !important;">fin</th>
+                    <th style="padding: 6px 6px !important;">cantidad de d&iacute;as</th>
+                    <th style="padding: 6px 6px !important;">d&iacute;as dieta</th>
+                    <td style="padding: 6px 6px !important;"></td>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div id="popup" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                {% if edit %}
+                    <form id="formularioAlimentacion" role="form" action="{% url 'editarAlimentacion' edit %}" method="post">
+                {% else %}
+                    <form id="formularioAlimentacion" role="form" action="{% url 'adicionarAlimentacion' %}" method="post">
+                {% endif %}
+                <div class="modal-header">
+                    <h6 style="text-align: center"><strong>Crear / Editar Alimentaci&oacute;n</strong></h6>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-sm-6"><strong> Trabajador:</strong>{{ form.codigo_trab }}</div>
+                        <div class="col-sm-6"><strong> Cantidad de d&iacute;as:</strong>{{ form.cant_dias }}</div>
+                        <div class="col-sm-6"><strong> Desde:</strong>{{ form.desde }}<div style="color: red; font-size: smaller">{{ form.desde.errors }}</div></div>
+                        <div class="col-sm-6"><strong> Hasta:</strong>{{ form.hasta }}<div style="color: red;; font-size: smaller">{{ form.hasta.errors }}</div></div>
+                        <div class="col-sm-6"><strong> D&iacute;as dieta:</strong>{{ form.cant_dias_dieta }}</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-lg-12 text-right">
+                        <input id="enviar" type="submit" class="btn btn-primary" name="submit" value="Guardar">
+                        <button type="button" class="btn btn-danger" onclick="return cerrar_modal()">
+                            Cancelar
+                        </button>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="delete" class="modal fade" role="dialog"></div>
+{% endblock %}
+{% block javascript %}
+    <script type="text/javascript">
+        var getDate = function (input) {
+            return new Date(input.date.valueOf());
+        };
+
+        $('#id_desde').prop("readonly", true).datepicker({
+            uiLibrary: 'bootstrap4',
+            language: 'es'
+        });
+        $('#id_hasta').prop("readonly", true).datepicker({
+            uiLibrary: 'bootstrap4',
+            language: 'es'
+        });
+
+        $('#id_desde').datepicker({
+            startDate: '+5d',
+            endDate: '+35d'
+        }).on('changeDate',
+            function (selected) {
+                $('#id_hasta').datepicker('setStartDate', getDate(selected));
+                $('#id_fecha').datepicker('setStartDate', getDate(selected));
+            });
+
+        $('#id_hasta').datepicker({
+            startDate: '+6d',
+            endDate: '+36d'
+        }).on('changeDate',
+            function (selected) {
+                $('#id_desde').datepicker('setEndDate', getDate(selected));
+            });
+
+
+        $('#addButtonAlimentacion').click(function () {
+            $('#popup form').prop('action', '/adicionar_alimentacion/');
+            $('#popup').modal('show');
+        });
+        {% if form.errors or edit %}
+            $('#popup').modal('show');
+        {% endif %}
+
+
+        $(document).ready(function () {
+            // Setup - add a text input to each footer cell
+            $('#tabla_sub tfoot th').each(function () {
+                var title = $(this).text();
+                $(this).html('<input class="form-control" style="font-size: smaller" type="text" placeholder="Buscar ' + title + '" />');
+            });
+
+            // DataTable
+            var table = $('#tabla_sub').DataTable({
+                "language": {
+                    processing: "Procesando...",
+                    search: "Buscar:",
+                    lengthMenu: "Mostrar _MENU_ registros",
+                    info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    infoEmpty: "Mostrando un total de 0 registros",
+                    infoFiltered: "(filtrado de un total de _MAX_ registros)",
+                    infoPostFix: "",
+                    loadingRecords: "Cargando...",
+                    zeroRecords: "No se encontraron resultados",
+                    emptyTable: "Ningún dato disponible en esta tabla",
+                    paginate: {
+                        first: "Último",
+                        previous: "Anterior",
+                        next: "Siguiente",
+                        last: "Último"
+                    }
+                }
+            });
+
+            // Apply the search
+            table.columns().every(function () {
+                var that = this;
+
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that.search(this.value).draw();
+                    }
+                });
+            });
+        });
+
+        $('#id_cant_dias').prop("min", '1').on('change keyup', function () {
+            validarFormulario();
+        });
+
+        var exp1 = "^[0-9]+$";
+        function validarFormulario() {
+            if (validarDias() && validarDiasDieta()) {
+                $('#enviar').removeAttr('disabled');
+            } else {
+                $('#enviar').attr('disabled', '');
+            }
+        }
+
+        $(document).ready(function () {
+            validarFormulario();
+        });
+
+        function validarDias() {
+            if ($('#id_cant_dias')[0].value.match(exp1) && $('#id_cant_dias')[0].value > 0) {
+                $('#id_cant_dias').removeClass('has-error');
+                return true;
+            } else {
+                $('#id_cant_dias').addClass('has-error');
+                return false;
+            }
+        }
+
+        function validarDiasDieta() {
+            if ($('#id_cant_dias_dieta')[0].value.match(exp1)) {
+                $('#id_cant_dias_dieta').removeClass('has-error');
+                return true;
+            } else {
+                $('#id_cant_dias_dieta').addClass('has-error');
+                return false;
+            }
+        }
+
+        $("#id_cant_dias_dieta").on('change keyup', function () {
+            validarFormulario();
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,25 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <form role="form" action="{%url 'altabaja' baja.id%}" method="post">{% csrf_token %}
+                <div class="modal-header">
+            <h5><strong>Alta Trabajador</strong></h5>
+            <button type="button" class="close" data-dismiss="modal">x</button>
+        </div>
+        <div class="modal-body">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <p>¿Estás seguro que desea dar de alta al Trabajador <strong>" {{baja.primer_nombre}} {{baja.segundo_nombre}} {{baja.apellidos}}"</strong>?</p>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="col-lg-12 text-right">
+                <input type="submit" class="btn btn-danger" name="submit" value="alta">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,209 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Reporte PR3</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <style>
+        @page {
+            size: letter landscape;
+            /* A4  21.0 x 29.7 cm */
+            /* A4  21.0 x 29.7 cm */
+            @frame header_frame { /* Static frame */
+            -pdf-frame-content: header_content;
+            left: 1cm;
+            width: 25.7cm;
+            top: 0.5cm;
+            height: 3cm;
+            /* for debugging the layout */
+        }
+        @frame col1_frame {
+            /* Content frame 1 */
+        left: 1cm;
+        width: 25.7cm;
+        top: 2cm;
+        height: 19cm;
+        -pdf-frame-content:content;
+            /* for debugging the layout */
+        }
+        @frame footer_frame {
+            /* Static frame */
+        -pdf-frame-content:footer_content;
+        left: 1cm; width: 25.7cm; top: 20cm; height: 2cm;
+            /* for debugging the layout */
+        }
+
+        }
+    </style>
+    <style type="text/css">
+
+    </style>
+</head>
+<body>
+
+<div id="header_content">
+    <table class="display" border=1 style="width: 1200px">
+        <tr>
+            <th rowspan="3" style="width: 140px;">
+                <div align="center" style="font-size: 12px; font-style: italic"><strong>MINISTERIO DE LA
+                    CONSTRUCCIÓN </strong></div>
+                <div align="center" style="font-size: 12px;font-style: italic"><strong>PRODUCCIÓN</strong></div>
+            </th>
+            <th rowspan="3" style="width: 350px;">
+                <strong style="font-style: italic; text-align: left; font-size: 18px">&nbsp;PR-3</strong>
+                <div style="font-size: large; font-style: normal!important; width: 252px;font-size: 18px"
+                     align="center">
+                    <strong>PLAN MENSUAL</strong>
+                </div>
+            </th>
+            <th rowspan="3" style="width: 240px; text-align: left;font-size: 14px;">
+                <p>
+                    <strong>
+                        &nbsp;EMPRESA: VERTICE
+                        <br>
+                    </strong>
+                </p>
+            </th>
+            <th colspan="2" style="width: 160px;"><strong>Periodo</strong></th>
+            <th rowspan="3" style="font-style: italic;width: 80px">
+                <strong>Hoja<br>
+                    <pdf:pagenumber> de
+                        <pdf:pagecount>
+                </strong></th>
+        </tr>
+        <tr>
+            <th style="width: 80px;"><strong>Desde:</strong></th>
+            <th style="width: 80px;">{{ fecha_ini }}</th>
+        </tr>
+        <tr>
+            <th style="width: 80px;"><strong>Hasta:</strong></th>
+            <th style="width: 80px;">{{ fecha_fin }}</th>
+        </tr>
+    </table>
+</div>
+<div id="content" style="padding-top: 5px; width: 1200px">
+    <table class="display" border=1 cellspacing=0 style="width: 100%; position: relative; font-size: 12px!important;">
+        <tr>
+            <th rowspan="2" style="font-style: italic; text-align: center; width: 40px">
+                <strong>OT</strong>
+            </th>
+            <th colspan="2" style="width: 350px">
+                <strong>Proyectos u otros trabajos de Proy</strong>
+            </th>
+            <th rowspan="2" align="center" style="width: 50px; text-align: center">
+                <strong>Producción<br> Real</strong>
+            </th>
+            <th rowspan="2" style="text-align: center; width: 5px">
+                <strong>O<br>B<br>S</strong>
+            </th>
+            <th rowspan="2" align="center" style="width: 195px">
+                <strong>Ejecutores</strong>
+            </th>
+            <th rowspan="2" style="width: 35px">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </th>
+            <th colspan="2" align="center" style="width: 80px">
+                <strong>Fdo Tiempo</strong>
+            </th>
+            <th colspan="2" style=" width: 150px;text-align: center">
+                <strong>Para uso de Economía</strong>
+            </th>
+        </tr>
+        <tr>
+            <th>
+                <strong>Código</strong>
+            </th>
+            <th style=" text-align: center;font-style: italic;">
+                <strong>Nombre</strong>
+            </th>
+            <th style=" text-align: center; width: 45px"><strong>
+                Real</strong>
+            </th>
+            <th style=" text-align: center; width: 45px"><strong>
+                Extra</strong>
+            </th>
+            <th style=" width: 90px; text-align: center"><strong>
+                Coef Salar</strong>
+            </th>
+            <th style=" width: 70px; text-align: center"><strong>
+                Importe</strong>
+            </th>
+        </tr>
+        {% for area in list_area %}
+            <tr style="text-align: left">
+                <th colspan="5" style="font-size: 12px; text-align: left">
+                    <strong style="font-style: italic;">
+                        &nbsp;&nbsp;Dirección de Proyectos &nbsp;&nbsp; {{ area.nombre }}
+                    </strong>
+                </th>
+                <th colspan="6" style="font-size: 12px; text-align: left">
+                    &nbsp;&nbsp;&nbsp;&nbsp;{{ area.total }}
+                </th>
+            </tr>
+            {% for ot in area.ot %}
+                <tr>
+                    <th colspan="5" style="font-size: 12px;text-align: left">
+                        <strong style="text-align: left">
+                            &nbsp;&nbsp; {{ ot.codigo }} &nbsp;&nbsp; {{ ot.nombre }}
+                        </strong>
+                    </th>
+                    <th colspan="6" style="font-size: 12px; text-align: left">
+                        &nbsp;&nbsp;&nbsp;&nbsp;{{ ot.total }}
+                    </th>
+                </tr>
+                {% for act in ot.actividades %}
+                    <tr>
+                        <td style="width: 20px"></td>
+                        <td align="center" style="width: 40px">{{ act.codigo }}</td>
+                        <td style="font-style: italic;width: 250px ">&nbsp;&nbsp;{{ act.nombre }}</td>
+                        <td align="center">{{ act.valor }}</td>
+                        <td></td>
+                        <td colspan="6" style="width: 15px"></td>
+                    </tr>
+                    {% for trab in act.trabajadores %}
+                        <tr>
+                            <td style="width: 40px"></td>
+                            <td style="width: 70px"></td>
+                            <td style="width: 250px"></td>
+                            <td style="width: 100px"></td>
+                            <td style="width: 30px"></td>
+                            <td>&nbsp;&nbsp;{{ trab.nombre }}</td>
+                            <td align="center">{{ trab.codigo }}</td>
+                            <td align="center">{{ trab.real }}</td>
+                            <td align="center">{{ trab.extra }}</td>
+                            <td style="width: 80px"></td>
+                            <td style="width:80px "></td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            {% endfor %}
+        {% endfor %}
+    </table>
+
+</div>
+<!-- Contenido del pie de página 'footer_frame' -->
+    <div id="footer_content">
+        <div class=table>
+            <tr>
+                <td>Hecho por : Ing. {{ usuario.first_name }} {{ usuario.last_name }}</td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td>Aprobado por:</td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </td>
+                <td>Calculado para registro de costo por:</td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </td>
+                <td>Anotado en el registro de costo por:</td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </td>
+            </tr>
+        </div>
+    </div>
+</body>
+</html>

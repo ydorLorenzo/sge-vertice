@@ -1,0 +1,620 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Home{% endblock %}
+{% block styles %}
+    <link href="{% static 'css/compiled-4.css' %}" rel="stylesheet">
+    <style type="text/css">
+        .face {
+            background-color: white;
+        }
+
+        .card-body p {
+            margin-bottom: 0;
+            padding: 8px 0;
+            transition: 0.5s;
+        }
+
+        .card-body p:hover {
+            background-color: rgba(200, 200, 200, 0.27);
+        }
+
+        .card-wrapper {
+            width: 100%;
+            min-height: 400px !important;
+        }
+
+        .increasing {
+            transition: 0.8s;
+            height: 110% !important;
+            width: 110% !important;
+            margin-left: -10px;
+            margin-top: -20px;
+        }
+
+        .increasing .face {
+            box-shadow: 0 4px 10px 0 rgba(0, 0, 0, .20), 0 4px 20px 0 rgba(0, 0, 0, .16)
+        }
+
+        .flipped {
+            transition: 0.8s !important;
+        }
+
+    </style>
+{% endblock %}
+{% block migas %}
+    <ol class="breadcrumb" style="margin-top: 56px; opacity: 0.9; position: fixed;
+    top: 0; right: 0; left: 0; z-index: 1000;">
+        <li class="breadcrumb-item"><a href="/home/">Sistema de Gesti&oacute;n Recursos Humanos</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Inicio</li>
+    </ol>
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="card-wrapper">
+                <div id="card-1" class="card-rotating effect__click text-center h-100 w-100 flipped">
+                    <!-- Front Side -->
+                    <div class="face front">
+                        <div class="card-body">
+                            <!-- Content -->
+                            <h4 class="font-weight-bold mb-0">Administraci&oacute;n General</h4>
+                            <hr>
+                            <p><a href="{% url 'gestionarUnidadOrg' %}">Gestionar Unidad Org.</a></p>
+                            <p><a href="{% url 'gestionarSeccionSindical' %}">Gestionar Sección Sindical</a></p>
+                            <p><a href="{% url 'gestionarDepartamento' %}"> Gestionar Departamento</a></p>
+                            <p><a href="{% url 'gestionarCargo' %}">Gestionar Cargo</a></p>
+                            <p><a href="{% url 'gestionarCalificacion' %}">Gestionar Calificación</a></p>
+                            <p><a href="{% url 'gestionarEspecialidad' %}">Gestionar Especialidad</a></p>
+                            <hr>
+                        </div>
+                    </div>
+                    <!-- Front Side -->
+
+                    <!-- Back Side -->
+                    <div class="face back">
+                        <!-- Image-->
+                        <div class="card-up">
+                            <img class="card-img-top"
+                                 src="{% static 'images/photo77.jpg' %}"
+                                 alt="Image with a photo of clouds.">
+                        </div>
+                        <!-- Avatar -->
+                        <div class="avatar mx-auto white"><img
+                                src="{% static 'images/icon7.png' %}"
+                                class="rounded-circle" alt="Sample avatar image.">
+                        </div>
+                        <!-- Content -->
+                        <div class="card-body">
+                            <h4 class="font-weight-bold mb-3">Administraci&oacute;n General</h4>
+                        </div>
+                    </div>
+                    <!-- Back Side -->
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="card-wrapper">
+                <div id="card-4" class="card-rotating effect__click text-center h-100 w-100 flipped">
+                    <!-- Front Side -->
+                    <div class="face front">
+                        <div class="card-body">
+                            <!-- Content -->
+                            <h4 class="font-weight-bold mb-0">Trabajadores</h4>
+                            <hr>
+                            <p><a href="{% url 'GestionarTrabajador' %}">Gestionar Altas</a></p>
+                            <p><a href="{% url 'AdicionarTrabajador' %}">Dar Alta</a></p>
+                            <p><a href="{% url 'ListarMovimiento' %}">Gestionar Movimiento</a></p>
+                            <p><a href="{% url 'TrabajadoresDisponibles' %}">Gestionar Disponibles</a></p>
+                            <p><a href="{% url 'GestionarBaja' %}">Gestionar Bajas</a></p>
+                            <p><a href="{% url 'gestionarRegistroTarjetaSNC' %}">Gestionar Registros Tarjeta SNC</a></p>
+                            <hr>
+                        </div>
+                    </div>
+                    <!-- Front Side -->
+
+                    <!-- Back Side -->
+                    <div class="face back">
+                        <!-- Image-->
+                        <div class="card-up">
+                            <img class="card-img-top"
+                                 src="{% static 'images/photo6.jpg' %}"
+                                 alt="Image with a photo of clouds.">
+                        </div>
+                        <!-- Avatar -->
+                        <div class="avatar mx-auto white"><img
+                                src="{% static 'images/icon6.png' %}"
+                                class="rounded-circle" alt="Sample avatar image.">
+                        </div>
+                        <!-- Content -->
+                        <div class="card-body">
+                            <h4 class="font-weight-bold mb-3">Trabajadores</h4>
+                        </div>
+                    </div>
+                    <!-- Back Side -->
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="card-wrapper">
+                <div id="card-3" class="card-rotating effect__click text-center h-100 w-100 flipped">
+                    <!-- Front Side -->
+                    <div class="face front">
+                        <div class="card-body">
+                            <!-- Content -->
+                            <h4 class="font-weight-bold mb-0">Plantilla</h4>
+                            <hr>
+                            <p><a href="{% url 'gestionarPlantilla' %}">Gestionar Plantilla</a></p>
+                            <p><a href="{% url 'visualizarReportePlantilla' %}">Reporte plantilla general</a></p>
+                            <p><a href="{% url 'visualizarReportePlantillaGraduados' %}">Reporte plantilla recién
+                                graduados</a></p>
+                            <p><a href="{% url 'visualizarReportePlantillaContratos' %}">Reporte plantilla contratos</a>
+                            </p>
+                            <hr>
+                        </div>
+                    </div>
+                    <!-- Front Side -->
+
+                    <!-- Back Side -->
+                    <div class="face back">
+                        <!-- Image-->
+                        <div class="card-up">
+                            <img class="card-img-top"
+                                 src="{% static 'images/photo5.png' %}"
+                                 alt="Image with a photo of clouds.">
+                        </div>
+                        <!-- Avatar -->
+                        <div class="avatar mx-auto white"><img
+                                src="{% static 'images/icon5.png' %}"
+                                class="rounded-circle" alt="Sample avatar image.">
+                        </div>
+                        <!-- Content -->
+                        <div class="card-body">
+                            <h4 class="font-weight-bold mb-3">Plantilla</h4>
+                        </div>
+                    </div>
+                    <!-- Back Side -->
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="card-wrapper">
+                <div id="card-2" class="card-rotating effect__click text-center h-100 w-100 flipped">
+                    <!-- Front Side -->
+                    <div class="face front">
+                        <div class="card-body">
+                            <!-- Content -->
+                            <h4 class="font-weight-bold mb-0">Subsidios</h4>
+                            <hr>
+                            <p><a href="{% url 'gestionarSubsidio' %}">Gestionar Subsidios</a></p>
+                            <p><a data-toggle="modal" href="#modalReporte">Reporte Subsidios</a></p>
+                            <hr>
+                        </div>
+                    </div>
+                    <!-- Front Side -->
+
+                    <!-- Back Side -->
+                    <div class="face back">
+                        <!-- Image-->
+                        <div class="card-up">
+                            <img class="card-img-top"
+                                 src="{% static 'images/photo4.jpg' %}"
+                                 alt="Image with a photo of clouds.">
+                        </div>
+                        <!-- Avatar -->
+                        <div class="avatar mx-auto white"><img
+                                src="{% static 'images/icon4.jpg' %}"
+                                class="rounded-circle" alt="Sample avatar image.">
+                        </div>
+                        <!-- Content -->
+                        <div class="card-body">
+                            <h4 class="font-weight-bold mb-3">Subsidios</h4>
+                        </div>
+                    </div>
+                    <!-- Back Side -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 40px;">
+        <div class="col"></div>
+        <div class="col-sm-3">
+            <div class="card-wrapper">
+                <div id="card-5" class="card-rotating effect__click text-center h-100 w-100 flipped">
+                    <!-- Front Side -->
+                    <div class="face front">
+                        <div class="card-body">
+                            <!-- Content -->
+                            <h4 class="font-weight-bold mb-0">Ausentismo</h4>
+                            <hr>
+                            <p><a href="{% url 'gestionarAusentismo' %}">Gestionar Ausentismo</a></p>
+                            <p><a data-toggle="modal" href="#modalReporteAusentismo">Mostrar Listado de Ausentismo</a>
+                            </p>
+                            <hr>
+                        </div>
+                    </div>
+                    <!-- Front Side -->
+
+                    <!-- Back Side -->
+                    <div class="face back">
+                        <!-- Image-->
+                        <div class="card-up">
+                            <img class="card-img-top"
+                                 src="{% static 'images/photo33.jpg' %}"
+                                 alt="Image with a photo of clouds.">
+                        </div>
+                        <!-- Avatar -->
+                        <div class="avatar mx-auto white"><img
+                                src="{% static 'images/icon3.jpg' %}"
+                                class="rounded-circle" alt="Sample avatar image.">
+                        </div>
+                        <!-- Content -->
+                        <div class="card-body">
+                            <h4 class="font-weight-bold mb-3">Ausentismo</h4>
+                        </div>
+                    </div>
+                    <!-- Back Side -->
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="card-wrapper">
+                <div id="card-6" class="card-rotating effect__click text-center h-100 w-100 flipped">
+                    <!-- Front Side -->
+                    <div class="face front">
+                        <div class="card-body">
+                            <!-- Content -->
+                            <h4 class="font-weight-bold mb-0">Reportes</h4>
+                            <hr>
+                            <p></p>
+                            <p></p>
+                            <hr>
+                        </div>
+                    </div>
+                    <!-- Front Side -->
+
+                    <!-- Back Side -->
+                    <div class="face back">
+                        <!-- Image-->
+                        <div class="card-up">
+                            <img class="card-img-top"
+                                 src="{% static 'images/photo2.jpg' %}"
+                                 alt="Image with a photo of clouds.">
+                        </div>
+                        <!-- Avatar -->
+                        <div class="avatar mx-auto white"><img
+                                src="{% static 'images/icon2.jpg' %}"
+                                class="rounded-circle" alt="Sample avatar image.">
+                        </div>
+                        <!-- Content -->
+                        <div class="card-body">
+                            <h4 class="font-weight-bold mb-3">Reportes</h4>
+                        </div>
+                    </div>
+                    <!-- Back Side -->
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="card-wrapper">
+                <div id="card-7" class="card-rotating effect__click text-center h-100 w-100 flipped">
+                    <!-- Front Side -->
+                    <div class="face front">
+                        <div class="card-body">
+                            <!-- Content -->
+                            <h4 class="font-weight-bold mb-0">Datos Pren&oacute;mina</h4>
+                            <hr>
+                            <p><a href="{% url 'gestionarTrabajoExtra' %}">Gestionar Trabajo Extraordinario</a></p>
+                            <p><a href="{% url 'gestionarVacaciones' %}">Gestionar Vacaciones</a></p>
+                            <p><a data-toggle="modal" href="#modalReporteVacaciones">Mostrar Listado de Vacaciones</a>
+                            </p>
+                            <p><a href="{% url 'gestionarAlimentacion' %}">Gestionar Alimentaci&oacute;n</a></p>
+                            <hr>
+                        </div>
+                    </div>
+                    <!-- Front Side -->
+
+                    <!-- Back Side -->
+                    <div class="face back">
+                        <!-- Image-->
+                        <div class="card-up">
+                            <img class="card-img-top"
+                                 src="{% static 'images/photo1.jpg' %}"
+                                 alt="Image with a photo of clouds.">
+                        </div>
+                        <!-- Avatar -->
+                        <div class="avatar mx-auto white"><img
+                                src="{% static 'images/icon1.jpg' %}"
+                                class="rounded-circle" alt="Sample avatar image.">
+                        </div>
+                        <!-- Content -->
+                        <div class="card-body">
+                            <h4 class="font-weight-bold mb-3">Datos Pren&oacute;mina</h4>
+                        </div>
+                    </div>
+                    <!-- Back Side -->
+                </div>
+            </div>
+        </div>
+        <div class="col"></div>
+    </div>
+
+    <div id="modalReporte" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6><strong>Reporte de Subsidios</strong></h6>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <div class="panel-body">
+                        <div class="panel panel-default">
+                            <div class="row" style="margin-bottom: 20px;">
+                                {% if error_subsidio %}
+                                    <div class="alert alert-danger"
+                                         style="width: 100%; text-align: center; margin: 0 auto; padding: 2px 10px; border-radius: 0;">
+                                        <p style="margin-top: 10px">Debe seleccionar un rango de fecha válido</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <p style="text-align: center">Seleccione rango de fecha para generar el reporte.</p>
+                        <form method="post" action="{% url 'visualizarReporte' %}">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col"></div>
+                                <div class="col-sm-2" style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="fecha_inic">Desde:</label>
+                                </div>
+                                <div class="col-sm-3" style="padding-left: 5px;">
+                                    <input name="fecha_inic" type="text" class="form-control" id="fecha_inic">
+                                </div>
+                                <div class="col-sm-2" style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="fecha_inic">Hasta:</label>
+                                </div>
+                                <div class="col-sm-3" style="padding-left: 0;">
+                                    <input name="fecha_fin" type="text" class="form-control" id="fecha_fin"
+                                           title="Fecha Fin">
+                                </div>
+                                <div class="col"></div>
+                            </div>
+                            <br>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary" style="text-transform: none;">Generar
+                                    Reporte
+                                </button>
+                                <button type="button" class="btn btn-danger" style="text-transform: none;"
+                                        data-dismiss="modal">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="modalReporteVacaciones" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6><strong>Reporte de Vacaciones</strong></h6>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <div class="panel-body">
+                        <div class="panel panel-default">
+                            <div class="row" style="margin-bottom: 20px;">
+                                {% if error_vacaciones %}
+                                    <div class="alert alert-danger"
+                                         style="width: 100%; text-align: center; margin: 0 auto; padding: 2px 10px; border-radius: 0;">
+                                        <p style="margin-top: 10px">Debe seleccionar un rango de fecha válido</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <p style="text-align: center">Seleccione rango de fecha para generar el reporte.</p>
+                        <form method="post" action="{% url 'visualizarReporteVacaciones' %}">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col"></div>
+                                <div class="col-sm-2" style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="fecha_inic">Desde:</label>
+                                </div>
+                                <div class="col-sm-3" style="padding-left: 5px;">
+                                    <input name="fecha_inic" type="text" class="form-control" id="fecha_inic">
+                                </div>
+                                <div class="col-sm-2" style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="fecha_inic">Hasta:</label>
+                                </div>
+                                <div class="col-sm-3" style="padding-left: 0;">
+                                    <input name="fecha_fin" type="text" class="form-control" id="fecha_fin"
+                                           title="Fecha Fin">
+                                </div>
+                                <div class="col"></div>
+                            </div>
+                            <br>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary" style="text-transform: none;">Generar
+                                    Reporte
+                                </button>
+                                <button type="button" class="btn btn-danger" style="text-transform: none;"
+                                        data-dismiss="modal">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="modalReporteAusentismo" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6><strong>Reporte de Ausentismo</strong></h6>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <div class="panel-body">
+                        <div class="panel panel-default">
+                            <div class="row" style="margin-bottom: 20px;">
+                                {% if error_add %}
+                                    <div class="alert alert-danger"
+                                         style="width: 100%; text-align: center; margin: 0 auto; padding: 0 10px; border-radius: 0;">
+                                        <p style="margin-top: 10px">Debe seleccionar un rango de fecha válido</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <p style="text-align: center">Seleccione rango de fecha para generar el reporte.</p>
+                        <form method="post" action="{% url 'visualizarReporteAusentismo' %}">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col"></div>
+                                <div class="col-sm-2" style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="fecha_inic">Desde:</label>
+                                </div>
+                                <div class="col-sm-3" style="padding-left: 5px;">
+                                    <input name="fecha_inic" type="text" class="form-control" id="fecha_inic">
+                                </div>
+                                <div class="col-sm-2" style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="fecha_inic">Hasta:</label>
+                                </div>
+                                <div class="col-sm-3" style="padding-left: 0;">
+                                    <input name="fecha_fin" type="text" class="form-control" id="fecha_fin"
+                                           title="Fecha Fin">
+                                </div>
+                                <div class="col"></div>
+                            </div>
+                            <br>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary" style="text-transform: none;">Generar
+                                    Reporte
+                                </button>
+                                <button type="button" class="btn btn-danger" style="text-transform: none;"
+                                        data-dismiss="modal">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+{% block javascript %}
+    {#    <script src="{% static 'js/compiled-4.js' %}"></script>#}
+    <script type="text/javascript">
+        $(".card-wrapper").hover(function () {
+            var id = this.firstElementChild.getAttribute('id');
+            $("#" + id).toggleClass('increasing').toggleClass("flipped")
+        });
+
+        {% if error_subsidio %}
+            $('#modalReporte').modal('show');
+        {% endif %}
+
+        {% if error_vacaciones %}
+            $('#modalReporteVacaciones').modal('show');
+        {% endif %}
+
+        {% if error_add %}
+            $('#modalReporteAusentismo').modal('show');
+        {% endif %}
+
+        var getDate = function (input) {
+            return new Date(input.date.valueOf());
+        };
+
+        $("#fecha_inic").prop("readonly", true).datepicker({
+            uiLibrary: 'bootstrap4',
+            language: 'es',
+            format: 'yyyy-mm-dd'
+        });
+
+        $("#fecha_fin").prop("readonly", true).datepicker({
+            uiLibrary: 'bootstrap4',
+            language: 'es',
+            format: 'yyyy-mm-dd'
+        });
+
+        $('#fecha_inic').datepicker({
+            startDate: '+5d',
+            endDate: '+35d'
+        }).on('changeDate',
+            function (selected) {
+                $('#fecha_fin').datepicker('setStartDate', getDate(selected));
+            });
+
+        $('#fecha_fin').datepicker({
+            startDate: '+6d',
+            endDate: '+36d'
+        }).on('changeDate',
+            function (selected) {
+                $('#fecha_inic').datepicker('setEndDate', getDate(selected));
+            });
+
+        $("#modalReporteVacaciones #fecha_inic").prop("readonly", true).datepicker({
+            uiLibrary: 'bootstrap4',
+            language: 'es',
+            format: 'yyyy-mm-dd'
+        });
+
+        $("#modalReporteVacaciones #fecha_fin").prop("readonly", true).datepicker({
+            uiLibrary: 'bootstrap4',
+            language: 'es',
+            format: 'yyyy-mm-dd'
+        });
+
+        $('#modalReporteVacaciones #fecha_inic').datepicker({
+            startDate: '+5d',
+            endDate: '+35d'
+        }).on('changeDate',
+            function (selected) {
+                $('#modalReporteVacaciones #fecha_fin').datepicker('setStartDate', getDate(selected));
+            });
+
+        $('#modalReporteVacaciones #fecha_fin').datepicker({
+            startDate: '+6d',
+            endDate: '+36d'
+        }).on('changeDate',
+            function (selected) {
+                $('#modalReporteVacaciones #fecha_inic').datepicker('setEndDate', getDate(selected));
+            });
+
+        $("#modalReporteAusentismo #fecha_inic").prop("readonly", true).datepicker({
+            uiLibrary: 'bootstrap4',
+            language: 'es',
+            format: 'yyyy-mm-dd'
+        });
+
+        $("#modalReporteAusentismo #fecha_fin").prop("readonly", true).datepicker({
+            uiLibrary: 'bootstrap4',
+            language: 'es',
+            format: 'yyyy-mm-dd'
+        });
+
+        $('#modalReporteAusentismo #fecha_inic').datepicker({
+            startDate: '+5d',
+            endDate: '+35d'
+        }).on('changeDate',
+            function (selected) {
+                $('#modalReporteAusentismo #fecha_fin').datepicker('setStartDate', getDate(selected));
+            });
+
+        $('#modalReporteAusentismo #fecha_fin').datepicker({
+            startDate: '+6d',
+            endDate: '+36d'
+        }).on('changeDate',
+            function (selected) {
+                $('#modalReporteAusentismo #fecha_inic').datepicker('setEndDate', getDate(selected));
+            });
+    </script>
+{% endblock %}

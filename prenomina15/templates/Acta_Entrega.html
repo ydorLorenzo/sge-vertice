@@ -1,0 +1,297 @@
+{% extends "base_pren15.html" %}
+{% load static %}
+{% block title %}Listado de revisiones{% endblock %}
+{% block styles %}
+    <style type="text/css">
+        #tabla_rev_paginate a:hover {
+            background-color: #007bff !important;
+            color: white;
+            border: solid 1px;
+            border-color: #0062cc !important;
+            transition: color .25s ease-in-out, background-color .25s ease-in-out, border-color .25s ease-in-out, border .25s ease-in-out;
+        }
+
+        div.container {
+            max-width: 100%
+        }
+
+        table.dataTable td, table.dataTable th {
+            font-size: 11px;
+
+        }
+
+        .dt-button.buttons-excel.buttons-html5 {
+            margin-left: 15px;
+            border-radius: 2px;
+            box-shadow: #47748b 1px 1px 1px;
+            color: #fff;
+            background-color: #37474F !important;
+            border-color: #37474F;
+            background-image: none;
+        }
+
+        .dt-button.buttons-excel.buttons-html5:hover {
+            margin-left: 15px;
+            border-radius: 2px;
+            box-shadow: #37474F 1px 1px 1px;
+            color: #fff;
+            background-color: #47748b !important;
+            border-color: #47748b;
+            background-image: none;
+        }
+
+        .ui-datepicker {
+            margin-left: 100px;
+            z-index: 1000;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <!-- Page Content Holder -->
+    <div id="content" style="padding-top: 90px; margin-left: -20px; padding-right:-10px">
+        <div class="container" role="main" style="width: 100%; font-size: smaller">
+            <div class="row" style="float: right; font-size: small; font-weight: bold">
+                {% if generate_acta %}
+                    <a class="btn btn-sm btn-info" data-toggle="collapse" href="#collapseExample" role="button"
+                       aria-expanded="false" aria-controls="collapseExample" style="font-size: small; font-weight: bold"><i
+                            class="fa fa-file-text"></i> Generar Acta
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+        <br>
+        <br>
+        <div class="container" role="main" style="width: 100%; margin-left: 0px; font-size: smaller;">
+            <div class="collapse" id="collapseExample">
+                <div class="card card-body">
+                    <!--FORMULARIO DE FILTROS-->
+                    <div class="well">
+                        <h6 style="margin-top: 0; font-weight: bold">Datos para acta de entrega</h6>
+                        <form method="post" action="{% url 'ActEntPlanos' %}" class="form-inline">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <label for="obra1"
+                                           style="margin-right: 300px; width: auto; margin-left: 20px">Obra:</label>
+                                    <select name="obra1" id="id_obra1" class="form-control" title="obra1">
+                                        {% for obra in obras %}
+                                            <option value="{{ obra.id }}">{{ obra.nombre }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-sm-3" style="margin-right: 30px;margin-left: -120px">
+                                    <label for="fecha" style="margin-left: -10px; margin-right: 50px">Fecha de
+                                        Estado</label>
+                                    <div class="input-group" style="width: 150px">
+                                        <input type="text" name="fecha" id="fecha" class="form-control">
+                                        <span class="input-group-append fecha"
+                                              style="background-color: lightgray; width: 28px"><i class="fa fa-calendar"
+                                                                                                  style="margin-left: 5px; padding-top: 10px; font-size: large; "></i></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4" style="margin-right: 30px;margin-left: -55px">
+                                    <div class="form-group">
+                                        <label for="recibido_por">Recibido por</label>
+                                        <input type="text" class="form-control" id="recibido_por" name="recibido_por"
+                                               title="recibido_por" required>
+                                    </div>
+                                </div>
+                                <br>
+                            </div>
+                            <div class="modal-footer">
+                                <div class=" text-right" style="font-size: smaller">
+                                    <div class="text-right">
+                                        <button type="submit" class="btn btn-sm btn-primary "
+                                                style="font-size: smaller!important;">
+                                            <strong><i class="fa fa-file-text "></i> Visualizar Acta</strong></button>
+                                    </div>
+                                    {% if fecha and recibido_por %}
+                                        <div class="text-right" style="color: white;"><a
+                                                href="{% url 'exportarActaEntrega' fecha recibido_por %}"
+                                                class="btn btn-sm btn-success"
+                                                style="font-size: smaller; font-weight: bold"><i
+                                                class="fa fa-download"></i> Exportar a PDF</a>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="container" role="main" style="width: 100%; margin-left: -5px;margin-right: 0px; font-size: smaller">
+            {% if obra and acta and fecha and elaborado_por %}
+                <div class=content>
+                    <div class="row">
+                        <div class="col-sm-10">
+                            <h6 style="text-align: center; font-weight: bold">{{ obra }}</h6>
+                        </div>
+                        <div class="col-sm-2">
+                            <h6>{{ acta }}</h6>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <h6>Fecha: {{ fecha }}</h6>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <h6>Elaborado Por: {{ elaborado_por.first_name }} {{ elaborado_por.last_name }}</h6>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            <br>
+            <br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <table id="tabla_rev" class="display" cellspacing="0" width="100%">
+                        <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Corte</th>
+                            <th>Especialidad</th>
+                            <th>Nombre del plano</th>
+                            <th>Actividad</th>
+                            <th>Objeto</th>
+                            <th>No Plano</th>
+                            <th>Recurso</th>
+                            <th>Estado</th>
+                            <th>Fecha Estado</th>
+                            <th>Revisión</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for rev in list_rev %}
+                            <tr>
+                                <td style="text-align: center; width: 5px">{{ forloop.counter }}</td>
+                                <td style="width: 15px"> {{ rev.plano.corte }}</td>
+                                <td style="text-align: center;  width: 15px">{{ rev.plano.especialidad.siglas }}</td>
+                                <td style="text-align: left; width: 150px">{{ rev.plano.nombre }}</td>
+                                <td style="text-align: center;  width: 15px">{{ rev.plano.actividad.codigo_act }}</td>
+                                <td style="text-align: center;  width: 15px">{{ rev.plano.objeto.codigo }}</td>
+                                <td style="width: 15px">{{ rev.plano.num }}</td>
+                                <td style="text-align: left; width: 100px ">{{ rev.plano.trabajador.primer_nombre }} {{ rev.plano.trabajador.segundo_nombre }}</td>
+                                <td style="text-align: center;  width: 15px">{{ rev.estado }}</td>
+                                <td style="text-align: center;  width: 15px">{{ rev.fecha_estado|date:"d/m/Y" }}</td>
+                                <td style="text-align: center; width: 15px">{{ rev.no_rev }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                        <tfoot>
+                        <td style="padding: 6px 6px !important;"></td>
+                        <th style="padding: 6px 6px !important;">Corte</th>
+                        <th style="padding: 6px 6px !important;">Nombre</th>
+                        <th style="padding: 6px 6px !important;">Act</th>
+                        <th style="padding: 6px 6px !important;">Objeto</th>
+                        <th style="padding: 6px 6px !important;">Número</th>
+                        <th style="padding: 6px 6px !important;">Inicio</th>
+                        <th style="padding: 6px 6px !important;">Fin</th>
+                        <th style="padding: 6px 6px !important;">Recurso</th>
+                        <th style="padding: 6px 6px !important;">Formato</th>
+                        <th style="padding: 6px 6px !important;">Valor</th>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <br>
+        {% if recibido_por and elaborado_por %}
+            <div class=content style="margin-left: 10px">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <h6>Elaborado Por: {{ elaborado_por.first_name }} {{ elaborado_por.last_name }}</h6>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <h6>Recibido por: {{ recibido_por }}</h6>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        $('#fecha').datepicker({
+            language: 'es',
+            format: "yyyy-mm-dd",
+            todayHighlight: true,
+            clearBtn: true,
+            orientation: "botton"
+        });
+
+        $("span.input-group-append.fecha").on("click", function () {
+            $("#fecha").datepicker("show");
+        });
+
+        $(document).ready(function () {
+            // DataTable
+            var table = $('#tabla_rev').DataTable({
+                "language": {
+                    processing: "Procesando...",
+                    search: "Buscar:",
+                    lengthMenu: "Mostrar _MENU_ registros",
+                    info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    infoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    infoFiltered: "(filtrado de un total de _MAX_ registros)",
+                    infoPostFix: "",
+                    loadingRecords: "Cargando...",
+                    zeroRecords: "No se encontraron resultados",
+                    emptyTable: "Ningún dato disponible en esta tabla",
+                    paginate: {
+                        first: "Último",
+                        previous: "Anterior",
+                        next: "Siguiente",
+                        last: "Último",
+                    },
+                },
+                fixedHeader: {
+                    header: true,
+                    headerOffset: $('#navbar').height() + 22
+                },
+                keys: true,
+                dom: 'lBfrtip',
+
+                buttons: [{
+                    extend: 'excelHtml5',
+                    autoFilter: true,
+                    text: 'Exportar Excel',
+                    filename: 'Listado de planos',
+                    bom: true,
+                    sheetName: 'Listado de Planos',
+                    exportOptions: {
+                        columns: ':visible',
+                    },
+                    messageTop: 'Listado de Planos.',
+                }
+                ]
+
+            });
+            // Setup - add a text input to each footer cell
+            $('#tabla_rev').find('tfoot th').each(function () {
+                var title = $(this).text();
+                $(this).html('<input class="form-control" type="text" style="font-size: smaller" placeholder="Buscar ' + title + '"/>');
+            });
+
+            // Apply the search
+            table.columns().every(function () {
+                var that = this;
+
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
+
+        });
+    </script>
+{% endblock %}

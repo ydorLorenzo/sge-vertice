@@ -1,0 +1,161 @@
+{% extends "base_principal.html" %}
+{% block content %}
+    <style type="text/css">
+        a:active, a:active * {
+        {# quita el borde de punticos alrededor del link visitado #} outline: none;
+        }
+
+        a:focus, a:focus * {
+        {# quita el borde de punticos alrededor del link visitado #} outline: none;
+        }
+    </style>
+    <div class="wrapper">
+        <!-- Sidebar Holder -->
+
+        <!-- Page Content Holder -->
+        <div id="content" style="padding-top: 90px;">
+            <div class="row">
+                <div class="col-3">
+                    {% if permiso_app_adm == 'home' %}
+                        <a href="{% url permiso_app_adm %}">
+                            <div class="card" style="text-align: center; margin-bottom: 10px; background-color:lightskyblue; font-weight: bold">
+                                <i class="fa fa-users" style="font-size: 40px; text-align: center; margin-top: 20px;"></i>
+                                <div class="card-body">
+                                   <span>CAPITAL HUMANO</span>
+                                </div>
+                           </div>
+                        </a>
+                    {% else %}
+
+                            <div class="card" title="Usted no posee permisos para el modulo de Recursos Humanos" style="text-align: center; margin-bottom: 10px; background-color:lightskyblue; font-weight: bold">
+                                <i class="fa fa-users" style="font-size: 40px; text-align: center; margin-top: 20px;"></i>
+                                <div class="card-body">
+                                   <span>CAPITAL HUMANO</span>
+                                </div>
+                            </div>
+
+                    {% endif %}
+                </div>
+                <div class="col-3">
+                    {% if permiso_app_pren15 == 'home_pren15' %}
+                        <a href="{% url permiso_app_pren15 %}">
+                           <div class="card"
+                                 style="text-align: center; margin-bottom: 10px; background-color:lightgreen; font-weight: bold">
+                                <i class="fa fa-files-o" style="font-size: 40px; text-align: center; margin-top: 20px;"></i>
+                                <div class="card-body">
+                                  <span>PRENÓMINA 15</span>
+                                </div>
+                            </div>
+                        </a>
+                    {% else %}
+
+                           <div class="card"  title="Usted no posee permisos para el modulo de PRENÓMINA 15"
+                                 style="text-align: center; margin-bottom: 10px; background-color:lightgreen; font-weight: bold">
+                                <i class="fa fa-files-o" style="font-size: 40px; text-align: center; margin-top: 20px;"></i>
+                                <div class="card-body">
+                                  <span>PRENÓMINA 15</span>
+                                </div>
+                            </div>
+
+                    {% endif %}
+                </div>
+                <div class="col-3">
+                    {% if permiso_app_datos == 'home_ent_dat' %}
+                        <a href="{% url permiso_app_datos %}" >
+                           <div class="card"
+                              style="text-align: center; margin-bottom: 10px; background-color: pink; font-weight: bold">
+                                <i class="fa fa-list" style="font-size: 40px; text-align: center; margin-top: 20px;"></i>
+                                <div class="card-body">
+                                    <span>ENTRADA DATOS</span>
+                                </div>
+                            </div>
+                        </a>
+                    {% else %}
+
+                           <div class="card" title="Usted no posee permisos para el modulo de ENTRADA DATOS"
+                              style="text-align: center; margin-bottom: 10px; background-color: pink; font-weight: bold">
+                                <i class="fa fa-list" style="font-size: 40px; text-align: center; margin-top: 20px;"></i>
+                                <div class="card-body">
+                                    <span>ENTRADA DATOS</span>
+                                </div>
+                            </div>
+
+                    {% endif %}
+
+                </div>
+                <div class="col-3">
+                    {% if permiso_app_pren15 == 'home_pr3' %}
+                        <a href="{% url permiso_app_pr3 %}">
+                            <div class="card"
+                                 style="text-align: center; margin-bottom: 10px; background-color: lightgoldenrodyellow; font-weight: bold">
+                                <i class="fa fa-calendar"
+                                   style="font-size: 40px; text-align: center; margin-top: 20px;"></i>
+                                <div class="card-body">
+                                    <span>PR3</span>
+                                </div>
+                            </div>
+                        </a>
+                    {% else %}
+
+                            <div class="card" title="Usted no posee permisos para el modulo de PR3"
+                                 style="text-align: center; margin-bottom: 10px; background-color: lightgoldenrodyellow; font-weight: bold">
+                                <i class="fa fa-calendar"
+                                   style="font-size: 40px; text-align: center; margin-top: 20px;"></i>
+                                <div class="card-body">
+                                    <span>PR3</span>
+                                </div>
+                            </div>
+                    {% endif %}
+                </div>
+                <div class="col-3">
+                    <a href="#">
+                        <div class="card"
+                             style="text-align: center; margin-bottom: 10px;font-weight: bold; background-color:lightgray">
+                            <i class="fa fa-shopping-bag"
+                               style="font-size: 40px; text-align: center; margin-top: 20px;"></i>
+                            <div class="card-body">
+                                <span>VENTAS</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-3">
+                    <a href="#">
+                        <div class="card"
+                             style="text-align: center; margin-bottom: 10px; background-color: plum; font-weight: bold">
+                            <i class="fa fa-check-square-o"
+                               style="font-size: 40px; text-align: center; margin-top: 20px;"></i>
+                            <div class="card-body">
+                                <span>FACTURACIÓN</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-3">
+                    <a href="#">
+                        <div class="card"
+                             style="text-align: center; margin-bottom: 10px;font-weight: bold;background-color: lightcoral">
+                            <i class="fa fa-credit-card"
+                               style="font-size: 40px; text-align: center; margin-top: 20px;"></i>
+                            <div class="card-body">
+                                <span>COSTO</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-3">
+                    <a href="#">
+                        <div class="card"
+                             style="text-align: center; margin-bottom: 10px; font-weight: bold; background-color: lightsalmon">
+                            <i class="fa fa-file-text-o"
+                               style="font-size: 40px; text-align: center; margin-top: 20px;"></i>
+                            <div class="card-body">
+                                <span>CONINSU</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Trabajadores Disponibles{% endblock %}
+{% block styles %}
+{% endblock %}
+{% block migas %}
+    <ol class="breadcrumb" style="margin-top: 56px; opacity: 0.9; position: fixed;
+    top: 0; right: 0; left: 0; z-index: 1000;">
+        <li class="breadcrumb-item"><a href="/home/">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="/home/">Trabajadores</a></li>
+        
+        <li class="breadcrumb-item active" aria-current="page">Gestionar Trabajadores Disponibles</li>
+    </ol>
+{% endblock %}
+
+{% block content %}
+    <div class=content align="center"><h3>Trabajadores Disponibles</h3></div>
+    <div class="container theme-showcase" role="main" style="width: 850px;">
+
+        <div class="tab-content">
+            {% if list_disponible %}
+                <div class="listas">
+                <table class="display" cellspacing="0" width="100%" id="tabla">
+                    <thead>
+                    <tr>
+                        <th>
+                            <div class="tabla-conten"><h6><strong>Fecha</strong></h6></div>
+                        </th>
+                        <th>
+                            <div class="tabla-conten"><h6><strong>Trabajador</strong></h6></div>
+                        </th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in list_disponible %}
+                        <tr class="table-light">
+                            <td>
+                                <div class="tabla-conten"><h6>{{ i.fecha }} </h6></div>
+                            </td>
+                            <td>
+                               <a href="{{i.trabajador.geturl}}">
+                                <div class="tabla-conten"><h6>{{ i.trabajador.primer_nombre }} 
+                                    {{ i.trabajador.segundo_nombre }} {{ i.trabajador.apellidos }} </h6></div>
+                            </a>
+                                </td>
+                            
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            {% endif %}
+
+        <hr>
+          <form method="get">
+            <div class="row">
+            <div class="col-md-4">     
+                 
+                <input name="fecha_inicio" type="text" id="fecha_inicio">
+                Fecha Inicio    
+            </div>
+                
+                <div class="col-md-4">    
+                   
+                    <input name="fecha_fin" type="text" id="fecha_fin">
+                    Fecha Fin
+                </div>
+                <div class="col-md-4"> 
+                    
+                    <input type="submit" class="btn btn-primary" value="Buscar" id="search">
+            
+                </div>    
+            </div>   
+                
+          </form>
+        
+       
+     
+    </div>
+</div>
+          
+       
+       
+{% endblock %}
+
+
+{% block javascript %}
+<script type="text/javascript">
+    
+    $('#fecha_inicio').prop("readonly", true).datepicker({
+                uiLibrary: 'bootstrap4',
+                iconsLibrary: 'font-awesome',
+                language: 'es'
+            });
+
+            $('#fecha_fin').prop("readonly", true).datepicker({
+                uiLibrary: 'bootstrap4',
+                iconsLibrary: 'font-awesome',
+                language: 'es'
+            });
+    
+    </script>
+
+{% endblock %}

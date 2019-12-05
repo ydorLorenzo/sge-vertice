@@ -1,0 +1,35 @@
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h6><strong>Detalle Subsidio</strong></h6>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-lg-6">
+                    <label><strong>Trabajador:</strong></label> {{ object.codigo_trab }}<br>
+                    <label><strong>Desde:</strong></label> {{ object.desde|date:"d/m/Y" }}<br>
+                    <label><strong>Hasta:</strong></label> {{ object.hasta|date:"d/m/Y" }}<br>
+                    <label><strong>Centro Asistencial:</strong></label> {{ object.centro }}<br>
+                    <label><strong>Médico:</strong></label> {{ object.medico }}<br>
+                    <label><strong>Diagnóstico:</strong></label> {{ object.diagnostico }}<br>
+                    <label><strong>Tipo:</strong></label> {{ object.tipo }}
+                </div>
+                <div class="col-lg-6">
+                    <label><strong>Fecha de registro:</strong></label> {{ object.fecha|date:"d/m/Y" }}<br>
+                    <label><strong>No registro:</strong></label> {{ object.no_reg }}<br>
+                    <label><strong>Porciento a pagar:</strong></label> {{ object.por_ciento }}%<br>
+                    <label><strong>Cantidad de días:</strong></label> {{ object.dias }}<br>
+                    <label><strong>Entrega antes 72 horas:</strong></label> {{ object.ent_72 }}
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="col-lg-12 text-right">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">
+                    Aceptar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

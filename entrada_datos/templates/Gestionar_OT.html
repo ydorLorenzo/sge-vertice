@@ -1,0 +1,404 @@
+{% extends "base1.html" %}
+{% load static %}
+{% block title %}Administrar Orden de Trabajo{% endblock %}
+{% block styles %}
+    <style type="text/css">
+        .has-error {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+        }
+
+        #tabla_ot_paginate a:hover {
+            background-color: #007bff !important;
+            color: white;
+            border: solid 1px;
+            border-color: #0062cc !important;
+            transition: color .25s ease-in-out, background-color .25s ease-in-out, border-color .25s ease-in-out, border .25s ease-in-out;
+        }
+        td, th {
+            padding: 1px!important;
+        }
+
+    </style>
+{% endblock %}
+{% block content %}
+    <!-- Page Content Holder -->
+    <div id="content" style="padding-top: 100px;">
+
+        <div class=content align="center"><h5><strong>Administrar Orden de Trabajo</strong></h5></div>
+        <div class="container" role="main" style="width: 900px; font-size: small">
+            <div class="text-right" style="color: white;"><a id="addButtonOT" class="btn btn-success"
+                                                             style="font-size: small"><i
+                    class="fa fa-plus"></i> Adicionar</a></div>
+
+            <p></p>
+            <div class="row">
+                {% if errores %}
+                    <div class="alert alert-dismissable alert-danger">
+                        <button style="margin-left: 20px;" type="button" class="close" data-dismiss="alert"
+                                aria-hidden="true"><strong> &times;</strong></button>
+                        <strong>Error:</strong> {{ errores }}
+                    </div>
+                {% endif %}
+                <div class="col-lg-12">
+                    <table id="tabla_ot" class="display" cellspacing="0" width="100%">
+                        <thead>
+                        <tr>
+                            <th class="text-center">Código OT</th>
+                            <th>Descripción</th>
+                            <th class="text-center">No. Contrato</th>
+                            <th class="text-center">Valor Contrato</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for i in list_ot %}
+                            <tr>
+                                <td align="center">{{ i.codigo_ot }}</td>
+                                <td>{{ i.descripcion_ot }}</td>
+                                <td align="center">{{ i.no_contrato }}</td>
+                                <td align="center">${{ i.valor_contrato }}</td>
+                                <td>
+                                    <div class="icon-acciones" align="center">
+                                        <!-- <a href="{% url 'editarOT' i.pk %}"
+                                               class="badge badge-pill badge-primary">
+                                                <i class="fa fa-edit" title="Editar Orden de Trabajo"
+                                                   style="color: white;"></i>
+                                            </a>-->
+                                        <a onclick=" return abrir_modal('{% url 'eliminarOT' i.pk %}')"
+                                           class="badge badge-pill badge-danger">
+                                            <i class="fa fa-trash" title="Eliminar Orden de Trabajo"
+                                               style="color: white;"></i>
+                                        </a>
+                                        <a onclick=" return abrir_modal('{% url 'detalleOT' i.pk %}')"
+                                           class="badge badge-pill badge-warning">
+                                            <i class="fa fa-eye" title="Visualizar Orden de Trabajo"
+                                               style="color: white;"></i>
+                                        </a>
+                                        <a id="{{ i.pk }}- {{ i.codigo_ot }}"
+                                           class="badge badge-pill badge-warning addSuplemento"
+                                           style="background-color: darkblue!important;">
+                                            <i class="fa fa-money" title="Crear suplemento"
+                                               style="color: white;"></i>
+                                        </a>
+                                        <a href="{% url 'listadoSup' i.pk %}"
+                                           class="badge badge-pill badge-warning"
+                                           style="background-color: darkgreen!important;">
+                                            <i class="fa fa-list" title="Visualizar listado de suplementos"
+                                               style="color: white;"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                        <tfoot>
+                        <th style="padding: 6px 6px !important;">Código OT</th>
+                        <th style="padding: 6px 6px !important;">Descripción</th>
+                        <th style="padding: 6px 6px !important;">No. Contrato</th>
+                        <th style="padding: 6px 6px !important;">Valor Contrato</th>
+                        <td style="padding: 6px 6px !important;"></td>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div id="popup" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-lg" style="width: 650px">
+                <div class="modal-content">
+                    <form id="formularioOT" role="form" action="{% url 'adicionarOT' %}"
+                          method="post">
+                        <div class="modal-header">
+                            <h5><strong>Crear Orden de Trabajo</strong></h5>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            {% csrf_token %}
+                            <div class="panel panel-default">
+                                <div class="row" style="margin-bottom: 20px;">
+                                    {% if form.errors %}
+                                        <div class="alert alert-danger"
+                                             style="width: 100%; text-align: center; margin: 0 auto; padding: 0 10px; border-radius: 0;">
+                                            <p>{{ form.codigo_ot.errors }}</p>
+                                            <p>{{ form.descripcion_ot.errors }}</p>
+                                            <p>{{ form.no_contrato.errors }}</p>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-3"><strong> Unidad:</strong>{{ form.unidad }}</div>
+                                    <div class="col-sm-5"><strong> Área:</strong>
+                                        <select name="area" id="id_area" onchange="ShowSelected(this);" class="form-control" title="area">
+                                            {% for area in areas %}
+                                                <option value="{{ area.id }}"
+                                                        code="{{ area.codigo }}">{{ area.nombre }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-4"><strong> Servicio:</strong>
+                                        <select name="servicio" id="id_servicio" onchange="ShowSelected(this);"
+                                                class="form-control" title="servicio">
+                                            {% for serv in servicios %}
+                                                <option value="{{ serv.id }}"
+                                                        code="{{ serv.codigo }}">{{ serv.nombre }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-sm-8"><strong> Inversionista:</strong>{{ form.inversionista }}</div>
+                                    <div class="col-sm-4"><strong>No Contrato:</strong>{{ form.no_contrato }}</div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-sm-8"><strong> Descripción:</strong>{{ form.descripcion_ot }}</div>
+                                    <div class="col-sm-4"><strong>Codigo OT:</strong>{{ form.codigo_ot }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="col-lg-12 text-right">
+                                <input id="enviar" type="submit" class="btn btn-primary" name="submit" value="Guardar">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="popup1" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg" style="width: 650px">
+            <div class="modal-content">
+                <form id="formularioSuplemento" role="form" action="{% url 'adicionarSuplemento' %}"
+                      method="post">
+                    <div class="modal-header">
+                        <h5><strong>Crear Suplemento</strong></h5>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        {% csrf_token %}
+                        <div class="panel panel-default">
+                            <input id="orden_trab" name="orden_trab" value="" type="hidden">
+                            <div class="row">
+                                <div class="col-sm-4"><strong> Fecha:</strong>{{ formsup.fecha }}
+                                    <div style="color: red; font-size: small">{{ formsup.fecha.errors }}</div>
+                                </div>
+                                <div class="col-sm-4"><strong>Monto:</strong>{{ formsup.monto }}
+                                    <div style="color: red; font-size: small">{{ formsup.monto.errors }}</div>
+                                </div>
+                                <div class="col-sm-4"><strong>Solicitud:</strong>{{ formsup.solicitud }}</div>
+                            </div>
+                            <br>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="col-lg-12 text-right">
+                            <input id="enviar1" type="submit" class="btn btn-primary" name="submit" value="Guardar">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">
+                                Cancelar
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="delete" class="modal fade" role="dialog"></div>
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        function validarFormulario() {
+            if (validarNoCont() && validarNombre() && validarCodigo()) {
+                $('#enviar').removeAttr('disabled');
+            } else {
+                $('#enviar').attr('disabled', '');
+            }
+        }
+
+        function validarFormulario1() {
+            if (ValidarMonto() && validarSolicitud()) {
+                $('#enviar1').removeAttr('disabled');
+            } else {
+                $('#enviar1').attr('disabled', '');
+            }
+        }
+
+        $(document).ready(function () {
+            validarFormulario();
+            validarFormulario1()
+        });
+
+        $("#id_unidad").on('change', function () {
+            validarFormulario();
+            ShowSelected();
+        });
+
+        function ShowSelected() {
+            var codeServicio = $('option:selected', $('#id_servicio')).attr('code');
+            var codeArea = $('option:selected', $('#id_area')).attr('code');
+            var codeUnidad = $('option:selected', $('#id_unidad')).val();
+
+            var no_con = $('#id_no_contrato').val();
+            var codigo = codeUnidad + codeArea + codeServicio + no_con;
+            $('#id_codigo_ot').val(codigo);
+            validarFormulario();
+        }
+
+        exp_codigo = "^[0-9]{10}$";
+        exp_nombre = "^([A-Z]{1})[A-Za-z0-9áéíóúñ .,()]+$";
+        exp_cont = "^[0-9]{5}$";
+        exp_monto = "^([0-9]{1,5}){1}(([,]{1})([0-9]{0,2}))?";
+        exp_solicitud = "^[A-Za-z0-9áéíóúñ .,]+$";
+
+        $('#id_codigo_ot').prop("title", 'Código numérico de 10 dígitos').attr("oninvalid", 'setCustomValidity("Código numérico de 10 dígitos")').prop("readonly", true).on('change', function () {
+            validarFormulario();
+        });
+        $('#id_descripcion_ot').prop("title", 'Descripción de la orden de trabajo').attr("oninvalid", 'setCustomValidity("Campo obligatorio.Comienza con mayúscula. No permite caracteres especiales")');
+        $('#id_no_contrato').prop("title", 'Código numérico de 5 dígitos').attr("oninvalid", 'setCustomValidity("Código numérico de 5 dígitos")').on('change', function () {
+            validarFormulario();
+            ShowSelected();
+        });
+        $('#id_monto').prop("title", 'Monto del suplemento').attr("oninvalid", 'setCustomValidity("Campo obligatorio, numérico hasta 99999")').on('change', function () {
+            validarFormulario1();
+        });
+        $('#id_solicitud').prop("title", 'Solicitud').attr("oninvalid", 'setCustomValidity("Campo obligatorio.Alfanumérico")');
+
+        $('#addButtonOT').click(function () {
+            $('#popup form').prop('action', '/adicionar_ot/');
+            $('#popup').modal('show');
+        });
+
+        $('.badge.badge-pill.badge-warning.addSuplemento').click(function () {
+            var nombre = this.id.split('-');
+            $('#popup1 input#orden_trab').prop('value', nombre[0]);
+            $('#formularioSuplemento .modal-header h5 strong').html('Crear suplemento a Orden de Trabajo' + nombre[1]);
+            $('#popup1').modal('show');
+        });
+
+        $('#id_fecha').prop("readonly", true).datepicker({
+            uiLibrary: 'bootstrap4',
+            language: 'es'
+        });
+
+        {% if form.errors %}
+            $('#popup').modal('show');
+        {% endif %}
+
+        {% if formsup.errors %}
+            $('#popup1').modal('show');
+        {% endif %}
+
+        function validarNoCont() {
+            var cadena = $('#id_no_contrato')[0].value;
+            if (!(cadena.match(exp_cont) && cadena.length === 5)) {
+                $('#id_no_contrato').addClass('has-error');
+                return false;
+            } else {
+                $('#id_no_contrato').removeClass('has-error');
+                return true;
+            }
+        }
+
+        function validarNombre() {
+            if ($('#id_descripcion_ot')[0].value.match(exp_nombre)) {
+                $('#id_descripcion_ot').removeClass('has-error');
+                return true;
+            } else {
+                $('#id_descripcion_ot').addClass('has-error');
+                return false;
+            }
+        }
+
+        function validarSolicitud() {
+            if ($('#id_solicitud')[0].value.match(exp_solicitud)) {
+                $('#id_solicitud').removeClass('has-error');
+                return true;
+            } else {
+                $('#id_solicitud').addClass('has-error');
+                return false;
+            }
+        }
+
+        function ValidarMonto() {
+            var cadena = $('#id_monto')[0].value;
+            if (!(cadena.match(exp_monto) && cadena.length < 100000 && cadena >= 1)) {
+                $('#id_monto').addClass('has-error');
+                return false;
+            } else {
+                $('#id_monto').removeClass('has-error');
+                return true;
+            }
+        }
+
+        function validarCodigo() {
+            var cadena = $('#id_codigo_ot')[0].value;
+            if (!(cadena.match(exp_codigo) && cadena.length === 10)) {
+                $('#id_codigo_ot').addClass('has-error');
+                return false;
+            } else {
+                $('#id_codigo_ot').removeClass('has-error');
+                return true;
+            }
+        }
+
+        $("#formularioOT").on('keyup', function () {
+            validarFormulario();
+        });
+
+        $("#formularioSuplemento").on('keyup', function () {
+            validarFormulario1();
+        });
+
+        $(document).ready(function () {
+            // DataTable
+            var table = $('#tabla_ot').DataTable({
+                "language": {
+                    processing: "Procesando...",
+                    search: "Buscar:",
+                    lengthMenu: "Mostrar _MENU_ registros",
+                    info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    infoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    infoFiltered: "(filtrado de un total de _MAX_ registros)",
+                    infoPostFix: "",
+                    loadingRecords: "Cargando...",
+                    zeroRecords: "No se encontraron resultados",
+                    emptyTable: "Ningún dato disponible en esta tabla",
+                    paginate: {
+                        first: "Último",
+                        previous: "Anterior",
+                        next: "Siguiente",
+                        last: "Último"
+                    }
+                }
+            });
+            // Setup - add a text input to each footer cell
+            $('#tabla_ot').find('tfoot th').each(function () {
+                var title = $(this).text();
+                $(this).html('<input class="form-control" type="text" style="font-size: smaller" placeholder="Buscar ' + title + '"/>');
+            });
+
+            // Apply the search
+            table.columns().every(function () {
+                var that = this;
+
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}
+

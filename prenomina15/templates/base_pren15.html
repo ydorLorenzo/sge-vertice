@@ -1,0 +1,761 @@
+{% load static %}
+{% load filters %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>{% block title %}Prenómina 15{% endblock %}</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/dataTables.jqueryui.css' %}" rel="stylesheet">
+    <link href="{% static 'font-aweson/css/font-awesome.min.css' %}" rel="stylesheet">
+    <!-- Botones exportar datatable -->
+    <link href="{% static 'css/colReorder.dataTables.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/buttons.dataTables.min.css' %}" rel="stylesheet">
+    <!--Image Upload-->
+    {#    <link href="{% static 'css/sidebar/bootstrap.min.css' %}" rel="stylesheet">#}
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    {#    <link href="{% static 'css/bootstrap-imageupload.css' %}" rel="stylesheet">#}
+    {#Estos son los css del datepicker#}
+    <link href="{% static 'datepickerFiles/css/bootstrap-datepicker.css' %}" rel="stylesheet">
+    <link href="{% static 'css/sidebar/mdb.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/sidebar/style5.css' %}" rel="stylesheet">
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet">
+    <link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/rowGroup.dataTables.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/fixedHeader.dataTables.min.css' %}" rel="stylesheet">
+
+
+    <style type="text/css">
+
+        #topcontrol {
+            transition: 0.5s;
+        }
+
+        .btn {
+            font-size: smaller !important;
+        }
+
+        table.dataTable thead .sorting:before, table.dataTable thead .sorting_asc:before, table.dataTable thead .sorting_desc:before, table.dataTable thead .sorting_asc_disabled:before, table.dataTable thead .sorting_desc_disabled:before {
+            right: 1em;
+        }
+    </style>
+
+    {% block styles %} {% endblock %}
+</head>
+
+<body>
+<nav id="navbar" class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: #263238;">
+    <button type="button" id="sidebarCollapse" class="navbar-btn" style="margin-right: 10px; border-radius: 100px;">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <a class="navbar-brand" href="{% url 'home_principal' %}">Sistema de Gestión Empresarial VERTICE</a>
+    <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarColor01"
+            aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="navbar-collapse collapse" id="navbarColor01" style="">
+        <ul class="navbar-nav ml-auto" style="margin-right: 10px;">
+            <li class="nav-item" style="margin-right: 10px; color: white;">
+                <h6 style="margin-top: 0.5rem;">
+                    Bienvenido(a) {{ request.user.first_name }} {{ request.user.last_name }}</h6>
+            </li>
+            <div class="btn-group">
+                <a class="btn btn-sm btn-primary" href="/admin/" style="text-transform: none; font-size: 1rem;"><i
+                        class="fa fa-gears" title="Administraci&oacute;n"
+                        style="color: white;"></i></a>
+                <button type="button" class="btn  btn-sm btn-primary dropdown-toggle dropdown-toggle-split"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right" style="text-align: center;">
+                    <h6 class="dropdown-header">Acciones</h6>
+                    <a class="dropdown-item" href="/admin/"><i class="fa fa-gear" title="Administraci&oacute;n"
+                                                               style="color: black;"></i> Administraci&oacute;n.</a>
+                    <a class="dropdown-item" id="fullscreen" href="javascript:"><i class="fa fa-angle-up"
+                                                                                   title="Inicio"
+                                                                                   style="color: black;"></i> Pantalla
+                        Completa. </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{% url 'logout' %}"><i class="fa fa-sign-out"
+                                                                          title="Cerrar sesi&oacute;n"
+                                                                          style="color: black;"></i> Cerrar sesi&oacute;n.</a>
+                </div>
+            </div>
+        </ul>
+    </div>
+</nav>
+<div class="wrapper">
+    <!-- Sidebar Holder -->
+    <nav id="sidebar" style="padding-top: 15px">
+        <div class="sidebar-header">
+            <h3>Prenómina 15</h3>
+        </div>
+        <ul class="list-unstyled components">
+            <a href="http://127.0.0.1:8000/pren/home_pren15/#" style="padding-left: 5px">Menú</a>
+            <br>
+            {% if menu_gestionar_obra %}
+            <li>
+                <a href="{% url 'gestionarObra' %}" aria-expanded="false" class="dropdown-toggle"><i
+                        class="fa fa-building-o"></i> Gestionar Obra</a>
+            </li>
+            {% endif %}
+            {% if menu_gestionar_objeto %}
+            <li>
+                <a aria-expanded="false" class="dropdown-toggle" data-toggle="modal" href="#modalGestionar_Objetos"><i
+                        class="fa fa-cube"></i> Gestionar Objeto</a>
+            </li>
+            {% endif %}
+            {% if menu_gestionar_plano %}
+            <li>
+                <a aria-expanded="false" class="dropdown-toggle" data-toggle="modal" href="#modalGestionar_Plano"><i
+                        class="fa fa-image"></i> Gestionar Planos</a>
+            </li>
+            {% endif %}
+            {% if menu_generate_acta %}
+            <li>
+                <a aria-expanded="false" class="dropdown-toggle" data-toggle="modal" href="#modalBuscarActa"><i
+                        class="fa fa-file-text-o"></i> Generar Acta</a>
+            </li>
+            {% endif %}
+            {% if menu_export_dato %}
+            <li>
+                <a aria-expanded="false" class="dropdown-toggle" data-toggle="modal" href="#modalExportarDatos"><i
+                        class="fa fa-file-excel-o"></i> Exportar Datos</a>
+            </li>
+            {% endif %}
+            {% if menu_generate_certifico %}
+            <li>
+                <a aria-expanded="false" class="dropdown-toggle" data-toggle="modal" href="#modalExportarCertifico"><i
+                        class="fa fa-file-pdf-o"></i> Generar Certifico</a>
+            </li>
+            {% endif %}
+            {% if menu_export_prenomina %}
+            <li>
+                <a aria-expanded="false" class="dropdown-toggle" data-toggle="modal" href="#modalExportarPrenomina"><i
+                        class="fa fa-file-excel-o"></i> Exportar Prenomina</a>
+            </li>
+            {% endif %}
+            {% if menu_generate_anexo %}
+            <li>
+                <a aria-expanded="false" class="dropdown-toggle" data-toggle="modal" href="#modalExportarAnexo"><i
+                        class="fa fa-file-excel-o"></i> Generar Anexo 2</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <!-- Page Content Holder -->
+    <div id="modalGestionar_Objetos" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 style="font-weight: bold">Gestionar Objetos</h6>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <div class="panel-body">
+                        <p style="text-align: center; color: black">Seleccione la obra para buscar objetos.</p>
+                        <form method="POST" action="{% url 'gestionarObjeto' %}">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-sm-12" style=" padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="obra">Obra:</label>
+                                </div>
+                                <div class="col-sm-8">
+                                    <select name="obra" id="id_obra" class="form-control" title="obra">
+                                        {% for obra in obras %}
+                                            <option value="{{ obra.id }}">{{ obra.nombre }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <br>
+                            <div class=" modal-footer">
+                                <button type="submit" class="btn btn-sm btn-primary" style="text-transform: none;">
+                                    Buscar
+                                </button>
+                                <button type="button" class="btn btn-sm btn-danger" style="text-transform: none;"
+                                        data-dismiss="modal">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="modalGestionar_Plano" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 style="font-weight: bold">Gestionar Planos</h6>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <div class="panel-body">
+                        <p style="text-align: center; color: black">Seleccione la obra para buscar planos.</p>
+                        <form method="POST" action="{% url 'gestionarPlano' %}">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-sm-12" style=" padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="obra">Obra:</label>
+                                </div>
+                                <div class="col-sm-8">
+                                    <select name="obra" id="id_obra" class="form-control" title="obra">
+                                        {% for obra in obras %}
+                                            <option value="{{ obra.id }}">{{ obra.nombre }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <br>
+                            <div class=" modal-footer">
+                                <button type="submit" class="btn btn-sm btn-primary" style="text-transform: none;">
+                                    Buscar
+                                </button>
+                                <button type="button" class="btn btn-sm btn-danger" style="text-transform: none;"
+                                        data-dismiss="modal">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="modalExportarDatos" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 style="font-weight: bold">Exportar Datos</h6>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <div class="panel-body">
+                        <div class="panel panel-default">
+                            <div class="row" style="margin-bottom: 20px;">
+                                {% if error_add %}
+                                    <div class="alert alert-danger"
+                                         style="width: 100%; text-align: center; margin: 0 auto; padding: 0 10px; border-radius: 0;">
+                                        <p style="margin-top: 10px">Debe seleccionar un rango de fecha válido</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <p style="text-align: center; color: black">Seleccione rango de fecha para generar el
+                            reporte.</p>
+                        <form method="POST" action="{% url 'exportarDatos' %}">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-sm-2" style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="fecha_inic">Desde:</label>
+                                </div>
+                                <div class="col-sm-4" style="padding-left: 5px;">
+                                    <div class="input-group">
+                                        <input type="text" name="fecha_inic" id="fecha_inic" class="form-control">
+                                        <span class="input-group-append uno"
+                                              style="background-color: lightgray; width: 28px"><i class="fa fa-calendar"
+                                                                                                  style="margin-left: 5px; padding-top: 10px; font-size: large; "></i></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2" style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="fecha_fin">Hasta:</label>
+                                </div>
+                                <div class="col-sm-4" style="padding-left: 0;">
+                                    <div class="input-group">
+                                        <input type="text" name="fecha_fin" id="fecha_fin" class="form-control">
+                                        <span class="input-group-append dos"
+                                              style="background-color: lightgray; width: 28px"><i class="fa fa-calendar"
+                                                                                                  style="margin-left: 5px; padding-top: 10px; font-size: large; "></i></span>
+                                    </div>
+                                </div>
+                                <div class="col"></div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-sm-2" style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="obra1">Obra:</label>
+                                </div>
+                                <div class="col-sm-10">
+                                    <select name="obra1" id="id_obra1" class="form-control" title="obra1">
+                                        {% for obra in obras %}
+                                            <option value="{{ obra.id }}">{{ obra.nombre }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <br>
+                            <div class=" modal-footer">
+                                <button type="submit" class="btn btn-sm btn-primary" style="text-transform: none;">
+                                    Buscar
+                                </button>
+                                <button type="button" class="btn btn-sm btn-danger" style="text-transform: none;"
+                                        data-dismiss="modal">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="modalExportarCertifico" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 style="font-weight: bold">Exportar Certifico</h6>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <div class="panel-body">
+                        <div class="panel panel-default">
+                            <div class="row" style="margin-bottom: 20px;">
+                                {% if error_cert %}
+                                    <div class="alert alert-danger"
+                                         style="width: 100%; text-align: center; margin: 0 auto; padding: 0 10px; border-radius: 0;">
+                                        <p style="margin-top: 10px; color: black">Debe seleccionar un rango de fecha
+                                            válido</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <form method="POST" action="{% url 'visualizarCertifico' %}">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-sm-1" style="padding-right: 0; padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="inicio">Desde:</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <input name="inicio" type="text" class="form-control" id="inicio">
+                                </div>
+                                <div class="col-sm-1" style="padding-right: 0; padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="fin">Hasta:</label>
+                                </div>
+                                <div class="col-sm-2" style="padding-left: 0;">
+                                    <input name="fin" type="text" class="form-control" id="fin" title="Fin">
+                                </div>
+                                <div class="col-sm-1" style="padding-right: 0; padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="obra1">Obra:</label>
+                                </div>
+                                <div class="col-sm-5">
+                                    <select name="obra1" id="id_obra1" class="form-control" title="obra1">
+                                        {% for obra in obras %}
+                                            <option value="{{ obra.id }}">{{ obra.nombre }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="recibido_por" style="font-weight: bold">Nombre que recibe</label>
+                                        <input type="text" class="form-control" id="recibido_por" name="recibido_por"
+                                               title="recibido_por" required>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="cargo" style="font-weight: bold">Cargo</label>
+                                        <input type="text" class="form-control" id="cargo" name="cargo"
+                                               title="cargo" required>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="org" style="font-weight: bold">Organismo</label>
+                                        <input type="text" class="form-control" id="org" name="org"
+                                               title="org" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <div class=" modal-footer">
+                                <button type="submit" class="btn btn-sm btn-primary" style="text-transform: none;">
+                                    Generar
+                                </button>
+                                <button type="button" class="btn btn-sm btn-danger" style="text-transform: none;"
+                                        data-dismiss="modal">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalExportarPrenomina" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 style="font-weight: bold">Exportar Prenomina</h6>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <div class="panel-body">
+                        <div class="panel panel-default">
+                            <div class="row" style="margin-bottom: 20px;">
+                                {% if error_pren %}
+                                    <div class="alert alert-danger"
+                                         style="width: 100%; text-align: center; margin: 0 auto; padding: 0 10px; border-radius: 0;">
+                                        <p style="margin-top: 10px">Debe seleccionar un rango de fecha válido</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <p style="text-align: center; color: black">Seleccione rango de fecha para generar la
+                            prenómina</p>
+                        <form method="POST" action="{% url 'exportarPrenomina' %}">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col"></div>
+                                <div class="col-sm-2" style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="fecha_inic">Desde:</label>
+                                </div>
+                                <div class="col-sm-3" style="padding-left: 5px;">
+                                    <input name="fecha_inic" type="text" class="form-control" id="fecha_inic">
+                                </div>
+                                <div class="col-sm-2" style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="fecha_fin">Hasta:</label>
+                                </div>
+                                <div class="col-sm-3" style="padding-left: 0;">
+                                    <input name="fecha_fin" type="text" class="form-control" id="fecha_fin"
+                                           title="Fecha Fin">
+                                </div>
+                                <div class="col"></div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-sm-1"></div>
+                                <div class="col-sm-2" style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="obra1">Obra:</label>
+                                </div>
+                                <div class="col-sm-8">
+                                    <select name="obra1" id="id_obra1" class="form-control" title="obra1">
+                                        {% for obra in obras %}
+                                            <option value="{{ obra.id }}">{{ obra.nombre }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <br>
+                            <div class=" modal-footer">
+                                <button type="submit" class="btn btn-sm btn-primary" style="text-transform: none;">
+                                    Generar
+                                </button>
+                                <button type="button" class="btn btn-sm btn-danger" style="text-transform: none;"
+                                        data-dismiss="modal">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="modalBuscarActa" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 style="font-weight: bold">Buscar Acta</h6>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <div class="panel-body">
+                        <p style="text-align: center; color: black">Seleccione la obra para buscar acta.</p>
+                        <form method="POST" action="{% url 'ListActas' %}">
+                            {% csrf_token %}
+                            <div class="row">
+
+                                <div class="col-sm-12" style=" padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="obra1">Obra:</label>
+                                </div>
+                                <div class="col-sm-8">
+                                    <select name="obra1" id="id_obra1" class="form-control" title="obra1">
+                                        {% for obra in obras %}
+                                            <option value="{{ obra.id }}">{{ obra.nombre }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-sm-12" style="padding-top: 8px;">
+                                    <label style="font-weight: bold; for="recibido_por">Recibido por </label>
+                                </div>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="recibido_por" name="recibido_por" title="recibido_por" required>
+                                </div>
+                            </div>
+                            <br>
+                            <div class=" modal-footer">
+                                <button type="submit" class="btn btn-sm btn-primary" style="text-transform: none;">
+                                    Buscar
+                                </button>
+                                <button type="button" class="btn btn-sm btn-danger" style="text-transform: none;"
+                                        data-dismiss="modal">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="modalExportarAnexo" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 style="font-weight: bold">Generar Anexo 2</h6>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <div class="panel-body">
+                        <div class="panel panel-default">
+                            <div class="row" style="margin-bottom: 20px;">
+                                {% if error_anexo %}
+                                    <div class="alert alert-danger"
+                                         style="width: 100%; text-align: center; margin: 0 auto; padding: 0 10px; border-radius: 0;">
+                                        <p style="margin-top: 10px">Debe seleccionar un rango de fecha válido</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <p style="text-align: center; color: black">Seleccione rango de fecha para generar el
+                            reporte.</p>
+                        <form method="POST" action="{% url 'exportarAnexo' %}">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-sm-2" style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="fecha1">Desde:</label>
+                                </div>
+                                <div class="col-sm-4" style="padding-left: 5px;">
+                                    <div class="input-group">
+                                        <input type="text" name="fecha1" id="fecha1" class="form-control" required>
+                                        <span class="input-group-append ini"
+                                              style="background-color: lightgray; width: 28px"><i class="fa fa-calendar"
+                                                                                                  style="margin-left: 5px; padding-top: 10px; font-size: large; "></i></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2" style="padding-right: 0; padding-left: 5px; padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="fecha2">Hasta:</label>
+                                </div>
+                                <div class="col-sm-4" style="padding-left: 0;">
+                                    <div class="input-group" style="margin-left: -20px">
+                                        <input type="text" name="fecha2" id="fecha2" class="form-control" required>
+                                        <span class="input-group-append fin"
+                                              style="background-color: lightgray; width: 28px"><i class="fa fa-calendar"
+                                                                                                  style="margin-left: 5px; padding-top: 10px; font-size: large; "></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-sm-2" style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="obra1">Obra:</label>
+                                </div>
+                                <div class="col-sm-10" style="margin-left: -15px">
+                                    <select name="obra1" id="id_obra1" class="form-control" title="obra1">
+                                        {% for obra in obras %}
+                                            <option value="{{ obra.id }}">{{ obra.nombre }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-sm-2" style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="total_hrs">Horas Mes:</label>
+                                </div>
+                                <div class="col-sm-3" style="padding-right: 0; padding-left: 5px; padding-top: 8px;">
+                                    <input type="number" name="total_hrs" id="total_hrs" class="form-control"
+                                           title="total_hrs" min="1" required>
+                                </div>
+                            </div>
+                            <div class=" modal-footer">
+                                <button type="submit" class="btn btn-sm btn-primary" style="text-transform: none;">
+                                    Buscar
+                                </button>
+                                <button type="button" class="btn btn-sm btn-danger" style="text-transform: none;"
+                                        data-dismiss="modal">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% block content %}
+
+    {% endblock %}
+
+    <!-- /container -->
+
+</div>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/sidebar/mdb.min.js' %}"></script>
+
+<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'js/dataTables.bootstrap4.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/dataTables.colReorder.min.js' %}"></script>
+<script src="{% static 'js/dataTables.buttons.min.js' %}"></script>
+<script src="{% static 'js/buttons.colVis.min.js' %}"></script>
+<script src="{% static 'js/dataTables.rowGroup.min.js' %}"></script>
+<script src="{% static 'js/jszip.min.js' %}"></script>
+<script src="{% static 'js/buttons.html5.min.js' %}"></script>
+<script src="{% static 'js/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'js/dataTables.keyTable.min.js' %}"></script>
+<script src="{% static 'js/dataTables.fixedHeader.min.js' %}"></script>
+
+<script type="text/javascript" src="{% static 'js/dataTables.jqueryui.js' %}"></script>
+<script src="{% static 'js/app.js' %}"></script>
+<!--Image Upload preview-->
+{#<script src="{% static 'js/bootstrap-imageupload.js' %}"></script>#}
+
+{#js Datepicker#}
+<script src="{% static 'datepickerFiles/js/bootstrap-datepicker.js' %}"></script>
+<script src="{% static 'datepickerFiles/locales/bootstrap-datepicker.es.min.js' %}"></script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('active');
+            $(this).toggleClass('active');
+        });
+    });
+
+    {% if error_add %}
+        $('#modalExportarDatos').modal('show');
+    {% endif %}
+
+    {% if error_cert %}
+        $('#modalExportarCertifico').modal('show');
+    {% endif %}
+
+    {% if error_pren %}
+        $('#modalExportarPrenomina').modal('show');
+    {% endif %}
+
+    {% if error_anexo %}
+        $('#modalExportarAnexo').modal('show');
+    {% endif %}
+
+
+    var getDate = function (input) {
+        return new Date(input.date.valueOf());
+    };
+
+    $("#fecha_inic, #fecha_fin, #inicio, #fin, #fecha1, #fecha2").prop("readonly", true).datepicker({
+        uiLibrary: 'bootstrap4',
+        language: 'es',
+        format: 'yyyy-mm-dd',
+        todayHighlight: true,
+        clearBtn: true,
+    });
+
+    $("span.input-group-append.uno").on("click", function () {
+        $("#fecha_inic").datepicker("show");
+    });
+
+    $("span.input-group-append.dos").on("click", function () {
+        $("#fecha_fin").datepicker("show");
+    });
+
+    $("span.input-group-append.ini").on("click", function () {
+        $("#fecha1").datepicker("show");
+    });
+
+    $("span.input-group-append.fin").on("click", function () {
+        $("#fecha2").datepicker("show");
+    });
+
+    $('#fecha_inic').datepicker({
+        startDate: '+5d',
+        endDate: '+35d'
+    }).on('changeDate',
+        function (selected) {
+            $('#fecha_fin').datepicker('setStartDate', getDate(selected));
+        });
+
+    $('#fecha_fin').datepicker({
+        startDate: '+6d',
+        endDate: '+36d'
+    }).on('changeDate',
+        function (selected) {
+            $('#fecha_inic').datepicker('setEndDate', getDate(selected));
+        });
+
+    $('#inicio').datepicker({
+        startDate: '+5d',
+        endDate: '+35d'
+    }).on('changeDate',
+        function (selected) {
+            $('#fin').datepicker('setStartDate', getDate(selected));
+        });
+
+    $('#fin').datepicker({
+        startDate: '+6d',
+        endDate: '+36d'
+    }).on('changeDate',
+        function (selected) {
+            $('#inicio').datepicker('setEndDate', getDate(selected));
+        });
+
+    $('#fecha1').datepicker({
+        startDate: '+5d',
+        endDate: '+35d'
+    }).on('changeDate',
+        function (selected) {
+            $('#fecha2').datepicker('setStartDate', getDate(selected));
+        });
+
+    $('#fecha2').datepicker({
+        startDate: '+6d',
+        endDate: '+36d'
+    }).on('changeDate',
+        function (selected) {
+            $('#fecha1').datepicker('setEndDate', getDate(selected));
+        });
+
+</script>
+
+
+{% block javascript %}
+
+{% endblock %}
+<div id="topcontrol"
+     style="position: fixed; bottom: 10px; right: 10px; cursor: pointer; z-index: 99999; opacity: 0;"
+     title="Ir arriba">
+    <img src="{% static 'images/up.png' %}" style="width:40px; height:40px">
+</div>
+</body>
+</html>

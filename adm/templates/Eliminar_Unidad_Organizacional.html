@@ -1,0 +1,25 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <form role="form" action="{% url 'eliminarUO' object.pk %}" method="post">{% csrf_token %}
+                <div class="modal-header">
+            <h6><strong>Eliminar Unidad Organizacional</strong></h6>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <p style="text-align: justify">¿Estás seguro que deseas eliminar la Unidad Organizacional <strong>"{{ object.nombre }}"</strong>?</p>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="col-lg-12 text-right">
+                <input type="submit" class="btn btn-danger" name="submit" value="Eliminar">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>

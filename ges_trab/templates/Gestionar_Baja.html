@@ -1,0 +1,178 @@
+
+
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Gestionar Bajas{% endblock %}
+{% block styles %}
+    <style type="text/css">
+        td, th {
+            padding: 1px!important;
+        }
+    </style>
+{% endblock %}
+{% block migas %}
+    <ol class="breadcrumb" style="margin-top: 56px; opacity: 0.9; position: fixed;
+    top: 0; right: 0; left: 0; z-index: 1000;">
+        <li class="breadcrumb-item"><a href="/home/">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="/home/">Trabajadores</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Gestionar Bajas</li>
+    </ol>
+{% endblock %}
+{% block content %}
+    <div class=content align="center"><h5><strong>Gestionar Bajas</strong></h5></div>
+    <div class="container theme-showcase" role="main" style="width: 1200px; font-size: small">
+        <div class="text-right" style="color: white;">
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#popup" style="background-color: rebeccapurple; border-color: rebeccapurple; font-size: small"><i
+                    class="fa fa-file-pdf-o"></i> Reporte
+            </button>
+        </div>
+        <p></p>
+        <div class="row">
+            <div class="col-lg-12">
+                <table class="display" cellspacing="0" width="100%" id="tabla" style="font-size: small">
+                    <thead>
+                    <tr style="width:10px; text-align: center">
+                        <th style="width: 15px"><strong>No.</strong></th>
+                        <th style="width: 140px"><strong>Nombre y apellidos</strong></th>
+                        <th style="width: 25px"><strong>CI</strong></th>
+                        <th style="width: 110px"><strong>Área de Trabajo</strong></th>
+                        <th style="width: 110px"><strong>Motivo de la Baja</strong></th>
+                        <th style="width: 70px"><strong>Graduado de</strong></th>
+                        <th style="width: 10px"><strong>Cat</strong></th>
+                        <th style="width: 20px"><strong>Fecha de Baja</strong></th>
+                        <th style="width: 40px"><strong>Acciones</strong></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for i in list_baja %}
+
+                        <tr class="table-light">
+                            <td style="text-align: center"> {{ forloop.counter }} </td>
+                            <td>{{ i.primer_nombre }} {{ i.segundo_nombre }} {{ i.apellidos }}</td>
+                            <td style="text-align: center">{{ i.ci }}</td>
+                            <td>{{ i.departamento }}</td>
+                            <td>{{ i.causa }}</td>
+                            <td>{{ i.especialidad }}</td>
+                            <td style="text-align: center">{{ i.categoria }}</td>
+                            <td style="text-align: center">{{ i.fecha_baja|date:"d/m/Y" }}</td>
+                            <td width="60" nowrap>
+                                <div class="icon-acciones" align="center">
+
+                                    <a onclick=" return abrir_modal('{% url 'altabaja' i.pk %}')"
+                                       class="badge badge-pill badge-success">
+                                        <i class="fa fa-arrow-up" title="Alta al Trabajador" style="color: white;"></i>
+                                    </a>
+                                    <a onclick=" return abrir_modal('{% url 'EditarBaja' i.pk %}')"
+                                        class="badge badge-pill badge-primary">
+                                        <i class="fa fa-edit" title="Editar Baja" style="color: white;"></i>
+                                    </a>
+                                    <a href="{% url 'MovimientoNominaBaja' i.pk %}"
+                                       class="badge badge-pill badge-secondary" style="background-color: orangered">
+                                        <i class="fa fa-file-text" title="Movimiento de Nomina"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div id="delete" class="modal fade" role="dialog"></div>
+
+    <div id="popup" class="modal fade" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5><strong>Reporte de Bajas</strong></h5>
+                    <button type="button" class="close" data-dismiss="modal">x</button>
+                </div>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <div class="panel-body">
+                        <div class="panel panel-default">
+                            <div class="row" style="margin-bottom: 20px;">
+                                {% if error_add %}
+                                    <div class="alert alert-danger"
+                                         style="width: 100%; text-align: center; margin: 0 auto; padding: 0 10px; border-radius: 0;">
+                                        <p>{{ error_add }}</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <p style="text-align: center">Seleccione rango de fecha para generar el reporte.</p>
+                        <form method="post" action="{% url 'ExportarReporteBajas' %}">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col"></div>
+                                <div class="col-sm-2" style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="fecha_inic">Desde:</label>
+                                </div>
+                                <div class="col-sm-3" style="padding-left: 5px;">
+                                    <input name="fecha_inic" type="text" class="form-control" id="fecha_inic" required>
+                                </div>
+                                <div class="col-sm-2" style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="fecha_inic">Hasta:</label>
+                                </div>
+                                <div class="col-sm-3" style="padding-left: 0;">
+                                    <input name="fecha_fin" type="text" class="form-control" id="fecha_fin" title="Fecha Fin" required>
+                                </div>
+                                <div class="col"></div>
+                            </div>
+                            <br>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary" style="text-transform: none;">Generar
+                                    Reporte
+                                </button>
+                                <button type="button" class="btn btn-danger" style="text-transform: none;"
+                                        data-dismiss="modal">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block javascript %}
+    <script type="text/javascript">
+
+        var getDate = function (input) {
+            return new Date(input.date.valueOf());
+        };
+
+        $("#fecha_inic").prop("readonly", true).datepicker({
+            uiLibrary: 'bootstrap4',
+            language: 'es',
+            format: 'yyyy-mm-dd'
+        });
+
+        $("#fecha_fin").prop("readonly", true).datepicker({
+            uiLibrary: 'bootstrap4',
+            language: 'es',
+            format: 'yyyy-mm-dd'
+        });
+
+        $('#fecha_inic').datepicker({
+            startDate: '+5d',
+            endDate: '+35d'
+        }).on('changeDate',
+            function (selected) {
+                $('#fecha_fin').datepicker('setStartDate', getDate(selected));
+            });
+
+        $('#fecha_fin').datepicker({
+            startDate: '+6d',
+            endDate: '+36d'
+        }).on('changeDate',
+            function (selected) {
+                $('#fecha_inic').datepicker('setEndDate', getDate(selected));
+            });
+    </script>
+{% endblock %}

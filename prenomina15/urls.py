@@ -1,0 +1,37 @@
+from django.urls import path
+from . import views
+from django.contrib.auth.decorators import login_required
+
+urlpatterns = [
+    path('home_pren15/', login_required(views.home_pren15), name='home_pren15'),
+    path('obras/', login_required(views.gestionar_obra), name='gestionarObra'),
+    path('planos/', login_required(views.gestionar_plano), name='gestionarPlano'),
+    path('objetos/', login_required(views.gestionar_objeto), name='gestionarObjeto'),
+    path('adicionar_obra/', login_required(views.adicionar_obra), name='adicionarObra'),
+    path('editar_obra/<int:pk>', login_required(views.editar_obra), name='editarObra'),
+    path('eliminar_obra/<int:pk>', login_required(views.eliminar_obra), name='eliminarObra'),
+    path('adicionar_plano/', login_required(views.adicionar_plano), name='adicionarPlano'),
+    path('editar_plano/<int:pk>', login_required(views.editar_plano), name='editarPlano'),
+    path('eliminar_plano/<int:pk>', login_required(views.eliminar_plano), name='eliminarPlano'),
+    path('adicionar_objeto/', login_required(views.adicionar_objeto), name='adicionarObjeto'),
+    path('editar_objeto/<int:pk>', login_required(views.editar_objeto), name='editarObjeto'),
+    path('eliminar_objeto/<int:pk>', login_required(views.eliminar_objeto), name='eliminarObjeto'),
+    path('obj_por_obra/<int:pk>/', login_required(views.obj_por_obra), name='objPorObra'),
+    path('act_por_obra/<int:pk>/', login_required(views.act_por_obra), name='actPorObra'),
+    path('registrar_revision/', login_required(views.registrar_revision), name='registrarRevision'),
+    path('listado_revisiones/<int:pk>/', login_required(views.listado_revisiones), name='listadoRev'),
+    path('exportar_datos/', login_required(views.exportar_datos), name='exportarDatos'),
+    path('editar_revision/<int:pk>/', login_required(views.editar_revision), name='editarRevision'),
+    path('acta_entrega/', login_required(views.acta_entrega_planos), name='ActEntPlanos'),
+    path('exportar_acta_entrega/<fecha>/<rp>/', login_required(views.exportar_acta_entrega),
+         name='exportarActaEntrega'),
+    path('visualizar_certifico/', login_required(views.visualizar_certifico), name='visualizarCertifico'),
+    path('eliminar_revision/<pk>', login_required(views.eliminar_revision), name='eliminarRevision'),
+    path('exportar_prenomina/', login_required(views.exportar_prenomina), name='exportarPrenomina'),
+    path('exportar_certifico/<obra>/<fecha_ini>/<fecha_fin>/<recibido_por>/<cargo>/<org>/',
+         login_required(views.exportar_certifico),
+         name='exportarCertifico'),
+    path('list_acta/', login_required(views.list_acta), name='ListActas'),
+    path('buscar_acta/<obra_id>,<recibido_por>/', login_required(views.buscar_acta), name='buscarActas'),
+    path('exportar_anexo/', login_required(views.exportar_anexo), name='exportarAnexo'),
+]

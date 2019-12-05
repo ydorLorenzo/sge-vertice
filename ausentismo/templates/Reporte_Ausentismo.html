@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Reporte Ausentismo{% endblock %}
+{% block styles %}
+    <style type="text/css">
+        th {
+            padding: 10px 5px !important;
+        }
+    </style>
+{% endblock %}
+{% block migas %}
+    <ol class="breadcrumb" style="margin-top: 56px; opacity: 0.9; position: fixed;
+    top: 0; right: 0; left: 0; z-index: 1000;">
+        <li class="breadcrumb-item"><a href="/home/">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="/home/">Ausentismo</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Vista previa Reporte Ausentismo</li>
+    </ol>
+{% endblock %}
+{% block content %}
+    <div class=content align="center"><h5><strong>Listado de Ausentismo per&iacute;odo ({{ fecha_inic }} / {{ fecha_fin }})</strong></h5></div>
+    <div class="container" role="main">
+        <div class="text-right" style="color: white;">
+            <form action="{% url 'exportarReporteAusentismo' %}" method="post">
+                {% csrf_token %}
+                <input name="fecha_inic" value="{{ fecha_inic }}" type="hidden">
+                <input name="fecha_fin" value="{{ fecha_fin }}" type="hidden">
+                <button class="btn btn-success" type="submit"><i class="fa fa-download"></i> Exportar PDF</button>
+            </form>
+        </div>
+        <p></p>
+        <div class="row">
+            <div class="col-lg-12">
+                <table class="display table table-striped" cellspacing="0" width="100%" id="tabla">
+                    <thead>
+                    <tr>
+                        <th style="text-align: center;">Area</th>
+                        <th style="text-align: center;">Fecha</th>
+                        <th style="text-align: center;">Horas</th>
+                        <th style="text-align: center;">Causal</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for dep in departments %}
+                        <tr>
+                            <td colspan="4"
+                                style="font-weight: bold; text-align: left">
+                                {% filter upper %}{{ dep.codigo }} {{ dep.nombre }}{% endfilter %}</td>
+                        </tr>
+                        {% for person in dep.personas %}
+                            <tr>
+                                <td colspan="4"
+                                    style="font-weight: bold; text-align: left; padding-left: 30px !important;">
+                                    {% filter upper %}{{ person.codigo }} {{ person.nombre }}{% endfilter %}</td>
+                            </tr>
+                            {% for sub in person.subsidios %}
+                                <tr>
+                                    <td></td>
+                                    <td style="text-align: center;">{{ sub.fecha|date:"d/m/Y" }}</td>
+                                    <td style="text-align: center;">{{ sub.horas }}</td>
+                                    <td style="text-align: center;">
+                                        {% if sub.causal == 'V' %}
+                                            Vacaciones
+                                        {% elif  sub.causal == 'Cm' %}
+                                            Certificado M&eacute;dico
+                                        {% elif  sub.causal == 'LSS' %}
+                                            Licencia sin Sueldo
+                                        {% elif  sub.causal == 'MI' %}
+                                            Misi&oacute;n Internacionalista
+                                        {% elif  sub.causal == 'I' %}
+                                            Interrupci&oacute;n
+                                        {% elif  sub.causal == 'B' %}
+                                            Baja
+                                        {% elif  sub.causal == 'A' %}
+                                            Alta
+                                        {% elif  sub.causal == 'M' %}
+                                            Movilizaci&oacute;n
+                                        {% elif  sub.causal == 'E' %}
+                                            Enfermo
+                                        {% elif  sub.causal == 'Fr' %}
+                                            Receso Laboral Retribuido
+                                        {% elif  sub.causal == 'F' %}
+                                            Prestaci&oacute;n Social
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            <tr>
+                                <td colspan="4"
+                                    style="font-weight: bold; text-align: center">
+                                    Suma para el c&oacute;digo {{ person.codigo }}, que
+                                    tiene {{ person.cant_registros }}
+                                    registros en la Base de Datos&nbsp;&nbsp;&nbsp;&nbsp;{{ person.suma_cod }}</td>
+                            </tr>
+                        {% endfor %}
+                        <tr>
+                            <td colspan="4"
+                                style="font-weight: bold; text-align: center">
+                                Suma para el &Aacute;rea {{ dep.codigo }}, que tiene {{ dep.cant_registros }} registros
+                                en la Base de Datos&nbsp;&nbsp;&nbsp;&nbsp;{{ dep.suma_area }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <h5 style="text-align: right">Existen en total {{ cant_registros_bd }} registros en la Base de Datos
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Suma
+                    total: {{ total }}</h5>
+            </div>
+        </div>
+    </div>
+    <div id="popup" class="modal fade" role="dialog"></div>
+{% endblock %}
+{% block javascript %}{% endblock %}

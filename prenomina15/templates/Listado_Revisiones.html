@@ -1,0 +1,286 @@
+{% extends "base_pren15.html" %}
+{% load static %}
+{% block title %}Listado de revisiones{% endblock %}
+{% block styles %}
+    <style type="text/css">
+        #tabla_rev_paginate a:hover {
+            background-color: #007bff !important;
+            color: white;
+            border: solid 1px;
+            border-color: #0062cc !important;
+            transition: color .25s ease-in-out, background-color .25s ease-in-out, border-color .25s ease-in-out, border .25s ease-in-out;
+        }
+
+        div.container {
+            max-width: 100%
+        }
+
+        table.dataTable td, table.dataTable th {
+            font-size: 14px;
+            padding: 2px !important;
+
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <!-- Page Content Holder -->
+    <div id="content" style="padding-top: 100px;">
+        <div class=content align="center"><h5 style="font-weight: bold">Listado de Revisiones del Plano
+            <br>{{ objeto }} {{ num }}
+        </h5>
+        </div>
+
+    <br>
+    <div class="container" role="main" style="width: 900px; font-size: small">
+    <div style="text-align: right; font-weight: bold">
+       {% if delete %}
+            <a onclick=" return abrir_modal('{% url 'eliminarRevision' pk  %}')"
+               class="btn btn-sm btn-danger" style="font-size: 12px!important; font-weight: bold">
+                <i class="fa fa-trash-o" title="Eliminar Revision"
+                   style="color: white;font-size: 13px;"></i>  Eliminar Última Revisión
+            </a></div>
+       {% endif %}
+
+        <div class="row">
+            <div class="col-lg-12">
+                <table id="tabla_rev" class="display" cellspacing="0" width="100%" style="font-size: 12px">
+                    <thead>
+                    <tr>
+                        <th style="width: 10px">No</th>
+                        <th>Fecha Revisión</th>
+                        <th>Entregado</th>
+                        <th>Observaciones</th>
+                        <th>Fecha Estado</th>
+                        <th>Estado</th>
+                        <th>Fecha VPC</th>
+                        <th>Acción</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for i in list_rev %}
+                        {% if i.estado == 'VPC' %}
+                            <tr style="color:green; font-weight: bold!important;">
+                                {% elif i.estado == 'V' %}
+                            <tr style="color:deeppink">
+                                {% elif i.estado == 'GE' %}
+                            <tr style="color:orangered">
+                        {% endif %}
+                    <td align="center">{{ i.no_rev }}</td>
+                    <td align="center">{{ i.fecha_revision|date:"d/m/Y" }}</td>
+                    {% if i.entregado != None %}
+                        <td>{{ i.entregado }}</td>
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                    {% if i.observaciones != None %}
+                        <td>{{ i.observaciones }}</td>
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                    <td align="center">{{ i.fecha_estado |date:"d/m/Y" }}</td>
+                    <td align="center">{{ i.estado }}</td>
+                    {% if i.fecha_vpc != None %}
+                        <td>{{ i.fecha_vpc|date:"d/m/Y" }}</td>
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                    <td width="60">
+                        <div class="icon-acciones" align="center">
+                            {% if change %}
+                                <a href="{% url 'editarRevision' i.pk %}"
+                                   class="badge badge-pill badge-primary">
+                                    <i class="fa fa-edit" title="Editar Revision"
+                                       style="color: white;"></i>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </td>
+                    </tr>
+
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                    <th style="padding: 6px 6px !important;">No</th>
+                    <th style="padding: 6px 6px !important;">Fecha revisión</th>
+                    <th style="padding: 6px 6px !important;">Entregado</th>
+                    <th style="padding: 6px 6px !important;">Observaciones</th>
+                    <th style="padding: 6px 6px !important;">Fecha estado</th>
+                    <th style="padding: 6px 6px !important;">Estado</th>
+                    <th style="padding: 6px 6px !important;">Fecha VPC</th>
+                    <td></td>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+    </div>
+    {% if edit %}
+        <div id="popup1" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-lg" style="width: 650px">
+                <div class="modal-content">
+                    <form id="formularioRevision" role="form" action="{% url 'editarRevision' edit %}"
+                          method="post">
+                        <div class="modal-header">
+                            <h6><span style="font-weight: bold;">Editar Revisión <br> Plano: {{ nombre }}</span></h6>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            {% csrf_token %}
+                            <div class="panel panel-default">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <strong> Fecha Revisión:</strong>{{ formrev.fecha_revision }}
+                                        <div style="color: red; font-size: small">{{ formrev.fecha_revision.errors }}</div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <strong>Entregado:</strong>{{ formrev.entregado }}
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <strong>Fecha de Estado:</strong>{{ formrev.fecha_estado }}
+                                        <div style="color: red; font-size: small">{{ formrev.fecha_estado.errors }}</div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <strong>Estado:</strong>{{ formrev.estado }}
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-sm-9">
+                                        <strong>Observaciones:</strong>{{ formrev.observaciones }}
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <strong>Fecha de VPC:</strong>{{ formrev.fecha_vpc }}
+                                    </div>
+                                </div>
+                                <br>
+                                    <div class="row">
+                                    {% if pago_aprobado == 0 %}
+                                        <div class="col-sm-2">
+                                          <strong>Aprobado:</strong>
+                                          <select name="aprobado" id="id_aprobado" class="form-control" title="aprobado">
+                                               <option           >NO</option>
+                                               <option value="SI">SI</option>
+                                          </select>
+                                      </diV>
+                                    {% elif pago_aprobado == 1 %}
+                                        <div class="col-sm-2">
+                                          <strong>Aprobado:</strong>
+                                          <select name="aprobado" id="id_aprobado" class="form-control" title="aprobado">
+                                               <option           >SI</option>
+                                               <option value="NO">NO</option>
+                                          </select>
+                                        </div>
+                                    {% else %}
+                                        <div class="col-sm-10">
+                                              <strong>Aprobado en revision #{{ rev_pago }}</strong>
+                                                <select name="aprobado" id="id_aprobado" class="form-control" title="aprobado" style="visibility:hidden">
+                                                     <option>----</option>
+                                                </select>
+                                        </div>
+                                    {% endif %}
+                                    </div>
+
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="col-lg-12 text-right">
+                                <input id="enviar" type="submit" class="btn btn-sm btn-primary" name="submit"
+                                       value="Guardar" style="font-weight: bold">
+                                <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"
+                                        style="font-weight: bold">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <div id="delete" class="modal fade" role="dialog"></div>
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+
+
+        $('#id_no_rev').prop("readonly", true);
+        $(document).ready(function () {
+            // DataTable
+            var table = $('#tabla_rev').DataTable({
+                "language": {
+                    processing: "Procesando...",
+                    search: "Buscar:",
+                    lengthMenu: "Mostrar _MENU_ registros",
+                    info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    infoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    infoFiltered: "(filtrado de un total de _MAX_ registros)",
+                    infoPostFix: "",
+                    loadingRecords: "Cargando...",
+                    zeroRecords: "No se encontraron resultados",
+                    emptyTable: "Ningún dato disponible en esta tabla",
+                    paginate: {
+                        first: "Último",
+                        previous: "Anterior",
+                        next: "Siguiente",
+                        last: "Último"
+                    }
+                }
+            });
+            // Setup - add a text input to each footer cell
+            $('#tabla_rev').find('tfoot th').each(function () {
+                var title = $(this).text();
+                $(this).html('<input class="form-control" type="text" style="font-size: smaller" placeholder="Buscar ' + title + '"/>');
+            });
+
+            {% if edit %}
+                $('#popup1').modal('show');
+            {% endif %}
+
+            // Apply the search
+            table.columns().every(function () {
+                var that = this;
+
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
+        });
+
+        var getDate = function (input) {
+            return new Date(input.date.valueOf());
+        };
+
+        $('#id_fecha_estado, #id_fecha_revision').prop("readonly", true).datepicker({
+            uiLibrary: 'bootstrap4',
+            iconsLibrary: 'font-awesome',
+            language: 'es'
+        });
+
+        $('#id_fecha_vpc').datepicker({
+            uiLibrary: 'bootstrap4',
+            iconsLibrary: 'font-awesome',
+            language: 'es'
+        });
+
+        $('#id_fecha_revision').datepicker({
+            startDate: '+5d',
+            endDate: '+35d'
+        }).on('changeDate',
+            function (selected) {
+                $('#id_fecha_estado').datepicker('setStartDate', getDate(selected));
+            });
+
+        $('#id_fecha_estado').datepicker({
+            startDate: '+6d',
+            endDate: '+36d'
+        }).on('changeDate',
+            function (selected) {
+                $('#id_fecha_revision').datepicker('setEndDate', getDate(selected));
+            });
+    </script>
+{% endblock %}

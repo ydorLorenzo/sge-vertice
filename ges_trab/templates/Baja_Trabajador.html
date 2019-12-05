@@ -1,0 +1,27 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <form role="form" action="{% url 'bajaeliminar' trabajador.id %}" method="post">{% csrf_token %}
+                <div class="modal-header">
+            <h6><strong>Baja Trabajador</strong></h6>
+            <button type="button" class="close" data-dismiss="modal">x</button>
+        </div>
+        <div class="modal-body">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <p style="text-align: justify">¿Estás seguro que desea dar baja al Trabajador <strong>" {{trabajador.primer_nombre}} {{trabajador.segundo_nombre}} {{trabajador.apellidos}}"</strong>?</p>
+                    
+                    <b>Causa:</b> <input type="text" name="causa" class="form-control" value="No definida">
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="col-lg-12 text-right">
+                <input type="submit" class="btn btn-danger" name="submit" value="Dar Baja">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>

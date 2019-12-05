@@ -1,0 +1,235 @@
+{% extends "base_pr3.html" %}
+{% load static %}
+{% block title %}Cambio Valor Producción{% endblock %}
+{% block styles %}
+    <style type="text/css">
+        .has-error {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+        }
+
+        #tabla_act_paginate a:hover {
+            background-color: #007bff !important;
+            color: white;
+            border: solid 1px;
+            border-color: #0062cc !important;
+            transition: color .25s ease-in-out, background-color .25s ease-in-out, border-color .25s ease-in-out, border .25s ease-in-out;
+        }
+        td, th {
+            padding: 1px!important;
+            class: table-succes;
+        }
+
+    </style>
+{% endblock %}
+{% block content %}
+    <!-- Page Content Holder -->
+    <div id="content" style="padding-top: 100px;">
+
+        <div class=content align="center"><h5><strong>Listado de Valor de Producción de Actividades</strong></h5></div>
+        <div class="container" role="main" style=" font-size: smaller; margin-left: 0">
+            <div class="row">
+                {% if errores %}
+                    <div class="alert alert-dismissable alert-danger">
+                        <button style="margin-left: 20px;" type="button" class="close" data-dismiss="alert"
+                                aria-hidden="true"><strong> &times;</strong></button>
+                        <strong>Error:</strong> {{ errores }}
+                    </div>
+                {% endif %}
+                <br>
+            <br>
+                <div class="col-lg-12">
+                    <table id="tabla_act" class="display table-success hover" cellspacing="0" width="100%">
+                        <thead>
+                        <tr align="center">
+                            <th>OT</th>
+                            <th>Act</th>
+                            <th>Descripción</th>
+                            <th>Ajuste Prod</th>
+                            <th>Prod Report.</th>
+                            <th>Prod Acum.</th>
+                            <th>Total Venta</th>
+                            <th>Venta-Prod Ac</th>
+                            <th>Valor Act.</th>
+                            <th>Ajuste</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for i in list_act %}
+                            <tr>
+                                <td align="center">{{ i.orden_trab.codigo_ot }}</td>
+                                <td align="center">{{ i.codigo_act }}</td>
+                                <td>{{ i.descripcion_act }}</td>
+                                <td align="center">{{ i.prod_tecleada }}</td>
+                                <td align="center">{{ i.valor_prod_act }}</td>
+                                <td align="center">0</td>
+                                <td align="center">{{ i.venta }}</td>
+                                <td align="center">0</td>
+                                <td align="center">{{ i.valor_act }}</td>
+                                <td>
+                                    <div class="icon-acciones" align="center">
+                                        <a id="{{ i.pk }} - {{ i.prod_tecleada }}"
+                                           class="badge badge-pill badge-primary ajustar">
+                                            <i class="fa fa-edit" title="Ajustar Producción"
+                                               style="color: white;"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                        <tfoot>
+                        <th style="padding: 6px 6px !important;">Orden de Trabajo</th>
+                        <th style="padding: 6px 6px !important;">Código</th>
+                        <th style="padding: 6px 6px !important;">Descripción</th>
+                        <th style="padding: 6px 6px !important;">Ajuste Prod</th>
+                        <th style="padding: 6px 6px !important;">Prod Reportada</th>
+                        <th style="padding: 6px 6px !important;">Prod Acumulada</th>
+                        <th style="padding: 6px 6px !important;">Venta</th>
+                        <th style="padding: 6px 6px !important;">Valor </th>
+                        <th style="padding: 6px 6px !important;">Valor Act</th>
+                        <td style="padding: 6px 6px !important;"></td>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="popup" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-sm-2">
+                <div class="modal-content">
+                    <form id="formularioAjuste" role="form" action="{% url 'ajustar_prod' %}"
+                          method="post">
+                        <div class="modal-header">
+                            <h5><strong>Ajustar Valor Producción</strong></h5>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            {% csrf_token %}
+                            <div class="panel panel-default">
+                                <div class="row" style="margin-bottom: 20px;">
+                                    {% if formajuste.errors %}
+                                        <div class="alert alert-danger"
+                                             style="width: 100%; text-align: center; margin: 0 auto; padding: 0 10px; border-radius: 0;">
+                                            <p>{{ formajuste.prod_tecleada.errors }}</p>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <input id="codigo_act" name="codigo_act" value="" type="hidden">
+                                <div class="row">
+                                    <div class="col-sm-6"><strong>Ajuste Valor
+                                        Producción:</strong>{{ formajuste.prod_tecleada }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="col-lg-12 text-right">
+                                <input id="enviar" type="submit" class="btn btn-primary" name="submit" value="Guardar">
+                                <button type="button" class="btn btn-danger" onclick="return cerrar_modal()">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+
+        $('.badge.badge-pill.badge-primary.ajustar').click(function () {
+            var nombre = this.id.split('-');
+            $('#popup input#codigo_act').prop('value', nombre[0]);
+            $('#popup').modal('show');
+        });
+
+        function validarFormulario() {
+            if (AjusteProd()) {
+                $('#enviar').removeAttr('disabled');
+            } else {
+                $('#enviar').attr('disabled', '');
+            }
+        }
+
+        $(document).ready(function () {
+            validarFormulario();
+        });
+
+        {% if formajuste.errors %}
+            $('#popup').modal('show');
+        {% endif %}
+
+    </script>
+    <script type="text/javascript">
+        exp_monto = "^([0-9]{1,5}){1}(([,]{1})([0-9]{0,2}))?";
+        $('#id_prod_tecleada').prop("title", 'Ajuste Producción').attr("oninvalid", 'setCustomValidity("Campo obligatorio, numérico hasta 99999")').on('change', function () {
+            validarFormulario();
+        });
+
+        {% if form.errors %}
+            $('#popup').modal('show');
+        {% endif %}
+
+        function AjusteProd() {
+            var cadena = $('#id_prod_tecleada')[0].value;
+            if (!(cadena.match(exp_monto))) {
+                $('#id_prod_tecleada').addClass('has-error');
+                return false;
+            } else {
+                $('#id_prod_tecleada').removeClass('has-error');
+                return true;
+            }
+        }
+
+        $("#formularioAjuste").on('keyup', function () {
+            validarFormulario();
+        });
+
+        $(document).ready(function () {
+            // DataTable
+            var table = $('#tabla_act').DataTable({
+                "language": {
+                    processing: "Procesando...",
+                    search: "Buscar:",
+                    lengthMenu: "Mostrar _MENU_ registros",
+                    info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    infoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    infoFiltered: "(filtrado de un total de _MAX_ registros)",
+                    infoPostFix: "",
+                    loadingRecords: "Cargando...",
+                    zeroRecords: "No se encontraron resultados",
+                    emptyTable: "Ningún dato disponible en esta tabla",
+                    paginate: {
+                        first: "Último",
+                        previous: "Anterior",
+                        next: "Siguiente",
+                        last: "Último"
+                    }
+                }
+            });
+            // Setup - add a text input to each footer cell
+            $('#tabla_act').find('tfoot th').each(function () {
+                var title = $(this).text();
+                $(this).html('<input class="form-control" type="text" style="font-size: smaller" placeholder="Buscar ' + title + '"/>');
+            });
+
+            // Apply the search
+            table.columns().every(function () {
+                var that = this;
+
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}
+

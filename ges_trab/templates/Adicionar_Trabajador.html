@@ -1,0 +1,1014 @@
+{% extends "base.html" %} {% load static %} {% block title %}Adicionar/Editar Trabajador{% endblock %}
+{% block styles %}
+    <style>
+        body {
+            padding-top: 70px;
+        }
+
+        .imageupload {
+            margin: 20px 0;
+            width: 100px;
+            height: 100px;
+        }
+
+        .thumbnail {
+            border-radius: 30%;
+            width: 100px;
+            height: 100px;
+        }
+
+        #orto {
+            display: block;
+            padding: 4px;
+            margin-bottom: 20px;
+            line-height: 1.42857143;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 30%;
+            -webkit-transition: border .2s ease-in-out;
+            -o-transition: border .2s ease-in-out;
+            transition: border .2s ease-in-out;
+            width: 100px;
+            height: 100px;
+        }
+
+        .error {
+            font-size: 10px;
+            color: red;
+        }
+
+        #nav-tabContent {
+            padding: 20px 0;
+        }
+    </style>
+
+{% endblock %}
+{% block migas %}
+    <ol class="breadcrumb" style="margin-top: 56px; opacity: 0.9; position: fixed;
+    top: 0; right: 0; left: 0; z-index: 1000;">
+        <li class="breadcrumb-item"><a href="/home/">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="/home/">Trabajadores</a></li>
+        <li class="breadcrumb-item"><a href="/trabajador/">Gestionar Altas</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Adicionar Trabajador</li>
+    </ol>
+{% endblock %}
+{% block content %}
+    <form id="new-trabajador-form" method="POST" action="#" enctype="multipart/form-data" novalidate>
+        {% csrf_token %} {% if form.errors %}
+        <ol>
+            {% for error in form.errors %}
+                <li>
+                    <strong>{{ error|escape }}</strong>
+                </li>
+            {% endfor %}
+        </ol>
+    {% endif %}
+        {% if inline.errors %}
+            <ol>
+                {% for error in inline.errors %}
+                    <li>
+                        <strong>{{ error|escape }}</strong>
+                    </li>
+                {% endfor %}
+            </ol>
+        {% endif %}
+        <div class="container theme-showcase" role="main" style="width: 1000px;">
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-personales-tab" data-toggle="tab" href="#nav-personales"
+                       role="tab" aria-controls="nav-home"
+                       aria-selected="true">Datos Personales</a>
+                    <a class="nav-item nav-link" id="nav-laborales-tab" data-toggle="tab" href="#nav-laborales"
+                       role="tab" aria-controls="nav-profile"
+                       aria-selected="false">Datos Laborales y Salariales</a>
+                    <a class="nav-item nav-link" id="nav-docentes-tab" data-toggle="tab" href="#nav-docentes" role="tab"
+                       aria-controls="nav-contact"
+                       aria-selected="false">Datos Docentes</a>
+                    <a class="nav-item nav-link" id="nav-defensa-tab" data-toggle="tab" href="#nav-defensa" role="tab"
+                       aria-controls="nav-contact"
+                       aria-selected="false">Defensa Y Otras Org.</a>
+                    <a class="nav-item nav-link" id="nav-nucleo-tab" data-toggle="tab" href="#nav-nucleo" role="tab"
+                       aria-controls="nav-contact"
+                       aria-selected="false">Núcleo Familiar</a>
+                    <a class="nav-item nav-link" id="nav-tallas-tab" data-toggle="tab" href="#nav-tallas" role="tab"
+                       aria-controls="nav-contact"
+                       aria-selected="false">Tallas</a>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-personales" role="tabpanel"
+                     aria-labelledby="nav-personales-tab">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <center>
+                                <div class="imageupload panel panel-default">
+                                    {% if form.foto.value != "" %}
+                                        <img id="orto" class="img-perfil" src="/static/media/{{ form.foto.value }}">
+                                    {% else %}
+                                        <img id="orto" src="{% static 'images/default-user.png' %}"/>
+                                    {% endif %}
+                                    <div class="file-tab panel-body">
+                                        <label style="visibility: hidden;" class="btn btn-default btn-file">
+                                            {{ form.foto }}
+                                        </label>
+                                    </div>
+                                </div>
+                            </center>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="row">
+                                <div class="col-md-4">Nombre {{ form.primer_nombre }}</div>
+                                <div class="col-md-4">2do Nombre {{ form.segundo_nombre }}</div>
+                                <div class="col-md-4">Apellidos {{ form.apellidos }}</div>
+                                <div class="col-md-4">
+                                    Usuario
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">@</div>
+                                        </div>
+                                        {{ form.usuario }}
+                                    </div>
+                                </div>
+                                <div class="col-md-4">Peso(Kgs){{ form.peso }}</div>
+                                <div class="col-md-4">Sexo {{ form.sexo }}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">Código {{ form.codigo_interno }}</div>
+                        <div class="col-md-3">Etnia {{ form.etnia }}</div>
+                        <div class="col-md-3">Lugar de nac. {{ form.lugar_nacimiento }}</div>
+                        <div class="col-md-3">CI {{ form.ci }}</div>
+                        <div class="col-md-3">No. Plantilla {{ form.org_plantilla }}</div>
+                        <div class="col-md-3">Estado civil {{ form.estado_civil }}</div>
+                        <div class="col-md-3">Licencia {{ form.licencia }}</div>
+                        <div class="col-md-3">Teléfono {{ form.telefono }}</div>
+                        <div class="col-md-3">Estatura(Metros){{ form.estatura }}</div>
+                        <div class="col-md-3">Hijos {{ form.hijos }}</div>
+                        <div class="col-md-3">Mcpio. residencia {{ form.residencia }}</div>
+                        <div class="col-md-3">Nombre del padre {{ form.nombre_padre }}</div>
+                        <div class="col-md-3">Nombre de madre {{ form.nombre_madre }}</div>
+                        <div class="col-md-3">Unidad Organizacional {{ form.unidad_org }}</div>
+                        <div class="col-md-3">Área {{ form.departamento }}</div>
+                        <div class="col-md-3">Dirección {{ form.direccion }}</div>
+                        <div class="col-md-12">Enfermedades que padece {{ form.enfermedades }}</div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-laborales" role="tabpanel" aria-labelledby="nav-laborales-tab">
+                    <div class="row">
+                        <div class="col-md-3">Cargo {{ form.cargo }}</div>
+                        <div class="col-md-3">Cat. ocupacional {{ form.categoria }}</div>
+                        <div class="col-md-3">Plantilla {{ form.t_plantilla }}</div>
+                        <div class="col-md-3">Tipo de Contrato {{ form.t_contrato }}</div>
+                        <div class="col-md-3">Fuerza Irregular {{ form.fuerza_i }}</div>
+                        <div class="col-md-3">Tipo de Pago {{ form.t_pago }}</div>
+                        <div class="col-md-3">Sistema de Pago {{ form.s_pago }}</div>
+                        <div class="col-md-3">Escala Salarial {{ form.escala_salarial }}</div>
+                        <div class="col-md-3">Salario Escala {{ form.salario_escala }}</div>
+                        <div class="col-md-3">Pago x perfeccion. {{ form.incre_res }}</div>
+                        <div class="col-md-3">Salario Básico {{ form.sal_bas }}</div>
+                        <div class="col-md-3">% CIES {{ form.por_cies }}</div>
+                        <div class="col-md-3">CIES {{ form.cies }}</div>
+                        <div class="col-md-3">Salario Plus {{ form.sal_plus }}</div>
+                        <div class="col-md-3">Sal. condic. anor. {{ form.sal_cond_anor }}</div>
+                        <div class="col-md-3">% Antiguedad {{ form.por_anti }}</div>
+                        <div class="col-md-3">Antiguedad {{ form.antiguedad }}</div>
+                        <div class="col-md-3">Fecha de Contrato {{ form.fecha_contrato }}</div>
+                        <div class="col-md-3">Fecha de alta al cargo {{ form.fecha_alta }}</div>
+                        <div class="col-md-3">Fecha de inicio disponibilidad {{ form.fecha_disponible }}</div>
+                        <div class="col-md-3">Fecha de ingreso al organismo {{ form.fecha_ingreso }}</div>
+                        <div class="col-md-3">Categoría Científica {{ form.cat_cient }}</div>
+                        <div class="col-md-3">Motivo Alta {{ form.motivo_alta }}</div>
+                        <div class="col-md-3">Albergado {{ form.albergado }}</div>
+                        <div class="col-md-3">Sancionado {{ form.sancionado }}</div>
+                        <div class="col-md-3">Jornada Laboral 208h {{ form.j_laboral }}</div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-docentes" role="tabpanel" aria-labelledby="nav-docentes-tab">
+                    <div class="row">
+                        <div class="col-md-3">Tipo de Tecnico {{ form.tipo_tecnico }}</div>
+                        <div class="col-md-3">Actividad {{ form.actividad }}</div>
+                        <div class="col-md-3">Calificación {{ form.calificacion }}</div>
+                        <div class="col-md-3">Especialidad {{ form.especialidad }}</div>
+                        <div class="col-md-3">Año de graduado {{ form.anno_graduado }}</div>
+                        <div class="col-md-3">Centro graduación {{ form.centro_graduacion }}</div>
+                        <div class="col-md-3">País graduación {{ form.pais_graduacion }}</div>
+                        <div class="col-md-3">Escolaridad {{ form.escolaridad }}</div>
+                        <div class="col-md-3">Idioma {{ form.idioma }}</div>
+                        <div class="col-md-3">Tec. TAC {{ form.tec_tac }}</div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-defensa" role="tabpanel" aria-labelledby="nav-defensa-tab">
+                    <div class="row">
+                        <div class="col-md-3">Org. de defensa {{ form.orga_defensa }}</div>
+                        <div class="col-md-3">Unidad Militar {{ form.unidad_militar }}</div>
+                        <div class="col-md-3">Estado Mayor {{ form.estado_mayor }}</div>
+                        <div class="col-md-3">Año de misión {{ form.a_mision }}</div>
+                        <div class="col-md-3">Militancia {{ form.militancia }}</div>
+                        <div class="col-md-3">Organizaciones de masas {{ form.org_masas }}</div>
+                        <div class="col-md-3">Organizaciones profesionales {{ form.org_prof }}</div>
+                        <div class="col-md-3">Organizaciones culturales {{ form.org_cult }}</div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-nucleo" role="tabpanel" aria-labelledby="nav-nucleo-tab">
+                    <p></p>
+                    <div class="row">
+                        <table class="display" cellspacing="0" width="100%">
+                            <thead>
+                            <tr>
+                                <th>
+                                    <strong></strong>
+                                </th>
+                                <th>
+                                    <strong>Parentesco</strong>
+                                </th>
+                                <th>
+                                    <strong>Fecha de Nacimiento</strong>
+                                </th>
+                                <th>
+                                    <strong>Enfermedades</strong>
+                                </th>
+                                <th>
+                                    <strong>Salario devengado</strong>
+                                </th>
+                                <th>
+                                    <strong>Vinculo laboral</strong>
+                                </th>
+                                <th>
+                                    <strong>Eliminar</strong>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {{ inline.management_form }} {% for i in inline %}
+                                <tr class="table-light">
+                                    <td>{{ i.id }}</td>
+                                    <td>{{ i.parentesco }}</td>
+                                    <td>{{ i.fecha_nac }}</td>
+                                    <td>{{ i.enfermedades }}</td>
+                                    <td>{{ i.salario_dev }}</td>
+                                    <td>{{ i.vinc_lab }}</td>
+                                    <td><a href=""
+                                           class="badge badge-pill badge-danger">
+                                        <i class="fa fa-trash" title="Eliminar Familiar" style="color: white;"></i>
+                                    </a></td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-tallas" role="tabpanel" aria-labelledby="nav-tallas-tab">
+                    <div class="row">
+                        <div class="col-md-3">Zapato {{ form.zapato }}</div>
+                        <div class="col-md-3">Saya {{ form.saya }}</div>
+                        <div class="col-md-3">Blusa {{ form.blusa }}</div>
+                        <div class="col-md-3">Pullover {{ form.pullover }}</div>
+                        <div class="col-md-3">Pitusa {{ form.pitusa }}</div>
+                        <div class="col-md-3">Camisa {{ form.camisa }}</div>
+                        <div class="col-md-3">Derecho {{ form.derecho }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-auto mr-auto">
+                    <a href="{% url 'GestionarTrabajador' %}">
+                        <button type="button" class="btn btn-danger">Cancelar</button>
+                    </a>
+                </div>
+                <!--div class="col-auto">
+                    <button type="submit" class="btn btn-success" name = "guardaradicionar" id="boton_verde">Guardar y Adicionar</button>
+                </div-->
+                <div class="col-auto">
+                    <input type="submit" class="btn btn-primary" name="guardar" value="Guardar">
+                </div>
+            </div>
+        </div>
+    </form>
+
+{% endblock %} {% block javascript %}
+    <script>
+        var $imageupload = $('.imageupload');
+        $imageupload.imageupload();
+
+        $('#orto').on('click', function () {
+            $('#id_foto').click();
+        });
+
+        $(document).on('click', '.thumbnail', function () {
+            $('#id_foto').click();
+        });
+
+        $('#id_foto').on('change', function (event) {
+            if (event.target.files.length === 0) {
+                $('#orto').show();
+            } else {
+                $('#orto').hide();
+            }
+        });
+    </script>
+
+    <script type="text/javascript">
+        $('.formset_row').formset({
+            addText: 'add family member',
+            deleteText: 'remove',
+            prefix: 'familymember_set'
+        });
+    </script>
+    <script type="text/javascript">
+        $('#id_salario_escala').prop("readonly", true);
+        $('#id_incre_res').prop("readonly", true);
+        $('#id_sal_bas').prop("readonly", true);
+        $('#id_cies').prop("readonly", true);
+        $('#id_antiguedad').prop("readonly", true);
+        $('#id_fecha_alta').prop("readonly", true).datepicker({
+            uiLibrary: 'bootstrap4',
+            iconsLibrary: 'font-awesome',
+            language: 'es'
+        });
+        $('#id_fecha_contrato').prop("readonly", true).datepicker({
+            uiLibrary: 'bootstrap4',
+            iconsLibrary: 'font-awesome',
+            language: 'es'
+        });
+        $('#id_fecha_disponible').prop("readonly", true).datepicker({
+            uiLibrary: 'bootstrap4',
+            iconsLibrary: 'font-awesome',
+            language: 'es'
+        });
+
+        $('#id_fecha_ingreso').prop("readonly", true).datepicker({
+            uiLibrary: 'bootstrap4',
+            iconsLibrary: 'font-awesome',
+            language: 'es'
+        });
+
+        $("#id_anno_graduado").prop("readonly", true).datepicker({
+            format: "yyyy",
+            viewMode: "years",
+            minViewMode: "years"
+        });
+        $("#id_a_mision").prop("readonly", true).datepicker({
+            format: "yyyy",
+            viewMode: "years",
+            minViewMode: "years"
+        });
+
+        $(".fecha-inline").prop("readonly", true).datepicker({
+            uiLibrary: 'bootstrap4',
+            iconsLibrary: 'font-awesome',
+            language: 'es'
+        });
+
+    </script>
+    |<!--VALIDACIONES EN TIEMPO REAL-->
+    <script type="text/javascript">
+        // Numeros
+        $(document).ready(function () {
+            $("#id_ci").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110]) !== -1 ||
+                    // Allow: Ctrl+A, Command+A
+                    (e.keyCode === 89 && (e.ctrlKey === true || e.metaKey === true)) ||
+                    // Allow: home, end, left, right, down, up
+                    (e.keyCode >= 35 && e.keyCode <= 40)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode >
+                    105)) {
+                    e.preventDefault();
+                }
+            });
+        });
+        $(document).ready(function () {
+            $("#id_telefono").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110]) !== -1 ||
+                    // Allow: Ctrl+A, Command+A
+                    (e.keyCode === 89 && (e.ctrlKey === true || e.metaKey === true)) ||
+                    // Allow: home, end, left, right, down, up
+                    (e.keyCode >= 35 && e.keyCode <= 40)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode >
+                    105)) {
+                    e.preventDefault();
+                }
+            });
+        });
+
+        // Letras
+        $(document).ready(function () {
+            $("#id_primer_nombre").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110]) !== -1 ||
+                    // Allow: Ctrl+A, Command+A
+                    (e.keyCode === 89 && (e.ctrlKey === true || e.metaKey === true)) ||
+                    // Allow: home, end, left, right, down, up
+                    (e.keyCode >= 35 && e.keyCode <= 40)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.keyCode === 16) || (e.keyCode < 65 || e.keyCode > 90)) {
+                    e.preventDefault();
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            $('#id_segundo_nombre').keyup(function () {
+                $('#id_segundo_nombre').css('textTransform', 'capitalize');
+            });
+            $("#id_segundo_nombre").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 32]) !== -1 ||
+                    // Allow: Ctrl+A, Command+A
+                    (e.keyCode === 89 && (e.ctrlKey === true || e.metaKey === true)) ||
+                    // Allow: home, end, left, right, down, up
+                    (e.keyCode >= 35 && e.keyCode <= 40)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.keyCode === 16) || (e.keyCode < 65 || e.keyCode > 90)) {
+                    e.preventDefault();
+                }
+            });
+        });
+        $(document).ready(function () {
+            $('#id_lugar_nacimiento').keyup(function () {
+                $('#id_lugar_nacimiento').css('textTransform', 'capitalize');
+            });
+            $("#id_lugar_nacimiento").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 32]) !== -1 ||
+                    // Allow: Ctrl+A, Command+A
+                    (e.keyCode === 89 && (e.ctrlKey === true || e.metaKey === true)) ||
+                    // Allow: home, end, left, right, down, up
+                    (e.keyCode >= 35 && e.keyCode <= 40)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.keyCode === 16) || (e.keyCode < 65 || e.keyCode > 90)) {
+                    e.preventDefault();
+                }
+            });
+        });
+        $(document).ready(function () {
+            $('#id_nombre_padre').keyup(function () {
+                $('#id_nombre_padre').css('textTransform', 'capitalize');
+            });
+            $("#id_nombre_padre").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 32]) !== -1 ||
+                    // Allow: Ctrl+A, Command+A
+                    (e.keyCode === 89 && (e.ctrlKey === true || e.metaKey === true)) ||
+                    // Allow: home, end, left, right, down, up
+                    (e.keyCode >= 35 && e.keyCode <= 40)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.keyCode === 16) || (e.keyCode < 65 || e.keyCode > 90)) {
+                    e.preventDefault();
+                }
+            });
+        });
+        $(document).ready(function () {
+            $('#id_nombre_madre').keyup(function () {
+                $('#id_nombre_madre').css('textTransform', 'capitalize');
+            });
+            $("#id_nombre_madre").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 32]) !== -1 ||
+                    // Allow: Ctrl+A, Command+A
+                    (e.keyCode === 89 && (e.ctrlKey === true || e.metaKey === true)) ||
+                    // Allow: home, end, left, right, down, up
+                    (e.keyCode >= 35 && e.keyCode <= 40)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.keyCode === 16) || (e.keyCode < 65 || e.keyCode > 90)) {
+                    e.preventDefault();
+                }
+            });
+        });
+
+    </script>
+    <!--TERMINA VALIDACIONES EN TIEMPO REAL -->
+
+    <script type="text/javascript">
+
+
+        // Cargos Disponibles
+        $('#id_departamento').on('change', function () {
+            var id_seleccionado = this.value;
+            $('#id_cargo').html(''); //esta linea lo que hace es limpiar el segundo select para volverlo a llenar luego con los valores que se obtendran en la peticion ajax
+
+            $.get(`/select_cargos/${id_seleccionado}/`,
+                function (data) {
+                    var datos = data[0].result;
+                    console.info(datos);
+                    if (datos.length !== 0) {
+                        for (var disponibles in datos) {
+                            console.info(disponibles);
+
+                            $('#id_cargo').append('<option value="' + datos[disponibles].id +
+                                '">' + datos[disponibles].nombre + '</option>');
+                        }
+                    } else {
+                        $('#id_cargo').append('No hay tareas para mostrar.');
+                    }
+
+                });
+        });
+        // Datos Personales OnChange
+        $('#id_unidad_org').on('change', function () {
+            //$('#id_departamento').prop('disabled', false);
+            var id_seleccionado = this.value;
+            $('#id_departamento').html(''); //esta linea lo que hace es limpiar el segundo select para volverlo a llenar luego con los valores que se obtendran en la peticion ajax
+
+            $.get(`/Dpto_por_unidad/${id_seleccionado}/`,
+                function (data) {
+                    var datos = data[0].result;
+                    console.info(datos);
+                    if (datos.length !== 0) {
+                        for (var departamento in datos) {
+                            console.info(departamento);
+                            $('#id_departamento').append('<option value="' + datos[departamento].id +
+                                '">' + datos[departamento].codigo + " " + datos[departamento].nombre + '</option>');
+                        }
+                    } else {
+                        $('#id_departamento').append('No hay tareas para mostrar.');
+                    }
+
+                });
+        });
+
+        //Calificacion - Especialidad
+        $('#id_calificacion').on('change', function () {
+            //$('#id_departamento').prop('disabled', false);
+            var id_seleccionado = this.value;
+            $('#id_especialidad').html(''); //esta linea lo que hace es limpiar el segundo select para volverlo a llenar luego con los valores que se obtendran en la peticion ajax
+
+            $.get(`/select_especialidad/${id_seleccionado}/`,
+                function (data) {
+                    var datos = data[0].result;
+                    console.info(datos);
+                    if (datos.length !== 0) {
+                        for (var especialidad in datos) {
+                            console.info(especialidad);
+                            $('#id_especialidad').append('<option value="' + datos[especialidad].id +
+                                '">' + datos[especialidad].nombre + '</option>');
+                        }
+                    } else {
+                        $('#id_especialidad').append('No hay tareas para mostrar.');
+                    }
+
+                });
+
+
+        });
+
+        // Datos Laborales OnChange
+        $('#id_escala_salarial').on('change', function () {
+
+            var id_seleccionado = this.value;
+
+            $('#id_salario_escala').html(''); //esta linea lo que hace es limpiar el segundo select para volverlo a llenar luego con los valores que se obtendran en la peticion ajax
+
+            $.get(`/select_salarioescala/${id_seleccionado}/`,
+                function (data) {
+                    var datos = data[0].result;
+
+                    console.info(datos);
+                    if (datos.length !== 0) {
+                        for (var salario_escala in datos) {
+
+                            console.info(salario_escala);
+                            // $('#id_salario_escala').append('<input value="' + datos[salario_escala].salario_escala +
+                            //   '">'  + '</input>');
+                            if ($('select[name=categoria]').val() === 'O') {
+                                $('#id_salario_escala').val(Math.round(datos[salario_escala].tarifa_horaria * 190.6 * 100) / 100)
+                            } else {
+                                $('#id_salario_escala').val(datos[salario_escala].salario_escala)
+
+
+                            }
+                        }
+                    } else {
+                        $('#id_salario_escala').append('No hay nigun salario asociado');
+                    }
+                    if ($('select[name=categoria]').val() === 'O') {
+                        $('#id_sal_bas').val(parseInt($('#id_incre_res').val()) + parseFloat($('#id_salario_escala').val()))
+                    } else {
+                        $('#id_sal_bas').val(parseInt($('#id_incre_res').val()) + parseInt($('#id_salario_escala').val()))
+                    }
+                    // salario_escala_anterior = $('#id_salario_escala').val()
+
+                    if ($('#id_j_laboral').prop('checked')) {
+                        // CIES
+                        if ($('select[name=por_cies]').val() === '1') {
+                            incre_res_temp = Math.round($('#id_incre_res').val() / 208 * 190.6 * 100) / 100;
+
+                            cies_temp = Math.round((parseInt(incre_res_temp) + Math.round($('#id_salario_escala').val())) * 0.3);
+
+                            $('#id_cies').val(Math.round(cies_temp / 190.6 * 208 * 100) / 100)
+                        } else if ($('select[name=por_cies]').val() === '2') {
+                            incre_res_temp = Math.round($('#id_incre_res').val() / 208 * 190.6 * 100) / 100;
+                            cies_temp = Math.round((parseInt(incre_res_temp) + Math.round($('#id_salario_escala').val())) * 0.5);
+                            $('#id_cies').val(Math.round(cies_temp / 190.6 * 208 * 100) / 100)
+                        }
+                        //Antiguedad
+                        if ($('select[name=por_anti]').val() === '1') {
+                            incre_res_temp = Math.round($('#id_incre_res').val() / 208 * 190.6 * 100) / 100;
+                            antiguedad_temp = Math.round((parseInt(incre_res_temp) + parseInt($('#id_salario_escala').val())) * 0.05);
+                            $('#id_antiguedad').val(Math.round(antiguedad_temp / 190.6 * 208 * 100) / 100)
+                        } else if ($('select[name=por_anti]').val() === '2') {
+                            incre_res_temp = Math.round($('#id_incre_res').val() / 208 * 190.6 * 100) / 100;
+                            antiguedad_temp = Math.round((parseInt(incre_res_temp) + parseInt($('#id_salario_escala').val())) * 0.10.toFixed(2));
+                            $('#id_antiguedad').val(Math.round(antiguedad_temp / 190.6 * 208 * 100) / 100)
+                        } else {
+                            $('#id_antiguedad').val(0)
+                        }
+                    } else {
+                        //CIES
+                        if ($('select[name=por_cies]').val() === '1') {
+                            // alert('Entro al if')
+                            if ($('#id_categoria').val() === 'O' && $('#id_escala_salarial').val() === '6') {
+                                $('#id_cies').val(101)
+                            } else if ($('#id_categoria').val() === 'T' && $('#id_cargo').val() === '217' && $('#id_escala_salarial').val() == '7') {
+                                $('#id_cies').val(114)
+                            } else {
+                                $('#id_cies').val(Math.round((parseInt($('#id_incre_res').val()) + Math.round($('#id_salario_escala').val())) * 0.3))
+                            }
+
+                        } else if ($('select[name=por_cies]').val() === '2') {
+                            if ($('#id_categoria').val() === 'O' && $('#id_escala_salarial').val() === '6') {
+                                $('#id_cies').val(168)
+                            } else if ($('#id_categoria').val() === 'T' && $('#id_cargo').val() === '217' && $('#id_escala_salarial').val() == '7') {
+                                $('#id_cies').val(190)
+                            } else {
+                                $('#id_cies').val(Math.round((parseInt($('#id_incre_res').val()) + Math.round($('#id_salario_escala').val())) * 0.5))
+                            }
+                        }
+                        //Antiguedad
+                        if ($('select[name=por_anti]').val() === '1') {
+                            // alert('Entro al if')
+                            if ($('#id_categoria').val() === 'O' && $('#id_escala_salarial').val() === '2') {
+                                $('#id_antiguedad').val(16)
+                            } else if ($('#id_categoria').val() === 'O' && $('#id_escala_salarial').val() === '7') {
+                                $('#id_antiguedad').val(18)
+                            } else {
+                                $('#id_antiguedad').val(Math.round((parseInt($('#id_incre_res').val()) + parseInt($('#id_salario_escala').val())) * 0.05))
+                            }
+                        } else if ($('select[name=por_anti]').val() === '2') {
+
+                            if ($('#id_categoria').val() === 'O' && $('#id_escala_salarial').val() === '4') {
+                                $('#id_antiguedad').val(33)
+                            } else if ($('#id_categoria').val() === 'O' && $('#id_escala_salarial').val() === '6') {
+                                $('#id_antiguedad').val(34)
+                            } else {
+                                $('#id_antiguedad').val(Math.round((parseInt($('#id_incre_res').val()) + parseInt($('#id_salario_escala').val())) * 0.10.toFixed(2)))
+                            }
+
+                        } else {
+                            $('#id_antiguedad').val(0)
+                        }
+                    }
+                });
+        });
+
+        $('#id_categoria').on('change', function () {
+            if ($('#id_j_laboral').prop('checked')) {
+                if ($('#id_cargo').val() === '217') {
+                    $('#id_incre_res').val(81.85)
+
+                } else {
+
+                    if ($('select[name=categoria]').val() === 'C') {
+                        $('#id_incre_res').val(218.26)
+
+                    } else if ($('select[name=categoria]').val() === 'T') {
+                        $('#id_incre_res').val(114.59)
+                    } else {
+                        $('#id_incre_res').val(81.85)
+                    }
+                }
+
+
+                // CIES
+                if ($('select[name=por_cies]').val() === '1') {
+                    incre_res_temp = Math.round($('#id_incre_res').val() / 208 * 190.6 * 100) / 100;
+
+                    cies_temp = Math.round((parseInt(incre_res_temp) + Math.round($('#id_salario_escala').val())) * 0.3);
+
+                    $('#id_cies').val(Math.round(cies_temp / 190.6 * 208 * 100) / 100)
+                } else if ($('select[name=por_cies]').val() === '2') {
+                    incre_res_temp = Math.round($('#id_incre_res').val() / 208 * 190.6 * 100) / 100;
+                    cies_temp = Math.round((parseInt(incre_res_temp) + Math.round($('#id_salario_escala').val())) * 0.5);
+                    $('#id_cies').val(Math.round(cies_temp / 190.6 * 208 * 100) / 100)
+                }
+
+                //Antiguedad
+                if ($('select[name=por_anti]').val() === '1') {
+                    incre_res_temp = Math.round($('#id_incre_res').val() / 208 * 190.6 * 100) / 100;
+                    antiguedad_temp = Math.round((parseInt(incre_res_temp) + parseInt($('#id_salario_escala').val())) * 0.05);
+                    $('#id_antiguedad').val(Math.round(antiguedad_temp / 190.6 * 208 * 100) / 100)
+                } else if ($('select[name=por_anti]').val() === '2') {
+                    incre_res_temp = Math.round($('#id_incre_res').val() / 208 * 190.6 * 100) / 100;
+                    antiguedad_temp = Math.round((parseInt(incre_res_temp) + parseInt($('#id_salario_escala').val())) * 0.10.toFixed(2));
+                    $('#id_antiguedad').val(Math.round(antiguedad_temp / 190.6 * 208 * 100) / 100)
+                } else {
+                    $('#id_antiguedad').val(0)
+                }
+            } else {
+                if ($('#id_cargo').val() === '217') {
+                    $('#id_incre_res').val(75)
+
+                } else {
+
+                    if ($('select[name=categoria]').val() === 'C') {
+                        $('#id_incre_res').val(200)
+
+                    } else if ($('select[name=categoria]').val() === 'T') {
+                        $('#id_incre_res').val(105)
+                    } else {
+                        $('#id_incre_res').val(75)
+                    }
+
+
+                }
+                //CIES
+                if ($('select[name=por_cies]').val() === '1') {
+                    // alert('Entro al if')
+                    if ($('#id_categoria').val() === 'O' && $('#id_escala_salarial').val() === '6') {
+                        $('#id_cies').val(101)
+                    } else if ($('#id_categoria').val() === 'T' && $('#id_cargo').val() === '217' && $('#id_escala_salarial').val() === '7') {
+                        $('#id_cies').val(114)
+                    } else {
+                        $('#id_cies').val(Math.round((parseInt($('#id_incre_res').val()) + Math.round($('#id_salario_escala').val())) * 0.3))
+                    }
+                    //alert(parseInt(234.44))
+                } else if ($('select[name=por_cies]').val() === '2') {
+                    if ($('#id_categoria').val() === 'O' && $('#id_escala_salarial').val() === '6') {
+                        $('#id_cies').val(168)
+                    } else if ($('#id_categoria').val() === 'T' && $('#id_cargo').val() === '217' && $('#id_escala_salarial').val() === '7') {
+                        $('#id_cies').val(190)
+                    } else {
+                        $('#id_cies').val(Math.round((parseInt($('#id_incre_res').val()) + Math.round($('#id_salario_escala').val())) * 0.5))
+                    }
+                }
+                //Antiguedad
+                if ($('select[name=por_anti]').val() === '1') {
+                    // alert('Entro al if')
+                    if ($('#id_categoria').val() === 'O' && $('#id_escala_salarial').val() === '2') {
+                        $('#id_antiguedad').val(16)
+                    } else if ($('#id_categoria').val() === 'O' && $('#id_escala_salarial').val() === '7') {
+                        $('#id_antiguedad').val(18)
+                    } else {
+                        $('#id_antiguedad').val(Math.round((parseInt($('#id_incre_res').val()) + parseInt($('#id_salario_escala').val())) * 0.05))
+                    }
+                } else if ($('select[name=por_anti]').val() === '2') {
+
+                    if ($('#id_categoria').val() === 'O' && $('#id_escala_salarial').val() === '4') {
+                        $('#id_antiguedad').val(33)
+                    } else if ($('#id_categoria').val() === 'O' && $('#id_escala_salarial').val() === '6') {
+                        $('#id_antiguedad').val(34)
+                    } else {
+                        $('#id_antiguedad').val(Math.round((parseInt($('#id_incre_res').val()) + parseInt($('#id_salario_escala').val())) * 0.10.toFixed(2)))
+                    }
+
+                } else {
+                    $('#id_antiguedad').val(0)
+                }
+
+
+            }
+            // incre_res_anterior = $('#id_incre_res').val()
+            //('#id_sal_bas').val() =  $('#id_incre_res').val() + $('#id_salario_escala').val()
+            $('#id_sal_bas').val(parseFloat($('#id_incre_res').val()) + parseInt($('#id_salario_escala').val()))
+        });
+
+        $('#id_cargo').on('change', function () {
+            if ($('#id_cargo').val() === '217') {
+                $('#id_incre_res').val(75)
+            }
+
+        });
+
+        $('#id_por_cies').on('change', function () {
+
+
+            if ($('#id_j_laboral').prop('checked')) {
+                if ($('select[name=por_cies]').val() === '1') {
+                    incre_res_temp = Math.round($('#id_incre_res').val() / 208 * 190.6 * 100) / 100;
+
+                    cies_temp = Math.round((parseInt(incre_res_temp) + Math.round($('#id_salario_escala').val())) * 0.3);
+
+                    $('#id_cies').val(Math.round(cies_temp / 190.6 * 208 * 100) / 100)
+                } else if ($('select[name=por_cies]').val() === '2') {
+                    incre_res_temp = Math.round($('#id_incre_res').val() / 208 * 190.6 * 100) / 100;
+                    cies_temp = Math.round((parseInt(incre_res_temp) + Math.round($('#id_salario_escala').val())) * 0.5);
+                    $('#id_cies').val(Math.round(cies_temp / 190.6 * 208 * 100) / 100)
+                }
+            } else {
+
+                if ($('select[name=por_cies]').val() === '1') {
+                    // alert('Entro al if')
+                    if ($('#id_categoria').val() === 'O' && $('#id_escala_salarial').val() === '6') {
+                        $('#id_cies').val(101)
+                    } else if ($('#id_categoria').val() === 'T' && $('#id_cargo').val() === '217' && $('#id_escala_salarial').val() === '7') {
+                        $('#id_cies').val(114)
+                    } else {
+                        $('#id_cies').val(Math.round((parseInt($('#id_incre_res').val()) + Math.round($('#id_salario_escala').val())) * 0.3))
+                    }
+                    //alert(parseInt(234.44))
+                } else if ($('select[name=por_cies]').val() === '2') {
+                    if ($('#id_categoria').val() === 'O' && $('#id_escala_salarial').val() === '6') {
+                        $('#id_cies').val(168)
+                    } else if ($('#id_categoria').val() === 'T' && $('#id_cargo').val() === '217' && $('#id_escala_salarial').val() === '7') {
+                        $('#id_cies').val(190)
+                    } else {
+                        $('#id_cies').val(Math.round((parseInt($('#id_incre_res').val()) + Math.round($('#id_salario_escala').val())) * 0.5))
+                    }
+                }
+            }
+            //cies_anterior = $('#id_cies').val()
+
+        });
+
+        //antiguedad_anterior = 0
+        $('#id_por_anti').on('change', function () {
+            if ($('#id_j_laboral').prop('checked')) {
+                if ($('select[name=por_anti]').val() === '1') {
+                    incre_res_temp = Math.round($('#id_incre_res').val() / 208 * 190.6 * 100) / 100;
+                    antiguedad_temp = Math.round((parseInt(incre_res_temp) + parseInt($('#id_salario_escala').val())) * 0.05);
+                    $('#id_antiguedad').val(Math.round(antiguedad_temp / 190.6 * 208 * 100) / 100)
+                } else if ($('select[name=por_anti]').val() === '2') {
+                    incre_res_temp = Math.round($('#id_incre_res').val() / 208 * 190.6 * 100) / 100;
+                    antiguedad_temp = Math.round((parseInt(incre_res_temp) + parseInt($('#id_salario_escala').val())) * 0.10.toFixed(2));
+                    $('#id_antiguedad').val(Math.round(antiguedad_temp / 190.6 * 208 * 100) / 100)
+                } else {
+                    $('#id_antiguedad').val(0)
+                }
+
+            } else {
+                if ($('select[name=por_anti]').val() === '1') {
+                    // alert('Entro al if')
+                    if ($('#id_categoria').val() === 'O' && $('#id_escala_salarial').val() === '2') {
+                        $('#id_antiguedad').val(16)
+                    } else if ($('#id_categoria').val() === 'O' && $('#id_escala_salarial').val() === '7') {
+                        $('#id_antiguedad').val(18)
+                    } else {
+                        $('#id_antiguedad').val(Math.round((parseInt($('#id_incre_res').val()) + parseInt($('#id_salario_escala').val())) * 0.05))
+                    }
+                } else if ($('select[name=por_anti]').val() === '2') {
+                    if ($('#id_categoria').val() === 'O' && $('#id_escala_salarial').val() === '4') {
+                        $('#id_antiguedad').val(33)
+                    } else if ($('#id_categoria').val() === 'O' && $('#id_escala_salarial').val() === '6') {
+                        $('#id_antiguedad').val(34)
+                    } else {
+                        $('#id_antiguedad').val(Math.round((parseInt($('#id_incre_res').val()) + parseInt($('#id_salario_escala').val())) * 0.10.toFixed(2)))
+                    }
+
+                } else {
+                    $('#id_antiguedad').val(0)
+                }
+                //antiguedad_anterior = $('#id_antiguedad').val()
+            }
+        });
+
+        //208 Horas
+        $('#id_j_laboral').change(function () {
+
+            if (this.checked) {
+
+                $('#id_antiguedad').val(Math.round($('#id_antiguedad').val() / 190.6 * 208 * 100) / 100);
+                $('#id_cies').val(Math.round($('#id_cies').val() / 190.6 * 208 * 100) / 100);
+                $('#id_incre_res').val(Math.round($('#id_incre_res').val() / 190.6 * 208 * 100) / 100);
+
+                salarioe = parseFloat($('#id_salario_escala').val());
+                pagoper = parseFloat($('#id_incre_res').val());
+
+                $('#id_sal_bas').val(Math.round((pagoper + salarioe) * 100) / 100)
+
+            } else {
+                $('#id_antiguedad').val(Math.round($('#id_antiguedad').val() / 208 * 190.6 * 100) / 100);
+                $('#id_cies').val(Math.round($('#id_cies').val() / 208 * 190.6 * 100) / 100);
+                $('#id_incre_res').val(Math.round($('#id_incre_res').val() / 208 * 190.6 * 100) / 100);
+                $('#id_sal_bas').val(parseFloat($('#id_salario_escala').val()) + parseFloat($('#id_incre_res').val()))
+            }
+        });
+        /*  $('#id_j_laboral').change(function () {
+
+
+          });*/
+        $(function () {
+            jQuery.extend(jQuery.validator.messages, {
+                required: "Este campo es obligatorio.",
+                remote: "Este valor ya está en uso",
+                email: "Por favor, escribe una direcciÃ³n de correo vÃ¡lida.",
+                url: "Por favor, escribe una URL vÃ¡lida.",
+                date: "Por favor, escribe una fecha vÃ¡lida.",
+                dateISO: "Por favor, escribe una fecha (ISO) vÃ¡lida.",
+                number: "Por favor, escribe un nÃºmero vÃ¡lido.",
+                digits: "Por favor, escribe sÃ³lo dÃ­gitos.",
+                creditcard: "Por favor, escribe un nÃºmero de tarjeta vÃ¡lido.",
+                equalTo: "Por favor, escribe el mismo valor de nuevo.",
+                extension: "Por favor, escribe un valor con una extensiÃ³n aceptada.",
+                maxlength: $.validator.format("Por favor, no escribas mÃ¡s de {0} caracteres."),
+                minlength: $.validator.format("Por favor, no escribas menos de {0} caracteres."),
+                rangelength: $.validator.format("Por favor, escribe un valor entre {0} y {1} caracteres."),
+                range: $.validator.format("Por favor, escribe un valor entre {0} y {1}."),
+                max: $.validator.format("Por favor, escribe un valor menor o igual a {0}."),
+                min: $.validator.format("Por favor, escribe un valor mayor o igual a {0}."),
+                nifES: "Por favor, escribe un NIF vÃ¡lido.",
+                nieES: "Por favor, escribe un NIE vÃ¡lido.",
+                cifES: "Por favor, escribe un CIF vÃ¡lido."
+            });
+
+            $.validator.addMethod("mayusculaPrimero", function (value, element, regexpr) {
+                return regexpr.test(value);
+            }, "Este campo no permite caracteres especiales y comienza con mayúscula");
+
+            $('#new-trabajador-form').validate({
+                ignore: [],
+                rules: {
+                    primer_nombre: {
+                        required: true,
+                        minlength: 2,
+                        mayusculaPrimero: /^([A-Z]{1})[A-Za-z0-9áéíóúñ .,]+/
+                    },
+
+                    apellidos: {
+                        required: true,
+                        minlength: 2,
+                        mayusculaPrimero: /^([A-Z]{1})[A-Za-z0-9áéíóúñ .,]+/
+                    },
+                    ci: {
+                        required: true,
+                        minlength: 11,
+                        digits: true,
+                        remote: "/ver_ci/"
+                    },
+                    codigo_interno: {
+                        minlength: 3,
+                        maxlength: 3,
+                        required: true,
+                        digits: true,
+                        remote: "/ver_codigo_interno/"
+                    },
+                    usuario: {
+                        required: true,
+                        remote: "/ver_usuario/"
+                    },
+                    org_plantilla: {
+                        required: true,
+                        digits: true
+                    },
+                    residencia: {
+                        required: true,
+                        minlength: 2,
+                        mayusculaPrimero: /^([A-Z]{1})[A-Za-z0-9áéíóúñ .,]+/
+                    },
+                    estatura: {
+                        min: 1.40,
+                        max: 2.40
+                    },
+                    peso: {
+                        min: 35,
+                        max: 150
+                    },
+                    centro_graduacion: {
+                        minlength: 2,
+                        mayusculaPrimero: /^([A-Z]{1})[A-Za-z0-9áéíóúñ .,]+/
+                    },
+                    pais_graduacion: {
+                        minlength: 2,
+                        mayusculaPrimero: /^([A-Z]{1})[A-Za-z0-9áéíóúñ .,]+/
+                    },
+                    idioma: {
+                        minlength: 2,
+                        mayusculaPrimero: /^([A-Z]{1})[A-Za-z0-9áéíóúñ .,]+/
+                    },
+                    anno_graduado: {
+                        minlength: 4,
+                        digits: true
+                    }
+                },
+                invalidHandler: function (event, validator) {
+                    if (validator.errorList.length) {
+                        $('#nav-tab a[href="#' + jQuery(validator.errorList[0].element).closest(
+                            ".tab-pane").attr('id') + '"]').tab('show')
+                    }
+                }
+            });
+        })
+    </script>
+{% endblock %}

@@ -1,0 +1,182 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Certifico</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <style>
+        @page {
+            size: letter landscape;
+            /* A4  21.0 x 29.7 cm */
+            /* A4  21.0 x 29.7 cm */
+            @frame header_frame { /* Static frame */
+            -pdf-frame-content: header_content;
+            left: 1cm;
+            width: 25.7cm;
+            top: 0.5cm;
+            height: 3cm;
+            /* for debugging the layout */
+        }
+        @frame col1_frame {
+            /* Content frame 1 */
+        left: 1cm;
+        width: 25.7cm;
+        top: 3cm;
+        height: 17 cm;
+            /* for debugging the layout */
+        }
+        @frame footer_frame {
+            /* Static frame */
+        -pdf-frame-content:footer_content;
+        left: 1cm; width: 25.7cm; top: 20cm; height: 2cm;
+            /* for debugging the layout */
+        }-4
+
+        }
+    </style>
+    <style type="text/css">
+        .logo {
+            height: 80px !important;
+            width: 160px !important;
+        }
+    </style>
+</head>
+<body>
+
+<div id="header_content">
+    <table class="display" border=1 style="width: 100%; padding: 1px">
+        <tr>
+            <th style="width: 800px;">
+                <div style="font-size: 10px; text-align: center; font-weight: lighter;">REGLAMENTO PARA LA APLICACIÓN
+                    DEL
+                    SISTEMA DE PAGO POR
+                    RENDIMIENTO CON TARIFAS SALARIALES INCREMENTADAS PARA LOS GRUPOS DE PROYECTOS, E INVESTIGACIONES
+                    INGENIERO GEOLOGICAS QUE LABORAN EN LOS PROGRAMAS DE DESARROLLO TURÍSTICO Y DE LA ZONA ESPECIAL DEL
+                    MARIEL
+                    <div style="color:blue">{{ nombre }} (RES.15/2016 MTSS)</div>
+                </div>
+            </th>
+            <th style="width: 400px;">
+                <img src="{% static 'images/logoN_h.jpg' %}" class="logo" style="margin-right: auto">
+            </th>
+        </tr>
+    </table>
+</div>
+<br>
+<div id="content" style="padding-top: 5px; width: 105%">
+    <div style="font-weight: bold; text-align: justify">ANEXO IV.8
+        CERTIFICACIÓN DEL CUMPLIMIENTO DE LOS INDICADORES Y LA DISTRIBUCIÓN DEL SALARIO, PARA LOS TRABAJADORES DIRECTOS
+        QUE ELABORAN LA DOCUMENTACIÓN TÉCNICA – EJECUTIVA DEL PROYECTO
+    </div>
+    <div style="font-weight: bold">Proyecto: {{ nombre }}
+    </div>
+    <table class="display" border=1 style="width: 100%; padding: 1px; background-color: lightgray">
+        <tr>
+            <th>
+                <div style="font-size: 10px; font-weight: bold; text-align: left; padding-top: 6px ">&nbsp;
+                    Fecha: {{ mes|upper }} {{ anno }}
+                </div>
+            </th>
+        </tr>
+    </table>
+    <di>1- Cumplimiento del plan de entrega de planos válidos para construir (VPC) por la Inversión según
+        conciliación.
+    </di>
+    <br>
+    <br>
+    {% for corte in cortes %}
+        <table class="display" border=1 style="width: 100%; font-size: 12px!important;">
+            <tbody>
+            <tr>
+                <th style="text-align: left; width: 800px; font-weight: bold; background-color: darkseagreen"
+                    colspan="2">&nbsp; Cierre Productivo
+                    del {{ corte.descripcion }}</th>
+                <th style="text-align: center; width: 100px; font-weight: bold; background-color: darkseagreen">Plan de
+                    planos VPC a
+                    declarar en el mes.
+                </th>
+                <th style="text-align: center; width: 100px; font-weight: bold; background-color: darkseagreen">Real de
+                    planos VPC
+                    declarados en el mes.
+                </th>
+            </tr>
+            <tr style="background-color: lightgray">
+                <th style="font-weight: bold; background-color: lightgray; width: 700px">Descripción del plano</th>
+                <th style="font-weight: bold; text-align: center; background-color: lightgray; width: 100px">
+                    Especialidad
+                </th>
+                <th style="font-weight: bold; text-align: center; background-color: lightgray">{{ corte.total }}
+                    (pendientes {{ corte.pendiente }} {% if corte.pendiente != 1 %} planos {% else %} plano {% endif %})
+                </th>
+                <th style="font-weight: bold; text-align: center; background-color: lightgray">{{ corte.vpc_mes }}</th>
+            </tr>
+            {% for esp in corte.especialidades %}
+                <tr style="background-color: lightgreen">
+                    <td style="font-weight: bold; background-color: lightgreen; padding-left: 1px; padding-right: 1px;">
+                        &nbsp;
+                    </td>
+                    {% if esp.nombre_esp == 'Hidrosanitaria Interior' or esp.nombre_esp == 'Hidrosanitaria Exterior' %}
+                        <td style="font-weight: bold; text-align: center; background-color: lightgreen; padding-left: 1px; padding-right: 1px;">
+                            Hidrosanitaria
+                        </td>
+                    {% else %}
+                        <td style="font-weight: bold; text-align: center; background-color: lightgreen; padding-left: 1px; padding-right: 1px;">{{ esp.nombre_esp }}</td>
+                    {% endif %}
+                    <td style="font-weight: bold; text-align: center; background-color: lightgreen">{{ esp.total }}
+                        (pendientes {{ esp.pendiente }}
+                        {% if esp.pendiente != 1 %} planos {% else %} plano {% endif %})
+                    </td>
+                    <td style="font-weight: bold; text-align: center; background-color: lightgreen">{{ esp.vpc }}</td>
+                </tr>
+                {% for plano in esp.planos_vpc %}
+                    <tr>
+                        <td style="padding-left: 2px; padding-right: 2px; text-align: justify">
+                            &nbsp; {{ plano.os_vpc }} {{ plano.num }} {{ plano.objeto.nombre }} {{ plano.nombre }}({{ plano.trabajador }})
+                        </td>
+                        <td style="text-align: center">&nbsp;</td>
+                        <td style="text-align: center">{{ forloop.counter }}</td>
+                        <td style="text-align: center">{{ plano.fecha_vpc|date:"d/m/Y" }}</td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <br>
+
+    {% endfor %}
+    <div>Causas de los planos no declarados VPC:
+        <div style="font-weight: bold">Se adjunta documentación con la definición del estado de cada plano
+            que no ha sido declarado VPC, la misma se desglosa por especialidades y los periodos productivos
+            correspondientes.
+        </div>
+    </div>
+    <br>
+    <br>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
+    <table class="display">
+        <tr>
+            <th>
+                Ing. {{ director }} <br> Cargo: Director <br> Unidad: UGDD <br> Empresa: VERTICE
+            </th>
+            <th>
+                Ing. {{ recibido_por }} <br> {{ cargo }} <br> {{ org }} <br>
+            </th>
+        </tr>
+    </table>
+
+</div>
+<!-- Contenido del pie de página 'footer_frame' -->
+<div id="footer_content">
+    <div class=table>
+        <tr>
+            <td>ACTIVIDAD DE PROYECTO REGLAMENTO GENERAL SISTEMA DE PAGO A RENDIMIENTO TARIFAS INCREMENTADAS Res.15-16
+                MTSS OBRA:
+                <div style="color: #0b51c5"> PTE Centro de Servicios Extrahotelero de Baracutey; VIGENTE:</div>
+            </td>
+        </tr>
+    </div>
+</div>
+</body>
+</html>

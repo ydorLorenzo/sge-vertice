@@ -1,0 +1,38 @@
+<div class="modal-dialog" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+    <div class="modal-content">
+        <form role="form"
+                {% if not error %}
+              action="{% url 'eliminarRegistroTarjetaSNC' idtrab object.pk %}" method="post">
+                {% endif %}
+        {% csrf_token %}
+        <div class="modal-header">
+            <h5><strong>Eliminar entrada de Tarjeta SNC</strong></h5>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    {% if not error %}
+                        <p>¿Estás seguro que deseas eliminar la entrada asociada al trabajador
+                            <strong>"{{ object.codigo_trab.primer_nombre }}
+                                {{ object.codigo_trab.segundo_nombre }} {{ object.codigo_trab.apellidos }}"</strong>?</p>
+                    {% else %}
+                        <h1 style="text-align: center; color: #dc3545"><i class="fa fa-warning"></i></h1>
+                        <h6 style="text-align: center; color: #dc3545"><strong>{{ error }}</strong></h6>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="col-lg-12 text-right">
+                {% if not error %}
+                    <input type="submit" class="btn btn-danger" name="submit" value="Eliminar">
+                {% endif %}
+                <button type="button" class="btn btn-primary" data-dismiss="modal">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>

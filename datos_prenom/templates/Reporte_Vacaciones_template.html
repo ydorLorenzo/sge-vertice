@@ -1,0 +1,137 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <style>
+        @page {
+            size: letter landscape;
+            /* A4  21.0 x 29.7 cm */
+            /* A4  21.0 x 29.7 cm */
+        {#        @frame header_frame { /* Static frame */#}
+        {#        -pdf-frame-content: header_content;#}
+        {#        left: 1cm;#}
+        {#        width: 25.7cm;#}
+        {#        top: 0.5cm;#}
+        {#        height: 2cm;#}
+        {#            /* for debugging the layout */#}
+        {#        }#}
+            @frame col1_frame { /* Content frame 1 */
+            left: 1cm;
+            width: 25.7cm;
+            top: 1cm;
+            height: 19cm;
+            /* for debugging the layout */
+        }
+        @frame footer_frame {
+            /* Static frame */
+        -pdf-frame-content:footer_content;
+        left: 1cm; width: 25.7cm; top: 20cm; height: 2cm;
+            /* for debugging the layout */
+        }
+
+        }
+    </style>
+    <style type="text/css">
+        .container {
+            margin: 50px auto 40px auto;
+            width: 600px;
+            text-align: center;
+        }
+
+        .logo {
+            display: inline-block;
+            margin-top: 35px;
+            width: 64px;
+            height: 64px;
+            margin-right: 20px;
+        }
+
+        .title {
+            font-size: 20px;
+            position: relative;
+            text-align: center;
+        }
+
+        td {
+            padding: 4px;
+            border-top: 1px solid #dddddd;
+            vertical-align: middle;
+        }
+
+        th {
+            vertical-align: bottom;
+            border-bottom: 2px solid #dddddd;
+            text-align: center;
+            padding: 5px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <img src="{% static 'images/Logo_C.jpg' %}" class="logo">&nbsp;&nbsp;&nbsp;&nbsp;
+    <p style="display: inline-block;" class="title"><strong>Registro de vacaciones ({{ fecha_inic }}
+        / {{ fecha_fin }})</strong>
+    </p>
+    {% for uni in unidades %}
+        <table class="display table table-striped" cellspacing="0" width="100%" id="tabla">
+            <thead>
+            <tr>
+                <th>Area</th>
+                <th>Nombre y Apellidos</th>
+                <th>C&oacute;digo interno</th>
+                <th>Fecha</th>
+                <th>Cant. D&iacute;as.</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td colspan="5"
+                    style="padding: 4px;
+	line-height: 1.428571429;
+	border-top: 1px solid #dddddd; font-weight: bold; text-align: left; background-color: rgba(245,245,245,0.50)">
+                    {{ uni.nombre }}</td>
+            </tr>
+            {% for dep in uni.departamentos %}
+                <tr>
+                    <td colspan="5"
+                        style="line-height: 1.428571429;
+	                            border-top: none; font-weight: bold; padding-left: 10px;
+	                            text-align: left; background-color: rgba(240,240,240,0.50)">
+                        {{ dep.nombre }}</td>
+                </tr>
+                {% for trab in dep.trabajadores %}
+                    <tr>
+                        <td></td>
+                        <td>{{ trab.data.nombre }} {{ trab.data.segundo_nombre }} {{ trab.data.apellidos }}</td>
+                        <td>{{ trab.data.codigo_interno }}</td>
+                        <td>{{ trab.data.fecha|date:"d/m/Y" }}</td>
+                        <td>{{ trab.data.cant_dias }}</td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+            </tbody>
+        </table>
+        <h5 style="text-align: right">Total Trabaj de {{ uni.nombre }}
+            &nbsp;&nbsp;&nbsp;&nbsp; {{ uni.cant_registros }}</h5>
+        {% if uni.numero < total %}
+            <pdf:nextpage>
+        {% endif %}
+    {% endfor %}
+
+    <h5 style="text-align: right">Existen en total {{ cant_registros_bd }} registros en la Base de Datos</h5>
+</div>
+
+<!-- Contenido del pie de página 'footer_frame' -->
+<div id="footer_content">
+    <div style="float: right">Sistema Gestión Recursos Humanos &copy; Empresa de Servicios de Ingeniería y Diseño de
+        Holguín - VERTICE 2018
+    </div>
+    página
+    <pdf:pagenumber> de
+        <pdf:pagecount>
+</div>
+</body>
+</html>

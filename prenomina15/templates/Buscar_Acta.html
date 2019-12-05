@@ -1,0 +1,257 @@
+{% extends "base_pren15.html" %}
+{% load static %}
+{% block title %}Buscar Acta {% endblock %}
+{% block styles %}
+    <style type="text/css">
+
+        div.container {
+            max-width: 100%;
+            margin-left: -70px;
+        }
+
+        th {
+            padding: 10px 5px !important;
+        }
+
+        td {
+            padding: 1px !important;
+            height: 50px;
+        }
+        table.dataTable td, table.dataTable th {
+            font-size: 12px;
+        }
+
+
+
+        .dt-button.buttons-excel.buttons-html5 {
+            margin-left: 15px;
+            border-radius: 2px;
+            box-shadow: #47748b 1px 1px 1px;
+            color: #fff;
+            background-color: #37474F !important;
+            border-color: #37474F;
+            background-image: none;
+        }
+
+        .dt-button.buttons-excel.buttons-html5:hover {
+            margin-left: 15px;
+            border-radius: 2px;
+            box-shadow: #37474F 1px 1px 1px;
+            color: #fff;
+            background-color: #47748b !important;
+            border-color: #47748b;
+            background-image: none;
+        }
+
+    </style>
+{% endblock %}
+<!-- Page Content Holder -->
+<div id="content" style="padding-top: 100px;">
+</div>
+
+{% block content %}
+    <!-- Page Content Holder -->
+    <div id="content" style="padding-top: 100px; width: 100%; position: relative">
+        <div class=content align="center" style="width: 100%">
+            <h5 style="font-weight: bold">Exportar Acta</h5>
+        </div>
+        <br>
+    {% if actas_activas == True %}
+        <div class=content align="center" style="width: 100%; font-size: smaller">
+            <div class="row" style="width: 100%; position: relative">
+                <div class="col-12">
+
+                    <div class="pull-right">
+                        <form method="post" action="{% url 'buscarActas' obra_id recibido_por %}" class="form-inline">
+                            {% csrf_token %}
+                            <label style="font-weight: bold;" for="no_acta">No Acta:&nbsp;</label>
+                            <select name="acta" id="acta" class="form-control form-control-sm" title="acta">
+                                {% for act in list_act %}
+                                    <option value="{{ act.entregado }}">{{ act.entregado }}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit" class="btn btn-sm btn-primary"><strong><i
+                                    class="fa fa-search" style="font-size: 16px"></i> Buscar</strong></button>
+                        </form>
+                            {% if export_acta %}
+                                <div class="text-right" style="color: white;">
+                                    <a href="{% url 'exportarActaEntrega' fecha recibido_por %}"
+                                       class="btn btn-sm btn-success"
+                                       style="font-size: smaller; font-weight: bold">
+                                       <i class="fa fa-download"></i> Exportar a PDF</a>
+                                </div>
+                            {% endif %}
+
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="container" role="main" style=" margin-left: 0; margin-right: 0; font-size: smaller; width: 100%;">
+                <div class=content>
+                    <div class="row">
+
+                        <div class="col-sm-12">
+                            <h6 style="text-align: center; font-weight: bold;">{{ obra }}</h6>
+                        </div>
+                        <div class="col-sm-12">
+                            <h6>{{ act }}</h6>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <h6 style="text-align: left;">Fecha: {{ fecha }}</h6>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <h6 style="text-align: left;">Elaborado Por: {{ elaborado_por.first_name }} {{ elaborado_por.last_name }}</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table id="tabla_acta" class="display" cellspacing="0" width="100%">
+                            <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Corte</th>
+                                <th>Especialidad</th>
+                                <th>Nombre del plano</th>
+                                <th>Actividad</th>
+                                <th>Objeto</th>
+                                <th>No Plano</th>
+                                <th>Recurso</th>
+                                <th>Estado</th>
+                                <th>Fecha Estado</th>
+                                <th>Revisión</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for rev in list_planos %}
+                                <tr>
+                                    <td style="text-align: center; width: 4em">{{ forloop.counter }}</td>
+                                    <td style="text-align: center; width: 4em"> {{ rev.plano.corte }}</td>
+                                    <td style="text-align: center; width: 9em">{{ rev.plano.especialidad.siglas }}</td>
+                                    <td style="text-align: left">{{ rev.plano.nombre }}</td>
+                                    <td style="text-align: center; width: 7em">{{ rev.plano.actividad.codigo_act }}</td>
+                                    <td style="text-align: center; width: 6em">{{ rev.plano.objeto.codigo }}</td>
+                                    <td style="text-align: center; width: 7em">{{ rev.plano.num }}</td>
+                                    <td style="text-align: center; width: 7em ">{{ rev.plano.trabajador.primer_nombre }} {{ rev.plano.trabajador.segundo_nombre }}</td>
+                                    <td style="text-align: center; width: 6em">{{ rev.estado }}</td>
+                                    <td style="text-align: center; width: 9em">{{ rev.fecha_estado|date:"d/m/Y" }}</td>
+                                    <td style="text-align: center; width: 7em">{{ rev.no_rev }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                            <tfoot>
+                            <td style="padding: 6px 6px !important;"></td>
+                            <th style="padding: 6px 5px !important;">Corte</th>
+                            <th style="padding: 6px 6px !important;">Especialidad</th>
+                            <th style="padding: 6px 6px !important;">Nombre del Plano</th>
+                            <th style="padding: 6px 6px !important;">Actividad</th>
+                            <th style="padding: 6px 6px !important;">Objeto</th>
+                            <th style="padding: 6px 6px !important;">No. Plano </th>
+                            <th style="padding: 6px 6px !important;">Recurso</th>
+                            <th style="padding: 6px 6px !important;">Estado</th>
+                            <th style="padding: 6px 6px !important;">Fecha Estado</th>
+                            <th style="padding: 6px 6px !important;">Revision</th>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if recibido_por and elaborado_por %}
+            <div class=content style="margin-left: 10px">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <h6>Elaborado Por: {{ elaborado_por.first_name }} {{ elaborado_por.last_name }}</h6>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <h6>Recibido por: {{ recibido_por }}</h6>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% else %}
+        <div class=content align="center" style="width: 100%">
+            <h1 style="font-weight: bold">La obra selecionada no posee planos asociados</h1>
+        </div>
+    {% endif %}
+    </div>
+{% endblock %}
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // DataTable
+            var table = $('#tabla_acta').DataTable({
+                "language": {
+                    processing: "Procesando...",
+                    search: "Buscar:",
+                    lengthMenu: "Mostrar _MENU_ registros",
+                    info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros, pagina actual _PAGE_",
+                    infoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    page: "_PAGE_",
+                    infoFiltered: "(filtrado de un total de _MAX_ registros)",
+                    infoPostFix: "",
+                    loadingRecords: "Cargando...",
+                    zeroRecords: "No se encontraron resultados",
+                    emptyTable: "Ningún dato disponible en esta tabla",
+                    paginate: {
+                        first:     "Último",
+                        previous:  "Anterior",
+                        next:      "Siguiente",
+                        last:      "Último",
+                    },
+
+
+                },
+                fixedHeader: {
+                    header: true,
+                    headerOffset: $('#navbar').height() + 22
+                },
+                keys: true,
+                dom: 'lBfrtip',
+
+                buttons: [{
+                    extend: 'excelHtml5',
+                    autoFilter: true,
+                    text: 'Exportar Excel',
+                    filename: 'Listado de planos',
+                    bom: true,
+                    sheetName: 'Listado de Planos',
+                    exportOptions: {
+                        columns: ':visible',
+                    },
+                    messageTop: 'Listado de Planos del {{ act }}',
+                }
+                ]
+
+
+            });
+
+            // Setup - add a text input to each footer cell
+            $('#tabla_acta').find('tfoot th').each(function () {
+                var title = $(this).text();
+                $(this).html('<input class="form-control" type="text" style="font-size: smaller" placeholder=" ' + title + '"/>');
+            });
+
+            // Apply the search
+            table.columns().every(function () {
+                var that = this;
+
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
+
+        });
+    </script>
+{% endblock %}

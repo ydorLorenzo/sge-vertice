@@ -1,0 +1,100 @@
+{% extends "base1.html" %}
+{% load static %}
+{% block title %}Listado de suplemento{% endblock %}
+{% block styles %}
+    <style type="text/css">
+        #tabla_sup_paginate a:hover {
+            background-color: #007bff !important;
+            color: white;
+            border: solid 1px;
+            border-color: #0062cc !important;
+            transition: color .25s ease-in-out, background-color .25s ease-in-out, border-color .25s ease-in-out, border .25s ease-in-out;
+        }
+
+    </style>
+{% endblock %}
+{% block content %}
+    <!-- Page Content Holder -->
+    <div id="content" style="padding-top: 100px;">
+    <div class=content align="center"><h5><strong>Listado de Suplementos de Orden de Trabajo {{ ot.codigo_ot }}</strong></h5></div>
+   <br>
+    <div class="container" role="main" style="width: 900px; font-size: small">
+        <div class="row">
+            <div class="col-lg-12">
+                <table id="tabla_sup" class="display" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Monto</th>
+                        <th>Usuario</th>
+                        <th>Solicitud</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for i in list_sup %}
+                        <tr>
+                            <td>{{ i.fecha |date:"d/m/Y"}}</td>
+                            <td>${{ i.monto }}</td>
+                            <td>{{ i.usuario }}</td>
+                            <td>{{ i.solicitud }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                    <th style="padding: 6px 6px !important;">Fecha</th>
+                    <th style="padding: 6px 6px !important;">Monto</th>
+                    <th style="padding: 6px 6px !important;">Usuario</th>
+                    <th style="padding: 6px 6px !important;">Solicitud</th>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // DataTable
+            var table = $('#tabla_sup').DataTable({
+                "language": {
+                    processing: "Procesando...",
+                    search: "Buscar:",
+                    lengthMenu: "Mostrar _MENU_ registros",
+                    info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    infoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    infoFiltered: "(filtrado de un total de _MAX_ registros)",
+                    infoPostFix: "",
+                    loadingRecords: "Cargando...",
+                    zeroRecords: "No se encontraron resultados",
+                    emptyTable: "Ningún dato disponible en esta tabla",
+                    paginate: {
+                        first: "Último",
+                        previous: "Anterior",
+                        next: "Siguiente",
+                        last: "Último"
+                    }
+                }
+            });
+            // Setup - add a text input to each footer cell
+            $('#tabla_sup').find('tfoot th').each(function () {
+                var title = $(this).text();
+                $(this).html('<input class="form-control" type="text" style="font-size: small" placeholder="Buscar ' + title + '"/>');
+            });
+
+            // Apply the search
+            table.columns().every(function () {
+                var that = this;
+
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}

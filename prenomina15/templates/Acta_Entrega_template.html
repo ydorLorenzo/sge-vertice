@@ -1,0 +1,141 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <style>
+        @page {
+            size: letter landscape;
+            /* A4  21.0 x 29.7 cm */
+            /* A4  21.0 x 29.7 cm */
+        {#        @frame header_frame { /* Static frame */#}
+        {#        -pdf-frame-content: header_content;#}
+        {#        left: 1cm;#}
+        {#        width: 25.7cm;#}
+        {#        top: 0.5cm;#}
+        {#        height: 2cm;#}
+        {#            /* for debugging the layout */#}
+        {#        }#}
+            @frame col1_frame { /* Content frame 1 */
+            left: 1cm;
+            width: 25.7cm;
+            top: 1cm;
+            height: 19cm;
+            /* for debugging the layout */
+        }
+        @frame footer_frame {
+            /* Static frame */
+        -pdf-frame-content:footer_content;
+        left: 1cm; width: 25.7cm; top: 20cm; height: 2cm;
+            /* for debugging the layout */
+        }
+
+        }
+    </style>
+    <style type="text/css">
+        .container {
+            margin: 50px auto 40px auto;
+            width: 600px;
+            text-align: center;
+        }
+
+        .title {
+            font-size: 18px;
+            position: relative;
+            text-align: center;
+        }
+
+
+
+        .table td {
+            padding: 4px;
+            border-top: 1px solid #dddddd;
+            vertical-align: middle;
+        }
+
+        .table th {
+            vertical-align: bottom;
+            border-bottom: 2px solid #dddddd;
+            text-align: center;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="container" role="main" style="width: 100%; margin-left: 0; font-size: 12px">
+        <div class=content>
+            <table class="table-borderless" style="border: none">
+                <tr>
+                    <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                    <th style="text-align: center; font-weight: bold; font-size: 14px; width: 600px"> {{ obra }}</th>
+                    <th style="text-align: right; font-size: 14px; font-weight: normal">{{ acta }}</th>
+                </tr>
+                <tr>
+                    <th style="text-align: left; font-size: 12px; font-weight: normal">Fecha: {{ fecha }}</th>
+                </tr>
+                <tr>
+                    <th style="text-align: left; font-size: 12px; font-weight: normal">Elaborado
+                        Por: {{ elaborado_por.first_name }} {{ elaborado_por.last_name }}</th>
+                </tr>
+            </table>
+        </div>
+        <table class="table" id="mi_tabla" style="border-collapse: collapse; border-spacing: 1px;">
+            <thead>
+            <tr>
+                <th style="width: 30px">No</th>
+                <th style="width: 100px">Corte</th>
+                <th style="width: 55px">Especialidad</th>
+                <th style="width: 300px; text-align: left">&nbsp;&nbsp;Nombre del plano</th>
+                <th style="width: 40px">Actividad</th>
+                <th style="width: 65px">Objeto</th>
+                <th style="width: 75px">No Plano</th>
+                <th style="width: 120px; text-align: left">Recurso</th>
+                <th style="width: 40px">Estado</th>
+                <th style="width: 110px">Fecha Estado</th>
+                <th style="width: 45px">Revisión</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for rev in list_rev %}
+                <tr>
+                    <td align="center">{{ forloop.counter }}</td>
+                    <td> {{ rev.plano.corte }}</td>
+                    <td>{{ rev.plano.especialidad.siglas }}</td>
+                    <td style="text-align: left">&nbsp;&nbsp;{{ rev.plano.nombre }}</td>
+                    <td>{{ rev.plano.actividad.codigo_act }}</td>
+                    <td>{{ rev.plano.objeto.codigo }}</td>
+                    <td>{{ rev.plano.num }}</td>
+                    <td style="text-align: left">{{ rev.plano.trabajador.primer_nombre }} {{ rev.plano.trabajador.segundo_nombre }}</td>
+                    <td>{{ rev.estado }}</td>
+                    <td>{{ rev.fecha_estado|date:"d/m/Y" }}</td>
+                    <td>{{ rev.no_rev }}</td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+    <div class=content>
+        <table class="table-borderless" style="border: hidden">
+            <tr>
+                <th style="text-align: left; font-size: 12px; font-weight: normal">Elaborado
+                    Por: {{ elaborado_por.first_name }} {{ elaborado_por.last_name }}</th>
+            </tr>
+            <tr>
+                <th style="text-align: left; font-size: 12px; font-weight: normal">Recibido Por: {{ recibido_por }}</th>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Contenido del pie de página 'footer_frame' -->
+    <div id="footer_content">
+        <div style="float: right">Subsistema Prenómina 15 &copy; Empresa de Servicios de Ingeniería y Diseño de
+            Holguín - VERTICE 2019
+        </div>
+        página
+        <pdf:pagenumber> de
+            <pdf:pagecount>
+    </div>
+</body>
+</html>

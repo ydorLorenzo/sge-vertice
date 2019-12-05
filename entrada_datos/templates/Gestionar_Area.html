@@ -1,0 +1,225 @@
+{% extends "base1.html" %}
+{% load static %}
+{% block title %}Administrar Area{% endblock %}
+{% block styles %}
+    <style type="text/css">
+        .has-error {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+        }
+
+        #tabla_area_paginate a:hover {
+            background-color: #007bff !important;
+            color: white;
+            border: solid 1px;
+            border-color: #0062cc !important;
+            transition: color .25s ease-in-out, background-color .25s ease-in-out, border-color .25s ease-in-out, border .25s ease-in-out;
+        }
+        td, th {
+            padding: 1px!important;
+        }
+
+    </style>
+{% endblock %}
+{% block content %}
+    <!-- Page Content Holder -->
+        <div id="content" style="padding-top: 100px;">
+
+            <div class=content align="center"><h5><strong>Administrar Área</strong></h5></div>
+            <div class="container" role="main" style="width: 570px; font-size: small">
+                <div class="text-right" style="color: white;">
+                 {% if add %}
+                    <a id="addButtonArea" class="btn btn-success" style="font-size: small">
+                    <i class="fa fa-plus"></i> Adicionar</a>
+                 {% endif %}
+                </div>
+
+                <p></p>
+                <div class="row">
+                    {% if errores %}
+                        <div class="alert alert-dismissable alert-danger">
+                            <button style="margin-left: 20px;" type="button" class="close" data-dismiss="alert"
+                                    aria-hidden="true"><strong> &times;</strong></button>
+                            <strong>Error:</strong> {{ errores }}
+                        </div>
+                    {% endif %}
+                    <div class="col-lg-12">
+                        <table id="tabla_area" class="display" cellspacing="0" width="100%">
+                            <thead>
+                            <tr>
+                                <th class="text-center" style="width: 80px">Código</th>
+                                <th style="width: auto">Nombre</th>
+                                <th style="width: 30px">Acciones</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for i in list_area %}
+                                <tr>
+                                    <td align="center">{{ i.codigo }}</td>
+                                    <td>{{ i.nombre }}</td>
+                                    <td>
+                                        <div class="icon-acciones" align="center">
+                                        {% if delete %}
+                                            <a onclick=" return abrir_modal('{% url 'eliminarArea' i.pk %}')"
+                                               class="badge badge-pill badge-danger">
+                                                <i class="fa fa-trash" title="Eliminar Área"
+                                                   style="color: white;"></i>
+                                            </a>
+                                        {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                            <tfoot>
+                            <th style="padding: 6px 6px !important;">Código</th>
+                            <th style="padding: 6px 6px !important;">Nombre</th>
+                            <td style="padding: 6px 6px !important;"></td>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div id="popup" class="modal fade" role="dialog">
+                <div class="modal-dialog modal-lg-8">
+                    <div class="modal-content">
+                        <form id="formularioArea" role="form" action="{% url 'adicionarArea' %}"
+                                  method="post">
+                        <div class="modal-header">
+                            <h5><strong>Crear Área</strong></h5>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            {% csrf_token %}
+                            <div class="panel panel-default">
+                                <div class="row" style="margin-bottom: 20px;">
+                                    {% if form.errors %}
+                                        <div class="alert alert-danger"
+                                             style="width: 100%; text-align: center; margin: 0 auto; padding: 0 10px; border-radius: 0;">
+                                            <p>{{ form.codigo.errors }}</p>
+                                            <p>{{ form.nombre.errors }}</p>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-3"><strong>Código:</strong>{{ form.codigo}}</div>
+                                    <div class="col-sm-9"><strong>Nombre:</strong>{{ form.nombre }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="col-lg-12 text-right">
+                                <input id="enviar" type="submit" class="btn btn-primary" name="submit"
+                                       value="Guardar">
+                                <button type="button" class="btn btn-danger" onclick="return cerrar_modal()">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <div id="delete" class="modal fade" role="dialog"></div>
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        function validarFormulario() {
+            if (validarCodigo() && validarNombre()) {
+                $('#enviar').removeAttr('disabled');
+            } else {
+                $('#enviar').attr('disabled', '');
+            }
+        }
+
+        $(document).ready(function () {
+            validarFormulario();
+        });
+
+        exp_codigo = "^[0-9]{1}$";
+        exp_nombre = "^([A-Z]{1})[A-Za-z0-9áéíóúñ ]+$";
+
+        $('#id_codigo').prop("min", '0').prop("max", '9').prop("title", 'Valor entre 1 y 9').attr("oninvalid", 'setCustomValidity("Campo obligatorio. Rango entre 1 y 9")');
+        $('#id_nombre').prop("title", 'Este campo es alfanumérico y comienza con mayúscula').attr("oninvalid", 'setCustomValidity("Campo obligatorio.Campo alfanuméricos y comienza con mayúscula")');
+
+        $('#addButtonArea').click(function () {
+            $('#popup form').prop('action', '/adicionar_area/');
+            $('#popup').modal('show');
+        });
+        {% if form.errors %}
+            $('#popup').modal('show');
+        {% endif %}
+
+        function validarCodigo() {
+            var cadena = $('#id_codigo')[0].value;
+            if (!(cadena.match(exp_codigo) && cadena.length === 1)) {
+                $('#id_codigo').addClass('has-error');
+                return false;
+            } else {
+                $('#id_codigo').removeClass('has-error');
+                return true;
+            }
+        }
+
+        function validarNombre() {
+            if ($('#id_nombre')[0].value.match(exp_nombre)) {
+                $('#id_nombre').removeClass('has-error');
+                return true;
+            } else {
+                $('#id_nombre').addClass('has-error');
+                return false;
+            }
+        }
+
+        $("#formularioArea").on('keyup', function () {
+            validarFormulario();
+        });
+
+        $(document).ready(function () {
+            // DataTable
+            var table = $('#tabla_area').DataTable({
+                "language": {
+                    processing: "Procesando...",
+                    search: "Buscar:",
+                    lengthMenu: "Mostrar _MENU_ registros",
+                    info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    infoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    infoFiltered: "(filtrado de un total de _MAX_ registros)",
+                    infoPostFix: "",
+                    loadingRecords: "Cargando...",
+                    zeroRecords: "No se encontraron resultados",
+                    emptyTable: "Ningún dato disponible en esta tabla",
+                    paginate: {
+                        first: "Último",
+                        previous: "Anterior",
+                        next: "Siguiente",
+                        last: "Último"
+                    }
+                }
+            });
+            // Setup - add a text input to each footer cell
+            $('#tabla_area').find('tfoot th').each(function () {
+                var title = $(this).text();
+                $(this).html('<input class="form-control" type="text" style="font-size: small" placeholder="Buscar ' + title + '"/>');
+            });
+
+            // Apply the search
+            table.columns().every(function () {
+                var that = this;
+
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
+        });
+
+    </script>
+{% endblock %}
+

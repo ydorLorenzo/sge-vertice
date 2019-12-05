@@ -1,0 +1,226 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Gestionar Especialidad{% endblock %}
+{% block styles %}
+    <style type="text/css">
+        .has-error {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+        }
+
+    </style>
+{% endblock %}
+{% block migas %}
+    <ol class="breadcrumb" style="margin-top: 56px; opacity: 0.9; position: fixed;
+    top: 0; right: 0; left: 0; z-index: 1000;">
+        <li class="breadcrumb-item"><a href="/home/">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="/home/">Administraci&oacute;n General</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Gestionar Especialidad</li>
+    </ol>
+{% endblock %}
+{% block content %}
+    <div class=content align="center"><h5><strong> Gestionar Especialidad</strong></h5></div>
+    <br>
+    <div class="container theme-showcase" role="main" style="width: 840px;font-size: small">
+        <div class="text-right" style="color: white;"><a
+                id="addButtonEspecialidad" class="btn btn-success" style="font-size: small"><i
+                class="fa fa-plus"></i> Adicionar</a></div>
+        <p></p>
+        <div class="row">
+            {% if errores %}
+                <div class="alert alert-dismissable alert-danger">
+                    <button style="margin-left: 20px;" type="button" class="close" data-dismiss="alert"
+                            aria-hidden="true"><strong> &times;</strong></button>
+                    <strong>Error:</strong> {{ errores }}
+                </div>
+            {% endif %}
+            <div class="col-lg-12">
+                <table class="display" cellspacing="0" width="100%" id="tabla_esp">
+                    <thead>
+                    <tr>
+                        <th class="text-center" style="width: 60px">Código</th>
+                        <th style="width: 270px">Nombre</th>
+                        <th style="width: 280px">Calificación</th>
+                        <th style="width: 50px">Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for i in list_especialidad reversed %}
+                        <tr>
+                            <td align="center">{{ i.codigo }}</td>
+                            <td>{{ i.nombre }}</td>
+                            <td>{{ i.calificacion.nombre }}</td>
+                            <td width="60" nowrap>
+                                <div class="icon-acciones" align="center">
+                                    <a href="{% url 'editarEspecialidad' i.pk %}"
+                                       class="badge badge-pill badge-primary">
+                                        <i class="fa fa-edit" title="Editar Especialidad"
+                                           style="color: white;"></i>
+                                    </a>
+                                    <a onclick=" return abrir_modal('{% url 'eliminarEspecialidad' i.pk %}')"
+                                       class="badge badge-pill badge-danger">
+                                        <i class="fa fa-trash" title="Eliminar Especialidad"
+                                           style="color: white;"></i>
+                                    </a>
+                                    <a onclick=" return abrir_modal('{% url 'detalleEspecialidad' i.pk %}')"
+                                       class="badge badge-pill badge-warning">
+                                        <i class="fa fa-eye" title="Visualizar Especialidad"
+                                           style="color: white;"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                    <th style="padding: 6px 6px !important;">Código</th>
+                    <th style="padding: 6px 6px !important;">Nombre</th>
+                    <th style="padding: 6px 6px !important;">Calificación</th>
+                    <td style="padding: 6px 6px !important;"></td>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div id="popup" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                {% if edit %}
+                    <form id="formularioEsp" role="form" action="{% url 'editarEspecialidad' edit %}" method="post">
+                {% else %}
+                    <form id="formularioEsp" role="form" action="{% url 'adicionarEspecialidad' %}" method="post">
+                {% endif %}
+                <div class="modal-header">
+                    <h6><strong>Crear / Editar Especialidad</strong></h6>
+                    <button type="button" class="close" data-dismiss="modal">x</button>
+                </div>
+                <div class="modal-body mio">
+                    {% csrf_token %}
+                    <div class="panel panel-default">
+                        <div class="row" style="margin-bottom: 20px;">
+                            {% if form.errors %}
+                                <div class="alert alert-danger"
+                                     style="width: 100%; text-align: center; margin: 0 auto; padding: 0 10px; border-radius: 0;">
+                                    <p>{{ form.codigo.errors }}</p>
+                                    <p>{{ form.nombre.errors }}</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12"><strong> Calificación:</strong>{{ form.calificacion }}</div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-sm-3"><strong> Código:</strong>{{ form.codigo }}</div>
+                            <div class="col-sm-9"><strong> Nombre:</strong>{{ form.nombre }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-lg-12 text-right">
+                        <input id="enviar" type="submit" class="btn btn-primary" name="submit" value="Guardar">
+                        <button type="button" class="btn btn-danger" onclick="return cerrar_modal()">
+                            Cancelar
+                        </button>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="delete" class="modal fade" role="dialog"></div>
+{% endblock %}
+{% block javascript %}
+    <script type="text/javascript">
+        function validarFormulario() {
+            if (validarCodigo() && validarNombre()) {
+                $('#enviar').removeAttr('disabled');
+            } else {
+                $('#enviar').attr('disabled', '');
+            }
+        }
+
+        $(document).ready(function () {
+            validarFormulario();
+        });
+
+        exp_codigo = "^[0-9]{8}$";
+        exp_nombre = "^([A-Z]{1}|[(])[A-Za-záéíóúñ ,.()]+$";
+        $('#id_codigo').prop("title", 'Cadena numérica de 8 dígitos').attr("oninvalid", 'setCustomValidity("Campo obligatorio. Cadena numérica de 8 dígitos")');
+        $('#id_nombre').prop("title", 'Campo obligatorio. Comienza con mayúscula y no acepta números').attr("oninvalid", 'setCustomValidity("Comienza con mayúscula y no acepta números")');
+        $('#addButtonEspecialidad').click(function () {
+            $('#popup form').prop('action', '/adicionar_especialidad/');
+            $('#popup').modal('show');
+        });
+        {% if form.errors or edit %}
+            $('#popup').modal('show');
+        {% endif %}
+
+        function validarCodigo() {
+            if ($('#id_codigo')[0].value.match(exp_codigo)) {
+                $('#id_codigo').removeClass('has-error');
+                return true;
+            } else {
+                $('#id_codigo').addClass('has-error');
+                return false;
+            }
+        }
+
+        function validarNombre() {
+            if ($('#id_nombre')[0].value.match(exp_nombre)) {
+                $('#id_nombre').removeClass('has-error');
+                return true;
+            } else {
+                $('#id_nombre').addClass('has-error');
+                return false;
+            }
+        }
+
+        $("#formularioEsp").on('keyup', function () {
+            validarFormulario();
+        });
+
+        $(document).ready(function () {
+            // DataTable
+            var table = $('#tabla_esp').DataTable({
+                "language": {
+                    processing: "Procesando...",
+                    search: "Buscar:",
+                    lengthMenu: "Mostrar _MENU_ registros",
+                    info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    infoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    infoFiltered: "(filtrado de un total de _MAX_ registros)",
+                    infoPostFix: "",
+                    loadingRecords: "Cargando...",
+                    zeroRecords: "No se encontraron resultados",
+                    emptyTable: "Ningún dato disponible en esta tabla",
+                    paginate: {
+                        first: "Último",
+                        previous: "Anterior",
+                        next: "Siguiente",
+                        last: "Último"
+                    }
+                }
+            });
+
+            // Setup - add a text input to each footer cell
+            $('#tabla_esp tfoot th').each(function () {
+                var title = $(this).text();
+                $(this).html('<input class="form-control" style="font-size: small" type="text" placeholder="Buscar ' + title + '" />');
+            });
+
+            // Apply the search
+            table.columns().every(function () {
+                var that = this;
+
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}

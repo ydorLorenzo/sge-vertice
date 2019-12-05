@@ -1,0 +1,120 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <style>
+        @page {
+            size: letter landscape;
+            /* A4  21.0 x 29.7 cm */
+            /* A4  21.0 x 29.7 cm */
+        {#        @frame header_frame { /* Static frame */#}
+        {#        -pdf-frame-content: header_content;#}
+        {#        left: 1cm;#}
+        {#        width: 25.7cm;#}
+        {#        top: 0.5cm;#}
+        {#        height: 2cm;#}
+        {#            /* for debugging the layout */#}
+        {#        }#}
+            @frame col1_frame { /* Content frame 1 */
+            left: 1cm;
+            width: 25.7cm;
+            top: 1cm;
+            height: 19cm;
+            /* for debugging the layout */
+        }
+        @frame footer_frame {
+            /* Static frame */
+        -pdf-frame-content:footer_content;
+        left: 1cm; width: 25.7cm; top: 20cm; height: 2cm;
+            /* for debugging the layout */
+        }
+
+        }
+    </style>
+    <style type="text/css">
+        .container {
+            margin: 50px auto 40px auto;
+            width: 600px;
+            text-align: center;
+        }
+
+        .logo {
+            display: inline-block;
+            margin-top: 35px;
+            width: 64px;
+            height: 64px;
+            margin-right: 20px;
+        }
+
+        .title {
+            font-size: 18px;
+            position: relative;
+            text-align: center;
+        }
+
+        td {
+            padding: 4px;
+            border-top: 1px solid #dddddd;
+            vertical-align: middle;
+        }
+
+        th {
+            vertical-align: bottom;
+            border-bottom: 2px solid #dddddd;
+            text-align: center;
+            padding: 5px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <img src="{% static 'images/Logo_C.jpg' %}" class="logo">&nbsp;&nbsp;&nbsp;&nbsp;
+    <p style="display: inline-block;" class="title"><strong>Reporte de Bajas ({{ fecha_inic }}
+        / {{ fecha_fin }})</strong></p>
+    <table class="table" style="border-collapse: collapse; border-spacing: 0;">
+        <thead>
+        <tr>
+            <th style="width: 30px"><strong>No.</strong></th>
+            <th style="width: 180px"><strong>Nombre y apellidos</strong></th>
+            <th style="width: 80px"><strong>CI</strong></th>
+            <th style="width: 180px"><strong>Área de Trabajo</strong></th>
+            <th style="width: 160px"><strong>Motivo de la Baja</strong></th>
+            <th style="width: 140px"><strong>Graduado de</strong></th>
+            <th style="width: 5px" ><strong>Cat. Ocup.</strong></th>
+            <th style="width: 150px"><strong>Fecha de Baja</strong></th>
+            <th style="width: 100px"><strong>Observaciones</strong></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for i in trabajadores %}
+            <tr>
+                <td style="text-align: center"> {{ forloop.counter }} </td>
+                <td>{{ i.primer_nombre }} {{ i.segundo_nombre }} {{ i.apellidos }}</td>
+                <td style="text-align: center">{{ i.ci }}</td>
+                <td>{{ i.departamento }}</td>
+                <td>{{ i.causa }}</td>
+                <td>{{ i.especialidad }}</td>
+                <td style="text-align: center">{{ i.categoria }}</td>
+                <td style="text-align: center">{{ i.fecha_baja|date:"d/m/Y" }}</td>
+                <td>         </td>
+            </tr>
+        {% endfor %}
+
+
+        </tbody>
+    </table>
+</div>
+
+<!-- Contenido del pie de página 'footer_frame' -->
+<div id="footer_content">
+    <div style="float: right">Sistema Gestión Recursos Humanos &copy; Empresa de Servicios de Ingeniería y Diseño de
+        Holguín - VERTICE 2018
+    </div>
+    página
+    <pdf:pagenumber> de
+        <pdf:pagecount>
+</div>
+</body>
+</html>

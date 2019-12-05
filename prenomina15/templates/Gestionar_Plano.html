@@ -1,0 +1,721 @@
+{% extends "base_pren15.html" %}
+{% load static %}
+{% load filters %}
+{% load widget_tweaks %}
+{% block title %}Gestionar Plano{% endblock %}
+{% block styles %}
+    <style type="text/css">
+        #tabla_planos_paginate a:hover {
+            background-color: #007bff !important;
+            color: white;
+            border: solid 1px;
+            border-color: #0062cc !important;
+            transition: color .25s ease-in-out, background-color .25s ease-in-out, border-color .25s ease-in-out, border .25s ease-in-out;
+        }
+
+        .has-error {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+        }
+
+        table.dataTable td.focus {
+            outline: 1px solid #ac1212;
+            outline-offset: -3px;
+            background-color: #f8e6e6 !important;
+        }
+
+        div.container {
+            max-width: 100%
+        }
+
+        table.dataTable td, table.dataTable th {
+            font-size: 11px;
+            padding: 2px !important;
+
+        }
+
+        .dt-button.buttons-excel.buttons-html5, .dt-button.buttons-collection.buttons-colvis {
+            margin-left: 15px;
+            border-radius: 3px;
+            box-shadow: #47748b 1px 1px 1px;
+            color: #fff;
+            background-color: #37474F !important;
+            border-color: #37474F;
+            background-image: none;
+        }
+
+        .dt-button.buttons-excel.buttons-html5:hover, .dt-button.buttons-collection.buttons-colvis:hover {
+            margin-left: 15px;
+            border-radius: 3px;
+            box-shadow: #37474F 1px 1px 1px;
+            color: #fff;
+            background-color: #47748b !important;
+            border-color: #47748b;
+            background-image: none;
+        }
+
+        .dt-button.buttons-columnVisibility.active {
+            box-shadow: #37474F 1px 1px 1px !important;
+            color: #fff;
+            background-color: #47748b !important;
+            border-color: #47748b;
+            background-image: none !important;
+        }
+
+        .dt-button.buttons-columnVisibility {
+            box-shadow: #37474F 1px 1px 1px !important;
+            color: #fff;
+            background-color: #37474F !important;
+            border-color: #37474F;
+            background-image: none !important;
+        }
+
+        .dt-button-collection.fixed.three-column {
+            padding-bottom: 10px !important;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, .8) !important;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <!-- Page Content Holder -->
+    <div id="content" style="padding-top: 100px;">
+
+        <div class=content align="center"><h5 style="font-weight: bold">Gestionar Planos {{obraS}}</h5></div>
+
+        <div class="row" style="float: right; font-size: smaller">
+            <div class="text-right" style="color: white;">
+              {% if add %} <!-- Aqui se verifica si el usuario tiene permiso de adicionar Plano -->
+                <a id="addButtonPlano" class="btn btn-sm btn-success" style="font-size: smaller; font-weight: bold">
+                    <i class="fa fa-plus"></i> Adicionar
+                </a>
+              {% endif %}
+            </div>
+            {% if read %} <!-- Aqui se verifica si el usuario tiene permiso de Buscar Plano -->
+                <a class="btn btn-sm btn-info" data-toggle="collapse" href="#collapseExample" role="button"
+                   aria-expanded="false" aria-controls="collapseExample" style="font-size: smaller; font-weight: bold">
+                    <i class="fa fa-search"></i>Avanzada
+                </a>
+            {% endif %}
+        </div>
+        <br>
+        <br>
+        <div class="container" role="main" style="width:100%; font-size: smaller">
+            <div class="collapse" id="collapseExample">
+                <div class="card card-body">
+                    <!--FORMULARIO DE FILTROS-->
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="well">
+                            <h6 style="margin-top: 0; font-weight: bold">Filtros</h6>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-3">
+                                    {{ plano_filter.form.estado.label_tag }}
+                                    {% render_field plano_filter.form.estado class="form-control" %}
+                                </div>
+                                <div class="form-group col-sm-4 col-md-3">
+                                    {{ plano_filter.form.vpc.label_tag }}
+                                    {% render_field plano_filter.form.vpc class="form-control" %}
+                                </div>
+                                <div class="form-group col-sm-8 col-md-3">
+                                    {{ plano_filter.form.dateestado.label_tag }}
+                                    {% render_field plano_filter.form.dateestado class="form-control" %}
+                                </div>
+                                <div class="form-group col-sm-8 col-md-3">
+                                    {{ plano_filter.form.datevpc.label_tag }}
+                                    {% render_field plano_filter.form.datevpc class="form-control" %}
+                                </div>
+                                <div class="form-group col-sm-8 col-md-3">
+                                    {{ plano_filter.form.obra.label_tag }}
+                                    {% render_field plano_filter.form.obra class="form-control" %}
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-sm btn-primary" style="font-weight: bold">
+                            <span class="glyphicon glyphicon-search"></span> Buscar
+                        </button>
+                    </form>
+                </div>
+
+                <!--AKI TERMINA EL FORMULARIO DE FILTROS-->
+            </div>
+        </div>
+
+        <div class="container" role="main" style=" margin-left: 0; font-size: smaller">
+            <br>
+            <div class="row">
+                {% if errores %}
+                    <div class="col-md-12 col-12 col-sm-12 col-xs-12">
+                        <div class="alert alert-dismissable alert-danger" style="text-align: center;">
+                            <button style="margin-left: 20px;" type="button" class="close" data-dismiss="alert"
+                                    aria-hidden="true"><strong> &times;</strong></button>
+                            <span style="font-weight: bold;">Error:</span> {{ errores }}
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="col-lg-12">
+                    <table id="tabla_planos" class="display" cellspacing="0" width="100%">
+                        <thead>
+                        <tr>
+                            <th>Corte</th>
+                            <th style="text-align: center; ">Esp</th>
+                            <th style="text-align: center; ">Nombre del Plano</th>
+                            <th style=" text-align: center;">Act</th>
+                            <th style="text-align: center;">Obj</th>
+                            <th style="text-align: center; ">N&uacute;m</th>
+                            <th style="text-align: center;">Inicio</th>
+                            <th style="text-align: center;">Fin</th>
+                            <th style="text-align: center;">Recurso</th>
+                            <th style="text-align: center;">For</th>
+                            <th style="text-align: center; ">Horas Creadas</th>
+                            <th style="text-align: center;">Valor</th>
+                            <th style="text-align: center;">Orden Serv</th>
+                            <th style="text-align: center; ">Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for i in plano_filter.qs %}
+                                {% if i.last_rev != None and i.estado == 'VPC' %}
+                                    <tr style="color:green; font-weight: bold!important;">
+                                        {% elif i.last_rev != None and i.estado == 'V' %}
+                                    <tr style="color:deeppink">
+                                        {% elif i.last_rev != None and i.estado == 'GE' %}
+                                    <tr style="color:orangered">
+                                {% endif %}
+                                {% if i.corte != None %}
+                                    <td style="width: 60px">{{ i.corte }}</td>
+                                {% else %}
+                                    <td align="center" style="width: 60px"></td>
+                                {% endif %}
+                                <td align="center" style="width: 5px">{{ i.especialidad.siglas }}</td>
+                                <td style="width: 150px">{{ i.nombre }}</td>
+                                <td align="center" style="width: 30px">{{ i.actividad.codigo_act }}</td>
+                                <td align="center" style="width: 10px">{{ i.objeto.codigo }} {{ i.objeto.nombre }}</td>
+                                <td align="center" style="width: 60px">{{ i.num }}</td>
+                                <td align="center" style="width: 20px">{{ i.fecha_ini|date:"d/m/Y" }}</td>
+                                <td align="center" style="width: 20px">{{ i.fecha_fin|date:"d/m/Y" }}</td>
+                                <td style="width: 130px">{{ i.trabajador }}</td>
+                                {% if i.cant > 1 %}
+                                    {% if i.porciento == '0.3' %}
+                                        <td align="center" style="width: 25px">{{ i.cant }}{{ i.formato }} (30%)</td>
+                                    {% elif i.porciento == '0.7' %}
+                                        <td align="center" style="width: 25px">{{ i.cant }}{{ i.formato }} (70%)</td>
+                                    {% else %}
+                                        <td align="center" style="width: 25px">{{ i.cant }}{{ i.formato }} (100%)</td>
+                                    {% endif %}
+                                {% else %}
+                                    {% if i.porciento == '0.3' %}
+                                        <td align="center" style="width: 25px">{{ i.formato }} (30%)</td>
+                                    {% elif i.porciento == '0.7' %}
+                                        <td align="center" style="width: 25px">{{ i.formato }} (70%)</td>
+                                    {% else %}
+                                        <td align="center" style="width: 25px">{{ i.formato }} (100%)</td>
+                                    {% endif %}
+                                {% endif %}
+                                <td align="center">{{ i.horas_creadas|replace }}</td>
+                                <td align="center">{{ i.valor|replace }}</td>
+                                {% if i.orden_servicio != None %}
+                                    <td align="center" style="width: 5px">{{ i.orden_servicio }}</td>
+                                {% else %}
+                                    <td align="center" style="width: 5px"></td>
+                                {% endif %}
+                                <td width="20" style="font-size: small">
+                                    <div class="icon-acciones" align="center">
+                                      {% if change %} <!-- Aqui se verifica si el usuario tiene permiso de editar Plano -->
+                                        <a href="{% url 'editarPlano' i.pk %}"
+                                           class="badge badge-pill badge-primary">
+                                            <i class="fa fa-edit" title="Editar Plano"
+                                               style="color: white;"></i>
+                                        </a>
+                                        <a href="#"
+                                           class="badge badge-pill badge-primary">
+                                            <i class="fa fa-folder" title="Gestionar Catalogo"
+                                               style="color: white;"></i>
+                                        </a>
+                                      {% endif %}
+                                      {% if add_rev %} <!-- Aqui se verifica si el usuario tiene permiso de adicionar Revision -->
+                                        <a id="{{ i.pk }}@ {{ i.nombre }}@ {{ i.rev_pago }}"
+                                           class="badge badge-pill badge-warning addRevision"
+                                           style="background-color: darkblue!important;">
+                                            <i class="fa fa-check" title="Registrar revisión"
+                                               style="color: white;"></i>
+                                        </a>
+                                      {% endif %}
+                                      {% if read_rev %} <!-- Aqui se verifica si el usuario tiene permiso de leer Revisiones -->
+                                        <a href="{% url 'listadoRev' i.pk %}"
+                                           class="badge badge-pill badge-warning"
+                                           style="background-color: darkgreen!important;">
+                                            <i class="fa fa-list" title="Visualizar listado de revisiones"
+                                               style="color: white;"></i>
+                                        </a>
+                                      {% endif %}
+                                      {% if delete %} <!-- Aqui se verifica si el usuario tiene permiso de eliminar Plano -->
+                                        <a onclick=" return abrir_modal('{% url 'eliminarPlano' i.pk %}')"
+                                           class="badge badge-pill badge-danger">
+                                            <i class="fa fa-trash-o" title="Eliminar Plano"
+                                               style="color: white;"></i>
+                                        </a>
+                                      {% endif %}
+                                    </div>
+                                </td>
+                                </tr>
+                        {% endfor %}
+                        </tbody>
+                        <tfoot>
+                        <th style="padding: 6px 6px !important;">Corte</th>
+                        <th style="padding: 6px 6px !important;">Especialidad</th>
+                        <th style="padding: 6px 6px !important;">Nombre</th>
+                        <th style="padding: 6px 6px !important;">Act</th>
+                        <th style="padding: 6px 6px !important;">Objeto</th>
+                        <th style="padding: 6px 6px !important;">Número</th>
+                        <th style="padding: 6px 6px !important;">Inicio</th>
+                        <th style="padding: 6px 6px !important;">Fin</th>
+                        <th style="padding: 6px 6px !important;">Recurso</th>
+                        <th style="padding: 6px 6px !important;">Formato</th>
+                        <th style="padding: 6px 6px !important;">Horas</th>
+                        <th style="padding: 6px 6px !important;">Valor</th>
+                        <th style="padding: 6px 6px !important;">Orden Servicio</th>
+                        <td></td>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="popup" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                {% if edit %}
+                    <form id="formularioPlano" role="form" action="{% url 'editarPlano' edit %}" method="post">
+                {% else %}
+                    <form id="formularioPlano" role="form" action="{% url 'adicionarPlano' %}" method="post">
+                {% endif %}
+                <div class="modal-header">
+                    <h6><span style="font-weight: bold;">Crear / Editar Plano</span></h6>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body mio">
+                    {% csrf_token %}
+                    <div class="panel panel-default">
+                        <p></p>
+                        <div class="row">
+                            <div class="col-sm-6"><strong> Obra:</strong>{{ form.obra }}</div>
+                            <div class="col-sm-6"><strong> Actividad:</strong>{{ form.actividad }}</div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-sm-6"><strong> Objeto:</strong>{{ form.objeto }}</div>
+                            <div class="col-sm-6"><strong> Especialidad:</strong>{{ form.especialidad }}</div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-sm-2"><strong> Tipo doc:</strong>{{ form.tipo_doc }}</div>
+                            <div class="col-sm-2"><strong> Formato:</strong>{{ form.formato }}</div>
+                            <div class="col-sm-2"><strong> Numero:</strong>{{ form.num }}</div>
+                            <div class="col-sm-2"><strong> Cantidad:</strong>{{ form.cant }}</div>
+                            <div class="col-sm-2"><strong> Porciento:</strong>{{ form.porciento }}</div>
+                            <div class="col-sm-2"><strong> Corte:</strong>{{ form.corte }}</div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-sm-12"><strong> Nombre:</strong>{{ form.nombre }}</div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-sm-6"><strong> Recurso:</strong>{{ form.trabajador }}</div>
+                            <div class="col-sm-3"><strong> Fecha Inicio:</strong>{{ form.fecha_ini }}
+                                <div style="color: red; font-size: smaller">{{ form.fecha_ini.errors }}</div>
+                            </div>
+                            <div class="col-sm-3"><strong> Fecha Fin:</strong>{{ form.fecha_fin }}
+                                <div style="color: red; font-size: smaller">{{ form.fecha_fin.errors }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-lg-12 text-right" style="font-size: smaller">
+                        <input id="enviar" type="submit" class="btn btn-sm btn-primary" name="submit" value="Guardar"
+                               style="font-weight: bold">
+                        <button type="button" class="btn btn-sm btn-danger" onclick="return cerrar_modal()"
+                                style="font-weight: bold">
+                            Cancelar
+                        </button>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="popup1" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg" style="width: 650px">
+            <div class="modal-content">
+                <form id="formularioRevision" role="form" action="{% url 'registrarRevision' %}"
+                      method="post">
+                    <div class="modal-header">
+                        <h5><strong>Registrar Revisión</strong></h5>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        {% csrf_token %}
+                        <div class="panel panel-default">
+                            <input id="plano" name="plano" value="" type="hidden">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <strong> Fecha Revisión:</strong>{{ formrev.fecha_revision }}
+                                    <div style="color: red; font-size: small">{{ formrev.fecha_revision.errors }}</div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <strong>Acta Entrega:</strong>{{ formrev.entregado }}
+                                </div>
+                                <div class="col-sm-4">
+                                    <strong>Fecha Acta Entrega:</strong>{{ formrev.fecha_estado }}
+                                    <div style="color: red; font-size: small">{{ formrev.fecha_estado.errors }}</div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <strong>Estado:</strong>{{ formrev.estado }}
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-sm-9">
+                                    <strong>Observaciones:</strong>{{ formrev.observaciones }}
+                                </div>
+                                <div class="col-sm-3">
+                                    <strong>Fecha de VPC:</strong>{{ formrev.fecha_vpc }}
+                                </div>
+                            </div>
+                            <br>
+
+                                    <div class="row">
+                                        <strong id="id_aprobado_en" hidden class="col-sm-10"> </strong>
+                                      <div name="aprobado_div" id="id_aprobado_div" class="col-sm-2">
+                                          <strong id="id_aprobado_rev">Aprobado:</strong>
+                                          <select name="aprobado" id="id_aprobado" class="form-control" title="aprobado" >
+                                             <option selected value="NO">NO </option>
+                                             <option value="SI">SI </option>
+                                          </select>
+                                      </div>
+                                    </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="col-lg-12 text-right">
+                            <input id="enviar1" type="submit" class="btn btn-sm btn-primary" name="submit"
+                                   value="Guardar" style="font-weight: bold">
+                            <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"
+                                    style="font-weight: bold">
+                                Cancelar
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="delete" class="modal fade" role="dialog"></div>
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        $('#addButtonPlano').click(function () {
+            $('#popup form').prop('action', '/pren/adicionar_plano/');
+            $('#popup').modal('show');
+        });
+        {% if edit %}
+            $('#popup').modal('show');
+        {% endif %}
+
+        exp_numero = "^([01]{1})[0-9]{4}$";
+        exp_cant = "^[0-9]{1,2}$";
+        exp_nombre = "^([A-ZÁ]{1})[A-Za-z0-9áéíóúñÁÉÍÓÚÑ /).,+-_'/(]+$";
+        $('#id_num').prop("title", 'Este campo solo acepta valores numéricos').attr("oninvalid",
+            'setCustomValidity("Campo obligatorio. Solo acepta valores numéricos")');
+        $('#id_nombre').prop("title", 'Este campo comienza con mayúscula').attr("oninvalid", 'setCustomValidity("Campo obligatorio.Empieza con mayúscula")');
+        $('#id_cant').prop("title", 'Este campo solo acepta valores numéricos').attr("oninvalid",
+            'setCustomValidity("Campo obligatorio. Solo acepta valores numéricos")').prop("min", '1').prop("max", '15');
+
+
+        exp_texto = "^([A-Z]{1})[A-Za-z0-9áéíóúñÁÉÍÓÚ .-]+$";
+        $('#id_entregado, #id_observaciones').prop("title", 'Alfanumérico y comienza con mayúscula').attr("oninvalid", 'setCustomValidity("Campo obligatorio.Alfanumérico y comienza con mayúscula")');
+        $('#id_last_rev').prop("min", '0').prop("max", '9');
+
+        function validarNumero() {
+            if ($('#id_num')[0].value.match(exp_numero)) {
+                $('#id_num').removeClass('has-error');
+                return true;
+            } else {
+                $('#id_num').addClass('has-error');
+                return false;
+            }
+        }
+
+        function validarCant() {
+            if ($('#id_cant')[0].value.match(exp_cant)) {
+                $('#id_cant').removeClass('has-error');
+                return true;
+            } else {
+                $('#id_cant').addClass('has-error');
+                return false;
+            }
+        }
+
+        function validarNombre() {
+            if ($('#id_nombre')[0].value.match(exp_nombre)) {
+                $('#id_nombre').removeClass('has-error');
+                return true;
+            } else {
+                $('#id_nombre').addClass('has-error');
+                return false;
+            }
+        }
+
+        function validarFormulario() {
+            if (validarNumero() && validarCant() && validarNombre()) {
+                $('#enviar').removeAttr('disabled');
+            } else {
+                $('#enviar').attr('disabled', '');
+            }
+        }
+
+
+        $("#formularioPlano").on('keyup', function () {
+            validarFormulario();
+        });
+
+        $(document).ready(function () {
+            validarFormulario();
+        });
+
+        $("#id_num,#id_nombre, #id_cant").on('change', function () {
+            validarFormulario();
+        }).on('keyup', function () {
+            validarFormulario();
+        });
+
+
+        $(document).ready(function () {
+            // DataTable
+            var table = $('#tabla_planos').DataTable({
+                "language": {
+                    processing: "Procesando...",
+                    search: "Buscar:",
+                    lengthMenu: "Mostrar _MENU_ registros",
+                    info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    infoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    infoFiltered: "(filtrado de un total de _MAX_ registros)",
+                    infoPostFix: "",
+                    loadingRecords: "Cargando...",
+                    zeroRecords: "No se encontraron resultados",
+                    emptyTable: "Ningún dato disponible en esta tabla",
+                    paginate: {
+                        first: "Último",
+                        previous: "Anterior",
+                        next: "Siguiente",
+                        last: "Último",
+                    },
+                },
+                keys: true,
+                dom: 'lBfrtip',
+                colReorder: {
+                    realtime: true,
+                    fixedColumnsRight: 1
+                },
+                "columnDefs": [
+                    {"orderable": false, "targets": [10, 11, 13]}
+                ],
+                fixedHeader: {
+                    header: true,
+                    headerOffset: $('#navbar').height() + 22
+                },
+                buttons: [{
+                    extend: 'excelHtml5',
+                    autoFilter: true,
+                    text: 'Exportar Excel',
+                    filename: 'Listado de planos',
+                    bom: true,
+                    sheetName: 'Listado de Planos',
+                    exportOptions: {
+                        columns: ':visible',
+                    },
+                    messageTop: 'Listado de Planos.',
+                },
+                    {
+                        extend: 'colvis',
+                        stateSave: true,
+                        collectionLayout: 'fixed three-column',
+                        text: 'Mostrar',
+                        postfixButtons: [{
+                            extend: 'colvisGroup',
+                            text: 'Ver Todas',
+                            show: ':hidden'
+                        }]
+                    }
+                ]
+            });
+            new $.fn.dataTable.Responsive(table);
+            // Setup - add a text input to each footer cell
+            $('#tabla_planos').find('tfoot th').each(function () {
+                var title = $(this).text();
+                $(this).html('<input class="form-control" type="text" style="font-size: smaller" placeholder="Buscar ' + title + '"/>');
+            });
+
+            // Apply the search
+            table.columns().every(function () {
+                var that = this;
+
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
+
+            $('a.toggle-vis').on('click', function (e) {
+                e.preventDefault();
+
+                // Get the column API object
+                var column = table.column($(this).attr('data-column'));
+
+                // Toggle the visibility
+                column.visible(!column.visible());
+            });
+        });
+
+
+
+        $('#id_fecha_fin, #id_fecha_ini, #id_fecha_estado, #id_fecha_revision').prop("readonly", true).datepicker({
+            uiLibrary: 'bootstrap4',
+            iconsLibrary: 'font-awesome',
+            language: 'es'
+        }).prop("readonly", true);
+
+        var getDate = function (input) {
+            return new Date(input.date.valueOf());
+        };
+
+        $('#id_fecha_ini').datepicker({
+            startDate: '+5d',
+            endDate: '+35d'
+        }).on('changeDate',
+            function (selected) {
+                $('#id_fecha_fin').datepicker('setStartDate', getDate(selected));
+            });
+
+        $('#id_fecha_fin').datepicker({
+            startDate: '+6d',
+            endDate: '+36d'
+        }).on('changeDate',
+            function (selected) {
+                $('#id_fecha_ini').datepicker('setEndDate', getDate(selected));
+            });
+
+        $('#id_fecha_revision').datepicker({
+            startDate: '+5d',
+            endDate: '+35d'
+        }).on('changeDate',
+            function (selected) {
+                $('#id_fecha_estado').datepicker('setStartDate', getDate(selected));
+            });
+
+        $('#id_fecha_estado').datepicker({
+            startDate: '+6d',
+            endDate: '+36d'
+        }).on('changeDate',
+            function (selected) {
+                $('#id_fecha_revision').datepicker('setEndDate', getDate(selected));
+            });
+
+        $('#id_datefin_0,#id_datefin_1,#id_fecha_vpc').datepicker({
+            uiLibrary: 'bootstrap4',
+            iconsLibrary: 'font-awesome',
+            language: 'es'
+        });
+
+        $('#id_datefin_0').datepicker({
+            startDate: '+5d',
+            endDate: '+35d'
+        }).on('changeDate',
+            function (selected) {
+                $('#id_datefin_1').datepicker('setStartDate', getDate(selected));
+            });
+
+        $('#id_datefin_1').datepicker({
+            startDate: '+6d',
+            endDate: '+36d'
+        }).on('changeDate',
+            function (selected) {
+                $('#id_datefin_0').datepicker('setEndDate', getDate(selected));
+            });
+
+        $('#id_dateestado_0,#id_dateestado_1').datepicker({
+            uiLibrary: 'bootstrap4',
+            iconsLibrary: 'font-awesome',
+            language: 'es'
+        });
+
+        $('#id_dateestado_0').datepicker({
+            startDate: '+5d',
+            endDate: '+35d'
+        }).on('changeDate',
+            function (selected) {
+                $('#id_dateestado_1').datepicker('setStartDate', getDate(selected));
+            });
+
+        $('#id_dateestado_1').datepicker({
+            startDate: '+6d',
+            endDate: '+36d'
+        }).on('changeDate',
+            function (selected) {
+                $('#id_dateestado_0').datepicker('setEndDate', getDate(selected));
+            });
+
+        $('#id_datevpc_0,#id_datevpc_1').datepicker({
+            uiLibrary: 'bootstrap4',
+            iconsLibrary: 'font-awesome',
+            language: 'es'
+        });
+
+        $('#id_datevpc_0').datepicker({
+            startDate: '+5d',
+            endDate: '+35d'
+        }).on('changeDate',
+            function (selected) {
+                $('#id_datevpc_1').datepicker('setStartDate', getDate(selected));
+            });
+
+        $('#id_datevpc_1').datepicker({
+            startDate: '+6d',
+            endDate: '+36d'
+        }).on('changeDate',
+            function (selected) {
+                $('#id_datevpc_0').datepicker('setEndDate', getDate(selected));
+            });
+
+        $('.badge.badge-pill.badge-warning.addRevision').click(function () {
+            var nombre = this.id.split('@');
+            var rev_pag = nombre[2];
+            if (rev_pag[1] === "N") {
+                $("#id_aprobado_div").prop('hidden', false);
+            }
+            else {
+                $("#id_aprobado").prop('hidden', true);
+                $("#id_aprobado_en").prop('hidden', false);
+                $("#id_aprobado_rev").prop('hidden', true);
+                $("#id_aprobado_en").html('Aprobado en revision #' + rev_pag[1]);
+            }
+
+            $('#popup1 input#plano').prop('value', nombre[0]);
+            $('#formularioRevision .modal-header h5 strong').html('Registrar revisión a' + nombre[1]);
+
+
+            $('#popup1').modal('show');
+        });
+
+        $("label[for='id_dateestado_0']").text("Corte:");  // cambiar texto en la busqueda avanzada
+
+    </script>
+{% endblock %}
+

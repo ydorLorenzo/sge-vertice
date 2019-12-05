@@ -1,0 +1,153 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <style>
+        @page {
+            size: letter landscape;
+            /* A4  21.0 x 29.7 cm */
+            /* A4  21.0 x 29.7 cm */
+        {#        @frame header_frame { /* Static frame */#}
+        {#        -pdf-frame-content: header_content;#}
+        {#        left: 1cm;#}
+        {#        width: 25.7cm;#}
+        {#        top: 0.5cm;#}
+        {#        height: 2cm;#}
+        {#            /* for debugging the layout */#}
+        {#        }#}
+            @frame col1_frame { /* Content frame 1 */
+            left: 1cm;
+            width: 25.7cm;
+            top: 1cm;
+            height: 19cm;
+            /* for debugging the layout */
+        }
+        @frame footer_frame {
+            /* Static frame */
+        -pdf-frame-content:footer_content;
+        left: 1cm; width: 25.7cm; top: 20cm; height: 2cm;
+            /* for debugging the layout */
+        }
+
+        }
+    </style>
+    <style type="text/css">
+        .container {
+            margin: 50px auto 40px auto;
+            width: 600px;
+            text-align: center;
+        }
+
+        .logo {
+            display: inline-block;
+            margin-top: 35px;
+            width: 64px;
+            height: 64px;
+            margin-right: 20px;
+        }
+
+        .title {
+            font-size: 18px;
+            position: relative;
+            text-align: center;
+        }
+
+        td {
+            padding: 4px;
+            border-top: 1px solid #dddddd;
+            vertical-align: middle;
+        }
+
+        th {
+            vertical-align: bottom;
+            border-bottom: 2px solid #dddddd;
+            text-align: center;
+            padding: 5px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <img src="{% static 'images/Logo_C.jpg' %}" class="logo">&nbsp;&nbsp;&nbsp;&nbsp;
+    <p style="display: inline-block;" class="title"><strong>Control de certificados m&eacute;dicos recibidos de los
+        Centros Asistenciales ({{ fecha_inic }} / {{ fecha_fin }})</strong></p>
+    <table class="table" style="border-collapse: collapse; border-spacing: 0;">
+        <thead>
+        <tr>
+            <th style="width: 50px;">Area</th>
+            <th style="width: 180px;">Fecha inicial</th>
+            <th style="width: 120px;">Fecha final</th>
+            <th style="width: auto;">Diagnóstico</th>
+            <th style="width: auto;">Centro Asistencial / Facultativo</th>
+            <th style="width: 80px;">No. Reg</th>
+            <th style="width: 80px;">Fecha Reg.</th>
+            <th style="width: 70px;">Días</th>
+            <th style="width: 60px;">Tipo</th>
+            <th style="width: 50px;">Antes 72h</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for dep in departments %}
+            <tr>
+                <td colspan="10"
+                    style="padding: 4px;
+	line-height: 1.428571429;
+	border-top: 1px solid #dddddd; font-weight: bold; text-align: left; background-color: rgba(245,245,245,0.50)">
+                    {% filter upper %}{{ dep.codigo }} {{ dep.nombre }}{% endfilter %}</td>
+            </tr>
+            {% for person in dep.personas %}
+                <tr>
+                    <td colspan="10"
+                        style="line-height: 1.428571429;
+	                            border-top: none; font-weight: bold; padding-left: 10px;
+	                            text-align: left; background-color: rgba(240,240,240,0.50)">
+                        {% filter upper %}{{ person.codigo }} {{ person.nombre }}{% endfilter %}
+                    </td>
+                </tr>
+                {% for sub in person.subsidios %}
+                    <tr>
+                        <td></td>
+                        <td>{{ sub.desde|date:"d/m/Y" }}</td>
+                        <td>{{ sub.hasta|date:"d/m/Y" }}</td>
+                        <td>{{ sub.diagnostico }}</td>
+                        <td>{% filter upper %}Dado en {{ sub.centro }} por {{ sub.medico }}{% endfilter %}</td>
+                        <td>{{ sub.no_reg }}</td>
+                        <td>{{ sub.fecha|date:"d/m/Y" }}</td>
+                        <td>{{ sub.dias }}</td>
+                        <td>{{ sub.tipo }}</td>
+                        <td>{{ sub.ent_72 }} </td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="10"
+                        style="font-weight: bold; text-align: center">
+                        Suma para el c&oacute;digo {{ person.codigo }}, que tiene {{ person.cant_registros }}
+                        registros en la Base de Datos&nbsp;&nbsp;&nbsp;&nbsp;{{ person.suma_cod }}</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="10"
+                    style="font-weight: bold; text-align: center">
+                    Suma para el &Aacute;rea {{ dep.codigo }}, que tiene {{ dep.cant_registros }} registros
+                    en la Base de Datos&nbsp;&nbsp;&nbsp;&nbsp;{{ dep.suma_area }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <h3 style="text-align: right">Existen en total {{ cant_registros_bd }} registros en la Base de Datos
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Suma
+        total: {{ total }}</h3>
+</div>
+
+<!-- Contenido del pie de página 'footer_frame' -->
+<div id="footer_content">
+    <div style="float: right">Sistema Gestión Recursos Humanos &copy; Empresa de Servicios de Ingeniería y Diseño de
+        Holguín - VERTICE 2018</div>
+    página
+    <pdf:pagenumber> de
+        <pdf:pagecount>
+</div>
+</body>
+</html>

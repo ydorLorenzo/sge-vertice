@@ -1,0 +1,77 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <form role="form" action="{% url 'EditarMovimiento' movimiento.id %}" method="post">{% csrf_token %}
+                <div class="modal-header">
+            <h5><strong>Editar Movimiento</strong></h5>
+            <button type="button" class="close" data-dismiss="modal">x</button>
+        </div>
+        <div class="modal-body">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <p>Editar Movimiento de<strong>" {{movimiento.trabajador.primer_nombre}} {{movimiento.trabajador.segundo_nombre}} {{movimiento.trabajador.apellidos}}"</strong></p>
+                </div>
+                <div>
+                    Fecha:
+                    
+                    <input type="text" id= "fecha_movimiento_id" name="fecha_movimiento" class="form-control"  value="{{movimiento.fecha|date:"d/m/Y"}}">
+                </div>
+                
+                <div>
+                    Tipo:
+                    <!--input type="text" name="tipo" class="form-control" value="No definido"-->
+                    <select class="custom-select" name= "select">
+                        <option selected>No definido</option>
+                        <option value="Cambio de plaza por promoción">Cambio de plaza por promoción</option>
+                        <option value="Por alcanzar la antiguedad de 1 año">Por alcanzar la antiguedad de 1 año</option>
+                        <option value="Por alcanzar la antiguedad de 4 años">Por alcanzar la antiguedad de 4 años</option>
+                        <option value="Por necesidad de la producción y los servicios">Por necesidad de la producción y los servicios</option>
+                        <option value="Reestructuración administrativa">Reestructuración administrativa</option>
+                      </select>
+                    </div>
+                    <hr>
+                    <div > 
+                Resolución:    
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">
+                        <input type="checkbox" aria-label="Checkbox for following text input" id="id_checkbox">
+                      </div>
+                    </div>
+                    <input type="text" class="form-control" aria-label="Text input with checkbox" id="id_text" name="resolucion">
+                  </div>
+            </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="col-lg-12 text-right">
+                <input type="submit" class="btn btn-primary" name="submit" value="Guardar">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
+<script>
+    $('#fecha_movimiento_id').prop("readonly", true).datepicker({
+    uiLibrary: 'bootstrap4',
+    iconsLibrary: 'font-awesome',
+    language: 'es'
+});
+
+$("#id_text").prop('disabled', true);
+
+$('#id_checkbox').change(function() {
+    
+    if(this.checked) {
+        $("#id_text").prop('disabled', false);
+    }
+    else{
+        $("#id_text").prop('disabled', true); 
+        $("#id_text").val('');
+    }
+
+});
+
+</script>

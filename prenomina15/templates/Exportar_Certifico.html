@@ -1,0 +1,190 @@
+{% extends "base_pren15.html" %}
+{% load static %}
+{% load filters %}
+{% block title %}Datos Certifico{% endblock %}
+{% block styles %}
+    <style type="text/css">
+        #tabla_datos_paginate a:hover {
+            background-color: #007bff !important;
+            color: white;
+            border: solid 1px;
+            border-color: #0062cc !important;
+            transition: color .25s ease-in-out, background-color .25s ease-in-out, border-color .25s ease-in-out, border .25s ease-in-out;
+        }
+
+        table.dataTable td, table.dataTable th {
+            font-size: 11px;
+            padding: 2px !important;
+        }
+
+        div.container {
+            max-width: 100%
+        }
+
+        table.dataTable td.focus {
+            outline: 1px solid #ac1212;
+            outline-offset: -3px;
+            background-color: #f8e6e6 !important;
+        }
+
+        .dt-button.buttons-excel.buttons-html5, .dt-button.buttons-collection.buttons-colvis {
+            margin-left: 15px;
+            border-radius: 3px;
+            box-shadow: #47748b 1px 1px 1px;
+            color: #fff;
+            background-color: #37474F !important;
+            border-color: #37474F;
+            background-image: none;
+        }
+
+        .dt-button.buttons-excel.buttons-html5:hover, .dt-button.buttons-collection.buttons-colvis:hover {
+            margin-left: 15px;
+            border-radius: 3px;
+            box-shadow: #37474F 1px 1px 1px;
+            color: #fff;
+            background-color: #47748b !important;
+            border-color: #47748b;
+            background-image: none;
+        }
+
+    </style>
+{% endblock %}
+{% block content %}
+    <!-- Page Content Holder -->
+    <div id="content" style="padding-top: 100px;">
+
+        <div class=content align="center"><h5 style="font-weight: bold">Cierre Productivo de {{ fecha_ini }}
+            al {{ fecha_fin }}</h5></div>
+
+        <div class="container" role="main" style=" margin-left: 0; font-size: smaller">
+            <div class="row" style="width: 103%; position: relative">
+                <div class="col-12">
+                    <div class="pull-right" style="color: white; ">
+                        <a href="{% url 'exportarCertifico' obra fecha_ini fecha_fin recibido_por cargo org %}"
+                           class="btn btn-sm btn-success">
+                            <i class="fa fa-download"></i><strong style="font-size: smaller"> Exportar a PDF</strong>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <table id="tabla_datos" class="display" cellspacing="0" width="100%">
+                        <thead>
+                        <tr>
+                            <th style="text-align: left; width: 350px">&nbsp;</th>
+                            <th style="text-align: center">&nbsp;</th>
+                            <th style="text-align: center; width: 60px">&nbsp;</th>
+                            <th style="text-align: center; width: 60px">&nbsp;</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for corte in cortes %}
+                            <tr style=" background-color: darkseagreen">
+                                <th style="text-align: left; width: 400px; font-weight: bold;">Cierre Productivo
+                                    del {{ corte.descripcion }}</th>
+                                <th style="text-align: center; font-weight: bold;  width: 80px;">&nbsp;</th>
+                                <th style="text-align: center; width: 80px; font-weight: bold">Plan de planos VPC a
+                                    declarar en el mes.
+                                </th>
+                                <th style="text-align: center; width: 90px; font-weight: bold">Real de planos VPC
+                                    declarados en el mes.
+                                </th>
+                            </tr>
+                            <tr style="background-color: lightgray">
+                                <th style="font-weight: bold">Descripción del plano</th>
+                                <th style="font-weight: bold; text-align: center">Especialidad</th>
+                                <th style="font-weight: bold; text-align: center">{{ corte.total }}
+                                    (pendientes {{ corte.pendiente }} {% if corte.pendiente != 1 %} planos {% else %} plano {% endif %})
+                                </th>
+                                <th style="font-weight: bold; text-align: center">{{ corte.vpc_mes }}</th>
+                            </tr>
+                            {% for esp in corte.especialidades %}
+                                <tr style="background-color: lightgreen">
+                                    <td style="font-weight: bold">&nbsp;</td>
+                                    {% if esp.nombre_esp == 'Hidrosanitaria Interior' or esp.nombre_esp == 'Hidrosanitaria Exterior' %}
+                                        <td style="font-weight: bold; text-align: center">Hidrosanitaria</td>
+                                    {% else %}
+                                        <td style="font-weight: bold; text-align: center">{{ esp.nombre_esp }}</td>
+                                    {% endif %}
+                                    <td style="font-weight: bold; text-align: center">{{ esp.total }}
+                                        (pendientes {{ esp.pendiente }}
+                                        {% if esp.pendiente != 1 %} planos {% else %} plano {% endif %})
+                                    </td>
+                                    <td style="font-weight: bold; text-align: center">{{ esp.vpc }}</td>
+                                </tr>
+                                {% for plano in esp.planos_vpc %}
+                                    <tr>
+                                        <td>{{ plano.os_vpc }} {{ plano.num }} {{ plano.objeto.nombre }} {{ plano.nombre }}({{ plano.trabajador }})</td>
+                                        <td style="text-align: center">&nbsp;</td>
+                                        <td style="text-align: center">{{ forloop.counter }}</td>
+                                        <td style="text-align: center">{{ plano.fecha_vpc|date:"d/m/Y" }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // DataTable
+            var table = $('#tabla_datos').DataTable({
+                "language": {
+                    processing: "Procesando...",
+                    search: "Buscar:",
+                    lengthMenu: "Mostrar _MENU_ registros",
+                    info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    infoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    infoFiltered: "(filtrado de un total de _MAX_ registros)",
+                    infoPostFix: "",
+                    loadingRecords: "Cargando...",
+                    zeroRecords: "No se encontraron resultados",
+                    emptyTable: "Ningún dato disponible en esta tabla",
+                    paginate: {
+                        first: "Último",
+                        previous: "Anterior",
+                        next: "Siguiente",
+                        last: "Último"
+                    }
+                },
+                "ordering": false,
+                fixedHeader: false,
+                keys: true,
+                dom: 'lBfrtip',
+                bFilter: false,
+                bInfo: false,
+                bLengthChange: false,
+                bPaginate: false,
+                buttons: [{
+                    extend: 'excelHtml5',
+                    autoFilter: true,
+                    text: 'Exportar Excel',
+                    filename: 'Datos Prenómina',
+                    bom: true,
+                    sheetName: 'Datos Prenómina',
+                    exportOptions: {
+                        columns: ':visible',
+                    },
+                    messageTop: 'Entidad: Emp.Serv.de Ingeniería y Diseño Holguín',
+                }]
+            });
+            new $.fn.dataTable.FixedHeader(table);
+        });
+    </script>
+{% endblock %}
+

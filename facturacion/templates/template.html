@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>{% block title %}{% endblock %}</title>
+    <!--Materilize CSS-->
+    <link href="{% static 'materialize/css/materialize.min.css' %}" rel="stylesheet">
+    <link href="{% static 'materialize/css/materialize.css' %}" rel="stylesheet">
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/dataTables.jqueryui.css' %}" rel="stylesheet">
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet">
+    <!--link href="{% static 'font-aweson/css/font-awesome.min.css' %}" rel="stylesheet"-->
+    <!-- Custom styles -->
+    <!--link href="{% static 'css/jumbotron-narrow.css' %}" rel="stylesheet"-->
+    <!--link href="{% static 'css/buttons.dataTables.min.css' %}" rel="stylesheet"-->
+    <!--Image Upload-->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/bootstrap-imageupload.css' %}" rel="stylesheet">
+    {#Estos son los css del datepicker#}
+    <!--link href="{% static 'datepickerFiles/css/bootstrap-datepicker.css' %}" rel="stylesheet"-->
+
+    <style type="text/css">
+        #topcontrol {
+            transition: 0.5s;
+        }
+    </style>
+
+    {% block styles %} {% endblock %}
+</head>
+
+<body>
+    <nav>
+        <div class="nav-wrapper">
+          <a href="#" class="brand-logo">Logo</a>
+          <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="sass.html">Sass</a></li>
+            <li><a href="badges.html">Components</a></li>
+            <li><a href="collapsible.html">JavaScript</a></li>
+          </ul>
+        </div>
+      </nav>
+      
+    
+
+
+<!-- /container -->
+<!-- Materialize Java Script-->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.sidenav');
+    var instances = M.Sidenav.init(elems, options);
+  });
+    $(document).ready(function(){
+    $('.sidenav').sidenav();
+  });
+        
+</script>
+<script src="{% static 'materialize/js/materialize.js' %}"></script>
+<script src="{% static 'materialize/js/materialize.min.js' %}"></script>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<!--script src="{% static 'js/jquery.dataTables.min.js' %}"></script-->
+<!--script src="{% static 'js/dataTables.bootstrap4.js' %}"></script-->
+<script src="{% static 'js/jquery-validation-1.17.0/jquery.validate.min.js' %}"></script>
+<!--script type="text/javascript" src="{% static 'js/dataTables.jqueryui.js' %}"></script-->
+<!--script src="{% static 'js/app.js' %}"></script-->
+<!--Image Upload preview-->
+<script src="{% static 'js/bootstrap-imageupload.js' %}"></script>
+{#js Datepicker#}
+<!--script src="{% static 'datepickerFiles/js/bootstrap-datepicker.js' %}"></script>
+<script src="{% static 'datepickerFiles/locales/bootstrap-datepicker.es.min.js' %}"></script-->
+<!--Adicionar dinamicos-->
+<!--script src="{% static 'js/jquery.formset.js' %}"></script-->
+<!--Data Table PDF-->
+<!--script src="{% static 'js/dataTables.buttons.min.js' %}"></script>
+<script src="{% static 'js/buttons.flash.min.js' %}"></script>
+<script src="{% static 'js/jszip.min.js' %}"></script>
+<script src="{% static 'js/pdfmake.min.js' %}"></script>
+<script src="{% static 'js/vfs_fonts.js' %}"></script>
+<script src="{% static 'js/buttons.html5.min.js' %}"></script>
+<script src="{% static 'js/buttons.print.min.js' %}"></script-->
+{% block javascript %}{% endblock %}
+<!--div id="topcontrol" style="position: fixed; bottom: 10px; right: 10px; cursor: pointer; z-index: 99999; opacity: 0;"
+    title="Ir arriba">
+    <img src="{% static 'images/up.png' %}" style="width:40px; height:40px">
+</div-->
+</body>
+</html>

@@ -1,0 +1,89 @@
+{% extends "base_pr3.html" %}
+{% load static %}
+{% block title %}Reporte Producción Direcciones {% endblock %}
+{% block styles %}
+    <style type="text/css">
+        td, th {
+            padding: 1px !important;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <!-- Page Content Holder -->
+    <div id="content" style="padding-top: 100px; width: 100%; position: relative;">
+        <div class=content align="center">
+            <h5><strong>Resumen Producción por Dirección</strong></h5>
+        </div>
+        <br>
+        <div class="container" role="main" style=" margin-left: 0; font-size: smaller; width: 50%; position: relative;">
+            <div class="row" style="text-align: right">
+                    <div class="pull-right" style="color: white; ">
+                        <a href="#" class="btn btn-success"
+                           style="font-size: smaller">
+                            <i class="fa fa-download"></i><strong>Exportar a PDF</strong>
+                        </a>
+                    </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <table style="margin-left: 120px; width: 100%; position: relative">
+                        <tr style="text-align: center">
+                            <th>
+                                <strong>
+                                    Desde:
+                                </strong>
+                                {{fecha_ini }}
+                            </th>
+                            <th>
+                                <strong>
+                                    Hasta:
+                                </strong>
+                                {{fecha_fin }}
+                            <th>
+                        </tr>
+                    </table>
+                <br>
+                    <table class="display table" cellspacing="0" align="center" style="margin-left: 120px; width: 100%">
+                        <thead>
+                        <tr>
+                            <th>
+                                <strong>Dirección</strong>
+                            </th>
+                            <th style="text-align: center">
+                                <strong>
+                                    Producción
+                                </strong>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for area in list_area %}
+                            <tr>
+                                <td>
+                                    {{ area.nombre }}
+                                </td>
+                                <td align="center">
+                                    {{ area.total }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        <tr>
+                            <th style="text-align: right">
+                                <strong>
+                                    Total Empresa
+                                </strong>
+                            </th>
+                            <th style="text-align: center">
+                                <strong>{{suma}}</strong>
+                            </th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block javascript %}{% endblock %}

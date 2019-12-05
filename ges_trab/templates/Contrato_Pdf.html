@@ -1,0 +1,116 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html>
+	<head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <style>
+        @page {
+            size: A4 portrait;
+            /* A4  21.0 x 29.7 cm */
+            /* A4  21.0 x 29.7 cm */
+        {#        @frame header_frame { /* Static frame */#}
+        {#        -pdf-frame-content: header_content;#}
+        {#        left: 1cm;#}
+        {#        width: 25.7cm;#}
+        {#        top: 0.5cm;#}
+        {#        height: 2cm;#}
+        {#            /* for debugging the layout */#}
+        {#        }#}
+            @frame col1_frame { /* Content frame 1 */
+            left: 1cm;
+            width: 19cm;
+            top: 1cm;
+            height: 28cm;
+            /* for debugging the layout */
+        }
+        @frame footer_frame {
+            /* Static frame */
+        -pdf-frame-content:footer_content;
+        left: 1cm; width: 19cm; top: 28cm; height: 2cm;
+            /* for debugging the layout */
+        }-4
+
+        }
+        </style>
+		<title>Contrato de Trabajo</title>
+		<style type="text/css">
+			body{
+				font-weight:200;
+				font-size: 14px;
+                text-align: justify;
+			}
+
+            .logo {
+                width: 130px;
+                height: 45px;
+
+            }
+		</style>
+	</head>
+	<body>
+    _________________________________________________________________________<img src="{% static 'images/logoN_h.jpg' %}" class="logo">
+    <strong><u><h3 align="center">CONTRATO DE TRABAJO</h3></u></strong>
+	Al efecto de suscribir el presente contrato, que tiene toda fuerza legal que en derecho se requiere,
+    comparecen de una parte el empleador <strong><u>Lic: Ana Aurora Rodríguez Pérez,</u></strong><br>
+	Que ocupa el cargo de: <strong><u>Directora de Gestión de Capital Humano</u> </strong> a nombre y representación de la
+    entidad denominada: <strong><u>Empresa de Servicios de Ingeniería y Diseño de Holguín  VERTICE </u></strong> que en lo
+    sucesivo, a los efectos del presente contrato, se denominará el empleador, cuyos datos fundamentales de
+    identificación son:<br>
+	Organismo al que pertenece:<strong><u> MICONS</u> </strong> Dirección: <b><u>Frexes Esq. Guiteras No. 300 Holguín.</u></b><br>
+    Municipio: <strong><u>Holguín</u></strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    Provincia: <strong><u>Holguín</u></strong><br>
+    De otra parte <strong><u>{{trabajador.primer_nombre}} {{trabajador.segundo_nombre}} {{trabajador.apellidos}}</u></strong> No. Carne de Identidad: <strong><u>{{trabajador.ci}}</u></strong> Fecha Nac.<strong><u>&nbsp;{{ fecha_nac }}&nbsp;</u></strong>
+    Profesión u Oficio: ____________________________  Dirección:<strong><u> {{trabajador.direccion}}</u></strong>&nbsp;&nbsp;
+    Municipio: <strong><u>Holguín</u></strong>&nbsp;&nbsp; Provincia: <strong><u>Holguín</u></strong><br>
+    No. Expediente Laboral: <strong><u>{{trabajador.ci}}</u></strong> y el que en lo sucesivo y a los efectos del presente documento se
+    denominará. <strong><u> El trabajador</u></strong><br><br>
+    <strong><u>El trabajador será contratado por:</u></strong><br>
+    Contrato Determinado por:<br>
+    Periodo a Prueba: (<strong>X</strong>)  Desde: <strong><u>{{trabajador.fecha_alta|date:"d/m/Y"}}</u></strong>&nbsp;&nbsp;&nbsp; Hasta <strong><u>________________</u></strong><br>
+    Por: ( &nbsp;) Serv. Social, (&nbsp; ) Ejecución de Obra, (&nbsp; ) Sustitución del Titular, (&nbsp; ) Necesidad de la Producción y los Servicios.   Desde&nbsp;________________&nbsp;&nbsp;&nbsp;Hasta&nbsp;________________&nbsp;<br>
+    Contrato Indeterminado (&nbsp; ) ___________________<br>
+    Ambas parte libre y voluntariamente y transcurrido el periodo a prueba, si se hubiese pactado.
+    <strong><h4 align="center">CONVIENEN</h4></strong>
+    <strong>PRIMERO:</strong> El trabajador prestará su servicio a la Administración bajo las condiciones siguientes:<br>
+    a) Desempeñará la ocupación o cargo denominado: <strong><u>{{trabajador.cargo}}</u></strong> que comprende al grupo <strong><u>{{trabajador.escala_salarial.grupo}}</u></strong> de la escala salarial y a la categoría ocupacional de:<br>
+    {% if trabajador.categoria == 'T' %}
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Operario ______ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Administrativo ____&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;Serv.______&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Técnico___<strong>X</strong>____<br>
+    {% elif trabajador.categoria == 'A' %}
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Operario ______ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Administrativo __<strong>X</strong>__&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;Serv.______&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   Técnico______<br>
+    {% elif trabajador.categoria == 'O' %}
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Operario ___<strong>X</strong>___ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Administrativo ____&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;Serv.______&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   Técnico______</p>
+    {% elif trabajador.categoria == 'S' %}
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Operario ______ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Administrativo ____&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;Serv.___<strong>X</strong>___&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   Técnico______<br>
+    {% endif %}
+    b) El contenido de trabajo es el siguiente: Se anexa, para completar su carga de trabajo dentro de la jornada laboral, realizarán las adicionales que sean necesarias, siempre que por sus conocimientos y habilidades que pueda realizar o capacitarse.<br>
+    c) El trabajo  será ejecutado en las unidades organizativas de la empresa y donde la producción y los servicios lo requieran<br>
+    {% if trabajador.categoria == 'T' or trabajador.categoria == 'O' or trabajador.categoria == 'A' %}
+        d) La duración de la jornada es de <strong><u>44</u></strong> horas semanales con un horario diario desde las 7.30 am  hasta las 5.00 pm desde  Lunes a Jueves y hasta las 4.00 pm los Viernes, con un régimen correspondiente a las horas de trabajo que traiga cada mes.<br>
+    {% elif trabajador.categoria == 'S' %}
+        d) La duración de la jornada es de <strong><u>44</u></strong> horas semanales con un horario de acuerdo a lo que le corresponda según el Plan de Guardia previamente establecido, con una jornada diurna desde las 7.30 am  hasta las 4.30 pm, y una jornada nocturna desde las 4:30 pm hasta las 7:30 am del siguiente día.<br>
+    {% endif %}
+    e) El puesto de trabajo tiene las siguientes condiciones de seguridad y salud en el trabajo.<br>
+    <strong>Cumplir con lo que se les establece en el Profesiograma</strong><br>
+    f) El trabajador deberá poseer y mantener las condiciones generales de idoneidad demostrada además de las Generales y específicas que requiera el cargo u ocupación.<br>
+    <strong><u><h4>REQUISITOS GENERALES</h4></u></strong></strong>
+    a) Ser laborioso y Disciplinado, cumplir con la calificación formal exigida, debido a la naturaleza del cargo, mediante la certificación o título emitido  por el centro de enseñanza correspondiente <br>
+    b) Cumplir con las normas de conductas de carácter general o específicas y características personales que se exijan en el desempeño para el cargo que se contrató y en cuanto a la disciplina laboral, establecida en el reglamento disciplinario interno de la entidad<br>
+    c) Cumplir con las normas de seguridad y salud en el trabajo<br>
+    d) Cumplir con lo regulado en el Reglamento de Seguridad Informática y con el Sistema de Gestión de Seguridad de la Información basado en la NC ISO 27 001/2007<br><br>
+    <strong>SEGUNDO:</strong>La administración abonará al trabajador un salario ascendente a la cantidad de: <strong>${{trabajador.salario_total}} </strong>pesos moneda nacional, que se ajustarán a algunas de las formas de pago establecidos en la legislación Vigente.<br>
+    a)	Forma de pago a Tiempo: en este caso le abonará un salario de $_____ pesos, a sueldo_______ por tarifa horaria: ________<br>
+    b)	Forma de pago a Rendimiento ______, a Destajo ______, o por Resultado del Trabajo.__<strong>X</strong>__<br>
+    c)	El trabajador disfrutará de un pago de <strong>${{trabajador.salario_total}} </strong> pesos mensuales<br><br>
+    Desglosado en <strong><u>${{trabajador.salario_escala}}</u></strong> salario escala, un Plus de <strong><u>${{trabajador.sal_plus}}</u></strong>, por años Antigüedad de <strong><u>${{trabajador.antiguedad}}</u></strong> por concepto de Jornada Irregular: <strong>_____</strong>, por concepto de maestría <strong><u>${{trabajador.sal_cat_cient}}</u></strong>, por el CIES <strong><u>${{trabajador.cies}}</u></strong>, por pago de Perfeccionamiento y/o R/30 <strong><u>${{trabajador.incre_res}}</u></strong><br><br>
+    <strong>CUARTO:</strong>El Trabajador tiene el deber de realizar su trabajo con la eficiencia, calidad y productividad requerida, cumplir con las normas de conducta, disciplina y con el orden establecido, así como cuidar de los recursos y medios que utilizan en el desempeño de su labor y responder por los daños que ocasionen, cumpliendo con el reglamento disciplinario interno de la empresa y el Convenio  Colectivo de Trabajo y el Código de Trabajo los artículos del 147 al 153 y del 155 al 157.<br>
+    La administración de otra parte  garantizará las condiciones de trabajo y demás derechos laborales que establece  la ley, el Convenio  Colectivo de Trabajo y el Reglamento Disciplinario  Interno de la entidad, así  como la demás disposiciones vigente que rijan las materias de organización del trabajo, seguridad y salud ocupacional del trabajo.<br>
+    <strong>QUINTO:</strong>La administración se compromete a abonar al trabajador su salario en la forma establecida en el presente contrato, seguridad social y las vacaciones anuales pagadas.<br>
+    <strong>SEXTO:</strong>A la terminación del Contrato de Trabajo el trabajador tiene derecho a percibir la remuneración proporcional al descanso no disfrutado, correspondiente al tiempo acumulado y a otros beneficios a lo que tenía derecho y accedió durante el desarrollo de su trabajo<br>
+    <strong>SEPTIMO:</strong>La modificación del Contrato de trabajo y suspensión de la relación de trabajo se realizará de acuerdo a lo que se recoge en la sección séptima del Código del Trabajo en sus artículos desde el 42 hasta el 52<br>
+    <strong>OCTAVO:</strong>Que las modificaciones por cualquier concepto sea necesario hacer al presente Contrato, se hará constar por escrito mediante un Suplemento, al mismo, firmado por ambas partes y concurren en lo expresado en el presente documento, comprometiéndose  a su más estricto cumplimiento.<br>
+    <strong>NOVENO:</strong>La administración está facultada para trasladar provisionalmente al trabajador a otra ocupación distinta a la que es objeto del presente contrato, siempre que esté apto para desempeñarla, según se establece en las legislaciones vigentes, artículo 33, 34 y del 35 al 38 Decreto 326 Reglamento del Código de Trabajo.<br>
+    <strong>Y PARA QUE CONSTE</strong> se extiende el presente contrato de Trabajo que suscriben las partes de común acuerdo en original y dos copias  dado en <strong>Holguín</strong> a los <strong><u>{{dia}}</u></strong> del mes de <strong><u>&nbsp;{{mes}}&nbsp;</u></strong>&nbsp; del año <strong><u>&nbsp;{{anno}}&nbsp;</u></strong><br><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; _______________&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;____________<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Por el empleador&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;El Trabajador
+	</body>
+</html>

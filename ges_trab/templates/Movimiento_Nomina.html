@@ -1,0 +1,324 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <style>
+        @page {
+            size: A4 portrait;
+            /* A4  21.0 x 29.7 cm */
+            /* A4  21.0 x 29.7 cm */
+        {#        @frame header_frame { /* Static frame */#}
+        {#        -pdf-frame-content: header_content;#}
+        {#        left: 1cm;#}
+        {#        width: 25.7cm;#}
+        {#        top: 0.5cm;#}
+        {#        height: 2cm;#}
+        {#            /* for debugging the layout */#}
+        {#        }#}
+            @frame col1_frame { /* Content frame 1 */
+            left: 1.2cm;
+            width: 19cm;
+            top: 1.2cm;
+            height: 28cm;
+            /* for debugging the layout */
+        }
+        @frame footer_frame {
+            /* Static frame */
+        -pdf-frame-content:footer_content;
+        left: 1cm; width: 19cm; top: 28cm; height: 2cm;
+            /* for debugging the layout */
+        }
+
+        }
+    </style>
+    <title>Movimiento de Nómina</title>
+    <style type="text/css">
+        body {
+            font-weight: 200;
+            font-size: 12px;
+            text-align: justify;
+        }
+
+        td{
+            border-width:1px;
+            border:solid;
+            border-color: #0f0f0f;
+            margin-bottom: 1px;
+        }
+        tr{
+            border-width:1px;
+            border:solid;
+            border-color: #0f0f0f;
+            margin-bottom: 1px;
+        }
+    </style>
+</head>
+<body>
+<table border=0 cellpadding=2 cellspacing=0 width="600">
+    <tr>
+        <td><p><strong>Organismo:</strong> MICONS</p></td>
+        <td rowspan="3"><p align="center"><strong>MOVIMIENTO PARA NÓMINAS</strong></p></td>
+        <td rowspan="3" width="105"><p align="center"><strong>({{trabajador.codigo_interno}})<br>{{trabajador.ci}}</strong></p></td>
+    </tr>
+    <tr>
+        <td><strong>Empresa:</strong> VERTICE</td>
+    </tr>
+    <tr>
+        <td><p><strong>Unidad:</strong> {{trabajador.unidad_org}}</p></td>
+    </tr>
+</table>
+<table border=0 cellpadding=2 cellspacing=0 width="600">
+   <tbody>
+    <tr>
+       <td rowspan="2" width="200"><strong>Nombre:</strong><div align="center">{{trabajador.primer_nombre}} {{trabajador.segundo_nombre}}</div></td>
+       <td rowspan="2" width="340"><strong>Apellidos:</strong><div align="center">{{trabajador.apellidos}}</div></td>
+       <td width="35"><p align="center"><strong>Día</strong></p></td>
+       <td width="35"><p align="center"><strong>Mes</strong></p></td>
+       <td width="35"><p align="center"><strong>Año</strong></p></td>
+   </tr>
+   <tr>
+       <td align="center">{{dia }}</td>
+       <td align="center">{{mes }}</td>
+       <td align="center">{{anno }}</td>
+   </tr>
+    </tbody>
+</table>
+<table border=0 cellpadding=2 cellspacing=0 width="600">
+{% if trabajador.sexo == 'M' %}
+    <tr>
+       <td><div align="center">&nbsp;&nbsp;&nbsp;( &nbsp;) Alta &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( X&nbsp;) Reubicación &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( &nbsp;) Baja &nbsp;&nbsp;&nbsp;&nbsp;</div></td>
+       <td width="35"><p align="center"><strong>Sexo</strong></p></td>
+       <td width="35"><p align="center">M(X)</p></td>
+        <td width="35"><p align="center">F(&nbsp;)</p></td>
+   </tr>
+    {% else %}
+    <tr>
+       <td><div align="center">&nbsp;&nbsp;&nbsp;( &nbsp;) Alta &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( X&nbsp;) Reubicación &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( &nbsp;) Baja &nbsp;&nbsp;&nbsp;&nbsp;</div></td>
+       <td width="35"><p align="center"><strong>Sexo</strong></p></td>
+       <td width="35"><p align="center">M(&nbsp;)</p></td>
+       <td width="35"><p align="center">F(X)</p></td>
+   </tr>
+    {% endif %}
+</table>
+<table border=0 cellpadding=2 cellspacing=0 width="600">
+   <tr>
+       <td><div align="Center"><strong>Situación</strong></div></td>
+   </tr>
+</table>
+<table border=0 cellpadding=2 cellspacing=0 width="600">
+   <tr>
+       <td colspan="7"><div align="Center">Actual</div></td>
+       <td colspan="7"><div align="Center">Nueva</div></td>
+   </tr>
+   <tr>
+       <td colspan="7"><div><strong>Puesto de trabajo:</strong>&nbsp;{{movimiento.cargo_ant}}</div></td>
+       <td colspan="7"><div><strong>Puesto de trabajo:</strong>&nbsp;{{movimiento.cargo_act}}</div></td>
+   </tr>
+   <tr>
+       <td colspan="7"><div><strong>Área de trabajo:</strong>&nbsp;{{movimiento.area_ant}}</div></td>
+       <td colspan="7"><div><strong>Área de trabajo:</strong>&nbsp;{{movimiento.area_act}}</div></td>
+   </tr>
+   <tr>
+       <td colspan="7"><div align="Center">Para uso de Trabajo</div></td>
+       <td colspan="7"><div align="Center">Para uso de Trabajo</div></td>
+   </tr>
+   <tr>
+       <td><div align="center">Escala</div></td>
+       <td><div align="center">P.Adic</div></td>
+       <td><div align="center">CIES</div></td>
+       <td><div align="center">Ant</div></td>
+       <td><div align="center">Maestr</div></td>
+       <td><div align="center">Otros</div></td>
+       <td><div align="center">Total</div></td>
+       <td><div align="center">Escala</div></td>
+       <td><div align="center">P.Adic</div></td>
+       <td><div align="center">CIES</div></td>
+       <td><div align="center">Ant</div></td>
+       <td><div align="center">Maestr</div></td>
+       <td><div align="center">Otros</div></td>
+       <td><div align="center">Total</div></td>
+   </tr>
+    <tr>
+        <td><div align="center"><strong>${{movimiento.salario_escala_ant}}</strong></div></td>
+        <td><div align="center"><strong>${{movimiento.incre_res_ant}}</strong></div></td>
+        <td><div align="center"><strong>${{movimiento.cies_ant}}</strong></div></td>
+        <td><div align="center"><strong>${{movimiento.antiguedad_ant}}</strong></div></td>
+        <td><div align="center"><strong>${{movimiento.sal_cat_cient_ant }}</strong></div></td>
+        <td><div align="center"><strong>${{movimiento.sal_plus_ant}}</strong></div></td>
+        <td><div align="center"><strong>${{movimiento.salario_total_ant}}</strong></div></td>
+        <td><div align="center"><strong>${{movimiento.salario_escala_act}}</strong></div></td>
+        <td><div align="center"><strong>${{movimiento.incre_res_act}}</strong></div></td>
+        <td><div align="center"><strong>${{movimiento.cies_act}}</strong></div></td>
+        <td><div align="center"><strong>${{movimiento.antiguedad_act}}</strong></div></td>
+        <td><div align="center"><strong>${{movimiento.sal_cat_cient_act }}</strong></div></td>
+        <td><div align="center"><strong>${{movimiento.sal_plus_act}}</strong></div></td>
+        <td><div align="center"><strong>${{movimiento.salario_total_act}}</strong></div></td>
+   </tr>
+    <tr>
+     <td colspan="4"><div>Grupo Escala: <strong>{{movimiento.escala_salarial_ant}}</strong></div></td>
+     <td colspan="3"><div>Categoría: <strong>{{movimiento.categoria_ant}}</strong></div></td>
+     <td colspan="4"><div>Grupo Escala:<strong>{{movimiento.escala_salarial_act}}</strong></div></td>
+     <td colspan="3"><div>Categoría: <strong>{{movimiento.categoria_act}}</strong></div></td>
+   </tr>
+   <tr>
+       <td colspan="12">Motivo del Movimiento: {{ movimiento.tipo}}</td>
+   </tr>
+</table>
+<table border=0 cellpadding=2 cellspacing=0 width="600">
+   <tr>
+       <td><div>Hecho por:</div></td>
+       <td colspan="2"><div>Para uso del Trabajo</div></td>
+       <td><div>Para uso de Nómina</div></td>
+       <td><div>Número</div></td>
+   </tr>
+    <tr>
+        <td>Ing. {{ elaborado.first_name }} {{ elaborado.last_name }}<br>Esp. Recursos Humanos
+        </td>
+        <td><strong>Aprobado por:</strong>
+            <br>Lic. {{ director.primer_nombre }} {{ director.segundo_nombre }} {{ director.apellidos }} <br>Director
+            Capital Humanos
+        </td>
+        <td><strong>Registrado
+            por:</strong><br>Ing. {{ registrado_por.primer_nombre }} {{ registrado_por.segundo_nombre }} {{ registrado_por.apellidos }}<br>Esp.
+            Recursos Humanos
+        </td>
+        <td><strong>Registrado por:</strong><br><br><br></td>
+    </tr>
+</table>
+
+<br>
+<table border=0 cellpadding=2 cellspacing=0 width="600">
+    <tr>
+        <td><p><strong>Organismo:</strong> MICONS</p></td>
+        <td rowspan="3"><p align="center"><strong>MOVIMIENTO PARA NÓMINAS</strong></p></td>
+        <td rowspan="3" width="105"><p align="center"><strong>({{trabajador.codigo_interno}})<br>{{trabajador.ci}}</strong></p></td>
+    </tr>
+    <tr>
+        <td><strong>Empresa:</strong> VERTICE</td>
+    </tr>
+    <tr>
+        <td><p><strong>Unidad:</strong> {{trabajador.unidad_org}}</p></td>
+    </tr>
+</table>
+<table border=0 cellpadding=2 cellspacing=0 width="600">
+   <tbody>
+    <tr>
+        <td rowspan="2" width="200"><strong>Nombre:</strong><div align="center">{{trabajador.primer_nombre}} {{trabajador.segundo_nombre}}</div></td>
+        <td rowspan="2" width="340"><strong>Apellidos:</strong><div align="center">{{trabajador.apellidos}}</div></td>
+       <td width="35"><p align="center"><strong>Día</strong></p></td>
+       <td width="35"><p align="center"><strong>Mes</strong></p></td>
+       <td width="35"><p align="center"><strong>Año</strong></p></td>
+   </tr>
+   <tr>
+       <td align="center">19</td>
+       <td align="center">09</td>
+       <td align="center">16</td>
+   </tr>
+    </tbody>
+</table>
+<table border=0 cellpadding=2 cellspacing=0 width="600">
+{% if trabajador.sexo == 'M' %}
+    <tr>
+       <td><div align="center">&nbsp;&nbsp;&nbsp;( &nbsp;) Alta &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( X&nbsp;) Reubicación &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( &nbsp;) Baja &nbsp;&nbsp;&nbsp;&nbsp;</div></td>
+       <td width="35"><p align="center"><strong>Sexo</strong></p></td>
+       <td width="35"><p align="center">M(X)</p></td>
+        <td width="35"><p align="center">F(&nbsp;)</p></td>
+   </tr>
+    {% else %}
+    <tr>
+       <td><div align="center">&nbsp;&nbsp;&nbsp;( &nbsp;) Alta &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( X&nbsp;) Reubicación &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( &nbsp;) Baja &nbsp;&nbsp;&nbsp;&nbsp;</div></td>
+       <td width="35"><p align="center"><strong>Sexo</strong></p></td>
+       <td width="35"><p align="center">M(&nbsp;)</p></td>
+       <td width="35"><p align="center">F(X)</p></td>
+   </tr>
+    {% endif %}
+</table>
+<table border=0 cellpadding=2 cellspacing=0 width="600">
+   <tr>
+       <td><div align="Center"><strong>Situación</strong></div></td>
+   </tr>
+</table>
+<table border=0 cellpadding=2 cellspacing=0 width="600">
+   <tr>
+       <td colspan="7"><div align="Center">Actual</div></td>
+       <td colspan="7"><div align="Center">Nueva</div></td>
+   </tr>
+   <tr>
+       <td colspan="7"><div><strong>Puesto de trabajo:</strong>&nbsp;{{movimiento.cargo_ant}}</div></td>
+       <td colspan="7"><div><strong>Puesto de trabajo:</strong>&nbsp;{{movimiento.cargo_act}}</div></td>
+   </tr>
+   <tr>
+       <td colspan="7"><div><strong>Área de trabajo:</strong>&nbsp;{{movimiento.area_ant}}</div></td>
+       <td colspan="7"><div><strong>Área de trabajo:</strong>&nbsp;{{movimiento.area_act}}</div></td>
+   </tr>
+   <tr>
+       <td colspan="7"><div align="Center">Para uso de Trabajo</div></td>
+       <td colspan="7"><div align="Center">Para uso de Trabajo</div></td>
+   </tr>
+   <tr>
+       <td><div align="center">Escala</div></td>
+       <td><div align="center">P.Adic</div></td>
+       <td><div align="center">CIES</div></td>
+       <td><div align="center">Ant</div></td>
+       <td><div align="center">Maestr</div></td>
+       <td><div align="center">Otros</div></td>
+       <td><div align="center">Total</div></td>
+       <td><div align="center">Escala</div></td>
+       <td><div align="center">P.Adic</div></td>
+       <td><div align="center">CIES</div></td>
+       <td><div align="center">Ant</div></td>
+       <td><div align="center">Maestr</div></td>
+       <td><div align="center">Otros</div></td>
+       <td><div align="center">Total</div></td>
+   </tr>
+    <tr>
+        <td><div align="center"><strong>${{movimiento.salario_escala_ant}}</strong></div></td>
+        <td><div align="center"><strong>${{movimiento.incre_res_ant}}</strong></div></td>
+        <td><div align="center"><strong>${{movimiento.cies_ant_ant}}</strong></div></td>
+        <td><div align="center"><strong>${{movimiento.antiguedad_ant}}</strong></div></td>
+        <td><div align="center"><strong>${{movimiento.sal_cat_cient }}</strong></div></td>
+        <td><div align="center"><strong>${{movimiento.sal_plus_ant}}</strong></div></td>
+        <td><div align="center"><strong>${{movimiento.salario_total_ant}}</strong></div></td>
+        <td><div align="center"><strong>${{movimiento.salario_escala_act}}</strong></div></td>
+        <td><div align="center"><strong>${{movimiento.incre_res_act}}</strong></div></td>
+        <td><div align="center"><strong>${{movimiento.cies_act}}</strong></div></td>
+        <td><div align="center"><strong>${{movimiento.antiguedad_act}}</strong></div></td>
+        <td><div align="center"><strong>${{movimiento.sal_cat_cient_act }}</strong></div></td>
+        <td><div align="center"><strong>${{movimiento.sal_plus_act}}</strong></div></td>
+        <td><div align="center"><strong>${{movimiento.salario_total_act}}</strong></div></td>
+   </tr>
+    <tr>
+     <td colspan="4"><div>Grupo Escala: <strong>{{movimiento.escala_salarial_ant}}</strong></div></td>
+     <td colspan="3"><div>Categoría: <strong>{{movimiento.categoria_ant}}</strong></div></td>
+     <td colspan="4"><div>Grupo Escala:<strong>{{movimiento.escala_salarial_act}}</strong></div></td>
+     <td colspan="3"><div>Categoría: <strong>{{movimiento.categoria_act}}</strong></div></td>
+   </tr>
+   <tr>
+       <td colspan="12">Motivo del Movimiento: {{ movimiento.tipo}}</td>
+   </tr>
+</table>
+<table border=0 cellpadding=2 cellspacing=0 width="600">
+   <tr>
+       <td><div>Hecho por:</div></td>
+       <td colspan="2"><div>Para uso del Trabajo</div></td>
+       <td><div>Para uso de Nómina</div></td>
+       <td><div>Número</div></td>
+   </tr>
+    <tr>
+        <td>Ing. {{ elaborado.first_name }} {{ elaborado.last_name }}<br>Esp. Recursos Humanos
+        </td>
+        <td><strong>Aprobado por:</strong>
+            <br>Lic. {{ director.primer_nombre }} {{ director.segundo_nombre }} {{ director.apellidos }} <br>Director
+            Capital Humanos
+        </td>
+        <td><strong>Registrado
+            por:</strong><br>Ing. {{ registrado_por.primer_nombre }} {{ registrado_por.segundo_nombre }} {{ registrado_por.apellidos }}<br>Esp.
+            Recursos Humanos
+        </td>
+        <td><strong>Registrado por:</strong><br><br><br></td>
+    </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,373 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <style>
+        @page {
+            size: A4 portrait;
+            /* A4  21.0 x 29.7 cm */
+            /* A4  21.0 x 29.7 cm */
+        {#        @frame header_frame { /* Static frame */#}
+        {#        -pdf-frame-content: header_content;#}
+        {#        left: 1cm;#}
+        {#        width: 25.7cm;#}
+        {#        top: 0.5cm;#}
+        {#        height: 2cm;#}
+        {#            /* for debugging the layout */#}
+        {#        }#}
+            @frame col1_frame { /* Content frame 1 */
+            left: 1.2cm;
+            width: 19cm;
+            top: 1.2cm;
+            height: 28cm;
+            /* for debugging the layout */
+        }
+        @frame footer_frame {
+            /* Static frame */
+        -pdf-frame-content:footer_content;
+        left: 1cm; width: 19cm; top: 28cm; height: 2cm;
+            /* for debugging the layout */
+        }
+
+        }
+    </style>
+    <title>Movimiento de Nómina</title>
+    <style type="text/css">
+        body {
+            font-weight: 200;
+            font-size: 12px;
+            text-align: justify;
+        }
+
+        td {
+            border-width: 1px;
+            border: solid;
+            border-color: #0f0f0f;
+            margin-bottom: 3px;
+        }
+
+        tr {
+            border-width: 1px;
+            border: solid;
+            border-color: #0f0f0f;
+            margin-bottom: 1px;
+        }
+    </style>
+</head>
+<body>
+<table border=0 cellpadding=2 cellspacing=0 width="600">
+    <tr>
+        <td style="width: 350px"><p>Empresa: VERTICE</p></td>
+        <td rowspan="3" style="width: 500px"><p align="center"><strong>NOTIFICACIÓN DE VACACIONES,<br>DEDUCCIONES,
+            LICENCIAS Y<br>SUBSIDIOS (SC-4-04)</strong></p></td>
+        <td colspan="3" width="105" style="width: 300px"><p align="center"><strong>FECHA</strong></p></td>
+    </tr>
+    <tr>
+        <td>Código: 126.0.12928</td>
+        <td width="35"><p align="center">Día</p></td>
+        <td width="35"><p align="center">Mes</p></td>
+        <td width="35"><p align="center">Año</p></td>
+    </tr>
+    <tr>
+        <td><p>Área: {{ vacaciones.codigo_trab.departamento }}</p></td>
+        <td width="35"><p align="center">{{ dia_s }}</p></td>
+        <td width="35"><p align="center">{{ mes_s }}</p></td>
+        <td width="35"><p align="center">{{ anno_s }}</p></td>
+    </tr>
+</table>
+<table border=0 cellpadding=2 cellspacing=0 width=100%>
+    <tbody>
+    <tr>
+        <td style="width: 150px"><strong>Código:</strong><br>{{ vacaciones.codigo_trab.codigo_interno }}</td>
+        <td style="width:500px;"><strong>Nombres y
+            Apellidos:</strong><br>{{ vacaciones.codigo_trab.primer_nombre }} {{ vacaciones.codigo_trab.segundo_nombre }} {{ vacaciones.codigo_trab.apellidos }}
+        </td>
+        <td style="width:200px;"><strong>Expediente:</strong><br>{{ vacaciones.codigo_trab.ci }}</td>
+    </tr>
+    <tr>
+        <td align="center" style="background-color: gainsboro" colspan="3"><strong>VACACIONES</strong></td>
+    </tr>
+</table>
+<table border=0 cellpadding=2 cellspacing=0 width=100%>
+    <tr>
+        <td align="center" style="width: 150px"><strong>Desde</strong></td>
+        <td align="center" style="width: 150px"><strong>Hasta</strong></td>
+        <td align="center" style="width: 150px"><strong>Días</strong></td>
+        <td align="cengter" style="width: 200px"><strong>Importe</strong></td>
+        <td align="center" style="width: 200px"><strong>Para Descontar</strong></td>
+        <td colspan="3" align="center" style="width: 150px"><strong>Fecha de incorporación</strong></td>
+        <td colspan="2" align="center" style="width: 200px"><strong>SALDO</strong></td>
+    </tr>
+    <tr>
+        <td rowspan="2" align="center"><strong>{{ vacaciones.desde|date:"d/m/Y" }}</strong></td>
+        <td rowspan="2" align="center"><strong>{{ vacaciones.hasta|date:"d/m/Y" }}</strong></td>
+        <td rowspan="2" align="center"><strong>{{ vacaciones.cant_dias }}</strong></td>
+        <td><strong> </strong></td>
+        <td align="center">{{ vacaciones.horas }} hrs</td>
+        <td align="center">D</td>
+        <td align="center">M</td>
+        <td align="center">A</td>
+        <td align="center" style="width: 150px"><strong>Días</strong></td>
+        <td align="center" style="width: 200px"><strong>Importe</strong></td>
+    </tr>
+    <tr>
+        <td><strong> </strong></td>
+        <td align="center">{{ vacaciones.horas1 }} hrs</td>
+        <td align="center" style="width: 100px">{{ dia_i }}</td>
+        <td align="center" style="width: 100px">{{ mes_i }}</td>
+        <td align="center" style="width: 100px">{{ anno_i }}</td>
+        <td><strong> </strong></td>
+        <td><strong> </strong></td>
+    </tr>
+    <tr>
+        <td align="center" style="background-color: gainsboro" colspan="10"><strong>VACACIONES</strong></td>
+    </tr>
+</table>
+<table border=0 cellpadding=2 cellspacing=0 width=100%>
+    <tr>
+        <td rowspan="2" align="center"><strong>CONCEPTO</strong></td>
+        <td rowspan="2" align="center"><strong>Importe Total</strong></td>
+        <td rowspan="2" align="center"><strong>Plazos</strong></td>
+        <td colspan="2" align="center"><strong>IMPORTE</strong></td>
+        <td rowspan="2" align="center"><strong>Importe Fijo</strong></td>
+    </tr>
+    <tr>
+        <td align="center"> Mensual</td>
+        <td align="center"> Último Plazo</td>
+    </tr>
+    <tr>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    </tr>
+    <tr>
+        <td align="center" style="background-color: gainsboro" colspan="6"><strong>SUBSIDIOS</strong></td>
+    </tr>
+</table>
+<table border=0 cellpadding=2 cellspacing=0 width="600">
+    <tr>
+        <td colspan="6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp;&nbsp;&nbsp;) Enfermedad Común&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp;&nbsp;&nbsp;)
+            Hospitalizado&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp;&nbsp;&nbsp;)
+            Accidente de Trabajo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp;&nbsp;&nbsp;) Decreto Ley
+            339<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp;&nbsp;&nbsp;) Lic. de Maternidad&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp;&nbsp;&nbsp;)
+            Invalidez Parcial
+        </td>
+    </tr>
+    <tr>
+        <td align="center"><strong>Desde</strong></td>
+        <td align="center"><strong>Hasta</strong></td>
+        <td align="center"><strong>Días</strong></td>
+        <td align="center"><strong>Salario Promedio</strong></td>
+        <td align="center"><strong>%</strong></td>
+        <td align="center"><strong>Importe a Pagar</strong></td>
+    </tr>
+    <tr>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    </tr>
+    <tr>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    </tr>
+</table>
+<table border=0 cellpadding=2 cellspacing=0 width="600">
+    <tr>
+        <td>
+            <div><strong>Solicitado por:</strong>
+                <br>{{ vacaciones.codigo_trab.primer_nombre }} {{ vacaciones.codigo_trab.segundo_nombre }} {{ vacaciones.codigo_trab.apellidos }}
+            </div>
+        </td>
+        <td>
+            <div>Jefe de Área:<br> {{ vacaciones.jefe_area }}</div>
+        </td>
+        <td>
+            <div>Aprobado:<br> {{ vacaciones.director }}</div>
+        </td>
+    </tr>
+</table>
+<table border=0 cellpadding=2 cellspacing=0 width="600">
+    <tr>
+        <td>
+            <div><strong>Área de Contabilidad:</strong> <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+        </td>
+        <td>
+            <div><strong>Área de Personal:</strong><br> {{ elaborado.first_name }} {{ elaborado.last_name }}</div>
+        </td>
+        <td style="width: 80px">
+            <div><strong>Número:</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+        </td>
+    </tr>
+</table>
+<br>
+<table border=0 cellpadding=2 cellspacing=0 width="600">
+    <tr>
+        <td style="width: 350px"><p>Empresa: VERTICE</p></td>
+        <td rowspan="3" style="width: 500px"><p align="center"><strong>NOTIFICACIÓN DE VACACIONES,<br>DEDUCCIONES,
+            LICENCIAS Y<br>SUBSIDIOS (SC-4-04)</strong></p></td>
+        <td colspan="3" width="105" style="width: 300px"><p align="center"><strong>FECHA</strong></p></td>
+    </tr>
+    <tr>
+        <td>Código: 126.0.12928</td>
+        <td width="35"><p align="center">Día</p></td>
+        <td width="35"><p align="center">Mes</p></td>
+        <td width="35"><p align="center">Año</p></td>
+    </tr>
+    <tr>
+        <td><p>Área: {{ vacaciones.codigo_trab.departamento }}</p></td>
+        <td width="35"><p align="center">{{ dia_s }}</p></td>
+        <td width="35"><p align="center">{{ mes_s }}</p></td>
+        <td width="35"><p align="center">{{ anno_s }}</p></td>
+    </tr>
+</table>
+<table border=0 cellpadding=2 cellspacing=0 width=100%>
+    <tbody>
+    <tr>
+        <td style="width: 150px"><strong>Código:</strong><br>{{ vacaciones.codigo_trab.codigo_interno }}</td>
+        <td style="width:500px;"><strong>Nombres y
+            Apellidos:</strong><br>{{ vacaciones.codigo_trab.primer_nombre }} {{ vacaciones.codigo_trab.segundo_nombre }} {{ vacaciones.codigo_trab.apellidos }}
+        </td>
+        <td style="width:200px;"><strong>Expediente:</strong><br>{{ vacaciones.codigo_trab.ci }}</td>
+    </tr>
+    <tr>
+        <td align="center" style="background-color: gainsboro" colspan="3"><strong>VACACIONES</strong></td>
+    </tr>
+</table>
+<table border=0 cellpadding=2 cellspacing=0 width=100%>
+    <tr>
+        <td align="center" style="width: 150px"><strong>Desde</strong></td>
+        <td align="center" style="width: 150px"><strong>Hasta</strong></td>
+        <td align="center" style="width: 150px"><strong>Días</strong></td>
+        <td align="cengter" style="width: 200px"><strong>Importe</strong></td>
+        <td align="center" style="width: 200px"><strong>Para Descontar</strong></td>
+        <td colspan="3" align="center" style="width: 150px"><strong>Fecha de incorporación</strong></td>
+        <td colspan="2" align="center" style="width: 200px"><strong>SALDO</strong></td>
+    </tr>
+    <tr>
+        <td rowspan="2" align="center"><strong>{{ vacaciones.desde|date:"d/m/Y" }}</strong></td>
+        <td rowspan="2" align="center"><strong>{{ vacaciones.hasta|date:"d/m/Y" }}</strong></td>
+        <td rowspan="2" align="center"><strong>{{ vacaciones.cant_dias }}</strong></td>
+        <td><strong> </strong></td>
+        <td align="center">{{ vacaciones.horas }} hrs</td>
+        <td align="center">D</td>
+        <td align="center">M</td>
+        <td align="center">A</td>
+        <td align="center" style="width: 150px"><strong>Días</strong></td>
+        <td align="center" style="width: 200px"><strong>Importe</strong></td>
+    </tr>
+    <tr>
+        <td><strong> </strong></td>
+        <td align="center">{{ vacaciones.horas1 }} hrs</td>
+        <td align="center" style="width: 100px">{{ dia_i }}</td>
+        <td align="center" style="width: 100px">{{ mes_i }}</td>
+        <td align="center" style="width: 100px">{{ anno_i }}</td>
+        <td><strong> </strong></td>
+        <td><strong> </strong></td>
+    </tr>
+    <tr>
+        <td align="center" style="background-color: gainsboro" colspan="10"><strong>VACACIONES</strong></td>
+    </tr>
+</table>
+<table border=0 cellpadding=2 cellspacing=0 width=100%>
+    <tr>
+        <td rowspan="2" align="center"><strong>CONCEPTO</strong></td>
+        <td rowspan="2" align="center"><strong>Importe Total</strong></td>
+        <td rowspan="2" align="center"><strong>Plazos</strong></td>
+        <td colspan="2" align="center"><strong>IMPORTE</strong></td>
+        <td rowspan="2" align="center"><strong>Importe Fijo</strong></td>
+    </tr>
+    <tr>
+        <td align="center"> Mensual</td>
+        <td align="center"> Último Plazo</td>
+    </tr>
+    <tr>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    </tr>
+    <tr>
+        <td align="center" style="background-color: gainsboro" colspan="6"><strong>SUBSIDIOS</strong></td>
+    </tr>
+</table>
+<table border=0 cellpadding=2 cellspacing=0 width="600">
+    <tr>
+        <td colspan="6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp;&nbsp;&nbsp;) Enfermedad Común&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp;&nbsp;&nbsp;)
+            Hospitalizado&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp;&nbsp;&nbsp;)
+            Accidente de Trabajo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp;&nbsp;&nbsp;) Decreto Ley
+            339<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp;&nbsp;&nbsp;) Lic. de Maternidad&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp;&nbsp;&nbsp;)
+            Invalidez Parcial
+        </td>
+    </tr>
+    <tr>
+        <td align="center"><strong>Desde</strong></td>
+        <td align="center"><strong>Hasta</strong></td>
+        <td align="center"><strong>Días</strong></td>
+        <td align="center"><strong>Salario Promedio</strong></td>
+        <td align="center"><strong>%</strong></td>
+        <td align="center"><strong>Importe a Pagar</strong></td>
+    </tr>
+    <tr>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    </tr>
+    <tr>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    </tr>
+</table>
+<table border=0 cellpadding=2 cellspacing=0 width="600">
+    <tr>
+        <td>
+            <div><strong>Solicitado por:</strong>
+                <br>{{ vacaciones.codigo_trab.primer_nombre }} {{ vacaciones.codigo_trab.segundo_nombre }} {{ vacaciones.codigo_trab.apellidos }}
+            </div>
+        </td>
+        <td>
+            <div>Jefe de Área:<br> {{ vacaciones.jefe_area }}</div>
+        </td>
+        <td>
+            <div>Aprobado:<br> {{ vacaciones.director }}</div>
+        </td>
+    </tr>
+</table>
+<table border=0 cellpadding=2 cellspacing=0 width="600">
+    <tr>
+        <td>
+            <div><strong>Área de Contabilidad:</strong> <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+        </td>
+        <td>
+            <div><strong>Área de Personal:</strong><br> {{ elaborado.first_name }} {{ elaborado.last_name }}</div>
+        </td>
+        <td style="width: 80px">
+            <div><strong>Número:</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

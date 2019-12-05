@@ -1,0 +1,149 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <style>
+        @page {
+            size: letter landscape;
+            /* A4  21.0 x 29.7 cm */
+            /* A4  21.0 x 29.7 cm */
+        {#        @frame header_frame { /* Static frame */#}
+        {#        -pdf-frame-content: header_content;#}
+        {#        left: 1cm;#}
+        {#        width: 25.7cm;#}
+        {#        top: 0.5cm;#}
+        {#        height: 2cm;#}
+        {#            /* for debugging the layout */#}
+        {#        }#}
+            @frame col1_frame { /* Content frame 1 */
+            left: 1cm;
+            width: 25.7cm;
+            top: 1cm;
+            height: 19cm;
+            /* for debugging the layout */
+        }
+        @frame footer_frame {
+            /* Static frame */
+        -pdf-frame-content:footer_content;
+        left: 1cm; width: 25.7cm; top: 20cm; height: 2cm;
+            /* for debugging the layout */
+        }
+
+        }
+    </style>
+    <style type="text/css">
+        .container {
+            width: 600px;
+            text-align: center;
+        }
+
+        .title {
+            font-size: 20px;
+            text-align: left;
+        }
+
+        td {
+            padding: 4px;
+            border-top: 1px solid #dddddd;
+            vertical-align: middle;
+        }
+
+        th {
+            vertical-align: bottom;
+            border-bottom: 2px solid #dddddd;
+            text-align: center;
+            padding: 5px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <p class="title"><strong>Plantilla de Contratos</strong></p>
+<div></div>
+    {% for uni in unidades %}
+        <table class="display table table-striped" cellspacing="0" width="100%" id="tabla">
+            <thead>
+            <tr>
+                <th style="width: 10px; margin-right: 0;">Area</th>
+                <th style="width: auto;">Cargo</th>
+                <th style="width: 20px;">Cat. Oc.</th>
+                <th style="width: auto;">Nombre y Apellidos</th>
+                <th style="width: 25px;">Sexo</th>
+                <th style="width: 200px;">Exped. Laboral</th>
+                <th style="width: 150px;">Niv Educ.</th>
+                <th style="width: 200px;">Grupo Esc.</th>
+                <th style="width: 100px;">Total Salario</th>
+                <th style="width: 100px;">Sal. Escala</th>
+                <th style="width: 100px;">Sal. Jor 240/260</th>
+                <th style="width: 100px;">Incr Res30</th>
+                <th style="width: 100px;">Coef CIES</th>
+                <th style="width: 100px;">Plus</th>
+                <th style="width: 100px;">Antig</th>
+                <th style="width: 100px;">Sal Maest.</th>
+                <th style="width: 100px;">Fecha Alta</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td colspan="18"
+                    style="padding: 4px;
+	line-height: 1.428571429;
+	border-top: 1px solid #dddddd; font-weight: bold; text-align: left; background-color: rgba(245,245,245,0.50)">
+                    {{ uni.nombre }}</td>
+            </tr>
+            {% for dep in uni.departamentos %}
+                <tr>
+                    <td colspan="18"
+                        style="line-height: 1.428571429;
+	                            border-top: none; font-weight: bold; padding-left: 10px;
+	                            text-align: left; background-color: rgba(240,240,240,0.50)">
+                        {{ dep.nombre }}</td>
+                </tr>
+                {% for trab in dep.trabajadores %}
+                    <tr>
+                        <td></td>
+                        <td style="text-align: left;">{{ trab.data.nombreCargo }}</td>
+                        <td style="text-align: right;">{{ trab.data.categoria }}</td>
+                        <td style="text-align: left;">{{ trab.data.nombre }} {{ trab.data.segundo_nombre }} {{ trab.data.apellidos }}</td>
+                        <td>{{ trab.data.sexo }}</td>
+                        <td>{{ trab.data.ci }}</td>
+                        <td>{{ trab.data.escolaridad }}</td>
+                        <td>{{ trab.data.grupoEscala }}</td>
+                        <td>{{ trab.data.salario_total }}</td>
+                        <td>{{ trab.data.salario_escala }}</td>
+                        <td>{{ trab.data.salario_jornada_laboral }}</td>
+                        <td>{{ trab.data.incre_res }}</td>
+                        <td>{{ trab.data.cies }}</td>
+                        <td>{{ trab.data.sal_plus }}</td>
+                        <td>{{ trab.data.antiguedad }}</td>
+                        <td>{{ trab.data.sal_cat_cient }}</td>
+                        <td>{{ trab.data.fecha_contrato|date:"d/m/Y" }}</td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+            </tbody>
+        </table>
+        <h5 style="text-align: right">Total Trabaj de {{ uni.nombre }}
+            &nbsp;&nbsp;&nbsp;&nbsp; {{ uni.cant_registros }}</h5>
+        {% if uni.numero < total %}
+            <pdf:nextpage>
+        {% endif %}
+    {% endfor %}
+
+    <h5 style="text-align: right">Existen en total {{ cant_registros_bd }} registros en la Base de Datos</h5>
+</div>
+
+<!-- Contenido del pie de página 'footer_frame' -->
+<div id="footer_content">
+    <div style="float: right">Sistema Gestión Recursos Humanos &copy; Empresa de Servicios de Ingeniería y Diseño de
+        Holguín - VERTICE 2018
+    </div>
+    página
+    <pdf:pagenumber> de
+        <pdf:pagecount>
+</div>
+</body>
+</html>

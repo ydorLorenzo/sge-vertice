@@ -1,0 +1,368 @@
+{% extends "base_pren15.html" %}
+{% load static %}
+{% load filters %}
+{% block title %}Datos Prenómina{% endblock %}
+{% block styles %}
+    <style type="text/css">
+        #tabla_datos_paginate a:hover {
+            background-color: #007bff !important;
+            color: white;
+            border: solid 1px;
+            border-color: #0062cc !important;
+            transition: color .25s ease-in-out, background-color .25s ease-in-out, border-color .25s ease-in-out, border .25s ease-in-out;
+        }
+
+        td, th {
+            padding: 2px !important;
+        }
+
+        table.dataTable td.focus {
+            outline: 1px solid #ac1212;
+            outline-offset: -3px;
+            background-color: #f8e6e6 !important;
+        }
+
+        table.dataTable td, table.dataTable th {
+            font-size: 11px;
+        }
+
+        .dt-button.buttons-excel.buttons-html5, .dt-button.buttons-collection.buttons-colvis {
+            margin-left: 15px;
+            border-radius: 3px;
+            box-shadow: #47748b 1px 1px 1px;
+            color: #fff;
+            background-color: #37474F !important;
+            border-color: #37474F;
+            background-image: none;
+        }
+
+        .dt-button.buttons-excel.buttons-html5:hover, .dt-button.buttons-collection.buttons-colvis:hover {
+            margin-left: 15px;
+            border-radius: 3px;
+            box-shadow: #37474F 1px 1px 1px;
+            color: #fff;
+            background-color: #47748b !important;
+            border-color: #47748b;
+            background-image: none;
+        }
+
+    </style>
+{% endblock %}
+{% block content %}
+    <!-- Page Content Holder -->
+    <div id="content" style="padding-top: 100px; padding-right: 0;">
+
+        <div class=content align="center"><h5 style="font-weight: bold">Datos para Prenómina</h5></div>
+        <div class="container" role="main"
+             style="padding-right: 0; margin-left: 0; font-size: smaller; position: relative; max-width: none; margin-right: 0px;">
+            <br>
+            <div class="row" style="width: 100%">
+                <div class="col-lg-12">
+                    <h6 style="font-weight: bold;font-size: 12px">Total de planos Mes : {{ total_planos }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Retenidos: {{ retenido }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pagar
+                        100%: {{ completo }}</h6>
+                    <table id="tabla_datos" class="display" cellspacing="0"
+                           style="width: 100%; max-width: 100% !important;">
+                        <thead id="tabla_datos_head">
+                        <tr>
+                            <th style="text-align: center">Nombres y Apellidos</th>
+                            <th style="text-align: center">Cargo</th>
+                            <th style="text-align: center">GE</th>
+                            <th style="text-align: center">Sal. Máx</th>
+                            <th style="text-align: center">Complejidad</th>
+                            <th style="text-align: center">Tarifa</th>
+                            <th style="text-align: center">Etapa</th>
+                            <th style="text-align: center">Cant</th>
+                            <th hidden>Horas Plan</th>
+                            <th hidden>Costo Planos Plan</th>
+                            <th style="text-align: center">Horas creadas en el mes</th>
+                            <th style="text-align: center">Salario por horas creadas</th>
+                            <th style="text-align: center">Plano VPC</th>
+                            <th style="text-align: center">VPC ant.</th>
+                            <th style="text-align: center">Valor 20%</th>
+                            <th style="text-align: center">Total a pagar</th>
+                            <th style="text-align: center">Ret. Ant</th>
+                            <th>Plano</th>
+                            <th style="text-align: center">No</th>
+                            <th style="text-align: center">Obj.</th>
+                            <th style="text-align: center">Corte</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for esp in especialidades %}
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td style="background-color: yellow; font-weight: bold"> {{ esp.nombre }}</td>
+                                <td style="background-color: yellow; font-weight: bold">&nbsp;</td>
+                                <td style="background-color: yellow; font-weight: bold">{{ esp.cant }}</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td hidden>&nbsp;</td>
+                                <td hidden>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            {% for per in esp.personas %}
+                                {% for plano in per.planos %}
+                                    {% if plano.cant == 1 %}
+                                        <tr>
+                                            <td>{{ per.nombre }}</td>
+                                            <td>{{ per.cargo }}</td>
+                                            <td style="text-align: center">{{ per.ge }}</td>
+                                            <td style="text-align: center">{{ per.sal_max|replace }}</td>
+                                            <td style="text-align: center">{{ plano.formato }}({{ plano.porciento }}%)</td>
+                                            <td style="text-align: center">{{ plano.tarifa |replace }}</td>
+                                            <td style="text-align: center">{{ plano.etapa }}</td>
+                                            {% if plano.caso == 2 or plano.caso == 0 %}
+                                                <td style="text-align: center"> 1</td>
+                                            {% else %}
+                                                <td>&nbsp;</td>
+                                            {% endif %}
+                                            <td hidden style="text-align: center">{{ plano.horas_creadas|replace }}</td>
+                                            <td hidden style="text-align: center">{{ plano.valor|replace }}</td>
+                                            {% if plano.horas_creadas != 0 %}
+                                                <td style="text-align: center">{{ plano.horas_creadas|replace }}</td>
+                                            {% else %}
+                                                <td>&nbsp;</td>
+                                            {% endif %}
+                                            <td style="text-align: center">{{ plano.valor|replace }}</td>
+                                            {% if plano.caso == 0 %}
+                                                <td style="text-align: center">X</td>
+                                            {% else %}
+                                                <td>&nbsp;</td>
+                                            {% endif %}
+                                            {% if plano.caso == 1 %}
+                                                <td style="text-align: center">X</td>
+                                            {% else %}
+                                                <td>&nbsp;</td>
+                                            {% endif %}
+                                            {% if plano.caso == 2 %}
+                                                <td style="text-align: center">{{ plano.retenido|replace }}</td>
+                                            {% else %}
+                                                <td>&nbsp;</td>
+                                            {% endif %}
+                                            {% if plano.caso != 1 %}
+                                                <td style="text-align: center">{{ plano.pagar|replace }}</td>
+                                            {% else %}
+                                                <td>&nbsp;</td>
+                                            {% endif %}
+                                            {% if plano.caso == 1 %}
+                                                <td style="text-align: center">{{ plano.reten_ant|replace }}</td>
+                                            {% else %}
+                                                <td>&nbsp;</td>
+                                            {% endif %}
+                                            <td>{{ plano.nombre }}</td>
+                                            <td style="text-align: center">{{ plano.codigo }}</td>
+                                            <td style="text-align: center">{{ plano.objeto }} {{ plano.nombre_obj }}</td>
+                                            {% if plano.caso == 1 %}
+                                                <td style="text-align: center">{{ plano.corte }}</td>
+                                            {% else %}
+                                                <td>&nbsp;</td>
+                                            {% endif %}
+                                        </tr>
+                                    {% else %}
+                                        <tr>
+                                            <td>{{ per.nombre }}</td>
+                                            <td>{{ per.cargo }}</td>
+                                            <td style="text-align: center">{{ per.ge }}</td>
+                                            <td style="text-align: center">{{ per.sal_max|replace }}</td>
+                                            <td style="text-align: center">{{ plano.formato }}({{ plano.porciento }}%)</td>
+                                            <td style="text-align: center">{{ per.tarifa |replace }}</td>
+                                            <td style="text-align: center">{{ plano.etapa }}</td>
+                                            {% if plano.caso == 2 or plano.caso == 0 %}
+                                                <td style="text-align: center"> 1</td>
+                                            {% else %}
+                                                <td>&nbsp;</td>
+                                            {% endif %}
+                                            <td hidden style="text-align: center">{{ plano.horas_creadas|replace }}</td>
+                                            <td hidden style="text-align: center">{{ plano.valor|replace }}</td>
+                                            {% if plano.horas_creadas != 0 %}
+                                                <td style="text-align: center">{{ plano.horas_creadas_real|replace }}</td>
+                                            {% else %}
+                                                <td>&nbsp;</td>
+                                            {% endif %}
+                                            <td style="text-align: center">{{ plano.valor_real|replace }}</td>
+                                            {% if plano.caso == 0 %}
+                                                <td style="text-align: center">X</td>
+                                            {% else %}
+                                                <td>&nbsp;</td>
+                                            {% endif %}
+                                            {% if plano.caso == 1 %}
+                                                <td style="text-align: center">X</td>
+                                            {% else %}
+                                                <td>&nbsp;</td>
+                                            {% endif %}
+                                            {% if plano.caso == 2 %}
+                                                <td style="text-align: center">{{ plano.valor_retenido_real|replace }}</td>
+                                            {% else %}
+                                                <td>&nbsp;</td>
+                                            {% endif %}
+                                            {% if plano.caso != 1 %}
+                                                <td style="text-align: center">{{ plano.valor_total_real|replace }}</td>
+                                            {% else %}
+                                                <td>&nbsp;</td>
+                                            {% endif %}
+                                            {% if plano.caso == 1 %}
+                                                <td style="text-align: center">{{ plano.valor_retenido_real|replace }}</td>
+                                            {% else %}
+                                                <td>&nbsp;</td>
+                                            {% endif %}
+                                            <td>{{ plano.nombre }}</td>
+                                            <td style="text-align: center">{{ plano.codigo }}</td>
+                                            <td style="text-align: center">{{ plano.objeto }} {{ plano.nombre_obj }}</td>
+                                            {% if plano.caso == 1 %}
+                                                <td style="text-align: center">{{ plano.corte }}</td>
+                                            {% else %}
+                                                <td>&nbsp;</td>
+                                            {% endif %}
+                                        </tr>
+                                        {% for can in plano.list_cant %}
+                                            <tr>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td style="text-align: center">&nbsp;</td>
+                                                <td style="text-align: center">&nbsp;</td>
+                                                <td style="text-align: center">{{ plano.formato }}({{ plano.porciento }}%)</td>
+                                                <td style="text-align: center">{{ per.tarifa |replace }}</td>
+                                                <td style="text-align: center">{{ plano.etapa }}</td>
+                                                <td>&nbsp;</td>
+                                                <td hidden
+                                                    style="text-align: center">{{ plano.horas_creadas|replace }}</td>
+                                                <td hidden style="text-align: center">{{ plano.valor|replace }}</td>
+                                                {% if plano.horas_creadas != 0 %}
+                                                    <td style="text-align: center">{{ plano.horas_creadas_real|replace }}</td>
+                                                {% else %}
+                                                    <td>&nbsp;</td>
+                                                {% endif %}
+                                                <td style="text-align: center">{{ plano.valor_real|replace }}</td>
+                                                {% if plano.caso == 0 %}
+                                                    <td style="text-align: center">X</td>
+                                                {% else %}
+                                                    <td>&nbsp;</td>
+                                                {% endif %}
+                                                {% if plano.caso == 1 %}
+                                                    <td style="text-align: center">X</td>
+                                                {% else %}
+                                                    <td>&nbsp;</td>
+                                                {% endif %}
+                                                {% if plano.caso == 2 %}
+                                                    <td style="text-align: center">{{ plano.valor_retenido_real|replace }}</td>
+                                                {% else %}
+                                                    <td>&nbsp;</td>
+                                                {% endif %}
+                                                {% if plano.caso != 1 %}
+                                                    <td style="text-align: center">{{ plano.valor_total_real|replace }}</td>
+                                                {% else %}
+                                                    <td>&nbsp;</td>
+                                                {% endif %}
+                                                {% if plano.caso == 1 %}
+                                                    <td style="text-align: center">{{ plano.valor_retenido_real|replace }}</td>
+                                                {% else %}
+                                                    <td>&nbsp;</td>
+                                                {% endif %}
+                                                <td>&nbsp;</td>
+                                                <td style="text-align: center">&nbsp;</td>
+                                                <td style="text-align: center">&nbsp;</td>
+                                                <td style="text-align: center">&nbsp;</td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endfor %}
+                                <tr style="background-color: #00b0ff">
+                                    <td style="font-weight: bold">Totales</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td style="font-weight: bold; text-align: center"> {{ per.cant }}</td>
+                                    <td hidden
+                                        style="font-weight: bold; text-align: center">{{ per.total_horas| replace }}</td>
+                                    <td hidden
+                                        style="font-weight: bold; text-align: center">{{ per.total_valor|replace }}</td>
+                                    <td style="font-weight: bold; text-align: center">{{ per.total_horas| replace }}</td>
+                                    <td style="font-weight: bold; text-align: center">{{ per.total_valor|replace }}</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td style="font-weight: bold; text-align: center">{{ per.total_retenido|replace }}</td>
+                                    <td style="font-weight: bold; text-align: center">{{ per.pagar|replace }}</td>
+                                    <td style="font-weight: bold; text-align: center">{{ per.retenido_ant|replace }}</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                            {% endfor %}
+                        {% endfor %}
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // DataTable
+            var table = $('#tabla_datos').DataTable({
+                "language": {
+                    processing: "Procesando...",
+                    search: "Buscar:",
+                    lengthMenu: "Mostrar _MENU_ registros",
+                    info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    infoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    infoFiltered: "(filtrado de un total de _MAX_ registros)",
+                    infoPostFix: "",
+                    loadingRecords: "Cargando...",
+                    zeroRecords: "No se encontraron resultados",
+                    emptyTable: "Ningún dato disponible en esta tabla",
+                    paginate: {
+                        first: "Último",
+                        previous: "Anterior",
+                        next: "Siguiente",
+                        last: "Último"
+                    }
+                },
+                "ordering": false,
+                fixedHeader: {
+                    header: true,
+                    headerOffset: $('#navbar').height() + 22
+                },
+                keys: true,
+                dom: 'lBfrtip',
+                bFilter: false,
+                bInfo: false,
+                bLengthChange: false,
+                bPaginate: false,
+                buttons: [{
+                    extend: 'excelHtml5',
+                    autoFilter: true,
+                    text: 'Exportar Excel',
+                    filename: 'Datos Prenómina',
+                    bom: true,
+                    sheetName: 'Datos Prenómina',
+                    exportOptions: {
+                        columns: ':visible',
+                    },
+                    messageTop: 'Entidad: Emp.Serv.de Ingeniería y Diseño Holguín',
+                }]
+            });
+        });
+    </script>
+{% endblock %}
+

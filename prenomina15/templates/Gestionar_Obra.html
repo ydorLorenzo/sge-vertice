@@ -1,0 +1,247 @@
+{% extends "base_pren15.html" %}
+{% load static %}
+{% block title %}Gestionar Obra{% endblock %}
+{% block styles %}
+    <style type="text/css">
+        #tabla_obras_paginate a:hover {
+            background-color: #007bff !important;
+            color: white;
+            border: solid 1px;
+            border-color: #0062cc !important;
+            transition: color .25s ease-in-out, background-color .25s ease-in-out, border-color .25s ease-in-out, border .25s ease-in-out;
+        }
+
+        td, th {
+            padding: 2px !important;
+        }
+
+        .has-error {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+        }
+        div.container { max-width: 1200px }
+    </style>
+{% endblock %}
+{% block content %}
+    <!-- Page Content Holder -->
+    <div id="content" style="padding-top: 100px;">
+
+        <div class=content align="center"><h5 style="font-weight: bold">Gestionar Obra</h5></div>
+        <div class="container" role="main" style=" margin-left: 0; font-size: smaller">
+            <div class="text-right" style="color: white;">
+              {% if add %}  <!-- Aqui se verifica si el usuario tiene permiso de adicionar Obra -->
+                <a id="addButtonObra" class="btn btn-sm btn-success" style="font-size: smaller; font-weight: bold">
+                <i class="fa fa-plus" style="font-weight: bold"></i> Adicionar</a>
+              {% endif %}
+            </div>
+            <br>
+            <div class="row">
+                {% if errores %}
+                    <div class="alert alert-dismissable alert-danger">
+                        <button style="margin-left: 20px;" type="button" class="close" data-dismiss="alert"
+                                aria-hidden="true"><strong> &times;</strong></button>
+                        <strong>Error:</strong> {{ errores }}
+                    </div>
+                {% endif %}
+                <div class="col-lg-12">
+                    <table id="tabla_obras" class="display" cellspacing="0" width="100%">
+                        <thead>
+                        <tr>
+                            <th style="width: auto">Orden de Trabajo</th>
+                            <th style="width: auto">Nombre de la Obra</th>
+                            <th style="text-align: center; width: 150px">Tipo de Obra</th>
+                            <th style="text-align: center; width: 80px">Horas A2</th>
+                            <th style="text-align: center; width: 100px">Grupo Escala</th>
+                            <th style="text-align: center; width: 60px">Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for i in list_obras %}
+                            <tr>
+                                <td>{{ i.orden_trab.descripcion_ot }}</td>
+                                <td>{{ i.nombre }}</td>
+                                {% if i.tipo == 'OT' %}
+                                    <td align="center">Obra de Turismo</td>
+                                {% elif i.tipo == 'VT' %}
+                                    <td align="center">Vivienda para Turismo</td>
+                                   {% else %}
+                                        <td align="center">Resolucion 6</td>
+                                {% endif %}
+                                <td align="center">{{ i.horas_a2 }}</td>
+                                <td align="center">{{ i.gesc.grupo }}</td>
+                                <td width="60">
+                                    <div class="icon-acciones" align="center">
+                                     {% if change %}  <!-- Aqui se verifica si el usuario tiene permiso de editar Obra -->
+                                        <a href="{% url 'editarObra' i.pk %}"
+                                           class="badge badge-pill badge-primary">
+                                            <i class="fa fa-edit" title="Editar Obra"
+                                               style="color: white;"></i>
+                                        </a>
+                                     {% endif %}
+                                     {% if delete %}  <!-- Aqui se verifica si el usuario tiene permiso de eliminar Obra -->
+                                        <a onclick=" return abrir_modal('{% url 'eliminarObra' i.pk %}')"
+                                           class="badge badge-pill badge-danger">
+                                            <i class="fa fa-trash-o" title="Eliminar Obra"
+                                               style="color: white;"></i>
+                                        </a>
+                                     {% endif %}
+
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                        <tfoot>
+                        <th style="padding: 6px 6px !important;">OT</th>
+                        <th style="padding: 6px 6px !important;">Nombre</th>
+                        <th style="padding: 6px 6px !important;">Tipo</th>
+                        <th style="padding: 6px 6px !important;">Horas A2</th>
+                        <th style="padding: 6px 6px !important;">Grupo</th>
+                        <td></td>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="popup" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                {% if edit %}
+                    <form id="formularioObra" role="form" action="{% url 'editarObra' edit %}" method="post">
+                {% else %}
+                    <form id="formularioObra" role="form" action="{% url 'adicionarObra' %}" method="post">
+                {% endif %}
+                <div class="modal-header">
+                    <h6 style="font-weight: bold"><strong>Crear / Editar Obra</strong></h6>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body mio">
+                    {% csrf_token %}
+                    <div class="panel panel-default">
+                        <div class="row" style="margin-bottom: 20px;">
+                            {% if form.errors %}
+                                <div class="alert alert-danger"
+                                     style="width: 100%; text-align: center; margin: 0 auto; padding: 0 10px; border-radius: 0;">
+                                    <p>{{ form.nombre.errors }}</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12"><strong> Orden de Trabajo:</strong>{{ form.orden_trab }}</div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-sm-6"><strong> Tipo:</strong>{{ form.tipo }}</div>
+                            <div class="col-sm-3"><strong> Horas A2:</strong>{{ form.horas_a2 }}</div>
+                            <div class="col-sm-3"><strong> Grupo:</strong>{{ form.gesc }}</div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-sm-6"><strong> Nombre:</strong>{{ form.nombre }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-lg-12 text-right" style="font-size: smaller">
+                        <input id="enviar" type="submit" class="btn btn-sm btn-primary" name="submit" value="Guardar" style="font-weight: bold">
+                        <button type="button" class="btn btn-sm btn-danger" onclick="return cerrar_modal()" style="font-weight: bold">
+                            Cancelar
+                        </button>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="delete" class="modal fade" role="dialog"></div>
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        $('#addButtonObra').click(function () {
+            $('#popup form').prop('action', '/pren/adicionar_obra/');
+            $('#popup').modal('show');
+        });
+        {% if form.errors or edit %}
+            $('#popup').modal('show');
+        {% endif %}
+
+        exp_horas = "^[0-9]{2}$";
+        exp_nombre = "^([A-Z]{1})[A-Za-z0-9áéíóúñ .,]+$";
+        $('#id_horas_a2').prop("title", 'Este campo solo acepta valores numéricos').attr("oninvalid",
+            'setCustomValidity("Campo obligatorio. Solo acepta valores numéricos")').prop("min", '19').prop("max", '30');
+        $('#id_nombre').prop("title", 'Este campo no permite caracteres especiales y comienza con mayúscula').attr("oninvalid", 'setCustomValidity("Campo obligatorio.Empieza con mayúscula y no acepta caracteres especiales")');
+
+        function validarNombre() {
+            if ($('#id_nombre')[0].value.match(exp_nombre)) {
+                $('#id_nombre').removeClass('has-error');
+                return true;
+            } else {
+                $('#id_nombre').addClass('has-error');
+                return false;
+            }
+        }
+
+        function validarFormulario() {
+            if (validarNombre()) {
+                $('#enviar').removeAttr('disabled');
+            } else {
+                $('#enviar').attr('disabled', '');
+            }
+        }
+
+        $("#formularioObra").on('keyup', function () {
+            validarFormulario();
+        }).on('change', function () {
+            validarFormulario();
+        });
+
+        $(document).ready(function () {
+            validarFormulario();
+        });
+
+        $(document).ready(function () {
+            // DataTable
+            var table = $('#tabla_obras').DataTable({
+                "language": {
+                    processing: "Procesando...",
+                    search: "Buscar:",
+                    lengthMenu: "Mostrar _MENU_ registros",
+                    info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    infoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    infoFiltered: "(filtrado de un total de _MAX_ registros)",
+                    infoPostFix: "",
+                    loadingRecords: "Cargando...",
+                    zeroRecords: "No se encontraron resultados",
+                    emptyTable: "Ningún dato disponible en esta tabla",
+                    paginate: {
+                        first: "Último",
+                        previous: "Anterior",
+                        next: "Siguiente",
+                        last: "Último"
+                    }
+                }
+            });
+            // Setup - add a text input to each footer cell
+            $('#tabla_obras').find('tfoot th').each(function () {
+                var title = $(this).text();
+                $(this).html('<input class="form-control" type="text" style="font-size: smaller" placeholder="Buscar ' + title + '"/>');
+            });
+
+            // Apply the search
+            table.columns().every(function () {
+                var that = this;
+
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}
+

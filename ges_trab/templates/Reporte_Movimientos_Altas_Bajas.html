@@ -1,0 +1,160 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <style>
+        @page {
+            size: A4 portrait;
+            /* A4  21.0 x 29.7 cm */
+            /* A4  21.0 x 29.7 cm */
+        {#        @frame header_frame { /* Static frame */#}
+        {#        -pdf-frame-content: header_content;#}
+        {#        left: 1cm;#}
+        {#        width: 25.7cm;#}
+        {#        top: 0.5cm;#}
+        {#        height: 2cm;#}
+        {#            /* for debugging the layout */#}
+        {#        }#}
+            @frame col1_frame { /* Content frame 1 */
+            left: 1cm;
+            width: 19cm;
+            top: 1cm;
+            height: 27cm;
+            /* for debugging the layout */
+        }
+        @frame footer_frame {
+            /* Static frame */
+        -pdf-frame-content:footer_content;
+        left: 1cm; width: 19cm; top: 28cm; height: 2cm;
+            /* for debugging the layout */
+        }
+
+        }
+    </style>
+    <style type="text/css">
+        .container {
+            margin: 50px auto 40px auto;
+            width: 600px;
+            text-align: center;
+        }
+
+        .logo {
+            display: inline-block;
+            margin-top: 35px;
+            width: 64px;
+            height: 64px;
+            margin-right: 20px;
+        }
+
+        .title {
+            font-size: 18px;
+            position: relative;
+            text-align: center;
+        }
+
+        td {
+            padding: 4px;
+            border-top: 1px solid #dddddd;
+            vertical-align: middle;
+        }
+
+        th {
+            vertical-align: bottom;
+            border-bottom: 2px solid #dddddd;
+            text-align: center;
+            padding: 5px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <img src="{% static 'images/Logo_C.jpg' %}" class="logo">&nbsp;&nbsp;&nbsp;&nbsp;
+    <p style="display: inline-block; " class="title"><strong>Listado de altas, bajas y movimiento interno <br>Período
+        ({{ fecha_inic }}
+        / {{ fecha_fin }})</strong></p>
+    <p class="title"><strong>Listado de Altas</strong></p>
+    <table class="table" style="border-collapse: collapse; border-spacing: 0;">
+        <thead>
+        <tr>
+            <th style="width: 30px"><strong>No.</strong></th>
+            <th style="width: 80px"><strong>Código</strong></th>
+            <th style="width: 210px; align-items: inherit"><strong>Nombre y apellidos</strong></th>
+            <th style="width: 80px"><strong>Cat. Ocup.</strong></th>
+            <th style="width: 280px"><strong>Área</strong></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for i in trabajadores_alta %}
+            <tr>
+                <td style="text-align: center"> {{ forloop.counter }} </td>
+                <td>{{ i.codigo_interno }}</td>
+                <td>{{ i.primer_nombre }} {{ i.segundo_nombre }} {{ i.apellidos }}</td>
+                <td style="text-align: center">{{ i.categoria }}</td>
+                <td>{{ i.departamento }}</td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+    <p class="title"><strong>Listado de Bajas</strong></p>
+    <table class="table" style="border-collapse: collapse; border-spacing: 0;">
+        <thead>
+        <tr>
+            <th style="width: 30px"><strong>No.</strong></th>
+            <th style="width: 80px"><strong>Código</strong></th>
+            <th style="width: 210px; align-items: inherit"><strong>Nombre y apellidos</strong></th>
+            <th style="width: 80px"><strong>Cat. Ocup.</strong></th>
+            <th style="width: 280px"><strong>Área</strong></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for i in trabajadores_baja %}
+            <tr>
+                <td style="text-align: center"> {{ forloop.counter }} </td>
+                <td>{{ i.codigo_interno }}</td>
+                <td>{{ i.primer_nombre }} {{ i.segundo_nombre }} {{ i.apellidos }}</td>
+                <td style="text-align: center">{{ i.categoria }}</td>
+                <td>{{ i.departamento }}</td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+<p class="title"><strong>Listado de Movimientos Internos</strong></p>
+<table class="table" style="border-collapse: collapse; border-spacing: 0;">
+    <thead>
+    <tr>
+        <th style="width: 30px"><strong>No.</strong></th>
+        <th style="width: 50px"><strong>Código</strong></th>
+        <th style="width: 180px; align-items: inherit"><strong>Nombre y apellidos</strong></th>
+        <th style="width: 40px"><strong>Cat. Ocup.</strong></th>
+        <th style="width: 200px"><strong>Área Anterior</strong></th>
+        <th style="width: 200px"><strong>Área Actual</strong></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for i in trabajadores_mov %}
+        <tr>
+            <td style="text-align: center"> {{ forloop.counter }} </td>
+            <td>{{ i.codigo_interno }}</td>
+            <td>{{ i.primer_nombre }} {{ i.segundo_nombre }} {{ i.apellidos }}</td>
+            <td style="text-align: center">{{ i.categoria }}</td>
+            <td>{{ i.area_ant }}</td>
+            <td>{{ i.area_act }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+
+<!-- Contenido del pie de página 'footer_frame' -->
+<div id="footer_content">
+    Página
+    <pdf:pagenumber> de
+        <pdf:pagecount>
+</div>
+</body>
+</html>

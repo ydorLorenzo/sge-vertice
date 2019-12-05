@@ -1,0 +1,324 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>{% block title %}PR3{% endblock %}</title>
+
+    <!-- Bootstrap core CSS -->
+    {#    <link href="{% static 'css/sidebar/bootstrap.min.css' %}" rel="stylesheet">#}
+    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/dataTables.jqueryui.css' %}" rel="stylesheet">
+    <link href="{% static 'font-aweson/css/font-awesome.min.css' %}" rel="stylesheet">
+    <!-- Custom styles -->
+    {#    <link href="{% static 'css/jumbotron-narrow.css' %}" rel="stylesheet">#}
+    <!--Image Upload-->
+    {#    <link href="{% static 'css/sidebar/bootstrap.min.css' %}" rel="stylesheet">#}
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    {#    <link href="{% static 'css/bootstrap-imageupload.css' %}" rel="stylesheet">#}
+    {#Estos son los css del datepicker#}
+    <link href="{% static 'datepickerFiles/css/bootstrap-datepicker.css' %}" rel="stylesheet">
+    <link href="{% static 'css/sidebar/mdb.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/sidebar/style5.css' %}" rel="stylesheet">
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet">
+
+
+    <style type="text/css">
+        #topcontrol {
+            transition: 0.5s;
+        }
+    </style>
+
+    {% block styles %} {% endblock %}
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: #263238;">
+    <button type="button" id="sidebarCollapse" class="navbar-btn" style="margin-right: 10px; border-radius: 100px;">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <a class="navbar-brand" href="{% url 'home_principal' %}">Sistema de Gestión Empresarial VERTICE</a>
+    <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarColor01"
+            aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="navbar-collapse collapse" id="navbarColor01" style="">
+        <ul class="navbar-nav ml-auto" style="margin-right: 10px;">
+            <li class="nav-item" style="margin-right: 10px; color: white;">
+                <h6 style="margin-top: 0.5rem;">
+                    Bienvenido(a) {{ request.user.first_name }} {{ request.user.last_name }}</h6>
+            </li>
+            <div class="btn-group">
+                <a class="btn btn-sm btn-primary" href="/admin/" style="text-transform: none; font-size: 1rem;"><i
+                        class="fa fa-gears" title="Administraci&oacute;n"
+                        style="color: white;"></i></a>
+                <button type="button" class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right" style="text-align: center;">
+                    <h6 class="dropdown-header">Acciones</h6>
+                    <a class="dropdown-item" href="/admin/"><i class="fa fa-gear" title="Administraci&oacute;n"
+                                                               style="color: black;"></i> Administraci&oacute;n.</a>
+                    <a class="dropdown-item" id="fullscreen" href="javascript:"><i class="fa fa-angle-up"
+                                                                                   title="Inicio"
+                                                                                   style="color: black;"></i> Pantalla
+                        Completa. </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{% url 'logout' %}"><i class="fa fa-sign-out"
+                                                                          title="Cerrar sesi&oacute;n"
+                                                                          style="color: black;"></i> Cerrar sesi&oacute;n.</a>
+                </div>
+            </div>
+        </ul>
+    </div>
+</nav>
+<div class="wrapper">
+    <!-- Sidebar Holder -->
+    <nav id="sidebar" style="padding-top: 15px">
+        <div class="sidebar-header">
+            <h3>PR3</h3>
+        </div>
+        <ul class="list-unstyled components">
+            <a href="http://127.0.0.1:8000/home_pr3/#">Menú</a>
+            <br>
+            <li class="active">
+                <a href="#pageSubmenu1" data-toggle="collapse" aria-expanded="false"
+                   class="dropdown-toggle"><i class="fa fa-folder"></i> Entrada de Datos</a>
+                <ul class="collapse list-unstyled" id="pageSubmenu1">
+                    <li>
+                        <a data-toggle="modal" href="#modalDatos"><i class="fa fa-user-plus"></i> Datos</a>
+                    </li>
+                    <li>
+                        <a data-toggle="modal" href="#modalActualizarCoef"><i class="fa fa-hashtag"></i> Coeficiente
+                            Promedio de Salario</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'listaValorProd' %}"><i class="fa fa-dollar"></i> Cambio Valor Producción</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#pageSubmenu2" data-toggle="collapse" aria-expanded="false"
+                   class="dropdown-toggle"><i class="fa fa-folder"></i> Trans de Datos</a>
+                <ul class="collapse list-unstyled" id="pageSubmenu2">
+                    <li>
+                        <a href="#"><i class="fa fa-list-alt"></i> Trans Datos de Una Activ a otra</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-list-alt"></i> Transf Horas de un Trabaj a otra Act</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i
+                        class="fa fa-eye"></i> Revisión PR-3</a>
+                <ul class="collapse list-unstyled" id="homeSubmenu">
+                    <li>
+                        <a href="{% url 'ListDatos' %}"><i class="fa fa-table"></i> Tabla Datos</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#homeSubmenu3" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i
+                        class="fa fa-file-text-o"></i> Impresión</a>
+                <ul class="collapse list-unstyled" id="homeSubmenu3">
+                    <li>
+                        <a href="{% url 'visualizarReportePR3' %}"><i class="fa fa-list"></i> PR-3</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'visualizarReporteProdDir' %}"><i class="fa fa-list"></i> Resumen PR-3 por Dirección</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-list"></i> PR-3 de un Mes Determinado</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'visualizarReporteOTActividades' %}"><i class="fa fa-list"></i> Listado OT y sus Activ</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'visualizarReporteAreaOT' %}"><i class="fa fa-list"></i> Listado OT por Direcciones</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'ReporteActCont' %}"><i class="fa fa-list"></i> Actividades de un Contrato Solicitado</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" aria-expanded="false" class="dropdown-toggle"><i
+                        class="fa fa-calendar"></i> Iniciar Nuevo Mes</a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Page Content Holder -->
+    <div id="modalActualizarCoef" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4><strong>Actualizar Coeficiente Promedio de Salario</strong></h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <div class="panel-body">
+
+                        <form method="post" action="{% url 'actualizarCoeficiente' %}">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-sm-8"><strong> Coeficiente Promedio de
+                                    Salario:</strong>{{ formcoe.coeficiente }}</div>
+                            </div>
+                            <br>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary" style="text-transform: none;">Guardar
+                                </button>
+                                <button type="button" class="btn btn-danger" style="text-transform: none;"
+                                        data-dismiss="modal">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalDatos" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4><strong>Entrada de Datos</strong></h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <div class="panel-body">
+
+                        <form method="post" action="{% url 'entradaDatos' %}">
+                            {% csrf_token %}
+                            <input id="continuar" name="continuar" value="" type="hidden">
+                            <div class="row">
+                                <div class="col-sm-6"><strong> Orden de Trabajo:</strong>{{ form.orden_trab }}</div>
+                                <div class="col-sm-6"><strong> Actividad:</strong>{{ form.actividad }}</div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-sm-6"><strong> Trabajador:</strong>{{ form.trabajador }}</div>
+                                <div class="col-sm-3"><strong> Cantidad Horas:</strong>{{ form.cant_horas }}</div>
+                                <div class="col-sm-3"><strong> Horas Extras:</strong>{{ form.horas_ext }}</div>
+                            </div>
+                            <br>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-success Cont" style="text-transform: none;">Guardar
+                                    y Continuar
+                                </button>
+                                <button type="submit" class="btn btn-primary" style="text-transform: none;">Guardar
+                                </button>
+                                <button type="button" class="btn btn-danger" style="text-transform: none;"
+                                        data-dismiss="modal">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% block content %}
+
+    {% endblock %}
+
+    <!-- /container -->
+
+</div>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/sidebar/mdb.min.js' %}"></script>
+{#<script src="{% static 'js/sidebar/jquery-3.3.1.slim.min.js' %}"></script>#}
+
+<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'js/dataTables.bootstrap4.js' %}"></script>
+{#<script src="{% static 'js/jquery-validation-1.17.0/jquery.validate.min.js' %}"></script>#}
+<script type="text/javascript" src="{% static 'js/dataTables.jqueryui.js' %}"></script>
+<script src="{% static 'js/app.js' %}"></script>
+<!--Image Upload preview-->
+{#<script src="{% static 'js/bootstrap-imageupload.js' %}"></script>#}
+
+{#js Datepicker#}
+<script src="{% static 'datepickerFiles/js/bootstrap-datepicker.js' %}"></script>
+<script src="{% static 'datepickerFiles/locales/bootstrap-datepicker.es.min.js' %}"></script>
+
+<!--Adicionar dinamico-->
+{#<script src="{% static 'js/jquery.formset.js' %}"></script>#}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('active');
+            $(this).toggleClass('active');
+        });
+    });
+
+    $(document).ready(function () {
+        var id_seleccionado = $('#id_orden_trab')[0].value;
+        $('#id_actividad').html(''); //esta linea lo que hace es limpiar el segundo select para volverlo a llenar luego con los valores que se obtendran en la peticion ajax
+
+        $.get("/act_por_ot/" + id_seleccionado + "/",
+            function (data) {
+                var datos = data[0].result;
+                console.info(datos);
+                if (datos.length !== 0) {
+                    for (var actividad in datos) {
+                        console.info(actividad);
+                        $('#id_actividad').append('<option value="' + datos[actividad].id + '">' + datos[actividad].codigo_act + ' ' + datos[actividad].nombre + '</option>');
+                    }
+                } else {
+                    $('#id_actividad').append('No hay actividades para mostrar.');
+                }
+            });
+    });
+
+
+    $('#id_orden_trab').on('change', function () {
+        var id_seleccionado = this.value;
+        $('#id_actividad').html(''); //esta linea lo que hace es limpiar el segundo select para volverlo a llenar luego con los valores que se obtendran en la peticion ajax
+
+        $.get("/act_por_ot/" + id_seleccionado + "/",
+            function (data) {
+                var datos = data[0].result;
+                console.info(datos);
+                if (datos.length !== 0) {
+                    for (var actividad in datos) {
+                        console.info(actividad);
+                        $('#id_actividad').append('<option value="' + datos[actividad].id + '">' + datos[actividad].codigo_act + ' ' + datos[actividad].nombre + '</option>');
+                    }
+                } else {
+                    $('#id_actividad').append('No hay actividades para mostrar.');
+                }
+            });
+    });
+</script>
+
+
+{% block javascript %}
+
+{% endblock %}
+<div id="topcontrol"
+     style="position: fixed; bottom: 10px; right: 10px; cursor: pointer; z-index: 99999; opacity: 0;"
+     title="Ir arriba">
+    <img src="{% static 'images/up.png' %}" style="width:40px; height:40px">
+</div>
+</body>
+</html>

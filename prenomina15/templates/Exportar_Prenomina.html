@@ -1,0 +1,602 @@
+{% extends "base_pren15.html" %}
+{% load static %}
+{% load filters %}
+{% block title %}Exportar Prenómina{% endblock %}
+{% block styles %}
+    <style type="text/css">
+        #tabla_datos_paginate a:hover {
+            background-color: #007bff !important;
+            color: white;
+            border: solid 1px;
+            border-color: #0062cc !important;
+            transition: color .25s ease-in-out, background-color .25s ease-in-out, border-color .25s ease-in-out, border .25s ease-in-out;
+        }
+
+        td, th {
+            padding: 2px !important;
+        }
+
+        table.dataTable td.focus {
+            outline: 1px solid #ac1212;
+            outline-offset: -3px;
+            background-color: #f8e6e6 !important;
+        }
+
+        table.dataTable td, table.dataTable th {
+            font-size: 10px;
+        }
+
+        .dt-button.buttons-excel.buttons-html5, .dt-button.buttons-collection.buttons-colvis {
+            margin-left: 15px;
+            border-radius: 3px;
+            box-shadow: #47748b 1px 1px 1px;
+            color: #fff;
+            background-color: #37474F !important;
+            border-color: #37474F;
+            background-image: none;
+        }
+
+        .dt-button.buttons-excel.buttons-html5:hover, .dt-button.buttons-collection.buttons-colvis:hover {
+            margin-left: 15px;
+            border-radius: 3px;
+            box-shadow: #37474F 1px 1px 1px;
+            color: #fff;
+            background-color: #47748b !important;
+            border-color: #47748b;
+            background-image: none;
+        }
+
+
+    </style>
+{% endblock %}
+{% block content %}
+    <!-- Page Content Holder -->
+    <div id="content" style="padding-top: 100px; padding-right: 0;">
+        <div class=content align="center"><h5 style="font-weight: bold">Exportar Prenómina</h5></div>
+        <div class="container" role="main"
+             style="padding-right: 0; margin-left: 0; font-size: smaller; position: relative; max-width: none; margin-right: 0px;">
+            <br>
+            <div class="row" style="width: 100%">
+                <div class="col-lg-12" id="datos">
+                    <h6 style="font-weight: bold;font-size: 12px">Total de planos Mes : {{ total_planos }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Retenidos: {{ retenido }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pagar
+                        100%: {{ completo }}</h6>
+                    <table id="tabla_datos" class="display" cellspacing="0"
+                           style="width: 100%;">
+                        <thead id="tabla_datos_head">
+                        <tr>
+                            <th style="text-align: center">No</th>
+                            <th style="text-align: center">CI</th>
+                            <th style="text-align: center">Código</th>
+                            <th style="text-align: center">Nombres y Apellidos</th>
+                            <th style="text-align: center">Cat</th>
+                            <th style="text-align: center">GE</th>
+                            <th style="text-align: center">Sal. Escala</th>
+                            <th style="text-align: center">Inc Res30</th>
+                            <th style="text-align: center">CIES</th>
+                            <th style="text-align: center">Antig</th>
+                            <th>Maest.</th>
+                            <th style="text-align: center">TarifaSE</th>
+                            <th style="text-align: center">TarifaPA</th>
+                            <th style="text-align: center">TarifaCIES</th>
+                            <th style="text-align: center">TarifaAntig</th>
+                            <th style="text-align: center">TarifaMT</th>
+                            <th style="text-align: center">SB</th>
+                            <th style="text-align: center">Horas Real</th>
+                            <th style="text-align: center">Horas Creadas</th>
+                            <th>SETRT</th>
+                            <th>Inc Res30</th>
+                            <th>CIES</th>
+                            <th>Ant.</th>
+                            <th>Maest</th>
+                            <th>Total Dev Res 30</th>
+                            <th>CPL</th>
+                            <th style="text-align: center">TH Res15</th>
+                            <th>Complejidad</th>
+                            <th>Esp</th>
+                            <th style="text-align: center">Cant</th>
+                            <th style="text-align: center">Horas creadas por Plano</th>
+                            <th style="text-align: center">Salario Res.15 por planos</th>
+                            <th style="text-align: center">Incum Plano</th>
+                            <th style="text-align: center">CPL</th>
+                            <th style="text-align: center">Calidad</th>
+                            <th style="text-align: center">1</th>
+                            <th style="text-align: center">2</th>
+                            <th style="text-align: center">3</th>
+                            <th style="text-align: center">SALARIO RES. 15/2016</th>
+                            <th style="text-align: center">Valor 20%</th>
+                            <th style="text-align: center">Ret. Ant</th>
+                            <th style="text-align: center">Impact Res15</th>
+                            <th style="text-align: center">Sal Dev Total</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for area in areas %}
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td style="background-color: yellow; font-weight: bold">{{ area.codigo }} {{ area.nombre }}</td>
+                                <td style="background-color: yellow; font-weight: bold">&nbsp;</td>
+                                <td style="background-color: yellow; font-weight: bold">&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            {% for per in area.personas %}
+                                <tr>
+                                    <td style="text-align: center;">{{ forloop.counter }}</td>
+                                    <td style="text-align: center;">{{ per.ci }}</td>
+                                    <td style="text-align: center;">{{ per.no }}</td>
+                                    <td>{{ per.nombre }}</td>
+                                    <td style="text-align: center;">{{ per.categoria }}</td>
+                                    <td style="text-align: center;">{{ per.ge }}</td>
+                                    <td style="text-align: center;">{{ per.sal_escala|replace }}</td>
+                                    <td style="text-align: center;">{{ per.incre_res|replace }}</td>
+                                    <td style="text-align: center;">{{ per.cies|replace }}</td>
+                                    <td style="text-align: center;">{{ per.antig|replace }}</td>
+                                    <td style="text-align: center;">{{ per.maestria|replace }}</td>
+                                    <td style="text-align: center;">{{ per.tarifa_se|replace }}</td>
+                                    <td style="text-align: center;">{{ per.tarifa_pa|replace }}</td>
+                                    <td style="text-align: center;">{{ per.tarifa_cies|replace }}</td>
+                                    <td style="text-align: center;">{{ per.tarifa_ant|replace }}</td>
+                                    <td style="text-align: center;">{{ per.tarifa_maest|replace }}</td>
+                                    <td style="text-align: center;">{{ per.salario_total|replace }}</td>
+                                    <td>&nbsp;</td>
+                                    <td style="text-align: center;">{{ per.total_horas|replace }}</td>
+                                    <td>{{ per.se_real|replace }}</td>
+                                    <td>{{ per.pa_real|replace }}</td>
+                                    <td>{{ per.cies_real|replace }}</td>
+                                    <td>{{ per.ant_real|replace }}</td>
+                                    <td>{{ per.maest_real|replace }}</td>
+                                    <td>{{ per.total_dev|replace }}</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                {% for plano in per.planos %}
+                                    {% if plano.cant == 1 %}
+                                        <tr>
+                                            <td>&nbsp;</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>&nbsp;</td>
+                                            <td style="text-align: center"></td>
+                                            <td style="text-align: center"></td>
+                                            <td style="text-align: center"></td>
+                                            <td style="text-align: center"></td>
+                                            <td style="text-align: center"></td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td></td>
+                                            <td style="text-align: center"></td>
+                                            <td style="text-align: center"></td>
+                                            <td>&nbsp;</td>
+                                            <td style="text-align: center"></td>
+                                            <td></td>
+                                            <td style="text-align: center"></td>
+                                            <td style="text-align: center"></td>
+                                            <td style="text-align: center">{{ plano.tarifa |replace }}</td>
+                                            <td>{{ plano.formato }}({{ plano.porciento }}%)</td>
+                                            <td>{{ plano.sigla }}</td>
+                                            {% if plano.caso == 2 or plano.caso == 0 %}
+                                                <td style="text-align: center"> 1</td>
+                                            {% else %}
+                                                <td>&nbsp;</td>
+                                            {% endif %}
+                                            {% if plano.horas_creadas != 0 %}
+                                                <td style="text-align: center">{{ plano.horas_creadas|replace }}</td>
+                                            {% else %}
+                                                <td>&nbsp;</td>
+                                            {% endif %}
+                                            {% if plano.horas_creadas != 0 %}
+                                                <td style="text-align: center">{{ plano.valor|replace }}</td>
+                                            {% else %}
+                                                <td>&nbsp;</td>
+                                            {% endif %}
+                                            <td></td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td></td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            {% if plano.caso != 1 %}
+                                                <td style="text-align: center">{{ plano.valor|replace }}</td>
+                                            {% else %}
+                                                <td>&nbsp;</td>
+                                            {% endif %}
+                                            {% if plano.caso == 2 %}
+                                                <td style="text-align: center">{{ plano.retenido|replace }}</td>
+                                            {% else %}
+                                                <td></td>
+                                            {% endif %}
+                                            {% if plano.caso == 1 %}
+                                                <td style="text-align: center">{{ plano.reten_ant|replace }}</td>
+                                            {% else %}
+                                                <td>&nbsp;</td>
+                                            {% endif %}
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                        </tr>
+                                    {% else %}
+                                        <tr>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td style="text-align: center">&nbsp;</td>
+                                            <td style="text-align: center">&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td style="text-align: center"></td>
+                                            <td style="text-align: center"></td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>{{ per.tarifa |replace }}</td>
+                                            <td>{{ plano.formato }}({{ plano.porciento }}%)
+                                            <td>{{ plano.sigla }}</td>
+                                            </td>
+                                            {% if plano.caso == 2 or plano.caso == 0 %}
+                                                <td style="text-align: center"> 1</td>
+                                            {% else %}
+                                                <td>&nbsp;</td>
+                                            {% endif %}
+                                            <td style="text-align: center">{{ plano.horas_creadas_real|replace }}</td>
+                                            <td style="text-align: center">{{ plano.valor_real|replace }}</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td></td>
+                                            {% if plano.caso != 1 %}
+                                                <td style="text-align: center">{{ plano.valor_real|replace }}</td>
+                                            {% else %}
+                                                <td>&nbsp;</td>
+                                            {% endif %}
+                                            {% if plano.caso == 2 %}
+                                                <td style="text-align: center">{{ plano.valor_retenido_real|replace }}</td>
+                                            {% else %}
+                                                <td>&nbsp;</td>
+                                            {% endif %}
+                                            {% if plano.caso == 1 %}
+                                                <td style="text-align: center">{{ plano.valor_retenido_real|replace }}</td>
+                                            {% else %}
+                                                <td>&nbsp;</td>
+                                            {% endif %}
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                        </tr>
+                                        {% for can in plano.list_cant %}
+                                            <tr>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td>&nbsp;</td>
+                                                <td></td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td style="text-align: center">&nbsp;</td>
+                                                <td style="text-align: center">&nbsp;</td>
+                                                <td></td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td style="text-align: center">&nbsp;</td>
+                                                <td style="text-align: center">&nbsp;</td>
+                                                <td style="text-align: center"></td>
+                                                <td style="text-align: center"></td>
+                                                <td style="text-align: center"></td>
+                                                <td>&nbsp;</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td style="text-align: center">&nbsp;</td>
+                                                <td style="text-align: center">&nbsp;</td>
+                                                <td style="text-align: center">{{ per.tarifa |replace }}</td>
+                                                <td>{{ plano.formato }}
+                                                    ({{ plano.porciento }}%)
+                                                </td>
+                                                <td>{{ plano.sigla }}</td>
+                                                <td style="text-align: center"></td>
+                                                {% if plano.horas_creadas != 0 %}
+                                                    <td style="text-align: center">{{ plano.horas_creadas_real|replace }}</td>
+                                                {% else %}
+                                                    <td>&nbsp;</td>
+                                                {% endif %}
+                                                <td style="text-align: center">{{ plano.valor_real|replace }}</td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td></td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                {% if plano.caso != 1 %}
+                                                    <td style="text-align: center">{{ plano.valor_real|replace }}</td>
+                                                {% else %}
+                                                    <td>&nbsp;</td>
+                                                {% endif %}
+                                                {% if plano.caso == 2 %}
+                                                    <td style="text-align: center">{{ plano.valor_retenido_real|replace }}</td>
+                                                {% else %}
+                                                    <td>&nbsp;</td>
+                                                {% endif %}
+                                                {% if plano.caso == 1 %}
+                                                    <td style="text-align: center">{{ plano.valor_retenido_real|replace }}</td>
+                                                {% else %}
+                                                    <td>&nbsp;</td>
+                                                {% endif %}
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endfor %}
+                                <tr style="background-color: lightskyblue">
+                                    <td></td>
+                                    <td style="font-weight: bold">Sub Total</td>
+                                    <td style="font-weight: bold; text-align: center">{{ per.no }}</td>
+                                    <td style="font-weight: bold">{{ per.nombre }}</td>
+                                    <td style="text-align: center; font-weight: bold">{{ per.categoria }}</td>
+                                    <td style="text-align: center; font-weight: bold">{{ per.ge }}</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td style="text-align: center"></td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td></td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td style="font-weight: bold; text-align: center">{{ per.total_horas|replace }}</td>
+                                    <td style="font-weight: bold; text-align: center">{{ per.se_real|replace }}</td>
+                                    <td style="font-weight: bold; text-align: center">{{ per.pa_real|replace }}</td>
+                                    <td style="font-weight: bold; text-align: center">{{ per.cies_real|replace }}</td>
+                                    <td style="font-weight: bold; text-align: center">{{ per.ant_real|replace }}</td>
+                                    <td style="font-weight: bold; text-align: center">{{ per.maest_real|replace }}</td>
+                                    <td style="font-weight: bold; text-align: center">{{ per.total_dev|replace }}</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td style="font-weight: bold; text-align: center">{{ per.cant }}</td>
+                                    <td style="font-weight: bold; text-align: center">{{ per.total_horas| replace }}</td>
+                                    <td style="font-weight: bold; text-align: center">{{ per.total_valor|replace }}</td>
+                                    <td style="font-weight: bold; text-align: center">0</td>
+                                    <td style="font-weight: bold; text-align: center">0</td>
+                                    <td style="font-weight: bold; text-align: center">0</td>
+                                    <td style="font-weight: bold; text-align: center">0.00</td>
+                                    <td style="font-weight: bold; text-align: center">0.00</td>
+                                    <td style="font-weight: bold; text-align: center">0.00</td>
+                                    <td style="font-weight: bold; text-align: center">{{ per.total_valor|replace }}</td>
+                                    <td style="font-weight: bold; text-align: center">{{ per.total_retenido|replace }}</td>
+                                    <td style="font-weight: bold; text-align: center">{{ per.retenido_ant|replace }}</td>
+                                    <td style="font-weight: bold; text-align: center">{{ per.impacto|replace }}</td>
+                                    <td style="font-weight: bold; text-align: center">{{ per.sal_dev_total|replace }}</td>
+                                </tr>
+                            {% endfor %}
+                            <tr style="background-color: #00b0ff">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td style="font-weight: bold">Total</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td></td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td></td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td style="font-weight: bold; text-align: center">{{ area.horas_creadas_total|replace }}</td>
+                                <td style="font-weight: bold; text-align: center">{{ area.setrt|replace }}</td>
+                                <td style="font-weight: bold; text-align: center">{{ area.inc_res_30|replace }}</td>
+                                <td style="font-weight: bold; text-align: center">{{ area.cies|replace }}</td>
+                                <td style="font-weight: bold; text-align: center">{{ area.ant|replace }}</td>
+                                <td style="font-weight: bold; text-align: center">{{ area.maest|replace }}</td>
+                                <td style="font-weight: bold; text-align: center">{{ area.total_dev_30|replace }}</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td style="font-weight: bold; text-align: center">{{ area.cant_planos }}</td>
+                                <td style="font-weight: bold; text-align: center">{{ area.total_horas| replace }}</td>
+                                <td style="font-weight: bold; text-align: center">{{ area.sal_res15_plano|replace }}</td>
+                                <td style="font-weight: bold; text-align: center"></td>
+                                <td style="font-weight: bold; text-align: center"></td>
+                                <td style="font-weight: bold; text-align: center"></td>
+                                <td style="font-weight: bold; text-align: center">0.00</td>
+                                <td style="font-weight: bold; text-align: center">0.00</td>
+                                <td style="font-weight: bold; text-align: center">0.00</td>
+                                <td style="font-weight: bold; text-align: center">{{ area.sal_res15|replace }}</td>
+                                <td style="font-weight: bold; text-align: center">{{ area.ret|replace }}</td>
+                                <td style="font-weight: bold; text-align: center">{{ area.ret_ant|replace }}</td>
+                                <td style="font-weight: bold; text-align: center">{{ area.impacto|replace }}</td>
+                                <td style="font-weight: bold; text-align: center">{{ area.sal_total_dev|replace }}</td>
+                            </tr>
+                        {% endfor %}
+                        <tr style="background-color: cyan; font-weight: bold">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td style="font-weight: bold">Total</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td></td>
+                            <td>&nbsp;</td>
+                            <td></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td style="font-weight: bold; text-align: center">{{horas|replace }}</td>
+                            <td style="font-weight: bold; text-align: center">{{setrt|replace }}</td>
+                            <td style="font-weight: bold; text-align: center">{{inc_res_30|replace }}</td>
+                            <td style="font-weight: bold; text-align: center">{{cies|replace }}</td>
+                            <td style="font-weight: bold; text-align: center">{{ ant|replace }}</td>
+                            <td style="font-weight: bold; text-align: center">{{ maest|replace }}</td>
+                            <td style="font-weight: bold; text-align: center">{{ total_dev_30|replace }}</td>
+                            <td style="font-weight: bold; text-align: center">0.00</td>
+                            <td style="font-weight: bold; text-align: center">0.00</td>
+                            <td style="font-weight: bold; text-align: center">0.00</td>
+                            <td>&nbsp;</td>
+                            <td style="font-weight: bold; text-align: center">{{ cant_planos }}</td>
+                            <td style="font-weight: bold; text-align: center">{{ horas|replace| replace }}</td>
+                            <td style="font-weight: bold; text-align: center">{{ sal_res15_plano|replace }}</td>
+                            <td style="font-weight: bold; text-align: center">0.00</td>
+                            <td style="font-weight: bold; text-align: center">0.00</td>
+                            <td style="font-weight: bold; text-align: center">0.00</td>
+                            <td style="font-weight: bold; text-align: center">0.00</td>
+                            <td style="font-weight: bold; text-align: center">0.00</td>
+                            <td style="font-weight: bold; text-align: center">0.00</td>
+                            <td style="font-weight: bold; text-align: center">{{ sal_res15_plano|replace }}</td>
+                            <td style="font-weight: bold; text-align: center">{{ ret|replace }}</td>
+                            <td style="font-weight: bold; text-align: center">{{ ret_ant|replace }}</td>
+                            <td style="font-weight: bold; text-align: center">{{ impacto|replace }}</td>
+                            <td style="font-weight: bold; text-align: center">{{ sal_total_dev|replace }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // DataTable
+            var table = $('#tabla_datos').DataTable({
+                "language": {
+                    processing: "Procesando...",
+                    search: "Buscar:",
+                    lengthMenu: "Mostrar _MENU_ registros",
+                    info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    infoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    infoFiltered: "(filtrado de un total de _MAX_ registros)",
+                    infoPostFix: "",
+                    loadingRecords: "Cargando...",
+                    zeroRecords: "No se encontraron resultados",
+                    emptyTable: "Ningún dato disponible en esta tabla",
+                    paginate: {
+                        first: "Último",
+                        previous: "Anterior",
+                        next: "Siguiente",
+                        last: "Último"
+                    }
+                },
+                "ordering": false,
+                fixedHeader: {
+                    header: true,
+                    headerOffset: $('#navbar').height() + 22
+                },
+                keys: true,
+                dom: 'lBfrtip',
+                bFilter: false,
+                bInfo: false,
+                bLengthChange: false,
+                bPaginate: false,
+                buttons: [{
+                    extend: 'excelHtml5',
+                    autoFilter: true,
+                    text: 'Exportar Excel',
+                    filename: 'Prenómina',
+                    bom: true,
+                    sheetName: 'Prenómina',
+                    exportOptions: {
+                        columns: ':visible',
+                    },
+                    messageTop: 'Entidad: Emp.Serv.de Ingeniería y Diseño Holguín',
+                }]
+            });
+        });
+    </script>
+{% endblock %}
+

@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Movimientos Realizados{% endblock %}
+{% block styles %}
+    <style type="text/css">
+        td, th {
+            padding: 1px!important;
+        }
+    </style>
+{% endblock %}
+{% block migas %}
+    <ol class="breadcrumb" style="margin-top: 56px; opacity: 0.9; position: fixed;
+    top: 0; right: 0; left: 0; z-index: 1000;">
+        <li class="breadcrumb-item"><a href="/home/">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="/home/">Trabajadores</a></li>
+
+        <li class="breadcrumb-item active" aria-current="page">Gestionar Movimientos</li>
+    </ol>
+{% endblock %}
+{% block content %}
+    <div class=content align="center"><h5><strong>Movimientos Realizados</strong></h5></div>
+    <div class="container" role="main" align="center" style="font-size: smaller">
+        <div class="text-right" style="color: white;">
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#popup"
+                    style="background-color: rebeccapurple; border-color: rebeccapurple; font-size: small"><i
+                    class="fa fa-file-pdf-o"></i> Reporte
+            </button>
+        </div>
+        <div class="col-lg-12">
+            {% if list_movimiento %}
+                <div class="listas">
+                <table class="display" cellspacing="0" width="100%" id="tabla">
+                    <thead>
+                    <tr>
+                        <th style="width: 30px">Fecha</th>
+                        <th style="width: 180px">Trabajador</th>
+                        <th style="width: 80px">Tipo Mov.</th>
+                        <th style="width: 110px">Cargo Anterior</th>
+                        <th style="width: 110px">Cargo Actual</th>
+                        <th style="width: 100px">Dpto Ant</th>
+                        <th style="width: 100px">Dpto Act</th>
+                        <th style="width: 60px!important;">Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for i in list_movimiento %}
+                        <tr class="table-light">
+                            <td>
+                                <div class="tabla-conten">{{ i.fecha |date:"d/m/Y" }}</div>
+                            </td>
+                            <td>
+                                <div class="tabla-conten">{{ i.trabajador.primer_nombre }} {{ i.trabajador.segundo_nombre }} {{ i.trabajador.apellidos }}</div>
+                            </td>
+                            <td>
+                                <div class="tabla-conten">{{ i.tipo }}</div>
+                            </td>
+                            <td>
+                                <div class="tabla-conten">{{ i.cargo_ant }}</div>
+                            </td>
+                            <td>
+                                <div class="tabla-conten">{{ i.cargo_act }}</div>
+                            </td>
+                            <td>
+                                <div class="tabla-conten">{{ i.area_ant }}</div>
+                            </td>
+                            <td>
+                                <div class="tabla-conten">{{ i.area_act }}</div>
+                            </td>
+                            <td>
+                                <a onclick=" return abrir_modal('{% url 'EditarMovimiento' i.pk %}')"
+                                   class="badge badge-pill badge-primary">
+                                    <i class="fa fa-edit" title="Editar Movimiento" style="color: white;"></i>
+                                </a>
+                                <a href="{% url 'MovimientoNomina' i.pk %}"
+                                   class="badge badge-pill badge-secondary" style="background-color: orangered">
+                                    <i class="fa fa-file-text" title="Movimiento de Nómina"></i>
+                                </a>
+                                <a href="{% url 'ExportarSuplementoContrato' i.pk %}"
+                                   class="badge badge-pill badge-secondary" style="background-color: darkgreen">
+                                    <i class="fa fa-file-text" title="Suplemento al contrato"></i>
+                                </a>
+
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            {% endif %}
+
+            </div>
+
+        </div>
+    </div>
+
+    <div id="delete" class="modal fade" role="dialog"></div>
+
+    <!--div id="popup" class="modal fade" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5><strong>Reporte General de Movimientos</strong></h5>
+                    <button type="button" class="close" data-dismiss="modal">x</button>
+                </div>
+                <div class="modal-body" >
+                    {% csrf_token %}
+                    <div class="panel-body">
+                        <div class="panel panel-default">
+                            <div class="row" style="margin-bottom: 20px;">
+                                {% if error_add %}
+                                    <div class="alert alert-danger"
+                                         style="width: 100%; text-align: center; margin: 0 auto; padding: 0 10px; border-radius: 0;">
+                                        <p>{{ error_add }}</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <p style="text-align: center">Seleccione rango de fecha para generar el reporte.</p>
+                        <form method="post" action="{% url 'ExportarReporteMovimientos' %}">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col"></div>
+                                <div class="col-sm-2" style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="fecha_inic">Desde:</label>
+                                </div>
+                                <div class="col-sm-3" style="padding-left: 5px;">
+                                    <input name="fecha_inic" type="text" class="form-control" id="fecha_inic" required>
+                                </div>
+                                <div class="col-sm-2" style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="fecha_inic">Hasta:</label>
+                                </div>
+                                <div class="col-sm-3" style="padding-left: 0;">
+                                    <input name="fecha_fin" type="text" class="form-control" id="fecha_fin"
+                                           title="Fecha Fin" required>
+                                </div>
+                                <div class="col"></div>
+                            </div>
+                            <br>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary" style="text-transform: none;">Generar
+                                    Reporte
+                                </button>
+                                <button type="button" class="btn btn-danger" style="text-transform: none;"
+                                        data-dismiss="modal">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div-->
+{% endblock %}
+{% block javascript %}
+    <script type="text/javascript">
+
+        var getDate = function (input) {
+            return new Date(input.date.valueOf());
+        };
+
+        $("#fecha_inic").prop("readonly", true).datepicker({
+            uiLibrary: 'bootstrap4',
+            language: 'es',
+            format: 'yyyy-mm-dd'
+        });
+
+        $("#fecha_fin").prop("readonly", true).datepicker({
+            uiLibrary: 'bootstrap4',
+            language: 'es',
+            format: 'yyyy-mm-dd'
+        });
+
+        $('#fecha_inic').datepicker({
+            startDate: '+5d',
+            endDate: '+35d'
+        }).on('changeDate',
+            function (selected) {
+                $('#fecha_fin').datepicker('setStartDate', getDate(selected));
+            });
+
+        $('#fecha_fin').datepicker({
+            startDate: '+6d',
+            endDate: '+36d'
+        }).on('changeDate',
+            function (selected) {
+                $('#fecha_inic').datepicker('setEndDate', getDate(selected));
+            });
+
+    </script>
+{% endblock %}
