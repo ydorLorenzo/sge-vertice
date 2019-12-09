@@ -1,0 +1,210 @@
+{% extends "base_pren15.html" %}
+{% load static %}
+{% block title %}Catalogo{% endblock %}
+{% block styles %}
+    <style type="text/css">
+        #tabla_cat_paginate a:hover {
+            background-color: #007bff !important;
+            color: white;
+            border: solid 1px;
+            border-color: #0062cc !important;
+            transition: color .25s ease-in-out, background-color .25s ease-in-out, border-color .25s ease-in-out, border .25s ease-in-out;
+        }
+
+        div.container {
+            max-width: 100%
+        }
+
+        table.dataTable td, table.dataTable th {
+            font-size: 14px;
+            padding: 2px !important;
+
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <!-- Page Content Holder -->
+    <div id="content" style="padding-top: 100px;">
+        <div class=content align="center"><h5 style="font-weight: bold">Catalogo del Plano
+            <br>{{ pk }} {{ num }}
+        </h5>
+        </div>
+
+        <br>
+        <div class="container" role="main" style="width: 900px; font-size: small">
+            <div style="text-align: right; font-weight: bold">
+
+                <a aria-expanded="false" class="btn btn-sm btn-success" data-toggle="modal" href="#modal_add_cat"
+                   style="font-size: smaller; font-weight: bold">
+                    <i class="fa fa-plus"></i> Adicionar
+                </a>
+
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <table id="tabla_cat" class="display" cellspacing="0" width="100%" style="font-size: 12px">
+                        <thead>
+                        <tr align="center">
+                            <th style="width: 10px">pk</th>
+                            <th style="width: 10px">No</th>
+                            <th>Formato</th>
+                            <th>Horas Creadas</th>
+                            <th>Valor Retenido</th>
+                            <th>Valor</th>
+                            <th>Valor Total</th>
+                            <th>Accion</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for i in list_cat %}
+                            <td align="center">{{ i.pk }}</td>
+                            <td align="center">{{ i.plano.num }}</td>
+                            {% if i.cant > 1 %}
+                                {% if i.porciento == '0.3' %}
+                                    <td align="center" style="width: 25px">{{ i.cant }} {{ i.formato }} (30%)</td>
+                                {% elif i.porciento == '0.7' %}
+                                    <td align="center" style="width: 25px">{{ i.cant }} {{ i.formato }} (70%)</td>
+                                {% else %}
+                                    <td align="center" style="width: 25px">{{ i.cant }} {{ i.formato }} (100%)</td>
+                                {% endif %}
+                            {% else %}
+                                {% if i.porciento == '0.3' %}
+                                    <td align="center" style="width: 25px">{{ i.formato }} (30%)</td>
+                                {% elif i.porciento == '0.7' %}
+                                    <td align="center" style="width: 25px">{{ i.formato }} (70%)</td>
+                                {% else %}
+                                    <td align="center" style="width: 25px">{{ i.formato }} (100%)</td>
+                                {% endif %}
+                            {% endif %}
+                            <td align="center">{{ i.horas_creadas }}</td>
+                            <td align="center">{{ i.valor_retenido }}</td>
+                            <td align="center">{{ i.valor }}</td>
+                            <td align="center">{{ i.valor_total }}</td>
+                            <td width="60">
+                                <div class="icon-acciones" align="center">
+                                    {% if delete %}
+                                        <!-- Aqui se verifica si el usuario tiene permiso de eliminar Plano -->
+                                        <a onclick=" return abrir_modal('{% url 'eliminarCatalogo' i.pk %}')"
+                                           class="badge badge-pill badge-danger">
+                                            <i class="fa fa-trash-o" title="Eliminar Catalogo"
+                                               style="color: white;"></i>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            </tr>
+
+                        {% endfor %}
+                        </tbody>
+                        <tfoot>
+                        <th style="padding: 6px 6px !important;">PK</th>
+                        <th style="padding: 6px 6px !important;">No</th>
+                        <th style="padding: 6px 6px !important;">Formato</th>
+                        <th style="padding: 6px 6px !important;">Horas Creadas</th>
+                        <th style="padding: 6px 6px !important;">Valor Retenido</th>
+                        <th style="padding: 6px 6px !important;">Valor</th>
+                        <th style="padding: 6px 6px !important;">Valor Total</th>
+                        <td></td>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div id="modal_add_cat" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <form id="formularioCat" method="POST" role="form" action="{% url 'adicionarCatalogo' pk %}">
+                    <div class="modal-header">
+                        <h6><span style="font-weight: bold;">Adicionar Plano al Catalogo: {{ plano.num }}</span></h6>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body mio">
+                        {% csrf_token %}
+                        <div class="panel panel-default">
+                            <p></p>
+                            <div class="row">
+                                <div class="col-sm-2"><strong> Formato:</strong>{{ form.formato }}</div>
+                                <div class="col-sm-2"><strong> Cantidad:</strong>{{ form.cant }}</div>
+                                <div class="col-sm-2"><strong> Porciento:</strong>{{ form.porciento }}</div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-sm-12"><strong> Nombre:</strong>{{ plano.nombre }}</div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-sm-6"><strong> Recurso:</strong>{{ plano.trabajador }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="col-lg-12 text-right" style="font-size: smaller">
+                            <input id="enviar" type="submit" class="btn btn-sm btn-primary" name="submit"
+                                   value="Guardar"
+                                   style="font-weight: bold">
+                            <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"
+                                    style="font-weight: bold">
+                                Cancelar
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="delete" class="modal fade" role="dialog"></div>
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+            // DataTable
+            var table = $('#tabla_cat').DataTable({
+                "language": {
+                    processing: "Procesando...",
+                    search: "Buscar:",
+                    lengthMenu: "Mostrar _MENU_ registros",
+                    info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    infoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    infoFiltered: "(filtrado de un total de _MAX_ registros)",
+                    infoPostFix: "",
+                    loadingRecords: "Cargando...",
+                    zeroRecords: "No se encontraron resultados",
+                    emptyTable: "Ningún dato disponible en esta tabla",
+                    paginate: {
+                        first: "Último",
+                        previous: "Anterior",
+                        next: "Siguiente",
+                        last: "Último"
+                    }
+                }
+            });
+            // Setup - add a text input to each footer cell
+            $('#tabla_cat').find('tfoot th').each(function () {
+                var title = $(this).text();
+                $(this).html('<input class="form-control" type="text" style="font-size: smaller" placeholder="Buscar ' + title + '"/>');
+            });
+
+            // Apply the search
+            table.columns().every(function () {
+                var that = this;
+
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
+        });
+
+
+    </script>
+{% endblock %}

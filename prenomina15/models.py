@@ -100,6 +100,21 @@ class Plano(models.Model):
     tipo_doc = models.CharField(max_length=2, blank=False, default='PL', editable=True, choices=DOC_OPT)
 
 
+class Catalogo(models.Model):
+    plano = models.ForeignKey(Plano, on_delete=models.CASCADE, default=0)
+    cant = models.PositiveIntegerField(default=1, blank=False, null=False)
+    formato = models.ForeignKey(Formato, on_delete=models.PROTECT, null=False, blank=False, default='')
+    PORCIENTO_OPT = (('1.0', '100%'), ('0.7', '70%'), ('0.3', '30%'))
+    porciento = models.CharField(choices=PORCIENTO_OPT, default='', max_length=3)
+    horas_creadas = models.DecimalField(max_digits=5, decimal_places=2, editable=False, default=0.00)
+    horas_creadas_real = models.DecimalField(max_digits=5, decimal_places=2, editable=False, default=0.00)
+    valor_retenido = models.DecimalField(max_digits=6, decimal_places=2, editable=False, default=0.00)
+    valor_retenido_real = models.DecimalField(max_digits=6, decimal_places=2, editable=False, default=0.00)
+    valor = models.DecimalField(max_digits=6, decimal_places=2, default=0.00)
+    valor_real = models.DecimalField(max_digits=6, decimal_places=2, default=0.00)
+    valor_total = models.DecimalField(max_digits=6, decimal_places=2, editable=False, default=0.00)
+    valor_total_real = models.DecimalField(max_digits=6, decimal_places=2, editable=False, default=0.00)
+
 class Revision(models.Model):
     plano = models.ForeignKey(Plano, on_delete=models.CASCADE, default=0)
     no_rev = models.IntegerField(editable=False)

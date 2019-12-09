@@ -1,5 +1,5 @@
 from django import forms
-from .models import Obra, Plano, Objeto, Revision
+from .models import Obra, Plano, Objeto, Revision, Catalogo
 from django.core.cache import cache
 
 
@@ -39,6 +39,17 @@ class PlanoForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(PlanoForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+
+
+class CatalogoForm(forms.ModelForm):
+    class Meta:
+        model = Catalogo
+        fields = ['cant', 'formato', 'porciento']
+
+    def __init__(self, *args, **kwargs):
+        super(CatalogoForm, self).__init__(*args, **kwargs)
         for field in iter(self.fields):
             self.fields[field].widget.attrs.update({'class': 'form-control'})
 

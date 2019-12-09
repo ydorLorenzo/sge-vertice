@@ -227,8 +227,8 @@
                                             <i class="fa fa-edit" title="Editar Plano"
                                                style="color: white;"></i>
                                         </a>
-                                        <a href="#"
-                                           class="badge badge-pill badge-primary">
+                                          <a href="{% url 'gestionarCatalogo' i.pk %}"
+                                             class="badge badge-pill badge-primary">
                                             <i class="fa fa-folder" title="Gestionar Catalogo"
                                                style="color: white;"></i>
                                         </a>
@@ -250,8 +250,8 @@
                                         </a>
                                       {% endif %}
                                       {% if delete %} <!-- Aqui se verifica si el usuario tiene permiso de eliminar Plano -->
-                                        <a onclick=" return abrir_modal('{% url 'eliminarPlano' i.pk %}')"
-                                           class="badge badge-pill badge-danger">
+                                          <a onclick=" return abrir_modal('{% url 'eliminarPlano' i.pk %}')"
+                                             class="badge badge-pill badge-danger">
                                             <i class="fa fa-trash-o" title="Eliminar Plano"
                                                style="color: white;"></i>
                                         </a>
