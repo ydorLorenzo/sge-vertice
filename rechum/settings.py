@@ -96,13 +96,11 @@ WSGI_APPLICATION = 'rechum.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'rechum1',
-        #'HOST': '192.168.1.95',
-        #'USER': 'srv.rechum',
-        #'PASSWORD': 'ZIMR8jHgMO',
-        'HOST': '127.0.0.1',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
+        # 'NAME': 'rechum',
+        'NAME': 'rechum_dev',
+        'HOST': '192.168.1.95',
+        'USER': 'srv.rechum',
+        'PASSWORD': 'ZIMR8jHgMO',
         'PORT': '5432'
     }
 }
