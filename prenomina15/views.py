@@ -2,7 +2,8 @@ from django.core.exceptions import FieldError
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .form import *
-from .models import Obra, Plano, Objeto, SalarioMax, Esp, Persona, Plan, Corte, Especial, Especialidad, Area, Trab
+from .models import Obra, Plano, Objeto, SalarioMax, Esp, Persona, Plan, Corte, Especial, Especialidad, Area, Trab, \
+    Catalogo
 import json
 from entrada_datos.models import Actividad
 from decimal import Decimal, ROUND_HALF_UP
@@ -685,6 +686,140 @@ def editar_revision(request, pk):
         return render(request, 'Listado_Revisiones.html', context)
 
 
+@permission_required('prenomina15.change_plano', 'home_principal')
+def gestionar_cat(request, pk):
+    obras = listar_obra(request)
+    list_cat = Catalogo.objects.filter(plano_id=pk)
+    plano = Plano.objects.get(id=pk)
+    form = CatalogoForm(request.POST or None)
+
+    context = {'form': form,
+               'obras': obras,
+               'list_cat': list_cat,
+               'plano': plano,
+               'pk': pk}
+    context = context_add_perm(request, context, 'prenomina15', 'plano')
+    return render(request, 'Gestionar_Catalogos.html', context)
+
+
+@permission_required('prenomina15.delete_plano', 'home_principal')
+def eliminar_cat(request, pk):
+    obras = listar_obra(request)
+    catalogo = Catalogo.objects.get(id=pk)
+    plano = Plano.objects.get(id=catalogo.plano_id)
+    list_cat = Catalogo.objects.filter(plano_id=catalogo.plano)
+    form = CatalogoForm(request.POST or None)
+    if request.method == 'GET':
+        context = {'object': catalogo}
+        return render(request, 'Eliminar_Catalogo.html', context)
+    else:
+        from django.db import IntegrityError
+        try:
+            plano.cant -= catalogo.cant
+            plano.horas_creadas -= catalogo.horas_creadas
+            plano.valor -= catalogo.valor
+            plano.valor_retenido -= catalogo.valor_retenido
+            plano.valor_total -= catalogo.valor_total
+            plano.horas_creadas_real -= catalogo.horas_creadas_real
+            plano.valor_real -= catalogo.valor_real
+            plano.valor_retenido_real -= catalogo.valor_retenido_real
+            plano.valor_total_real -= catalogo.valor_total_real
+            plano.save()
+            catalogo.delete()
+        except IntegrityError:
+            pk = plano.id
+            context = {'form': form,
+                       'obras': obras,
+                       'list_cat': list_cat,
+                       'plano': plano,
+                       'pk': pk}
+            context = context_add_perm(request, context, 'prenomina15', 'plano')
+            return render(request, 'Gestionar_Catalogos.html', context)
+    pk = plano.id
+    context = {'form': form,
+               'obras': obras,
+               'list_cat': list_cat,
+               'plano': plano,
+               'pk': pk}
+    context = context_add_perm(request, context, 'prenomina15', 'plano')
+    return render(request, 'Gestionar_Catalogos.html', context)
+
+
+@permission_required('prenomina15.change_plano', 'home_principal')
+def adicionar_cat(request, pk):
+    obras = listar_obra(request)
+    plano = Plano.objects.get(id=pk)
+    form = CatalogoForm(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            sal_trab = SalarioMax.objects.filter(tipo=plano.obra.tipo,
+                                                 grupo_esc=plano.trabajador.escala_salarial).get()
+            sal_obra = SalarioMax.objects.filter(tipo=plano.obra.tipo, grupo_esc=plano.obra.gesc).get()
+            coe = sal_obra.sal / sal_trab.sal
+            horas_creadas_real = 0
+            valor_plano = 0
+            valor_retenido = 0
+            valor_total = 0
+            esp_factor = plano.especialidad.factor
+            for_factor = form.cleaned_data['formato'].factor
+            cant = form.cleaned_data['cant']
+            horas = (plano.obra.horas_a2 * coe).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+            horas_esp = (horas * esp_factor).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+            horas_creadas = ((horas_esp * for_factor).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP) * Decimal(
+                form.cleaned_data['porciento'])).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+            tarifa = Decimal(sal_trab.sal / Decimal(190.6)).quantize(Decimal('.000001'))
+            valor_real = (horas_creadas.quantize(Decimal('.01')) * tarifa).quantize(Decimal('.01'))
+            valor_retenido_real = ((horas_creadas.quantize(Decimal('.01')) * tarifa) * Decimal(0.2)).quantize(
+                Decimal('.01'))
+            valor_total_real = valor_real - valor_retenido_real
+            if cant == 1:
+                horas_creadas_real = horas_creadas
+                valor_plano = valor_real
+                valor_retenido = valor_retenido_real
+                valor_total = valor_total_real
+            else:
+                while cant != 0:
+                    horas_creadas_real += horas_creadas
+                    valor_plano += valor_real
+                    valor_retenido += valor_retenido_real
+                    valor_total += valor_total_real
+                    cant -= 1
+            catalogo = Catalogo(
+                plano=plano,
+                formato=form.cleaned_data['formato'],
+                cant=form.cleaned_data['cant'],
+                porciento=form.cleaned_data['porciento'],
+                horas_creadas=horas_creadas_real,
+                valor=Decimal(valor_plano),
+                valor_retenido=valor_retenido,
+                valor_total=valor_total,
+                horas_creadas_real=horas_creadas,
+                valor_real=valor_real,
+                valor_retenido_real=valor_retenido_real,
+                valor_total_real=valor_total_real
+            )
+            catalogo.save()
+            plano.cant += catalogo.cant
+            plano.horas_creadas += catalogo.horas_creadas
+            plano.valor += catalogo.valor
+            plano.valor_retenido += catalogo.valor_retenido
+            plano.valor_total += catalogo.valor_total
+            plano.horas_creadas_real += catalogo.horas_creadas_real
+            plano.valor_real += catalogo.valor_real
+            plano.valor_retenido_real += catalogo.valor_retenido_real
+            plano.valor_total_real += catalogo.valor_total_real
+            plano.save()
+    list_cat = Catalogo.objects.filter(plano_id=pk)
+    context = {'form': form,
+               'obras': obras,
+               'list_cat': list_cat,
+               'plano': plano,
+               'pk': pk}
+    context = context_add_perm(request, context, 'prenomina15', 'plano')
+    return render(request, 'Gestionar_Catalogos.html', context)
+
+
+
 @permission_required('prenomina15.delete_obra', 'home_principal')
 def eliminar_obra(request, pk):
     user_id = User.objects.get(username=request.user).id
@@ -736,6 +871,7 @@ def eliminar_plano(request, pk):
     user_id = User.objects.get(username=request.user).id
     obras = listar_obra(request)
     plano = Plano.objects.get(id=pk)
+    obra = Obra.objects.get(id=plano.obra_id)
     if request.method == 'GET':
         context = {'object': plano}
         return render(request, 'Eliminar_Plano.html', context)
@@ -750,7 +886,7 @@ def eliminar_plano(request, pk):
                 obra__usuarios=user_id)
             form = PlanoForm(None)
             formrev = RevisionForm(None)
-            context = {'list_planos': cal, 'form': form, 'obras': obras, 'formrev': formrev,
+            context = {'list_planos': cal, 'form': form, 'obras': obras, 'obra': obra, 'formrev': formrev,
                        'errores': 'Imposible eliminar el Plano porque tiene datos asociados.'}
             context = context_add_perm(request, context, 'prenomina15', 'plano')
             return render(request, 'Gestionar_Plano.html', context)
