@@ -1,67 +1,72 @@
-from django.contrib.auth.decorators import permission_required
-from django.shortcuts import render, redirect
-from django.forms import inlineformset_factory
-from .forms import *
-from .filters import TrabajadorFilter
-from .models import *
-from datetime import datetime
-from django.http import HttpResponse
 import json
+import os
+from datetime import datetime
 from decimal import Decimal
+
+from django.contrib.auth.decorators import permission_required
+from django.core.exceptions import ObjectDoesNotExist
+from django.forms import inlineformset_factory
+from django.http import HttpResponse
+from django.shortcuts import render, redirect
 from django.template.loader import get_template
 from xhtml2pdf import pisa
+
 from plantilla.models import Plantilla
-from django.core.exceptions import ObjectDoesNotExist
 from rechum import settings
-import os
+from .filters import TrabajadorFilter
+from .forms import *
+from .models import *
 
 check = False
 
-@permission_required('ges_trab',login_url='home_principal')
+
+@permission_required('ges_trab', login_url='home_principal')
 def search(request):
     user_list = User.objects.all()
     user_filter = UserFilter(request.GET, queryset=user_list)
     return render(request, 'search/user_list.html', {'filter': user_filter})
 
-@permission_required('ges_trab',login_url='home_principal')
+
+@permission_required('ges_trab', login_url='home_principal')
 def listar_movimiento(request):
     list_movimiento = Movimiento.objects.all()
     fecha_inicio = request.GET.get('fecha_inicio')
     fecha_fin = request.GET.get('fecha_fin')
 
-    if (fecha_inicio and fecha_fin):
+    if fecha_inicio and fecha_fin:
         fecha_inicio_convert = datetime.strptime(fecha_inicio, '%d/%m/%Y').strftime('%Y-%m-%d')
         fecha_fin_convert = datetime.strptime(fecha_fin, '%d/%m/%Y').strftime('%Y-%m-%d')
         list_movimiento = Movimiento.objects.filter(fecha__range=[fecha_inicio_convert, fecha_fin_convert])
 
-    elif (not fecha_fin and fecha_inicio):
+    elif not fecha_fin and fecha_inicio:
 
         fecha_inicio_convert = datetime.strptime(fecha_inicio, '%d/%m/%Y').strftime('%Y-%m-%d')
         list_movimiento = Movimiento.objects.filter(fecha__range=[fecha_inicio_convert, '2200-01-01'])
-    elif (fecha_fin and not fecha_inicio):
+    elif fecha_fin and not fecha_inicio:
         fecha_fin_convert = datetime.strptime(fecha_fin, '%d/%m/%Y').strftime('%Y-%m-%d')
         list_movimiento = Movimiento.objects.filter(fecha__range=['1970-01-01', fecha_fin_convert])
     else:
         list_movimiento = Movimiento.objects.all()
     return render(request, 'Listar_Movimiento.html', {'list_movimiento': list_movimiento})
 
-@permission_required('ges_trab',login_url='home_principal')
+
+@permission_required('ges_trab', login_url='home_principal')
 def listar_disponible(request):
     list_disponible = Disponible.objects.all()
     fecha_inicio = request.GET.get('fecha_inicio')
     fecha_fin = request.GET.get('fecha_fin')
 
-    if (fecha_inicio and fecha_fin):
+    if fecha_inicio and fecha_fin:
 
         fecha_inicio_convert = datetime.strptime(fecha_inicio, '%d/%m/%Y').strftime('%Y-%m-%d')
         fecha_fin_convert = datetime.strptime(fecha_fin, '%d/%m/%Y').strftime('%Y-%m-%d')
         list_disponible = Disponible.objects.filter(fecha__range=[fecha_inicio_convert, fecha_fin_convert])
 
-    elif (not fecha_fin and fecha_inicio):
+    elif not fecha_fin and fecha_inicio:
 
         fecha_inicio_convert = datetime.strptime(fecha_inicio, '%d/%m/%Y').strftime('%Y-%m-%d')
         list_disponible = Disponible.objects.filter(fecha__range=[fecha_inicio_convert, '2200-01-01'])
-    elif (fecha_fin and not fecha_inicio):
+    elif fecha_fin and not fecha_inicio:
         fecha_fin_convert = datetime.strptime(fecha_fin, '%d/%m/%Y').strftime('%Y-%m-%d')
         list_disponible = Disponible.objects.filter(fecha__range=['1970-01-01', fecha_fin_convert])
     else:
@@ -69,19 +74,22 @@ def listar_disponible(request):
 
     return render(request, 'Listar_Disponibilidad.html', {'list_disponible': list_disponible})
 
-@permission_required('ges_trab',login_url='home_principal')
+
+@permission_required('ges_trab', login_url='home_principal')
 def gestionar_cpl(request):
     list_cpl = Cpl.objects.all()
     context = {'list_cpl': list_cpl}
     return render(request, 'Gestionar_cpl.html', context)
 
-@permission_required('ges_trab',login_url='home_principal')
+
+@permission_required('ges_trab', login_url='home_principal')
 def gestionar_nucleo_familiar(request):
     list_nucleo_fam = NucleoFamiliar.objects.all()
     context = {'list_nucleo_fam': list_nucleo_fam}
     return render(request, 'Gestionar_Nucleo_Familiar.html', context)
 
-@permission_required('ges_trab',login_url='home_principal')
+
+@permission_required('ges_trab', login_url='home_principal')
 def gestionar_trabajador(request):
     list_trabajador = Trabajador.objects.all().select_related("unidad_org").select_related(
         "departamento").select_related("cargo").select_related("escala_salarial").select_related(
@@ -108,30 +116,34 @@ def gestionar_trabajador(request):
 
     return render(request, 'Gestionar_Trabajador.html', {'trabajador_filter': trabajador_filter})
 
-@permission_required('ges_trab',login_url='home_principal')
+
+@permission_required('ges_trab', login_url='home_principal')
 def gestionar_bajatrabajador(request):
     list_baja = Baja.objects.all()
     fecha_inicio = request.GET.get('fecha_inicio')
     fecha_fin = request.GET.get('fecha_fin')
 
-    if (fecha_inicio and fecha_fin):
+    if fecha_inicio and fecha_fin:
         fecha_inicio_convert = datetime.strptime(fecha_inicio, '%d/%m/%Y').strftime('%Y-%m-%d')
         fecha_fin_convert = datetime.strptime(fecha_fin, '%d/%m/%Y').strftime('%Y-%m-%d')
         list_baja = Baja.objects.filter(fecha_alta__range=[fecha_inicio_convert, fecha_fin_convert])
 
-    elif (not fecha_fin and fecha_inicio):
+    elif not fecha_fin and fecha_inicio:
 
         fecha_inicio_convert = datetime.strptime(fecha_inicio, '%d/%m/%Y').strftime('%Y-%m-%d')
         list_baja = Baja.objects.filter(fecha_alta__range=[fecha_inicio_convert, '2200-01-01'])
-    elif (fecha_fin and not fecha_inicio):
+    elif fecha_fin and not fecha_inicio:
         fecha_fin_convert = datetime.strptime(fecha_fin, '%d/%m/%Y').strftime('%Y-%m-%d')
         list_baja = Baja.objects.filter(fecha_alta__range=['1970-01-01', fecha_fin_convert])
     else:
         list_baja = Baja.objects.all()
     return render(request, 'Gestionar_Baja.html', {'list_baja': list_baja})
 
-@permission_required('ges_trab',login_url='home_principal')
-# NucleoFamiliarFormSet = inlineformset_factory(Trabajador, NucleoFamiliar, fields=('parentesco','fecha_nac','enfermedades','salario_dev','vinc_lab'),form=NucleoFamiliarForm, extra=3, can_delete=True)
+
+@permission_required('ges_trab', login_url='home_principal')
+# NucleoFamiliarFormSet = inlineformset_factory(Trabajador, NucleoFamiliar,
+#                         fields=('parentesco','fecha_nac','enfermedades','salario_dev','vinc_lab'),
+#                         form=NucleoFamiliarForm, extra=3, can_delete=True)
 def adicionar_trabajador_inline(request, trabajador_id=None):
     globals()['check'] = False
     if trabajador_id:
@@ -176,16 +188,16 @@ def adicionar_trabajador_inline(request, trabajador_id=None):
                 fecha_nacimiento = '20' + ci[0: 2] + '-' + ci[2: 4] + '-' + ci[4: 6]
             trabajador.fecha_nac = fecha_nacimiento
             # Esto es para decrementar la disponibilidad de un cargo
-            if check == False:
+            if not check:
                 cargo_id = (form.cleaned_data['cargo'])
                 departamento_id = (form.cleaned_data['departamento'])
                 plantilla = Plantilla.objects.filter(cargo_id=cargo_id, departamento_id=departamento_id).get()
                 plantilla.disponibles = plantilla.disponibles - 1
                 plantilla.save()
             # Esto es para el salario por categoria cientifica
-            if ((form.cleaned_data['cat_cient']) == '2'):
+            if form.cleaned_data['cat_cient'] == '2':
                 trabajador.sal_cat_cient = 80
-            elif ((form.cleaned_data['cat_cient']) == '3'):
+            elif form.cleaned_data['cat_cient'] == '3':
                 trabajador.sal_cat_cient = 150
             else:
                 trabajador.sal_cat_cient = 0
@@ -199,7 +211,7 @@ def adicionar_trabajador_inline(request, trabajador_id=None):
             j_laboral = (form.cleaned_data['j_laboral'])
             escala_salarial = (form.cleaned_data['escala_salarial'])
             categoria = (form.cleaned_data['categoria'])
-            if j_laboral == False:
+            if not j_laboral:
                 trabajador.salario_total = salario_escala + incre_res + cies + sal_plus + sal_cond_anor + antiguedad + trabajador.sal_cat_cient
             else:
                 trabajador_salario_jornada_laboral = (salario_escala / Decimal(190.60)) * 208
@@ -274,7 +286,8 @@ def adicionar_trabajador_inline(request, trabajador_id=None):
         form = TrabajadorForm(instance=trabajador)
     return render(request, 'Adicionar_Trabajador.html', {'inline': inline, 'form': form})
 
-@permission_required('ges_trab',login_url='home_principal')
+
+@permission_required('ges_trab', login_url='home_principal')
 def bajaeliminar(request, pk):
     trabajador = Trabajador.objects.get(pk=pk)
     # form = BajaForm(request.POST or None)
@@ -318,7 +331,8 @@ def bajaeliminar(request, pk):
         return redirect('GestionarTrabajador')
         # return render(request, 'Baja_Trabajador.html', {'trabajdor':trabajador})
 
-@permission_required('ges_trab',login_url='home_principal')
+
+@permission_required('ges_trab', login_url='home_principal')
 def editar_movimiento(request, pk):
     movimiento = Movimiento.objects.get(pk=pk)
     # form=MovimientoForm(request.POST or None,instance=movimiento)
@@ -335,7 +349,8 @@ def editar_movimiento(request, pk):
         return redirect('ListarMovimiento')
     return render(request, 'Editar_Movimiento.html', {'movimiento': movimiento})
 
-@permission_required('ges_trab',login_url='home_principal')
+
+@permission_required('ges_trab', login_url='home_principal')
 def editar_baja(request, pk):
     baja = Baja.objects.get(pk=pk)
 
@@ -349,12 +364,14 @@ def editar_baja(request, pk):
         return redirect('GestionarBaja')
     return render(request, 'Editar_Baja.html', {'baja': baja})
 
-@permission_required('ges_trab',login_url='home_principal')
+
+@permission_required('ges_trab', login_url='home_principal')
 def eliminar_familiar(request, pk):
     nucleof = NucleoFamiliar.objects.filter(pk=pk)
     nucleof.delete()
 
-@permission_required('ges_trab',login_url='home_principal')
+
+@permission_required('ges_trab', login_url='home_principal')
 def daralta(request, pk):
     baja = Baja.objects.get(pk=pk)
     if request.method == 'GET':
@@ -389,7 +406,8 @@ def daralta(request, pk):
         return redirect('AdicionarTrabajador', {'form': form})
         # return render(request, 'Adicionar_Trabajador.html', {'form': form})
 
-@permission_required('ges_trab',login_url='home_principal')
+
+@permission_required('ges_trab', login_url='home_principal')
 def salarioescala_por_escalasarial(request, pk):
     escalasalarial = EscalaSalarial.objects.filter(pk=pk)
     datos = [{'salario_escala': str(salarioescala.salario_escala), 'tarifa_horaria': str(salarioescala.tarifa_horaria),
@@ -397,7 +415,8 @@ def salarioescala_por_escalasarial(request, pk):
     response = [{"success": 1, "result": datos}]
     return HttpResponse(json.dumps(response), content_type='application/json')
 
-@permission_required('ges_trab',login_url='home_principal')
+
+@permission_required('ges_trab', login_url='home_principal')
 def cargos_disponibles(request, departamento_id):
     plantilla = Plantilla.objects.filter(departamento_id=departamento_id).exclude(disponibles=0)
 
@@ -407,7 +426,8 @@ def cargos_disponibles(request, departamento_id):
     return HttpResponse(json.dumps(response), content_type='application/json')
     # return HttpResponse(json.dumps(response), content_type='application/json')
 
-@permission_required('ges_trab',login_url='home_principal')
+
+@permission_required('ges_trab', login_url='home_principal')
 def calificacion_especialidad(request, calificacion_id):
     especialidad = Especialidad.objects.filter(calificacion_id=calificacion_id)
 
@@ -416,7 +436,8 @@ def calificacion_especialidad(request, calificacion_id):
     return HttpResponse(json.dumps(response), content_type='application/json')
     # return HttpResponse(json.dumps(response), content_type='application/json')
 
-@permission_required('ges_trab',login_url='home_principal')
+
+@permission_required('ges_trab', login_url='home_principal')
 def check_codigo(request):
     is_available = "false"
     if check is True:
@@ -430,7 +451,8 @@ def check_codigo(request):
             is_available = "true"
     return HttpResponse(is_available)
 
-@permission_required('ges_trab',login_url='home_principal')
+
+@permission_required('ges_trab', login_url='home_principal')
 def check_usuario(request):
     is_available = "false"
     if check is True:
@@ -446,7 +468,8 @@ def check_usuario(request):
             is_available = "true"
     return HttpResponse(is_available)
 
-@permission_required('ges_trab',login_url='home_principal')
+
+@permission_required('ges_trab', login_url='home_principal')
 def check_ci(request):
     is_available = "false"
     if check is True:
@@ -463,7 +486,8 @@ def check_ci(request):
             is_available = "true"
     return HttpResponse(is_available)
 
-@permission_required('ges_trab',login_url='home_principal')
+
+@permission_required('ges_trab', login_url='home_principal')
 def check_plantilla(request):
     is_available = "false"
 
@@ -651,7 +675,8 @@ def request_report_baja(fecha_inic, fecha_fin):
           "ges_trab_baja.causa, ges_trab_baja.especialidad_id, " \
           "ges_trab_baja.categoria,ges_trab_baja.fecha_baja " \
           "FROM public.ges_trab_baja" \
-          " WHERE ges_trab_baja.fecha_baja BETWEEN " + "'" + fecha_inic + "'" + "::DATE AND " + "'" + fecha_fin + "'" + "::DATE " \
+          " WHERE ges_trab_baja.fecha_baja BETWEEN " + "'" + fecha_inic + "'" + "::DATE AND " + \
+          "'" + fecha_fin + "'" + "::DATE " \
                                                                                                                         "ORDER BY ges_trab_baja.fecha_baja ASC;"
     result = Baja.objects.raw(sql)
     trabajadores = []
