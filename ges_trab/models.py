@@ -1,3 +1,4 @@
+from django.core.validators import MinValueValidator
 from django.urls import reverse
 
 from adm.models import *
@@ -74,7 +75,8 @@ class Trabajador(models.Model):
     POR_CIES_OPT = (('0', '0%'), ('1', '30%'), ('2', '50%'))
     por_cies = models.CharField(max_length=3, choices=POR_CIES_OPT, verbose_name='% CIES', default=POR_CIES_OPT[0])
     cies = models.DecimalField(max_digits=5, decimal_places=2, verbose_name='CIES')
-    sal_plus = models.DecimalField(max_digits=5, decimal_places=2, verbose_name='Salario plus', default=0.00)
+    sal_plus = models.DecimalField(max_digits=5, decimal_places=2, verbose_name='Salario plus', default=0.00,
+                                   validators=[MinValueValidator(0.00)])
     sal_cond_anor = models.DecimalField(max_digits=5, decimal_places=2, verbose_name='Salario condiciones anormales',
                                         default=0.00)
     POR_ANTI_OPT = (('0', '0%'), ('1', '5%'), ('2', '10%'))
