@@ -50,13 +50,11 @@ INSTALLED_APPS = [
     'pr3',
     'entrada_datos',
     'prenomina15',
-    'principal',
-    'guardian'
+    'principal'
 ]
 
 
 AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend',
-                           'guardian.backends.ObjectPermissionBackend',
 ]
 
 MIDDLEWARE = [

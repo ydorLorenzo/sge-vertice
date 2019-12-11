@@ -46,7 +46,7 @@ def home_pren15(request):
 def gestionar_obra(request):
     obras = listar_obra(request)
     user_id = User.objects.get(username=request.user)
-    list_obras = Obra.objects.all().select_related("orden_trab").select_related("gesc").filter(owner=user_id)
+    list_obras = Obra.objects.all().select_related("orden_trab").select_related("gesc").filter(usuarios=request.user.id)
     form = ObraForm(request.POST or None)
     context = {'list_obras': list_obras, 'form': form, 'obras': obras}
     context = context_add_perm(request, context, 'prenomina15', 'obra')
@@ -174,11 +174,14 @@ def adicionar_plano(request):
                 form.cleaned_data['porciento'])).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
             tipo_doc = form.cleaned_data['tipo_doc']
             if tipo_doc == 'MD':
-                horas_creadas = form.cleaned_data['especialidad'].md
-            if tipo_doc == 'LM':
-                horas_creadas = form.cleaned_data['especialidad'].lm
+                horas_creadas = (form.cleaned_data['especialidad'].md * coe).quantize(Decimal('0.01'),
+                                                                                      rounding=ROUND_HALF_UP)
+            if tipo_doc == 'LC':
+                horas_creadas = (form.cleaned_data['especialidad'].lc * coe).quantize(Decimal('0.01'),
+                                                                                      rounding=ROUND_HALF_UP)
             if tipo_doc == 'PR':
-                horas_creadas = form.cleaned_data['especialidad'].pr
+                horas_creadas = (form.cleaned_data['especialidad'].pr * coe).quantize(Decimal('0.01'),
+                                                                                      rounding=ROUND_HALF_UP)
 
             tarifa = Decimal(sal_trab.sal / Decimal(190.6)).quantize(Decimal('.000001'))
             valor_real = (horas_creadas.quantize(Decimal('.01')) * tarifa).quantize(Decimal('.01'))
@@ -478,6 +481,16 @@ def editar_plano(request, pk):
                 horas_esp = (horas * esp_factor).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
                 horas_creadas = ((horas_esp * for_factor).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP) * Decimal(
                     form.cleaned_data['porciento'])).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+                tipo_doc = form.cleaned_data['tipo_doc']
+                if tipo_doc == 'MD':
+                    horas_creadas = (form.cleaned_data['especialidad'].md * coe).quantize(Decimal('0.01'),
+                                                                                          rounding=ROUND_HALF_UP)
+                if tipo_doc == 'LC':
+                    horas_creadas = (form.cleaned_data['especialidad'].lc * coe).quantize(Decimal('0.01'),
+                                                                                          rounding=ROUND_HALF_UP)
+                if tipo_doc == 'PR':
+                    horas_creadas = (form.cleaned_data['especialidad'].pr * coe).quantize(Decimal('0.01'),
+                                                                                          rounding=ROUND_HALF_UP)
                 tarifa = Decimal(sal_trab.sal / Decimal(190.6)).quantize(Decimal('.000001'))
                 valor_real = (horas_creadas.quantize(Decimal('.01')) * tarifa).quantize(Decimal('.01'))
                 valor_retenido_real = ((horas_creadas.quantize(Decimal('.01')) * tarifa) * Decimal(0.2)).quantize(
@@ -532,6 +545,16 @@ def editar_plano(request, pk):
             horas_esp = (horas * esp_factor).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
             horas_creadas = ((horas_esp * for_factor).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP) * Decimal(
                 form.cleaned_data['porciento'])).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+            tipo_doc = form.cleaned_data['tipo_doc']
+            if tipo_doc == 'MD':
+                horas_creadas = (form.cleaned_data['especialidad'].md * coe).quantize(Decimal('0.01'),
+                                                                                      rounding=ROUND_HALF_UP)
+            if tipo_doc == 'LC':
+                horas_creadas = (form.cleaned_data['especialidad'].lc * coe).quantize(Decimal('0.01'),
+                                                                                      rounding=ROUND_HALF_UP)
+            if tipo_doc == 'PR':
+                horas_creadas = (form.cleaned_data['especialidad'].pr * coe).quantize(Decimal('0.01'),
+                                                                                      rounding=ROUND_HALF_UP)
             tarifa = Decimal(sal_trab.sal / Decimal(190.6)).quantize(Decimal('.000001'))
             valor_real = (horas_creadas.quantize(Decimal('.01')) * tarifa).quantize(Decimal('.01'))
             valor_retenido_real = ((horas_creadas.quantize(Decimal('.01')) * tarifa) * Decimal(0.2)).quantize(

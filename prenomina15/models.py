@@ -27,9 +27,9 @@ class Especialidad(models.Model):
     nombre = models.CharField(max_length=150, null=False, blank=False)
     factor = models.DecimalField(max_digits=2, decimal_places=1, null=False, blank=False)
     siglas = models.CharField(max_length=2, null=False, blank=False)
-    md = models.IntegerField(editable=False, blank=True, null=True)
-    lm = models.IntegerField(editable=False, blank=True, null=True)
-    pr = models.IntegerField(editable=False, blank=True, null=True)
+    md = models.DecimalField(max_digits=4, decimal_places=2, null=False, default=0.00, editable=False)
+    lc = models.DecimalField(max_digits=4, decimal_places=2, null=False, default=0.00, editable=False)
+    pr = models.DecimalField(max_digits=4, decimal_places=2, null=False, default=0.00, editable=False)
 
     def __str__(self):
         return self.nombre
@@ -96,7 +96,7 @@ class Plano(models.Model):
     os_vpc = models.CharField(max_length=7, blank=True, null=True, editable=False, default='')
     rev_vpc = models.IntegerField(editable=False, blank=True, null=True)
     rev_pago = models.IntegerField(editable=False, blank=True, null=True)
-    DOC_OPT = (('PL', 'PL'), ('MD', 'MD'), ('LM', 'LM'), ('PR', 'PR'))
+    DOC_OPT = (('PL', 'PL'), ('MD', 'MD'), ('LC', 'LC'), ('PR', 'PR'))
     tipo_doc = models.CharField(max_length=2, blank=False, default='PL', editable=True, choices=DOC_OPT)
 
 
