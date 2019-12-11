@@ -151,6 +151,7 @@
                     <th style="width: 90px">Departamento</th>
                     <th style="width: 20px" class="text-center">Nivel</th>
                     <th style="width: 60px">Especialidad</th>
+                    <th style="width: 20px">Sexo</th>
                     <th style="width: 20px" class="text-center">Fecha Alta</th>
                     <th style="width: 60px">Acciones</th>
                 </tr>
@@ -168,6 +169,7 @@
                         <td>{{ i.departamento }}</td>
                         <td align="center">{{ i.escolaridad }}</td>
                         <td>{{ i.especialidad.nombre }}</td>
+                        <td>{{ i.sexo }}</td>
                         <td align="center">{{ i.fecha_alta|date:"d/m/Y" }}</td>
                         <td>
                             <div class="icon-acciones" align="center">
@@ -214,6 +216,7 @@
                 <th style="padding: 6px 6px !important;">Departamento</th>
                 <th style="padding: 6px 6px !important;">Escolaridad</th>
                 <th style="padding: 6px 6px !important;">Especialidad</th>
+                <th style="">Sexo</th>
                 <th style="padding: 6px 6px !important;">Fecha Alta</th>
                 <td style="padding: 6px 6px !important;"></td>
                 </tfoot>

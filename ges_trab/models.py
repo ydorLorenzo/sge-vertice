@@ -1,5 +1,7 @@
-from adm.models import *
+from django.core.validators import MinValueValidator
 from django.urls import reverse
+
+from adm.models import *
 
 
 # Create your models here.
@@ -73,7 +75,8 @@ class Trabajador(models.Model):
     POR_CIES_OPT = (('0', '0%'), ('1', '30%'), ('2', '50%'))
     por_cies = models.CharField(max_length=3, choices=POR_CIES_OPT, verbose_name='% CIES', default=POR_CIES_OPT[0])
     cies = models.DecimalField(max_digits=5, decimal_places=2, verbose_name='CIES')
-    sal_plus = models.DecimalField(max_digits=5, decimal_places=2, verbose_name='Salario plus', default=0.00)
+    sal_plus = models.DecimalField(max_digits=5, decimal_places=2, verbose_name='Salario plus', default=0.00,
+                                   validators=[MinValueValidator(0.00)])
     sal_cond_anor = models.DecimalField(max_digits=5, decimal_places=2, verbose_name='Salario condiciones anormales',
                                         default=0.00)
     POR_ANTI_OPT = (('0', '0%'), ('1', '5%'), ('2', '10%'))
@@ -85,7 +88,6 @@ class Trabajador(models.Model):
     fecha_disponible = models.DateField(blank=True, verbose_name="Fecha de inicio disponibilidad", null=True)
     fecha_ingreso = models.DateField(verbose_name="Fecha de ingreso al organismo")
     albergado = models.BooleanField()
-    sancionado = models.BooleanField()
     CAT_CIENT_OPT = (('1', 'Ninguna'), ('2', 'Máster'), ('3', 'Doctor'))
     cat_cient = models.CharField(max_length=10, choices=CAT_CIENT_OPT)
     sal_cat_cient = models.DecimalField(max_digits=5, decimal_places=2, verbose_name="Salario x cat. científica",
@@ -106,21 +108,12 @@ class Trabajador(models.Model):
     pais_graduacion = models.CharField(max_length=20, verbose_name="País de graduación", default='Ninguno')
     ESCOLARIDAD_OPT = (
         ('6to', '6to Grado'), ('9no ', '9no Grado'), ('12mo ', '12mo Grado'), ('TM', 'Técnico Medio'),
-        ('OC', 'Obrero Calificado'),
-        ('Univ', 'Universitario'))
+        ('OC', 'Obrero Calificado'), ('Univ', 'Universitario'), ('FOC', 'Facultad Obrero Campesino'))
     escolaridad = models.CharField(max_length=20, choices=ESCOLARIDAD_OPT, verbose_name="Escolaridad")
     idioma = models.CharField(max_length=20, verbose_name="Idioma", blank=True, null=True, default='Ninguno')
-    TIPO_TEC = (
-        ('TA', 'Tec. Administrativo'), ('TD ', 'Tec.Dirigente'), ('TP ', 'Tec. Plaza Profesional'),
-        ('TN', 'Tec. No Titulado'), ('TU', 'Tec. Universitario'),
-        ('TM', 'Tec. Medio'), ('Nin', 'Ninguno'))
-    tipo_tecnico = models.CharField(max_length=20, choices=TIPO_TEC, verbose_name="Tipo de tecnico")
-    tec_tac = models.BooleanField(verbose_name="Tec. TAC")
-    # Defensa y otras Organizaciones
     ORG_DEF = (
         ('MTT', 'MTT'), ('FEI', 'FEI'), ('BPD-LR ', 'BPD-LR'), ('BPD-PTG ', 'BPD-PTG'), ('U/R', 'U/R'),
         ('Imp', 'Imprescindible'))
-
     orga_defensa = models.CharField(max_length=20, verbose_name="Organización defensa", choices=ORG_DEF)
     unidad_militar = models.CharField(max_length=20, verbose_name="Unidad Militar", blank=True)
     estado_mayor = models.CharField(max_length=20, verbose_name="Estado Mayor", blank=True)
