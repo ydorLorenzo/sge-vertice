@@ -46,68 +46,32 @@
                 locale: 'es',
                 height: 'auto',
                 firstDay: 0,
-                editable: true,
                 selectable: true,
                 businessHours: true,
                 dayMaxEvents: true,
                 dateClick: function (info) {
-                    location.href = `{% url 'evento_create' %}?trabajador=${$('#trabajadores').val()}&date=${info.dateStr}`;
+                    var queries = '?', trab = $('#trabajadores').val();
+                    if(trab) { queries += 'trabajadores=' + trab }
+                    queries += '&date=' + info.dateStr;
+                    location.href = `{% url 'evento_create' %}${queries}`;
                 },
                 events: [
-                    {
-                        title: 'All day event',
-                        start: '2020-09-01'
-                    },
-                    {
-                        title: 'Long Event',
-                        start: '2020-09-07',
-                        end: '2020-09-10'
-                    },
-                    {
-                        groupId: 999,
-                        title: 'Repeating Event',
-                        start: '2020-09-09T16:00:00'
-                    },
-                    {
-                        groupId: 999,
-                        title: 'Repeating Event',
-                        start: '2020-09-16T16:00:00'
-                    },
-                    {
-                        title: 'Conference',
-                        start: '2020-09-11',
-                        end: '2020-09-13'
-                    },
-                    {
-                        title: 'Meeting',
-                        start: '2020-09-12T10:30:00',
-                        end: '2020-09-12T12:30:00'
-                    },
-                    {
-                        title: 'Lunch',
-                        start: '2020-09-12T12:00:00'
-                    },
-                    {
-                        title: 'Meeting',
-                        start: '2020-09-12T14:30:00'
-                    },
-                    {
-                        title: 'Happy Hour',
-                        start: '2020-09-12T17:30:00'
-                    },
-                    {
-                        title: 'Dinner',
-                        start: '2020-09-12T20:00:00'
-                    },
-                    {
-                        title: 'Birthday Party',
-                        start: '2020-09-13T07:00:00'
-                    },
-                    {
-                        title: 'Click for Google',
-                        url: 'http://google.com/',
-                        start: '2020-09-28'
-                    }
+{#                    {% for event in dummy_events %}#}
+{#                        {#}
+{#                            title: '{{ event.title }}',#}
+{#                            start: '{{ event.start }}',#}
+{#                            {% if event.end %}end: '{{ event.end }}',{% endif %}#}
+{#                            {% if event.color %}color: '#{{ event.color }}'{% endif %}#}
+{#                        },#}
+{#                    {% endfor %}#}
+                    {% for event in events %}
+                        {
+                            title: '{{ event.title }}',
+                            start: '{{ event.start|date:'Y-m-d' }}',
+                            {% if event.end %}end: '{{ event.end|date:'Y-m-d' }}',{% endif %}
+                            {% if event.color %}color: '#{{ event.color }}'{% endif %}
+                        },
+                    {% endfor %}
                 ]
             });
             calendar.render();

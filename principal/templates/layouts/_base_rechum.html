@@ -121,16 +121,16 @@
         <li>
             <a href="#submenuPlantilla" class="dropdown-toggle"
                data-toggle="collapse"
-               aria-expanded="{% if request.current_app == 'plantilla' %}true{% else %}false{% endif %}">
+               aria-expanded="{% if request.current_app == 'parte_tiempo' %}true{% else %}false{% endif %}">
                 <i class="fa fa-list-ul"></i>
                 Parte tiempo
             </a>
-            <ul class="collapse list-unstyled {% if request.current_app == 'plantilla' %}show{% endif %}"
+            <ul class="collapse list-unstyled {% if request.current_app == 'parte_tiempo' %}show{% endif %}"
                 id="submenuPlantilla">
                 <li>
-                    <a class="{% if model_name == 'plantilla' %}active{% endif %}"
-                       href="{% url 'plantilla_list' %}">
-                        Plantilla
+                    <a class="{% if model_name == 'evento' or request.resolver_match.url_name == 'evento_list' %}active{% endif %}"
+                       href="{% url 'evento_list' %}">
+                        Parte tiempo
                     </a>
                 </li>
             </ul>

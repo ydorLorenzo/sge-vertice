@@ -48,8 +48,8 @@ class TipoEvento(models.Model):
 ####################################################################################
 class Evento(models.Model):
     STATUS = (
-        ('programado', 'Programado'),
-        ('cancelado', 'Cancelado')
+        ('prog', 'Programado'),
+        ('canc', 'Cancelado')
     )
     EVENT_TYPE = (
         ('AJ', 'Ausencia Justificada'),
@@ -74,7 +74,7 @@ class Evento(models.Model):
     agregado_por = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     afecta_a = models.ForeignKey(Trabajador, on_delete=models.CASCADE, null=True, blank=True)
     comentario = models.TextField(blank=True, null=True)
-    estado = models.CharField(max_length=12, choices=STATUS, default=STATUS[0])
+    estado = models.CharField(max_length=16, choices=STATUS, default='programado')
     programado = models.DateTimeField(auto_now_add=True, editable=False)
     fecha_inicio = models.DateTimeField()
     fecha_fin = models.DateTimeField(blank=True, null=True)
