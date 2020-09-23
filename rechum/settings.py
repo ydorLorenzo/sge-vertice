@@ -101,8 +101,8 @@ WSGI_APPLICATION = 'rechum.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        # 'NAME': 'rechum',
-        'NAME': 'sge_vertice_dev',
+        'NAME': 'rechum',
+        # 'NAME': 'sge_vertice_dev',
         'HOST': '192.168.1.155',
         'USER': 'sge.vertice',
         'PASSWORD': 'Ve2020*',
