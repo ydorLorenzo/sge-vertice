@@ -1,0 +1,129 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>SGE VERTICE | {% block title %}Dashboard{% endblock %}</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+    <link type="text/css" href="{% static 'font-aweson/css/font-awesome.min.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'css/sidebar/bootstrap.min.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'materialize/css/materialize.min.css' %}" rel="stylesheet">
+    <!-- Custom styles -->
+{#    <link type="text/css" href="{% static 'css/custom.css' %}" rel="stylesheet">#}
+
+{#    <link type="text/css" href="{% static 'css/sidebar/style5.css' %}" rel="stylesheet">#}
+
+    <style type="text/css">
+        #topcontrol {
+            transition: 0.5s;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            padding-bottom: 2px;
+        }
+
+        .dark-green {
+            background-color: #263238 !important;
+        }
+
+        .go-up-button {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            cursor: pointer;
+            z-index: 99999;
+            opacity: 0;
+        }
+
+        #content.pt-content {
+            padding-top: 95px;
+            padding-bottom: 50px;
+        }
+
+        .pt-content-title {
+            padding-top: 50px;
+        }
+    </style>
+
+    {% block styles %}
+    {% endblock %}
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top dark-green">
+    {% block header_left %}
+        <a class="navbar-brand" href="{% url 'home_principal' %}">
+            <img src="{% static 'images/Untitled.png' %}" class="logo" alt="Logo Entidad">
+            &nbsp;&nbsp;Sistema de Gestión Empresarial VERTICE
+        </a>
+    {% endblock %}
+    <div class="navbar-collapse collapse" id="navbarColor01">
+        <ul class="navbar-nav ml-auto mr-2">
+            <li class="nav-item mr-2 text-white">
+                <h6 class="mt-2">
+                    Bienvenido(a) {{ request.user.first_name }}
+                </h6>
+            </li>
+            <li class="btn-group">
+                <a class="btn btn-sm btn-primary" href="{% url 'admin:index' %}"
+                   style="text-transform: none; font-size: 1rem;">
+                    <i class="fa fa-gears text-white" title="Administraci&oacute;n"></i>
+                </a>
+                <button type="button" class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right text-center">
+                    <h6 class="dropdown-header">Acciones</h6>
+                    <a class="dropdown-item" href="{% url 'admin:index' %}">
+                        <i class="fa fa-gear text-dark" title="Administraci&oacute;n"></i>
+                        Administraci&oacute;n.
+                    </a>
+                    <a class="dropdown-item" id="fullscreen" href="javascript:">
+                        <i class="fa fa-angle-up text-dark" title="Inicio"></i>
+                        Pantalla Completa.
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{% url 'logout' %}">
+                        <i class="fa fa-sign-out text-dark" title="Cerrar sesi&oacute;n"></i>
+                        Cerrar sesi&oacute;n.
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="wrapper">
+    {% block base_sidebar %}{% endblock %}
+    <div id="content" class="pt-content">
+        {% block content %}{% endblock %}
+    </div>
+</div>
+
+{% block modals %}{% endblock %}
+<!-- /container -->
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script type="text/javascript" src="{% static 'js/sidebar/jquery-3.3.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/sidebar/bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'materialize/js/materialize.min.js' %}"></script>
+
+{% block javascript %}{% endblock %}
+
+<div id="topcontrol" class="go-up-button" title="Ir arriba">
+    <img src="{% static 'images/up.png' %}" alt="Up icon" class="logo">
+</div>
+
+</body>
+</html>

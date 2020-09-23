@@ -27,7 +27,7 @@ SECRET_KEY = 'b-885fkbpc__698+o%j8j24m0cp812c-$cp6kfy6ec7*r38a(z'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['sge.vertice.com.cu']
+ALLOWED_HOSTS = ['sge.vertice.com.cu', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_filters.filters',
+    'django_select2',
+    'highcharts',
+    'auditlog',
     'adm',
     'ges_trab',
     'plantilla',
@@ -51,7 +54,8 @@ INSTALLED_APPS = [
     'pr3',
     'entrada_datos',
     'prenomina15',
-    'principal'
+    'principal',
+    'parte_tiempo'
 ]
 
 
@@ -66,6 +70,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'principal.middleware.SetApplicationNameMiddleware',
+    'auditlog.middleware.AuditlogMiddleware'
 ]
 
 ROOT_URLCONF = 'rechum.urls'
@@ -96,11 +102,11 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         # 'NAME': 'rechum',
-        'NAME': 'rechum_dev',
-        'HOST': '192.168.1.95',
-        'USER': 'srv.rechum',
-        'PASSWORD': 'ZIMR8jHgMO',
-        'PORT': '5432'
+        'NAME': 'sge_vertice_dev',
+        'HOST': '192.168.1.155',
+        'USER': 'sge.vertice',
+        'PASSWORD': 'Ve2020*',
+        'PORT': '2345'
     }
 }
 
@@ -124,6 +130,12 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+# Select2 config
+SELECT2_JS = 'plugins/select2/select2.min.js'
+SELECT2_CSS = 'plugins/select2/select2.min.css'
+SELECT2_I18N_PATH = 'plugins/select2/i18n'
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
@@ -144,7 +156,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 LOGIN_REDIRECT_URL = '/home_principal'
-LOGOUT_REDIRECT_URL = reverse_lazy('login_up')
+LOGOUT_REDIRECT_URL = reverse_lazy('login')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'adm/static/media/')
 MEDIA_URL = '/media/'
 

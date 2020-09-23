@@ -193,7 +193,7 @@
         $('#id_nit').prop("title", 'Campo numérico de 11 dígitos').attr("oninvalid", 'setCustomValidity("Campo obligatorio, numérico de 11 dígitos")');
 
         $('#addButtonInversionista').click(function () {
-            $('#popup form').prop('action', '/adicionar_inversionista/');
+            $('#popup form').prop('action', '{% url "adicionarInversionista" %}');
             $('#popup').modal('show');
         });
 

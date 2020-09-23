@@ -103,7 +103,19 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-3"><strong>Código:</strong>{{ form.codigo}}</div>
-                                    <div class="col-sm-9"><strong>Nombre:</strong>{{ form.nombre }}</div>
+                                    <div class="col-sm-9">
+                                        <strong>Unidad:</strong>
+                                        <select name="unidad" id="unidad_id" class="form-control">
+                                            <option selected>---------</option>
+                                            {% for unidad in list_unidades %}
+                                                <option value="{{ unidad.id }}">{{ unidad.nombre }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-12 mt-3">
+                                        <strong>Área:</strong>
+                                        {{ form.area }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -127,6 +139,29 @@
 
 {% block javascript %}
     <script type="text/javascript">
+        function select_departamento() {
+            var id_seleccionado = this.value;
+            $('#id_area').html('');
+
+            $.get(`/Dpto_por_unidad/${id_seleccionado}/area/`, function (data) {
+                var departamentos = data[0].result;
+                if (departamentos.length !== 0) {
+                    $('#id_area').append("<option>---------</option>");
+                    for (var departamento in departamentos) {
+                        $('#id_area').append(
+                            `<option value="${departamentos[departamento].id}">
+                                ${departamentos[departamento].nombre}
+                             </option>`
+                        );
+                    }
+                } else {
+                    $('#id_area').append(`<span class="text-warning">No hay departamentos para mostrar.</span>`);
+                }
+            });
+        }
+
+        $("#unidad_id").on('change', select_departamento);
+
         function validarFormulario() {
             if (validarCodigo() && validarNombre()) {
                 $('#enviar').removeAttr('disabled');
@@ -139,14 +174,14 @@
             validarFormulario();
         });
 
-        exp_codigo = "^[0-9]{1}$";
+        exp_codigo = "^[1-9]{0,1}[0-9]{1}$";
         exp_nombre = "^([A-Z]{1})[A-Za-z0-9áéíóúñ ]+$";
 
-        $('#id_codigo').prop("min", '0').prop("max", '9').prop("title", 'Valor entre 1 y 9').attr("oninvalid", 'setCustomValidity("Campo obligatorio. Rango entre 1 y 9")');
+        $('#id_codigo').prop("min", '0').prop("max", '99').prop("title", 'Valor de dos dígitos').attr("oninvalid", 'setCustomValidity("Campo obligatorio. Rango entre 1 y 9")');
         $('#id_nombre').prop("title", 'Este campo es alfanumérico y comienza con mayúscula').attr("oninvalid", 'setCustomValidity("Campo obligatorio.Campo alfanuméricos y comienza con mayúscula")');
 
         $('#addButtonArea').click(function () {
-            $('#popup form').prop('action', '/adicionar_area/');
+            $('#popup form').prop('action', '{% url "adicionarArea" %}');
             $('#popup').modal('show');
         });
         {% if form.errors %}
@@ -155,7 +190,7 @@
 
         function validarCodigo() {
             var cadena = $('#id_codigo')[0].value;
-            if (!(cadena.match(exp_codigo) && cadena.length === 1)) {
+            if (!(cadena.match(exp_codigo) && cadena.length <= 2)) {
                 $('#id_codigo').addClass('has-error');
                 return false;
             } else {

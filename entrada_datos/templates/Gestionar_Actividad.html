@@ -186,7 +186,7 @@
         $('#id_codigo_act').prop("min", '1000').prop("max", '9999').prop("title", 'Valor entre 1000 y 9999').attr("oninvalid", 'setCustomValidity("Campo obligatorio. Rango entre 1000 y 9999")').prop("readonly", true);
         $('#id_descripcion_act').prop("title", 'Este campo permite solo letras y comienza con mayúscula').attr("oninvalid", 'setCustomValidity("Campo obligatorio.Este campo permite solo letras y comienza con mayúscula")');
         $('#addButtonActividad').click(function () {
-            $('#popup form').prop('action', '/adicionar_actividad/');
+            $('#popup form').prop('action', '{% url "adicionarActividad" %}');
             $('#popup').modal('show');
         });
         {% if form.errors or edit %}

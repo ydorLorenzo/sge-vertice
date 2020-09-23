@@ -1,4 +1,5 @@
 {% extends "base_principal.html" %}
+{% load sge_perms %}
 {% block content %}
     <style type="text/css">
         a:active, a:active * {
@@ -15,77 +16,80 @@
         <!-- Page Content Holder -->
         <div id="content" style="padding-top: 90px;">
             <div class="row">
-                <div class="col-3">
-                    {% if permiso_app_adm == 'home' %}
-                        <a href="{% url permiso_app_adm %}">
-                            <div class="card" style="text-align: center; margin-bottom: 10px; background-color:lightskyblue; font-weight: bold">
-                                <i class="fa fa-users" style="font-size: 40px; text-align: center; margin-top: 20px;"></i>
+                {% if user|has_module_perm:'adm' or user|has_module_perm:'ges_trab' or user|has_module_perm:'ausentismo' or user|has_module_perm:'datos_prenom' or user|has_module_perm:'plantilla' or user|has_module_perm:'subsidio' %}
+                    <div class="col-3">
+                        <a href="{% url "home" %}">
+                            <div class="card"
+                                 style="text-align: center; margin-bottom: 10px; background-color:lightskyblue; font-weight: bold">
+                                <i class="fa fa-users"
+                                   style="font-size: 40px; text-align: center; margin-top: 20px;"></i>
                                 <div class="card-body">
-                                   <span>CAPITAL HUMANO</span>
-                                </div>
-                           </div>
-                        </a>
-                    {% else %}
-
-                            <div class="card" title="Usted no posee permisos para el modulo de Recursos Humanos" style="text-align: center; margin-bottom: 10px; background-color:lightskyblue; font-weight: bold">
-                                <i class="fa fa-users" style="font-size: 40px; text-align: center; margin-top: 20px;"></i>
-                                <div class="card-body">
-                                   <span>CAPITAL HUMANO</span>
-                                </div>
-                            </div>
-
-                    {% endif %}
-                </div>
-                <div class="col-3">
-                    {% if permiso_app_pren15 == 'home_pren15' %}
-                        <a href="{% url permiso_app_pren15 %}">
-                           <div class="card"
-                                 style="text-align: center; margin-bottom: 10px; background-color:lightgreen; font-weight: bold">
-                                <i class="fa fa-files-o" style="font-size: 40px; text-align: center; margin-top: 20px;"></i>
-                                <div class="card-body">
-                                  <span>PRENÓMINA 15</span>
+                                    <span>CAPITAL HUMANO</span>
                                 </div>
                             </div>
                         </a>
-                    {% else %}
-
-                           <div class="card"  title="Usted no posee permisos para el modulo de PRENÓMINA 15"
+                    </div>
+                    {% comment %}
+                        <div class="card" title="Usted no posee permisos para el módulo de Capital Humanos"
+                             style="text-align: center; margin-bottom: 10px; background-color:lightskyblue; font-weight: bold">
+                            <i class="fa fa-users" style="font-size: 40px; text-align: center; margin-top: 20px;"></i>
+                            <div class="card-body">
+                                <span>CAPITAL HUMANO</span>
+                            </div>
+                        </div>
+                    {% endcomment %}
+                {% endif %}
+                {% if user|has_module_perm:'prenomina15' %}
+                    <div class="col-3">
+                        <a href="{% url "home_pren15" %}">
+                            <div class="card"
                                  style="text-align: center; margin-bottom: 10px; background-color:lightgreen; font-weight: bold">
-                                <i class="fa fa-files-o" style="font-size: 40px; text-align: center; margin-top: 20px;"></i>
+                                <i class="fa fa-files-o"
+                                   style="font-size: 40px; text-align: center; margin-top: 20px;"></i>
                                 <div class="card-body">
-                                  <span>PRENÓMINA 15</span>
+                                    <span>PRENÓMINA 15</span>
                                 </div>
                             </div>
-
-                    {% endif %}
-                </div>
-                <div class="col-3">
-                    {% if permiso_app_datos == 'home_ent_dat' %}
-                        <a href="{% url permiso_app_datos %}" >
-                           <div class="card"
-                              style="text-align: center; margin-bottom: 10px; background-color: pink; font-weight: bold">
-                                <i class="fa fa-list" style="font-size: 40px; text-align: center; margin-top: 20px;"></i>
+                        </a>
+                        {% comment %}
+                            <div class="card" title="Usted no posee permisos para el módulo de PRENÓMINA 15"
+                                 style="text-align: center; margin-bottom: 10px; background-color:lightgreen; font-weight: bold">
+                                <i class="fa fa-files-o"
+                                   style="font-size: 40px; text-align: center; margin-top: 20px;"></i>
+                                <div class="card-body">
+                                    <span>PRENÓMINA 15</span>
+                                </div>
+                            </div>
+                        {% endcomment %}
+                    </div>
+                {% endif %}
+                {% if user|has_module_perm:'entrada_datos' %}
+                    <div class="col-3">
+                        <a href="{% url 'home_ent_dat' %}">
+                            <div class="card"
+                                 style="text-align: center; margin-bottom: 10px; background-color: pink; font-weight: bold">
+                                <i class="fa fa-list"
+                                   style="font-size: 40px; text-align: center; margin-top: 20px;"></i>
                                 <div class="card-body">
                                     <span>ENTRADA DATOS</span>
                                 </div>
                             </div>
                         </a>
-                    {% else %}
-
-                           <div class="card" title="Usted no posee permisos para el modulo de ENTRADA DATOS"
-                              style="text-align: center; margin-bottom: 10px; background-color: pink; font-weight: bold">
-                                <i class="fa fa-list" style="font-size: 40px; text-align: center; margin-top: 20px;"></i>
+                        {% comment %}
+                            <div class="card" title="Usted no posee permisos para el módulo de ENTRADA DATOS"
+                                 style="text-align: center; margin-bottom: 10px; background-color: pink; font-weight: bold">
+                                <i class="fa fa-list"
+                                   style="font-size: 40px; text-align: center; margin-top: 20px;"></i>
                                 <div class="card-body">
                                     <span>ENTRADA DATOS</span>
                                 </div>
                             </div>
-
-                    {% endif %}
-
-                </div>
-                <div class="col-3">
-                    {% if permiso_app_pren15 == 'home_pr3' %}
-                        <a href="{% url permiso_app_pr3 %}">
+                        {% endcomment %}
+                    </div>
+                {% endif %}
+                {% if user|has_module_perm:'pr3' %}
+                    <div class="col-3">
+                        <a href="{% url 'home_pr3' %}">
                             <div class="card"
                                  style="text-align: center; margin-bottom: 10px; background-color: lightgoldenrodyellow; font-weight: bold">
                                 <i class="fa fa-calendar"
@@ -95,9 +99,8 @@
                                 </div>
                             </div>
                         </a>
-                    {% else %}
-
-                            <div class="card" title="Usted no posee permisos para el modulo de PR3"
+                        {% comment %}
+                            <div class="card" title="Usted no posee permisos para el módulo de PR3"
                                  style="text-align: center; margin-bottom: 10px; background-color: lightgoldenrodyellow; font-weight: bold">
                                 <i class="fa fa-calendar"
                                    style="font-size: 40px; text-align: center; margin-top: 20px;"></i>
@@ -105,8 +108,10 @@
                                     <span>PR3</span>
                                 </div>
                             </div>
-                    {% endif %}
-                </div>
+                        {% endcomment %}
+                    </div>
+                {% endif %}
+                {% comment %}
                 <div class="col-3">
                     <a href="#">
                         <div class="card"
@@ -155,6 +160,7 @@
                         </div>
                     </a>
                 </div>
+                {% endcomment %}
             </div>
         </div>
     </div>

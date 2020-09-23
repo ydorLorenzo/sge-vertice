@@ -1,0 +1,70 @@
+{% extends base_module %}
+{% load sge_perms static %}
+
+{% block styles %}
+    {{ block.super }}
+    {{ form.media.css }}
+    <style>
+        .required {
+            font-weight: bold;
+        }
+    </style>
+{% endblock styles %}
+
+{% block content %}
+    <div class="card">
+        {% with current_url=request.resolver_match.view_name update_url=model_name|add:'_update' %}
+            <div class="card-header">
+                <div class="row align-items-center">
+                    <div class="col-8">
+                        <h3 class="mb-0">
+                            {% if current_url == update_url %}Actualizar{% else %}
+                                Crear{% endif %} {{ verbose_name|title }}
+                            #{{ object.id|default:0 }}
+                        </h3>
+                    </div>
+                    <div class="col-4 text-right" style="font-size: 1.3rem">
+                        {% if request.current_app|read_perm:model_name in perms %}
+                            <a href="{% url model_name|add:'_list' %}">
+                                <i class="fa fa-list text-info"></i>
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <form id="create_update_form" method="post">
+                    {% csrf_token %}
+                    {% block complete_form %}
+                        <div class="px-lg-4">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            {% block form_elements %}{% endblock %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 offset-3 text-center">
+                                    <button id="submit_button" type="submit" class="btn btn-success">
+                                        <i class="fa fa-save"></i> &nbsp;Guardar
+                                    </button>
+                                    <a class="btn btn-danger" href="{% url model_name|add:'_list' %}">
+                                        <i class="fa fa-close"></i> &nbsp;Cancelar
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endblock %}
+                </form>
+            </div>
+        {% endwith %}
+    </div>
+{% endblock content %}
+
+{% block javascript %}
+    {{ block.super }}
+    {{ form.media.js }}
+{% endblock javascript %}

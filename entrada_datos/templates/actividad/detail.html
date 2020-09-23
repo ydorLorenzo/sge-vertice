@@ -1,0 +1,26 @@
+{% extends 'layouts/crud/_base_detail.html' %}
+
+{% block detail_elements %}
+    <dt class="col-md-4 col-sm-12">Orden de trabajo:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.orden_trab.codigo_ot }}</dd>
+    <dt class="col-md-4 col-sm-12">Código:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.codigo_act }}</dd>
+    <dt class="col-md-4 col-sm-12">Tipo de actividad:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.tipo_act }}</dd>
+    <dt class="col-md-4 col-sm-12">Descripción:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.descripcion_act }}</dd>
+    <dt class="col-md-4 col-sm-12">Valor producido de actividad:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.valor_prod_act }}</dd>
+    <dt class="col-md-4 col-sm-12">Valor de actividad:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.valor_act }}</dd>
+    <dt class="col-md-4 col-sm-12">Producción tecleada:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.prod_tecleada }}</dd>
+    <dt class="col-md-4 col-sm-12">Venta:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.venta }}</dd>
+    <dt class="col-md-4 col-sm-12">Número:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.numero }}</dd>
+    <span class="badge {% if object.activa %}badge-info{% else %}badge-danger{% endif %}"
+          style="font-size: 1rem; position: absolute; right: calc(1rem + 15px)">
+        {% if object.activa %}Activa{% else %}Inactiva{% endif %}
+    </span>
+{% endblock %}

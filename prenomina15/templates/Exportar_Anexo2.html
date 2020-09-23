@@ -77,31 +77,55 @@
                             <th style="text-align: center">Retenido 20% del mes</th>
                             <th style="text-align: center">Salario de Penalización</th>
                             <th style="text-align: center">Pago del Retenido Anterior</th>
+                            <th style="text-align: center">Sal Dev Total</th>
                             <th style="text-align: center">Dif. Salarial R.15 R.30</th>
                             <th style="text-align: center; background-color: yellow">vac 9,09%</th>
-                            <th style="text-align: center; background-color: yellow">otros</th>
+                            <th style="text-align: center; background-color: yellow">Impuesto y Contrib.  19%</th>
                             <th style="text-align: center">Dif. Salarial con 9,09 Vac. Impuesto y Contrib.</th>
                         </tr>
                         </thead>
                         <tbody>
                         {% for area in areas %}
+                            <tr>
+                                <td></td>
+                                <td style="font-weight: bold">{{ area.nombre }}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
                             {% for per in area.personas %}
                                 <tr>
-                                    <td style="text-align: center;">{{ forloop.counter }}</td>
+                                    <td style="text-align: center">{{ forloop.counter|add:forloop.parentloop.counter }}</td>
                                     <td>{{ per.nombre }}</td>
-                                    <td style="text-align: center;">{{ per.cargo }}</td>
-                                    <td style="text-align: center;">{{ per.ge }}</td>
-                                    <td style="text-align: center;">{{ per.eval|replace }}%</td>
-                                    <td style="text-align: center;">{{ per.total_horas|replace }}</td>
-                                    <td style="text-align: center;"></td>
-                                    <td style="text-align: center;">0.00</td>
-                                    <td style="text-align: center;">{{ per.tarifa_30|replace }}</td>
-                                    <td style="text-align: center;">{{ per.total_dev|replace }}</td>
-                                    <td style="text-align: center;">{{ per.tarifa|replace }}</td>
-                                    <td style="text-align: center;">{{ per.total_valor|replace }}</td>
-                                    <td style="text-align: center;">{{ per.total_retenido|replace }}</td>
+                                    <td style="text-align: center">{{ per.cargo }}</td>
+                                    <td style="text-align: center">{{ per.ge }}</td>
+                                    <td style="text-align: center">{{ per.eval|replace }}%</td>
+                                    <td style="text-align: center">{{ per.total_horas|replace }}</td>
+                                    <td style="text-align: center"></td>
                                     <td style="text-align: center">0.00</td>
+                                    <td style="text-align: center">{{ per.tarifa_30|replace }}</td>
+                                    <td style="text-align: center">{{ per.total_dev|replace }}</td>
+                                    <td style="text-align: center">{{ per.tarifa|replace }}</td>
+                                    <td style="text-align: center">{{ per.total_valor|replace }}</td>
+                                    <td style="text-align: center">{{ per.total_retenido|replace }}</td>
+                                    <td style="text-align: center">{{ per.total_valor_pen|replace }}</td>
                                     <td style="text-align: center">{{ per.retenido_ant|replace }}</td>
+                                    <td style="text-align: center">{{ per.sal_dev_total|replace }}</td>
                                     <td style="text-align: center">{{ per.dif_30_15|replace }}</td>
                                     <td style="text-align: center; background-color: yellow">{{ per.vac|replace }}</td>
                                     <td style="text-align: center; background-color: yellow">{{ per.otros|replace }}</td>
@@ -112,23 +136,24 @@
                         <tr style="background-color: cyan; font-weight: bold">
                             <td></td>
                             <td style="font-weight: bold">Total</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                             <td style="font-weight: bold; text-align: center">{{ horas|replace }}</td>
-                            <td style="font-weight: bold; text-align: center">{{ setrt|replace }}</td>
-                            <td style="font-weight: bold; text-align: center">{{ inc_res_30|replace }}</td>
-                            <td style="font-weight: bold; text-align: center">{{ cies|replace }}</td>
-                            <td style="font-weight: bold; text-align: center">{{ ant|replace }}</td>
-                            <td style="font-weight: bold; text-align: center">{{ maest|replace }}</td>
-                            <td style="font-weight: bold; text-align: center">{{ total_dev_30|replace }}</td>
+                            <td></td>
                             <td style="font-weight: bold; text-align: center">0.00</td>
-                            <td style="font-weight: bold; text-align: center">0.00</td>
-                            <td style="font-weight: bold; text-align: center">0.00</td>
-                            <td style="font-weight: bold; text-align: center">{{ cant_planos }}</td>
-                            <td style="font-weight: bold; text-align: center">{{ horas|replace| replace }}</td>
+                            <td></td>
+                            <td style="font-weight: bold; text-align: right">{{ total_dev_30|replace }}</td>
+                            <td></td>
                             <td style="font-weight: bold; text-align: center">{{ sal_res15_plano|replace }}</td>
                             <td style="font-weight: bold; text-align: center">{{ ret|replace }}</td>
+                            <td style="font-weight: bold; text-align: center">{{ penalizacion|replace }}</td>
                             <td style="font-weight: bold; text-align: center">{{ ret_ant|replace }}</td>
-                            <td style="font-weight: bold; text-align: center">{{ impacto|replace }}</td>
                             <td style="font-weight: bold; text-align: center">{{ sal_total_dev|replace }}</td>
+                            <td style="font-weight: bold; text-align: center">{{ impacto|replace }}</td>
+                            <td style="font-weight: bold; text-align: center">{{ total_vac|replace }}</td>
+                            <td style="font-weight: bold; text-align: center">{{ total_otros|replace }}</td>
+                            <td style="font-weight: bold; text-align: center">{{ total_dif_sal|replace }}</td>
                         </tr>
                         </tbody>
                     </table>

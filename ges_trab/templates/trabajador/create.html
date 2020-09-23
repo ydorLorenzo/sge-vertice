@@ -1,0 +1,639 @@
+{% extends 'layouts/crud/_base_create-update.html' %}
+{% load static widget_tweaks %}
+
+{% block styles %}
+    {{ block.super }}
+    {#    <link rel="stylesheet" href="{% static 'plugins/bootstrap-imageupload/bootstrap-imageupload.min.css' %}?v=2"/>#}
+    <link rel="stylesheet" href="{% static 'plugins/bs-stepper/bs-stepper.min.css' %}"/>
+    <style>
+
+        .thumbnail {
+            padding: 4px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            -webkit-transition: border .2s ease-in-out;
+            -o-transition: border .2s ease-in-out;
+            transition: border .2s ease-in-out;
+            width: 100%;
+        }
+
+        ul.nav.nav-tabs > .nav-item.nav-link {
+            text-shadow: none;
+            color: #0d638f;
+            background-color: #eee;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .tab-active {
+            background-color: #35aa47 !important;
+            color: #fff !important;
+        }
+
+        .tab-done {
+            background-color: #f2ae43 !important;
+            color: #fff !important;
+        }
+
+        thead th {
+            font-size: .795rem !important;
+            padding-top: 7px;
+            padding-bottom: 7px;
+        }
+    </style>
+{% endblock styles %}
+
+{% block complete_form %}
+    {{ form.non_field_errors }}
+    <div class="bs-stepper">
+        <div class="bs-stepper-header" role="tablist">
+            <div class="step" data-target="#personal_step">
+                <button type="button" class="step-trigger" role="tab"
+                        aria-controls="personal_step" id="personal-trigger">
+                    <span class="bs-stepper-circle">1</span>
+                    <span class="bs-stepper-label">Datos personales</span>
+                </button>
+            </div>
+            <div class="step" data-target="#laboral_step">
+                <button type="button" class="step-trigger" role="tab"
+                        aria-controls="laboral_step" id="laboral-trigger">
+                    <span class="bs-stepper-circle">2</span>
+                    <span class="bs-stepper-label">Datos laborales</span>
+                </button>
+            </div>
+            <div class="step" data-target="#docente_step">
+                <button type="button" class="step-trigger" role="tab"
+                        aria-controls="docente_step" id="docente-trigger">
+                    <span class="bs-stepper-circle">3</span>
+                    <span class="bs-stepper-label">Datos docentes</span>
+                </button>
+            </div>
+            <div class="step" data-target="#defensa_org_step">
+                <button type="button" class="step-trigger" role="tab"
+                        aria-controls="defensa_org_step" id="defensa_org-trigger">
+                    <span class="bs-stepper-circle">4</span>
+                    <span class="bs-stepper-label">Defensa y Org.</span>
+                </button>
+            </div>
+            <div class="step" data-target="#nucleo_familiar_step">
+                <button type="button" class="step-trigger" role="tab"
+                        aria-controls="nucleo_familiar_step" id="nucleo_familiar-trigger">
+                    <span class="bs-stepper-circle">5</span>
+                    <span class="bs-stepper-label">Núcleo familiar</span>
+                </button>
+            </div>
+            <div class="step" data-target="#tallas_step">
+                <button type="button" class="step-trigger" role="tab"
+                        aria-controls="tallas_step" id="tallas-trigger">
+                    <span class="bs-stepper-circle">6</span>
+                    <span class="bs-stepper-label">Tallas</span>
+                </button>
+            </div>
+        </div>
+        <div class="bs-stepper-content">
+            <div id="personal_step" class="content" role="tabpanel" aria-labelledby="personal-trigger">
+                <div class="row">
+                    <div class="col-lg-2 col-12 imageupload panel panel-default m-auto" id="foto-container">
+                        <img id="orto"
+                             alt="Imagen Perfil" class="img-perfil thumbnail"
+                             src="{% if form.foto.value %}
+                                /static/media/{{ form.foto.value }}{% else %}
+                                {% static 'images/default-user.png' %}{% endif %}">
+                        <div class="file-tab panel-body m-auto">
+                            <img src="" id="preview" alt="Imagen Perfil Vista Previa" class="thumbnail"
+                                 style="display:none">
+                            <label hidden class="btn btn-default btn-file">
+                                {{ form.foto }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-lg-10 col-12">
+                        <div class="row">
+                            <div class="col-lg-3 col-12">
+                            {{ form.primer_nombre.label_tag }}
+                            {{ form.primer_nombre }}
+                            {{ form.primer_nombre.errors }}
+                        </div>
+                            <div class="col-lg-3 col-12">
+                            {{ form.segundo_nombre.label_tag }}
+                            {{ form.segundo_nombre }}
+                            {{ form.segundo_nombre.errors }}
+                        </div>
+                            <div class="col-lg-6 col-12">
+                            {{ form.apellidos.label_tag }}
+                            {{ form.apellidos }}
+                            {{ form.apellidos.errors }}
+                        </div>
+                            <div class="col-lg-3 col-6">
+                            {{ form.etnia.label_tag }}
+                            {{ form.etnia }}
+                            {{ form.etnia.errors }}
+                        </div>
+                            <div class="col-lg-3 col-6">
+                            {{ form.sexo.label_tag }}
+                            {{ form.sexo }}
+                            {{ form.sexo.errors }}
+                        </div>
+                            <div class="col-lg-3 col-6">
+                                {{ form.peso.label_tag }}
+                                <div class="input-group">
+                                    {{ form.peso }}
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">kg</div>
+                                    </div>
+                                </div>
+                                {{ form.peso.errors }}
+                            </div>
+                            <div class="col-lg-3 col-6">
+                                {{ form.estatura.label_tag }}
+                                <div class="input-group">
+                                    {{ form.estatura }}
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">m</div>
+                                    </div>
+                                </div>
+                                {{ form.estatura.errors }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-6">
+                    {{ form.ci.label_tag }}
+                    {{ form.ci }}
+                    {{ form.ci.errors }}
+                </div>
+                    <div class="col-lg-3 col-6">
+                    {{ form.lugar_nacimiento.label_tag }}
+                    {{ form.lugar_nacimiento }}
+                    {{ form.lugar_nacimiento.errors }}
+                </div>
+                    <div class="col-lg-3 col-6">
+                    {{ form.residencia.label_tag }}
+                    {{ form.residencia }}
+                    {{ form.residencia.errors }}
+                </div>
+                    <div class="col-lg-3 col-6">
+                    {{ form.estado_civil.label_tag }}
+                    {{ form.estado_civil }}
+                    {{ form.estado_civil.errors }}
+                </div>
+                    <div class="col-lg-3 col-6">
+                    {{ form.hijos.label_tag }}
+                    {{ form.hijos }}
+                    {{ form.hijos.errors }}
+                </div>
+                    <div class="col-lg-3 col-6">
+                    {{ form.nombre_padre.label_tag }}
+                    {{ form.nombre_padre }}
+                    {{ form.nombre_padre.errors }}
+                </div>
+                    <div class="col-lg-3 col-6">
+                    {{ form.nombre_madre.label_tag }}
+                    {{ form.nombre_madre }}
+                    {{ form.nombre_madre.errors }}
+                </div>
+                    <div class="col-lg-3 col-6">
+                    {{ form.telefono.label_tag }}
+                    {{ form.telefono }}
+                    {{ form.telefono.errors }}
+                </div>
+                    <div class="col-lg-3 col-6">
+                    {{ form.licencia.label_tag }}
+                    {{ form.licencia }}
+                    {{ form.licencia.errors }}
+                </div>
+                    <div class="col-lg-3 col-6">
+                        {{ form.usuario.label_tag }}
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">@</div>
+                            </div>
+                            {{ form.usuario }}
+                        </div>
+                        {{ form.usuario.errors }}
+                    </div>
+                    <div class="col-lg-6 col-12">
+                    {{ form.direccion.label_tag }}
+                    {{ form.direccion }}
+                    {{ form.direccion.errors }}
+                </div>
+                </div>
+            </div>
+            <div id="laboral_step" class="content" role="tabpanel" aria-labelledby="laboral-trigger">
+                <div class="row">
+                    <div class="col-lg-3 col-6">
+                        {{ form.codigo_interno.label_tag }}
+                        {{ form.codigo_interno }}
+                        {{ form.codigo_interno.errors }}
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        {{ form.unidad_org.label_tag }}
+                        {{ form.unidad_org }}
+                        {{ form.unidad_org.errors }}
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        {{ form.departamento.label_tag }}
+                        {{ form.departamento }}
+                        {{ form.departamento.errors }}
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        {{ form.plantilla.label_tag }}
+                        {{ form.plantilla }}
+                        {{ form.plantilla.errors }}
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        {{ form.org_plantilla.label_tag }}
+                        {{ form.org_plantilla }}
+                        {{ form.org_plantilla.errors }}
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        {{ form.categoria.label_tag }}
+                        {{ form.categoria }}
+                        {{ form.categoria.errors }}
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        {{ form.t_plantilla.label_tag }}
+                        {{ form.t_plantilla }}
+                        {{ form.t_plantilla.errors }}
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        {{ form.t_contrato.label_tag }}
+                        {{ form.t_contrato }}
+                        {{ form.t_contrato.errors }}
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        {{ form.fuerza_i.label_tag }}
+                        {{ form.fuerza_i }}
+                        {{ form.fuerza_i.errors }}
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        {{ form.t_pago.label_tag }}
+                        {{ form.t_pago }}
+                        {{ form.t_pago.errors }}
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        <input list="browsers">
+                        <datalist id="browsers">
+                            <option value="Internet Explorer">
+                            <option value="Firefox">
+                            <option value="Chrome">
+                            <option value="Opera">
+                            <option value="Safari">
+                        </datalist>
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        {{ form.escala_salarial.label_tag }}
+                        {{ form.escala_salarial }}
+                        {{ form.escala_salarial.errors }}
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        {{ form.por_cies.label_tag }}
+                        {{ form.por_cies }}
+                        {{ form.por_cies.errors }}
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        {{ form.por_anti.label_tag }}
+                        {{ form.por_anti }}
+                        {{ form.por_anti.errors }}
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        {{ form.cat_cient.label_tag }}
+                        {{ form.cat_cient }}
+                        {{ form.cat_cient.errors }}
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        {{ form.sal_plus.label_tag }}
+                        {{ form.sal_plus }}
+                        {{ form.sal_plus.errors }}
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        {{ form.sal_cond_anor.label_tag }}
+                        {{ form.sal_cond_anor }}
+                        {{ form.sal_cond_anor.errors }}
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        {{ form.fecha_contrato.label_tag }}
+                        {{ form.fecha_contrato }}
+                        {{ form.fecha_contrato.errors }}
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        {{ form.fecha_alta.label_tag }}
+                        {{ form.fecha_alta }}
+                        {{ form.fecha_alta.errors }}
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        {{ form.fecha_disponible.label_tag }}
+                        {{ form.fecha_disponible }}
+                        {{ form.fecha_disponible.errors }}
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        {{ form.fecha_ingreso.label_tag }}
+                        {{ form.fecha_ingreso }}
+                        {{ form.fecha_ingreso.errors }}
+                    </div>
+                    <div class="col-lg-6 col-12">
+                        {{ form.motivo_alta.label_tag }}
+                        {{ form.motivo_alta }}
+                        {{ form.motivo_alta.errors }}
+                    </div>
+                    <div class="col-lg-3 col-12">
+                        <div class="form-check-inline pt-3">
+                            <label class="form-check-label">
+                                {% render_field form.albergado class="form-check-input" %} {{ form.albergado.label }}
+                            </label>
+                            {{ form.albergado.errors }}
+                        </div>
+                        <div class="form-check-inline">
+                            <label class="form-check-label">
+                                {% render_field form.j_laboral class="form-check-input" %} {{ form.j_laboral.label }}
+                            </label>
+                            {{ form.j_laboral.errors }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="docente_step" class="content" role="tabpanel" aria-labelledby="docente-trigger">
+                <div class="row">
+                    <div class="col-lg-3 col-12">
+                    {{ form.escolaridad.label_tag }}
+                    {{ form.escolaridad }}
+                    {{ form.escolaridad.errors }}
+                </div>
+                    <div class="col-lg-3 col-12">
+                    {{ form.calificacion.label_tag }}
+                    {{ form.calificacion }}
+                    {{ form.calificacion.errors }}
+                </div>
+                    <div class="col-lg-3 col-12">
+                    {{ form.especialidad.label_tag }}
+                    {{ form.especialidad }}
+                    {{ form.especialidad.errors }}
+                </div>
+                    <div class="col-lg-3 col-12">
+                    {{ form.actividad.label_tag }}
+                    {{ form.actividad }}
+                    {{ form.actividad.errors }}
+                </div>
+                    <div class="col-lg-3 col-12">
+                    {{ form.centro_graduacion.label_tag }}
+                    {{ form.centro_graduacion }}
+                    {{ form.centro_graduacion.errors }}
+                </div>
+                    <div class="col-lg-3 col-12">
+                    {{ form.anno_graduado.label_tag }}
+                    {{ form.anno_graduado }}
+                    {{ form.anno_graduado.errors }}
+                </div>
+                    <div class="col-lg-3 col-12">
+                    {{ form.pais_graduacion.label_tag }}
+                    {{ form.pais_graduacion }}
+                    {{ form.pais_graduacion.errors }}
+                </div>
+                    <div class="col-lg-3 col-12">
+                    {{ form.idioma.label_tag }}
+                    {{ form.idioma }}
+                    {{ form.idioma.errors }}
+                </div>
+                </div>
+            </div>
+            <div id="defensa_org_step" class="content" role="tabpanel" aria-labelledby="defensa_org-trigger">
+                <div class="row">
+                    <div class="col-lg-3 col-12">
+                    {{ form.orga_defensa.label_tag }}
+                    {{ form.orga_defensa }}
+                    {{ form.orga_defensa.errors }}
+                </div>
+                    <div class="col-lg-3 col-12">
+                    {{ form.unidad_militar.label_tag }}
+                    {{ form.unidad_militar }}
+                    {{ form.unidad_militar.errors }}
+                </div>
+                    <div class="col-lg-3 col-12">
+                    {{ form.estado_mayor.label_tag }}
+                    {{ form.estado_mayor }}
+                    {{ form.estado_mayor.errors }}
+                </div>
+                    <div class="col-lg-3 col-12">
+                    {{ form.militancia.label_tag }}
+                    {{ form.militancia }}
+                    {{ form.militancia.errors }}
+                </div>
+                    <div class="col-lg-3 col-12">
+                    {{ form.org_masas.label_tag }}
+                    {{ form.org_masas }}
+                    {{ form.org_masas.errors }}
+                </div>
+                    <div class="col-lg-3 col-12">
+                    {{ form.org_prof.label_tag }}
+                    {{ form.org_prof }}
+                    {{ form.org_prof.errors }}
+                </div>
+                    <div class="col-lg-3 col-12">
+                    {{ form.org_cult.label_tag }}
+                    {{ form.org_cult }}
+                    {{ form.org_cult.errors }}
+                </div>
+                    <div class="col-lg-3 col-12">
+                    {{ form.a_mision.label_tag }}
+                    {{ form.a_mision }}
+                    {{ form.a_mision.errors }}
+                </div>
+                </div>
+            </div>
+            <div id="nucleo_familiar_step" class="content" role="tabpanel" aria-labelledby="nucleo_familiar-trigger">
+                <div class="row">
+                    <div class="col-12">
+                        <table style="width: 100%">
+                            {{ nucleos_familiares.management_form }}
+                            <thead>
+                            <tr>
+                                <th class="pr-2" style="width: 18%">Parentesco</th>
+                                <th class="px-2" style="width: 17%">Fecha de nacimiento</th>
+                                <th class="px-2" style="width: 30%">Enfermedades</th>
+                                <th class="px-2" style="width: 13%">Salario devengado</th>
+                                <th class="px-2" style="width: 12%">Vínculo laboral</th>
+                                <th style="width: 5%"></th>
+                            </tr>
+                            </thead>
+                            {% for nf_form in nucleos_familiares.forms %}
+                                <tr class="formset_row-{{ nucleos_familiares.prefix }}">
+                                    <td class="pr-2">
+                                        {% for hidden in nf_form.hidden_fields %}
+                                            {{ hidden }}
+                                        {% endfor %}
+                                        {{ nf_form.parentesco }}
+                                        {{ nf_form.parentesco.errors.as_ul }}
+                                    </td>
+                                    <td class="px-2">
+                                        {{ nf_form.fecha_nac }}
+                                        {{ nf_form.fecha_nac.errors.as_ul }}
+                                    </td>
+                                    <td class="px-2">
+                                        {{ nf_form.enfermedades }}
+                                        {{ nf_form.enfermedades.errors.as_ul }}
+                                    </td>
+                                    <td class="px-2">
+                                        {{ nf_form.salario_dev }}
+                                        {{ nf_form.salario_dev.errors.as_ul }}
+                                    </td>
+                                    <td class="text-center px-2">
+                                        {% render_field nf_form.vinc_lab class="custom-checkbox" %}
+                                        {{ nf_form.vinc_lab.errors.as_ul }}
+                                    </td>
+                                    <td class="text-center"></td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div id="tallas_step" class="content" role="tabpanel" aria-labelledby="tallas-trigger">
+                <div class="row">
+                    <div class="col-lg-2 col-3">
+                    {{ form.zapato.label_tag }}
+                    {{ form.zapato }}
+                    {{ form.zapato.errors }}
+                </div>
+                    <div class="col-lg-2 col-3">
+                    {{ form.saya.label_tag }}
+                    {{ form.saya }}
+                    {{ form.saya.errors }}
+                </div>
+                    <div class="col-lg-2 col-3">
+                    {{ form.blusa.label_tag }}
+                    {{ form.blusa }}
+                    {{ form.blusa.errors }}
+                </div>
+                    <div class="col-lg-2 col-3">
+                    {{ form.pullover.label_tag }}
+                    {{ form.pullover }}
+                    {{ form.pullover.errors }}
+                </div>
+                    <div class="col-lg-2 col-3">
+                    {{ form.pitusa.label_tag }}
+                    {{ form.pitusa }}
+                    {{ form.pitusa.errors }}
+                </div>
+                    <div class="col-lg-2 col-3">
+                    {{ form.camisa.label_tag }}
+                    {{ form.camisa }}
+                    {{ form.camisa.errors }}
+                </div>
+                    <div class="col-lg-6 col-12">
+                        <div class="form-check-inline pt-3 check">
+                            <label class="form-check-label">
+                                {% render_field form.derecho class="form-check-input" %} {{ form.derecho.label }}
+                            </label>
+                            {{ form.derecho.errors }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-right">
+            <a type="button" class="btn btn-sm font-smaller previous-step" onclick="stepper.previous()">anterior</a>
+            <a type="button" class="btn btn-sm font-smaller next-step" onclick="stepper.next()">siguiente</a>
+            <button id="submit_button" type="submit" class="btn btn-sm btn-success font-smaller final-step">guardar
+            </button>
+        </div>
+    </div>
+{% endblock complete_form %}
+
+{% block javascript %}
+    {{ block.super }}
+    <script src="{% static 'plugins/jquery-validation/jquery.validate.min.js' %}"></script>
+    <script src="{% static 'plugins/dynamic-formsets/jquery.formset.js' %}"></script>
+    <script src="{% static 'plugins/bs-stepper/bs-stepper.min.js' %}"></script>
+    <script>
+        var flag = false;
+
+        $('.inline-date').datepicker({
+            uiLibrary: 'bootstrap4',
+            format: 'dd/mm/yyyy',
+            autoclose: true
+        });
+
+        $('#id_anno_graduado').datepicker({
+            uiLibrary: 'bootstrap4',
+            format: 'yyyy',
+            minViewMode: 'years',
+            viewMode: 'years',
+            autoclose: true
+        });
+
+        $(document).on('click', '.thumbnail', function () {
+            $('#id_foto').click();
+        });
+
+        var allowedFileExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+
+        function isValidImageFile(file, callback) {
+            if (file.size / 1024 > 2048) {
+                callback(false, 'El archivo es muy grande (máximo 2048kB).');
+                return;
+            }
+
+            var fileExtension = file.name.substr(file.name.lastIndexOf('.') + 1).toLowerCase();
+
+            if ($.inArray(fileExtension, allowedFileExtensions) > -1) {
+                callback(true, 'El archivo de la imagen es válido.');
+            } else {
+                callback(false, 'El tipo de archivo no es permitido (' + allowedFileExtensions.join(', ') + ').')
+            }
+        }
+
+        $(document).on('change', '#id_foto', function (event) {
+
+            var prevImg = $('#preview');
+            var loadedImg = $('#orto');
+            if (event.target.files.length === 0) {
+                loadedImg.show();
+                return;
+            }
+            var file = event.target.files[0];
+            isValidImageFile(file, function (isValid, message) {
+                if (isValid) {
+                    var fileReader = new FileReader();
+                    fileReader.onload = function (e) {
+                        prevImg.attr('src', e.target.result);
+                        loadedImg.hide();
+                        prevImg.show();
+                    };
+                    fileReader.onerror = function () {
+                        $('#id_foto').val('');
+                    };
+                    fileReader.readAsDataURL(file);
+                } else {
+                    alert(message);
+                    $('#id_foto').val('');
+                }
+            });
+        });
+
+        const stepperEl = $('.bs-stepper')[0],
+            stepper = new Stepper(stepperEl, {animation: true, linear: false});
+
+        stepperEl.addEventListener('shown.bs-stepper', function (event) {
+            if (event.detail.indexStep === 4 && flag === false) {
+                $('.formset_row-{{ nucleos_familiares.prefix }}').formset({
+                    addText: '<button class="btn btn-sm btn-info font-smaller px-2 mx-0"><i class="fa fa-plus"> agregar familiar</i></button>',
+                    deleteText: '<span class="badge badge-danger"><i class="fa fa-trash"></i></span>',
+                    prefix: '{{ nucleos_familiares.prefix }}',
+                });
+                flag = true;
+            }
+        });
+
+    </script>
+    <script>
+        $.validator.messages.required = "Este campo es requerido.";
+        $(function ($) {
+            var form = $('#create_update_form');
+            form.validate({
+                errorPlacement: function errorPlacement(error, element) {
+                    element.before(error);
+                }
+            });
+        });
+    </script>
+{% endblock javascript %}

@@ -8,9 +8,19 @@
         <div class="modal-body">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <p style="text-align: justify">¿Estás seguro que desea dar baja al Trabajador <strong>" {{trabajador.primer_nombre}} {{trabajador.segundo_nombre}} {{trabajador.apellidos}}"</strong>?</p>
+                    <p style="text-align: justify">¿Estás seguro que desea dar baja al Trabajador <strong>"{{trabajador.primer_nombre}} {{trabajador.segundo_nombre}} {{trabajador.apellidos}}"</strong>?</p>
                     
-                    <b>Causa:</b> <input type="text" name="causa" class="form-control" value="No definida">
+                    <label for="fecha_baja_id">Fecha:</label>
+                    <input type="text" id="fecha_baja_id" name="fecha_baja" class="form-control"
+                           value="{% now 'd/m/Y' %}">
+
+                    <label for="causa" class="font-weight-bold">Causa:</label>
+                    <select name="causa" class="form-control" required id="causa">
+                        <option selected>---------</option>
+                        {% for motivo in motivos %}
+                            <option value="{{ motivo.key }}">{{ motivo.value }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
             </div>
         </div>
@@ -25,3 +35,12 @@
         </form>
     </div>
 </div>
+
+<script>
+    $('#fecha_baja_id').prop("readonly", true).datepicker({
+        uiLibrary: 'bootstrap4',
+        iconsLibrary: 'font-awesome',
+        language: 'es'
+    });
+</script>
+

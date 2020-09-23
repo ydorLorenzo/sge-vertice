@@ -25,11 +25,11 @@
     <link href="{% static 'datepickerFiles/css/bootstrap-datepicker.css' %}" rel="stylesheet">
     <link href="{% static 'css/sidebar/mdb.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/sidebar/style5.css' %}" rel="stylesheet">
-    <link href="{% static 'css/custom.css' %}" rel="stylesheet">
+    <link href="{% static 'css/custom.css' %}?v1.0.2" rel="stylesheet">
     <link href="{% static 'css/responsive.dataTables.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/rowGroup.dataTables.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/fixedHeader.dataTables.min.css' %}" rel="stylesheet">
-
+    <link href="{% static 'plugins/bootstrap4-toggle/css/bootstrap4-toggle.min.css' %}" rel="stylesheet">
 
     <style type="text/css">
 
@@ -100,7 +100,7 @@
             <h3>Prenómina 15</h3>
         </div>
         <ul class="list-unstyled components">
-            <a href="http://127.0.0.1:8000/pren/home_pren15/#" style="padding-left: 5px">Menú</a>
+            <a href="{% url 'home_pren15' %}" style="padding-left: 5px">Menú</a>
             <br>
             {% if menu_gestionar_obra %}
             <li>
@@ -120,6 +120,12 @@
                         class="fa fa-image"></i> Gestionar Planos</a>
             </li>
             {% endif %}
+            {% if menu_gestionar_obra %}
+            <li>
+               <a aria-expanded="false" class="dropdown-toggle" data-toggle="modal" href="#modalGestionar_Penalizacion"><i
+                        class="fa fa-building"></i> Gestionar Penalizaci&oacuten</a>
+            </li>
+            {% endif %}
             {% if menu_generate_acta %}
             <li>
                 <a aria-expanded="false" class="dropdown-toggle" data-toggle="modal" href="#modalBuscarActa"><i
@@ -130,6 +136,10 @@
             <li>
                 <a aria-expanded="false" class="dropdown-toggle" data-toggle="modal" href="#modalExportarDatos"><i
                         class="fa fa-file-excel-o"></i> Exportar Datos</a>
+            </li>
+            <li>
+                <a aria-expanded="false" class="dropdown-toggle" data-toggle="modal" href="#modalControlPlanos"><i
+                        class="fa fa-file-excel-o"></i> Conciliación Planos por OO</a>
             </li>
             {% endif %}
             {% if menu_generate_certifico %}
@@ -142,6 +152,14 @@
             <li>
                 <a aria-expanded="false" class="dropdown-toggle" data-toggle="modal" href="#modalExportarPrenomina"><i
                         class="fa fa-file-excel-o"></i> Exportar Prenomina</a>
+            </li>
+            <li>
+                <a aria-expanded="false" class="dropdown-toggle" data-toggle="modal" href="#modalcompendiotrabajador"><i
+                        class="fa fa-file-excel-o"></i> Compendio por Trabajador</a>
+            </li>
+            <li>
+                <a aria-expanded="false" class="dropdown-toggle" data-toggle="modal" href="#modalcompendioservicio"><i
+                        class="fa fa-file-excel-o"></i> Compendio por Servicio/Obra</a>
             </li>
             {% endif %}
             {% if menu_generate_anexo %}
@@ -236,6 +254,47 @@
             </div>
         </div>
     </div>
+    <div id="modalGestionar_Penalizacion" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 style="font-weight: bold">Gestionar Penalizaci&oacuten</h6>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <div class="panel-body">
+                        <p style="text-align: center; color: black">Seleccione la obra para buscar penalizaciones.</p>
+                        <form method="POST" action="{% url 'gestionarPenalizacion' %}">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-sm-12" style=" padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="obra">Obra:</label>
+                                </div>
+                                <div class="col-sm-8">
+                                    <select name="obra" id="id_obra" class="form-control" title="obra">
+                                        {% for obra in obras %}
+                                            <option value="{{ obra.id }}">{{ obra.nombre }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <br>
+                            <div class=" modal-footer">
+                                <button type="submit" class="btn btn-sm btn-primary" style="text-transform: none;">
+                                    Buscar
+                                </button>
+                                <button type="button" class="btn btn-sm btn-danger" style="text-transform: none;"
+                                        data-dismiss="modal">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="modalExportarDatos" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -259,6 +318,84 @@
                         <p style="text-align: center; color: black">Seleccione rango de fecha para generar el
                             reporte.</p>
                         <form method="POST" action="{% url 'exportarDatos' %}">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-sm-2" style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="fecha_inic">Desde:</label>
+                                </div>
+                                <div class="col-sm-4" style="padding-left: 5px;">
+                                    <div class="input-group">
+                                        <input type="text" name="fecha_inic" id="fecha_inic" class="form-control">
+                                        <span class="input-group-append uno"
+                                              style="background-color: lightgray; width: 28px"><i class="fa fa-calendar"
+                                                                                                  style="margin-left: 5px; padding-top: 10px; font-size: large; "></i></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2" style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="fecha_fin">Hasta:</label>
+                                </div>
+                                <div class="col-sm-4" style="padding-left: 0;">
+                                    <div class="input-group">
+                                        <input type="text" name="fecha_fin" id="fecha_fin" class="form-control">
+                                        <span class="input-group-append dos"
+                                              style="background-color: lightgray; width: 28px"><i class="fa fa-calendar"
+                                                                                                  style="margin-left: 5px; padding-top: 10px; font-size: large; "></i></span>
+                                    </div>
+                                </div>
+                                <div class="col"></div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-sm-2" style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="obra1">Obra:</label>
+                                </div>
+                                <div class="col-sm-10">
+                                    <select name="obra1" id="id_obra1" class="form-control" title="obra1">
+                                        {% for obra in obras %}
+                                            <option value="{{ obra.id }}">{{ obra.nombre }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <br>
+                            <div class=" modal-footer">
+                                <button type="submit" class="btn btn-sm btn-primary" style="text-transform: none;">
+                                    Buscar
+                                </button>
+                                <button type="button" class="btn btn-sm btn-danger" style="text-transform: none;"
+                                        data-dismiss="modal">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="modalControlPlanos" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 style="font-weight: bold">Control de Planos</h6>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <div class="panel-body">
+                        <div class="panel panel-default">
+                            <div class="row" style="margin-bottom: 20px;">
+                                {% if error_add %}
+                                    <div class="alert alert-danger"
+                                         style="width: 100%; text-align: center; margin: 0 auto; padding: 0 10px; border-radius: 0;">
+                                        <p style="margin-top: 10px">Debe seleccionar un rango de fecha válido</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <p style="text-align: center; color: black">Seleccione rango de fecha para generar el
+                            reporte.</p>
+                        <form method="POST" action="{% url 'controlPlanos' %}">
                             {% csrf_token %}
                             <div class="row">
                                 <div class="col-sm-2" style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
@@ -473,6 +610,121 @@
             </div>
         </div>
     </div>
+
+    <div id="modalcompendiotrabajador" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 style="font-weight: bold">Compendio por Trabajadores</h6>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <div class="panel-body">
+                        <div class="panel panel-default">
+                            <div class="row" style="margin-bottom: 20px;">
+                                {% if error_comp_trab %}
+                                    <div class="alert alert-danger"
+                                         style="width: 100%; text-align: center; margin: 0 auto; padding: 0 10px; border-radius: 0;">
+                                        <p style="margin-top: 10px">Debe seleccionar un rango de fecha válido</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <p style="text-align: center; color: black">Seleccione rango de fecha para generar la
+                            prenómina</p>
+                        <form method="POST" action="{% url 'exportar_comp_trab' %}">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col"></div>
+                                <div class="col-sm-2" style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="fecha_inic">Desde:</label>
+                                </div>
+                                <div class="col-sm-3" style="padding-left: 5px;">
+                                    <input name="fecha_inic" type="text" class="form-control" id="fecha_inic">
+                                </div>
+                                <div class="col-sm-2" style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="fecha_fin">Hasta:</label>
+                                </div>
+                                <div class="col-sm-3" style="padding-left: 0;">
+                                    <input name="fecha_fin" type="text" class="form-control" id="fecha_fin"
+                                           title="Fecha Fin">
+                                </div>
+                                <div class="col"></div>
+                            </div>
+                            <br>
+                            <div class=" modal-footer">
+                                <button type="submit" class="btn btn-sm btn-primary" style="text-transform: none;">
+                                    Generar
+                                </button>
+                                <button type="button" class="btn btn-sm btn-danger" style="text-transform: none;"
+                                        data-dismiss="modal">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="modalcompendioservicio" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 style="font-weight: bold">Compendio por Obras/Servicios</h6>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <div class="panel-body">
+                        <div class="panel panel-default">
+                            <div class="row" style="margin-bottom: 20px;">
+                                {% if error_comp_serv %}
+                                    <div class="alert alert-danger"
+                                         style="width: 100%; text-align: center; margin: 0 auto; padding: 0 10px; border-radius: 0;">
+                                        <p style="margin-top: 10px">Debe seleccionar un rango de fecha válido</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <p style="text-align: center; color: black">Seleccione rango de fecha para generar la
+                            prenómina</p>
+                        <form method="POST" action="{% url 'exportar_comp_obras' %}">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col"></div>
+                                <div class="col-sm-2" style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="fecha_inic">Desde:</label>
+                                </div>
+                                <div class="col-sm-3" style="padding-left: 5px;">
+                                    <input name="fecha_inic" type="text" class="form-control" id="fecha_inic">
+                                </div>
+                                <div class="col-sm-2" style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="fecha_fin">Hasta:</label>
+                                </div>
+                                <div class="col-sm-3" style="padding-left: 0;">
+                                    <input name="fecha_fin" type="text" class="form-control" id="fecha_fin"
+                                           title="Fecha Fin">
+                                </div>
+                                <div class="col"></div>
+                            </div>
+                            <br>
+                            <div class=" modal-footer">
+                                <button type="submit" class="btn btn-sm btn-primary" style="text-transform: none;">
+                                    Generar
+                                </button>
+                                <button type="button" class="btn btn-sm btn-danger" style="text-transform: none;"
+                                        data-dismiss="modal">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="modalBuscarActa" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -492,7 +744,7 @@
                                     <label style="font-weight: bold;" for="obra1">Obra:</label>
                                 </div>
                                 <div class="col-sm-8">
-                                    <select name="obra1" id="id_obra1" class="form-control" title="obra1">
+                                    <select name="obra_acta" id="id_obra_acta" class="form-control" title="obra_acta">
                                         {% for obra in obras %}
                                             <option value="{{ obra.id }}">{{ obra.nombre }}</option>
                                         {% endfor %}
@@ -502,7 +754,13 @@
                                     <label style="font-weight: bold; for="recibido_por">Recibido por </label>
                                 </div>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="recibido_por" name="recibido_por" title="recibido_por" required>
+                                    <input type="text" class="form-control" id="id_recibido_por_acta" name="recibido_por_acta" title="recibido_por_acta" required>
+                                </div>
+                                <div class="col-sm-12" style="padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="alpha">Alpha </label>
+                                </div>
+                                <div class="col-sm-8">
+                                    <input type="checkbox" id="alpha" name="alpha" data-toggle="toggle" data-onstyle="info" data-offstyle="light">
                                 </div>
                             </div>
                             <br>
@@ -634,6 +892,10 @@
 <script src="{% static 'js/dataTables.responsive.min.js' %}"></script>
 <script src="{% static 'js/dataTables.keyTable.min.js' %}"></script>
 <script src="{% static 'js/dataTables.fixedHeader.min.js' %}"></script>
+<script src="{% static 'js/buttons.flash.min.js' %}"></script>
+<script src="{% static 'js/pdfmake.min.js' %}"></script>
+<script src="{% static 'js/vfs_fonts.js' %}"></script>
+<script src="{% static 'js/buttons.print.min.js' %}"></script>
 
 <script type="text/javascript" src="{% static 'js/dataTables.jqueryui.js' %}"></script>
 <script src="{% static 'js/app.js' %}"></script>
@@ -644,6 +906,7 @@
 <script src="{% static 'datepickerFiles/js/bootstrap-datepicker.js' %}"></script>
 <script src="{% static 'datepickerFiles/locales/bootstrap-datepicker.es.min.js' %}"></script>
 
+<script src="{% static 'plugins/bootstrap4-toggle/js/bootstrap4-toggle.min.js' %}"></script>
 
 <script type="text/javascript">
     $(document).ready(function () {

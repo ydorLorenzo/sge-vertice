@@ -1,0 +1,94 @@
+{% extends 'layouts/materialize/_base_main_materialize.html' %}
+{% load static %}
+
+{% block styles %}
+    <!-- DataTables core CSS -->
+    <link type="text/css" href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'css/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'css/dataTables.jqueryui.css' %}" rel="stylesheet">
+    <!-- Export buttons DataTable -->
+    <link type="text/css" href="{% static 'css/buttons.dataTables.min.css' %}" rel="stylesheet">
+    <!-- Datepicker core CSS -->
+    <link type="text/css" href="{% static 'datepickerFiles/css/bootstrap-datepicker.min.css' %}" rel="stylesheet">
+
+    <style type="text/css">
+        #topcontrol {
+            transition: 0.5s;
+        }
+
+        .btn {
+            font-size: smaller!important;
+        }
+        ul ul ul a {
+            padding-left: 50px!important;
+        }
+        .my-list-style {
+            font-size: .75rem;
+        }
+        .has-error {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+        }
+    </style>
+{% endblock %}
+
+{% block header_left %}
+    <button type="button" id="sidebarCollapse" class="navbar-btn"
+            style="margin-right: 10px; border-radius: 100px;">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <a class="navbar-brand" href="{% url 'home_principal' %}">Sistema de Gestión Empresarial VERTICE</a>
+    <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarColor01"
+            aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+{% endblock %}
+
+{% block base_sidebar %}
+    <nav id="sidebar" class="pt-3">
+        <div class="sidebar-header">
+            <h5 class="text-center">{% block sidebar_title %}{% endblock %}</h5>
+        </div>
+        <ul class="list-unstyled components my-list-style">
+            <a class="pl-2" href="{% block sidebar_home_url %}{% endblock %}">Menú</a>
+            <br>
+            {% block sidebar_list %}
+            {% endblock %}
+        </ul>
+    </nav>
+{% endblock %}
+
+{% block content %}
+    <div class="text-center">
+        {% block content_title %}{% endblock %}
+    </div>
+    {% block content_inner %}{% endblock %}
+{% endblock %}
+
+{% block modals %}
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript" src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/dataTables.bootstrap4.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/dataTables.buttons.min.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'js/dataTables.jqueryui.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/app.js' %}"></script>
+
+    <!-- Datepicker js -->
+    <script type="text/javascript" src="{% static 'datepickerFiles/js/bootstrap-datepicker.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'datepickerFiles/locales/bootstrap-datepicker.es.min.js' %}"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+                $(this).toggleClass('active');
+            });
+        });
+    </script>
+{% endblock %}

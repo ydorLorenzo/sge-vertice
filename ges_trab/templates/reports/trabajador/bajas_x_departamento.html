@@ -1,0 +1,5 @@
+{% extends 'reports/trabajador/altas_x_departamento.html' %}
+
+{% block fecha_head %}Baja{% endblock %}
+{% block fecha_body %}{{ item.fecha_baja|date:"d/m/y" }}{% endblock %}
+{% block fecha_foot %}Baja{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'layouts/crud/_base_create-update.html' %}
+{% load widget_tweaks %}
+
+{% block styles %}{{ block.super }} {{ form.media.css }}{% endblock %}
+{% block javascript %}{{ block.super }} {{ form.media.js }}{% endblock %}
+
+{% block form_elements %}
+    {{ form.non_field_errors }}
+    <div class="col-lg-6 col-12">
+        {{ form.codigo.label_tag }}
+        {{ form.codigo.errors }}
+        {{ form.codigo }}
+    </div>
+    <div class="col-lg-6 col-12 mt-lg-0 mt-2">
+        {{ form.nombre.label_tag }}
+        {{ form.nombre.errors }}
+        {{ form.nombre }}
+    </div>
+    <div class="col-lg-6 col-12 mt-2">
+        {{ form.unidad.label_tag }}
+        {{ form.unidad.errors }}
+        {{ form.unidad }}
+    </div>
+    <div class="col-lg-6 col-12 mt-2">
+        {{ form.area.label_tag }}
+        {{ form.area.errors }}
+        {{ form.area }}
+    </div>
+{% endblock %}

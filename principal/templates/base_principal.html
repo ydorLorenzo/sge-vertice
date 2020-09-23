@@ -9,6 +9,7 @@
     <title>{% block title %}Sistema de Gestión Empresarial VERTICE{% endblock %}</title>
 
     <!-- Bootstrap core CSS -->
+    <link rel="shortcut icon" href="{% static 'favicon_sge.ico' %}">
     {#    <link href="{% static 'css/sidebar/bootstrap.min.css' %}" rel="stylesheet">#}
     {#    <link href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet">#}
     {#    <link href="{% static 'css/dataTables.bootstrap4.min.css' %}" rel="stylesheet">#}
@@ -24,7 +25,7 @@
 
     <link href="{% static 'css/sidebar/mdb.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/sidebar/style5.css' %}" rel="stylesheet">
-    <link href="{% static 'css/custom.css' %}" rel="stylesheet">
+    <link href="{% static 'css/custom.css' %}?v1.0.2" rel="stylesheet">
 
 
     <style type="text/css">
@@ -45,7 +46,7 @@
 
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: #263238;">
-    <a class="navbar-brand" href="{% url 'home_principal' %}"><img src="{% static 'images/Untitled.png' %}" class="logo"
+    <a class="navbar-brand" href="{% url 'home_principal' %}"><img src="{% static 'favicon_sge.ico' %}" class="logo"
     >&nbsp;&nbsp;Sistema de Gestión
         Empresarial VERTICE</a>
     <div class="navbar-collapse collapse" id="navbarColor01" style="">

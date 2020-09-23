@@ -144,7 +144,7 @@
         $('#id_nombre_tipo_act').prop("title", 'Este campo permite solo letras y comienza con mayúscula').attr("oninvalid", 'setCustomValidity("Campo obligatorio.Este campo permite solo letras y comienza con mayúscula")');
 
         $('#addButtonTipoActividad').click(function () {
-            $('#popup form').prop('action', '/adicionar_tipo_actividad/');
+            $('#popup form').prop('action', '{% url "adicionarTipoActividad" %}');
             $('#popup').modal('show');
         });
         {% if form.errors %}

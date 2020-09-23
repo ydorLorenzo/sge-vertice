@@ -64,7 +64,7 @@
     <p class="title"><strong>Plantilla de Contratos</strong></p>
 <div></div>
     {% for uni in unidades %}
-        <table class="display table table-striped" cellspacing="0" width="100%" id="tabla">
+        <table class="display table table-striped" cellspacing="0" width="100%" id="tabla" repeat="1">
             <thead>
             <tr>
                 <th style="width: 10px; margin-right: 0;">Area</th>
@@ -114,7 +114,7 @@
                         <td>{{ trab.data.grupoEscala }}</td>
                         <td>{{ trab.data.salario_total }}</td>
                         <td>{{ trab.data.salario_escala }}</td>
-                        <td>{{ trab.data.salario_jornada_laboral }}</td>
+                        <td>{% if trab.data.j_laboral %}{{ trab.data.salario_jornada_laboral }}{% else %}0.00{% endif %}</td>
                         <td>{{ trab.data.incre_res }}</td>
                         <td>{{ trab.data.cies }}</td>
                         <td>{{ trab.data.sal_plus }}</td>

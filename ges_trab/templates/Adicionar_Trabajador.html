@@ -1,5 +1,10 @@
-{% extends "base.html" %} {% load static %} {% block title %}Adicionar/Editar Trabajador{% endblock %}
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Adicionar/Editar Trabajador{% endblock %}
+
 {% block styles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'plugins/bootstrap4-toggle/css/bootstrap4-toggle.min.css' %}" />
     <style>
         body {
             padding-top: 70px;
@@ -40,15 +45,18 @@
         #nav-tabContent {
             padding: 20px 0;
         }
+        option {
+            padding: 0;
+        }
     </style>
+    {{ form.media.css }}
 
 {% endblock %}
 {% block migas %}
     <ol class="breadcrumb" style="margin-top: 56px; opacity: 0.9; position: fixed;
     top: 0; right: 0; left: 0; z-index: 1000;">
-        <li class="breadcrumb-item"><a href="/home/">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="/home/">Trabajadores</a></li>
-        <li class="breadcrumb-item"><a href="/trabajador/">Gestionar Altas</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'GestionarTrabajador' %}">Trabajadores</a></li>
         <li class="breadcrumb-item active" aria-current="page">Adicionar Trabajador</li>
     </ol>
 {% endblock %}
@@ -98,6 +106,7 @@
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="nav-personales" role="tabpanel"
                      aria-labelledby="nav-personales-tab">
+                    <input hidden="hidden" id="trabajador_id" name="trabajador_id" value="{{ pk }}">
                     <div class="row">
                         <div class="col-md-3">
                             <center>
@@ -160,7 +169,6 @@
                         <div class="col-md-3">Tipo de Contrato {{ form.t_contrato }}</div>
                         <div class="col-md-3">Fuerza Irregular {{ form.fuerza_i }}</div>
                         <div class="col-md-3">Tipo de Pago {{ form.t_pago }}</div>
-                        <div class="col-md-3">Sistema de Pago {{ form.s_pago }}</div>
                         <div class="col-md-3">Escala Salarial {{ form.escala_salarial }}</div>
                         <div class="col-md-3">Salario Escala {{ form.salario_escala }}</div>
                         <div class="col-md-3">Pago x perfeccion. {{ form.incre_res }}</div>
@@ -178,13 +186,11 @@
                         <div class="col-md-3">Categoría Científica {{ form.cat_cient }}</div>
                         <div class="col-md-3">Motivo Alta {{ form.motivo_alta }}</div>
                         <div class="col-md-3">Albergado {{ form.albergado }}</div>
-                        <div class="col-md-3">Sancionado {{ form.sancionado }}</div>
                         <div class="col-md-3">Jornada Laboral 208h {{ form.j_laboral }}</div>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="nav-docentes" role="tabpanel" aria-labelledby="nav-docentes-tab">
                     <div class="row">
-                        <div class="col-md-3">Tipo de Tecnico {{ form.tipo_tecnico }}</div>
                         <div class="col-md-3">Actividad {{ form.actividad }}</div>
                         <div class="col-md-3">Calificación {{ form.calificacion }}</div>
                         <div class="col-md-3">Especialidad {{ form.especialidad }}</div>
@@ -193,7 +199,6 @@
                         <div class="col-md-3">País graduación {{ form.pais_graduacion }}</div>
                         <div class="col-md-3">Escolaridad {{ form.escolaridad }}</div>
                         <div class="col-md-3">Idioma {{ form.idioma }}</div>
-                        <div class="col-md-3">Tec. TAC {{ form.tec_tac }}</div>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="nav-defensa" role="tabpanel" aria-labelledby="nav-defensa-tab">
@@ -264,7 +269,7 @@
                         <div class="col-md-3">Pullover {{ form.pullover }}</div>
                         <div class="col-md-3">Pitusa {{ form.pitusa }}</div>
                         <div class="col-md-3">Camisa {{ form.camisa }}</div>
-                        <div class="col-md-3">Derecho {{ form.derecho }}</div>
+                        <div class="col-md-3 mt-4"><input type="checkbox" data-offstyle="outline-primary" {% if form.derecho %}checked{% endif %} data-toggle="toggle" data-on="Derecho" data-off="Zurdo" name="derecho" data-width="80"></div>
                     </div>
                 </div>
             </div>
@@ -284,7 +289,11 @@
         </div>
     </form>
 
-{% endblock %} {% block javascript %}
+{% endblock %}
+
+{% block javascript %}
+    {{ form.media.js }}
+    <script src="{% static 'plugins/bootstrap4-toggle/js/bootstrap4-toggle.min.js' %}"></script>
     <script>
         var $imageupload = $('.imageupload');
         $imageupload.imageupload();
@@ -498,99 +507,165 @@
                 }
             });
         });
+        $(document).ready(function() {
+            var $especialidad = $("#id_especialidad :selected").val() | 0,
+                $calificacion = $("#id_calificacion :selected").val() | 0,
+                $unidad = $("#id_unidad_org :selected").val() | 0,
+                $departamento = $("#id_departamento :selected").val() | 0;
+
+            $('#id_especialidad').html('');
+
+            $.get(`{% url 'ges_trab_home' %}select_especialidad/${$calificacion}/`, function (data) {
+                var especialidades = data[0].result;
+                if (especialidades.length !== 0) {
+                    $('#id_especialidad').append("<option value=''>---------</option>");
+                    for (var especialidad in especialidades) {
+                        if($especialidad == especialidades[especialidad].id) {
+                            $('#id_especialidad').append(`
+                                <option value="${especialidades[especialidad].id}" selected="selected">
+                                    ${especialidades[especialidad].nombre}
+                                </option>`
+                            );
+                        } else {
+                            $('#id_especialidad').append(`
+                                <option value="${especialidades[especialidad].id}">
+                                    ${especialidades[especialidad].nombre}
+                                </option>`
+                            );
+                        }
+                    }
+                } else {
+                    $('#id_especialidad').append(`<option value="">No hay especialidades para mostrar.</option>`);
+                }
+            });
+
+            $('#id_departamento').html('');
+
+            $.get(`{% url 'gestionarPlantilla' %}Dpto_por_unidad/${$unidad}/`, function (data) {
+                var departamentos = data[0].result;
+                if (departamentos.length !== 0) {
+                    $('#id_departamento').append("<option value=''>---------</option>");
+                    for (var departamento in departamentos) {
+                        var index_tab = '';
+                        if(departamentos[departamento].dirige_nombre) {index_tab = ' - '}
+                        if($departamento == departamentos[departamento].id) {
+                            $('#id_departamento').append(
+                                `<option value="${departamentos[departamento].id}" selected="selected">
+                                   ${index_tab} ${departamentos[departamento].nombre}
+                                </option>`
+                            );
+                        } else {
+                            $('#id_departamento').append(
+                                `<option value="${departamentos[departamento].id}">
+                                    ${index_tab} ${departamentos[departamento].nombre}
+                                 </option>`
+                            );
+                        }
+                    }
+                } else {
+                    $('#id_departamento').append(`<option value="">No hay departamentos para mostrar.</option>`);
+                }
+            });
+            
+        });
 
     </script>
     <!--TERMINA VALIDACIONES EN TIEMPO REAL -->
 
     <script type="text/javascript">
 
+        // Helper functions
+        function select_especialidad() {
+            var id_seleccionado = this.value | 0;
+            // Esta línea lo que hace es limpiar el segundo select para volverlo a llenar luego con los valores que
+            // se obtendrán en la petición ajax
+            $('#id_especialidad').html('');
+
+            $.get(`{% url 'ges_trab_home' %}select_especialidad/${id_seleccionado}/`, function (data) {
+                var especialidades = data[0].result;
+                if (especialidades.length !== 0) {
+                    $('#id_especialidad').append(`<option>---------</option>`);
+                    for (var especialidad in especialidades) {
+                            $('#id_especialidad').append(`
+                                <option value="${especialidades[especialidad].id}">
+                                    ${especialidades[especialidad].nombre}
+                                </option>`
+                            );
+                    }
+                } else {
+                    $('#id_especialidad').append(`<option>No hay especialidades para mostrar.</option>`);
+                }
+            });
+        }
+        
+        function select_cargos() {
+            var id_seleccionado = this.value | 0;
+            $('#id_cargo').html('');
+
+            $.get(`{% url 'ges_trab_home' %}select_cargos/${id_seleccionado}/`, function (data) {
+                var cargos = data[0].result;
+                if (cargos.length !== 0) {
+                    $('#id_cargo').append(`<option>---------</option>`);
+                    for (var disponibles in cargos) {
+                            $('#id_cargo').append(
+                                `<option value="${cargos[disponibles].id}">${cargos[disponibles].nombre}</option>`
+                            );
+                    }
+                } else {
+                    $('#id_cargo').append(`<option>No hay cargos para mostrar.</option>`);
+                }
+            });
+        }
+        
+        function select_departamentos() {
+            var id_seleccionado = this.value | 0;
+            $('#id_departamento').html('');
+
+            $.get(`{% url 'gestionarPlantilla' %}Dpto_por_unidad/${id_seleccionado}/`, function (data) {
+                var departamentos = data[0].result;
+                if (departamentos.length !== 0) {
+                    $('#id_departamento').append(`<option>---------</option>`);
+                    for (var departamento in departamentos) {
+                        var index_tab = '';
+                        if (departamentos[departamento].dirige_nombre) {index_tab = ' - '}
+                            $('#id_departamento').append(
+                                `<option value="${departamentos[departamento].id}">
+                                    ${index_tab} ${departamentos[departamento].nombre}
+                                 </option>`
+                            );
+                    }
+                } else {
+                    $('#id_departamento').append(`<option>No hay departamentos para mostrar.</option>`);
+                }
+            });
+        }
+
 
         // Cargos Disponibles
-        $('#id_departamento').on('change', function () {
-            var id_seleccionado = this.value;
-            $('#id_cargo').html(''); //esta linea lo que hace es limpiar el segundo select para volverlo a llenar luego con los valores que se obtendran en la peticion ajax
+        $('#id_departamento').on('change', select_cargos);
 
-            $.get(`/select_cargos/${id_seleccionado}/`,
-                function (data) {
-                    var datos = data[0].result;
-                    console.info(datos);
-                    if (datos.length !== 0) {
-                        for (var disponibles in datos) {
-                            console.info(disponibles);
-
-                            $('#id_cargo').append('<option value="' + datos[disponibles].id +
-                                '">' + datos[disponibles].nombre + '</option>');
-                        }
-                    } else {
-                        $('#id_cargo').append('No hay tareas para mostrar.');
-                    }
-
-                });
-        });
         // Datos Personales OnChange
-        $('#id_unidad_org').on('change', function () {
-            //$('#id_departamento').prop('disabled', false);
-            var id_seleccionado = this.value;
-            $('#id_departamento').html(''); //esta linea lo que hace es limpiar el segundo select para volverlo a llenar luego con los valores que se obtendran en la peticion ajax
-
-            $.get(`/Dpto_por_unidad/${id_seleccionado}/`,
-                function (data) {
-                    var datos = data[0].result;
-                    console.info(datos);
-                    if (datos.length !== 0) {
-                        for (var departamento in datos) {
-                            console.info(departamento);
-                            $('#id_departamento').append('<option value="' + datos[departamento].id +
-                                '">' + datos[departamento].codigo + " " + datos[departamento].nombre + '</option>');
-                        }
-                    } else {
-                        $('#id_departamento').append('No hay tareas para mostrar.');
-                    }
-
-                });
-        });
+        $('#id_unidad_org').on('change', select_departamentos);
 
         //Calificacion - Especialidad
-        $('#id_calificacion').on('change', function () {
-            //$('#id_departamento').prop('disabled', false);
-            var id_seleccionado = this.value;
-            $('#id_especialidad').html(''); //esta linea lo que hace es limpiar el segundo select para volverlo a llenar luego con los valores que se obtendran en la peticion ajax
-
-            $.get(`/select_especialidad/${id_seleccionado}/`,
-                function (data) {
-                    var datos = data[0].result;
-                    console.info(datos);
-                    if (datos.length !== 0) {
-                        for (var especialidad in datos) {
-                            console.info(especialidad);
-                            $('#id_especialidad').append('<option value="' + datos[especialidad].id +
-                                '">' + datos[especialidad].nombre + '</option>');
-                        }
-                    } else {
-                        $('#id_especialidad').append('No hay tareas para mostrar.');
-                    }
-
-                });
-
-
-        });
+        $('#id_calificacion').on('change', select_especialidad);
 
         // Datos Laborales OnChange
         $('#id_escala_salarial').on('change', function () {
 
             var id_seleccionado = this.value;
 
-            $('#id_salario_escala').html(''); //esta linea lo que hace es limpiar el segundo select para volverlo a llenar luego con los valores que se obtendran en la peticion ajax
+            // Esta linea lo que hace es limpiar el segundo select para volverlo a llenar
+            // luego con los valores que se obtendran en la peticion ajax.
+            $("#id_salario_escala").html("");
 
-            $.get(`/select_salarioescala/${id_seleccionado}/`,
+            $.get(`{% url 'ges_trab_home' %}select_salarioescala/${id_seleccionado}/`,
                 function (data) {
                     var datos = data[0].result;
 
-                    console.info(datos);
                     if (datos.length !== 0) {
                         for (var salario_escala in datos) {
 
-                            console.info(salario_escala);
                             // $('#id_salario_escala').append('<input value="' + datos[salario_escala].salario_escala +
                             //   '">'  + '</input>');
                             if ($('select[name=categoria]').val() === 'O') {
@@ -905,110 +980,112 @@
                 $('#id_sal_bas').val(parseFloat($('#id_salario_escala').val()) + parseFloat($('#id_incre_res').val()))
             }
         });
-        /*  $('#id_j_laboral').change(function () {
 
+        // Validations
+        $(document).ready(function () {
+	        var $id_worker = $("#trabajador_id").val() | '';
+	        $(function () {
+	            jQuery.extend(jQuery.validator.messages, {
+	                required: "Este campo es obligatorio.",
+	                remote: "Este valor ya está en uso",
+	                email: "Por favor, escribe una dirección de correo válida.",
+	                url: "Por favor, escribe una URL válida.",
+	                date: "Por favor, escribe una fecha válida.",
+	                dateISO: "Por favor, escribe una fecha (ISO) válida.",
+	                number: "Por favor, escribe un número válido.",
+        	        digits: "Por favor, escribe sólo dígitos.",
+	                creditcard: "Por favor, escribe un número de tarjeta válido.",
+        	        equalTo: "Por favor, escribe el mismo valor de nuevo.",
+                	extension: "Por favor, escribe un valor con una extensión aceptada.",
+	                maxlength: $.validator.format("Por favor, no escribas más de {0} caracteres."),
+        	        minlength: $.validator.format("Por favor, no escribas menos de {0} caracteres."),
+                	rangelength: $.validator.format("Por favor, escribe un valor entre {0} y {1} caracteres."),
+	                range: $.validator.format("Por favor, escribe un valor entre {0} y {1}."),
+        	        max: $.validator.format("Por favor, escribe un valor menor o igual a {0}."),
+                	min: $.validator.format("Por favor, escribe un valor mayor o igual a {0}."),
+	                nifES: "Por favor, escribe un NIF válido.",
+        	        nieES: "Por favor, escribe un NIE válido.",
+                	cifES: "Por favor, escribe un CIF válido."
+	            });
 
-          });*/
-        $(function () {
-            jQuery.extend(jQuery.validator.messages, {
-                required: "Este campo es obligatorio.",
-                remote: "Este valor ya está en uso",
-                email: "Por favor, escribe una direcciÃ³n de correo vÃ¡lida.",
-                url: "Por favor, escribe una URL vÃ¡lida.",
-                date: "Por favor, escribe una fecha vÃ¡lida.",
-                dateISO: "Por favor, escribe una fecha (ISO) vÃ¡lida.",
-                number: "Por favor, escribe un nÃºmero vÃ¡lido.",
-                digits: "Por favor, escribe sÃ³lo dÃ­gitos.",
-                creditcard: "Por favor, escribe un nÃºmero de tarjeta vÃ¡lido.",
-                equalTo: "Por favor, escribe el mismo valor de nuevo.",
-                extension: "Por favor, escribe un valor con una extensiÃ³n aceptada.",
-                maxlength: $.validator.format("Por favor, no escribas mÃ¡s de {0} caracteres."),
-                minlength: $.validator.format("Por favor, no escribas menos de {0} caracteres."),
-                rangelength: $.validator.format("Por favor, escribe un valor entre {0} y {1} caracteres."),
-                range: $.validator.format("Por favor, escribe un valor entre {0} y {1}."),
-                max: $.validator.format("Por favor, escribe un valor menor o igual a {0}."),
-                min: $.validator.format("Por favor, escribe un valor mayor o igual a {0}."),
-                nifES: "Por favor, escribe un NIF vÃ¡lido.",
-                nieES: "Por favor, escribe un NIE vÃ¡lido.",
-                cifES: "Por favor, escribe un CIF vÃ¡lido."
-            });
+		    $.validator.addMethod("mayusculaPrimero", function (value, element, regexpr) {
+                	return regexpr.test(value);
+	            }, "Este campo no permite caracteres especiales y comienza con mayúscula");
 
-            $.validator.addMethod("mayusculaPrimero", function (value, element, regexpr) {
-                return regexpr.test(value);
-            }, "Este campo no permite caracteres especiales y comienza con mayúscula");
+	            $('#new-trabajador-form').validate({
+	                ignore: [],
+	                rules: {
+	                    primer_nombre: {
+	                        required: true,
+	                        minlength: 2,
+        	                mayusculaPrimero: /^([A-Z]{1})[A-Za-z0-9áéíóúñ .,]+/
+                	    },
 
-            $('#new-trabajador-form').validate({
-                ignore: [],
-                rules: {
-                    primer_nombre: {
-                        required: true,
-                        minlength: 2,
-                        mayusculaPrimero: /^([A-Z]{1})[A-Za-z0-9áéíóúñ .,]+/
-                    },
-
-                    apellidos: {
-                        required: true,
-                        minlength: 2,
-                        mayusculaPrimero: /^([A-Z]{1})[A-Za-z0-9áéíóúñ .,]+/
-                    },
-                    ci: {
-                        required: true,
-                        minlength: 11,
-                        digits: true,
-                        remote: "/ver_ci/"
-                    },
-                    codigo_interno: {
-                        minlength: 3,
-                        maxlength: 3,
-                        required: true,
-                        digits: true,
-                        remote: "/ver_codigo_interno/"
-                    },
-                    usuario: {
-                        required: true,
-                        remote: "/ver_usuario/"
-                    },
-                    org_plantilla: {
-                        required: true,
-                        digits: true
-                    },
-                    residencia: {
-                        required: true,
-                        minlength: 2,
-                        mayusculaPrimero: /^([A-Z]{1})[A-Za-z0-9áéíóúñ .,]+/
-                    },
-                    estatura: {
-                        min: 1.40,
-                        max: 2.40
-                    },
-                    peso: {
-                        min: 35,
-                        max: 150
-                    },
-                    centro_graduacion: {
-                        minlength: 2,
-                        mayusculaPrimero: /^([A-Z]{1})[A-Za-z0-9áéíóúñ .,]+/
-                    },
-                    pais_graduacion: {
-                        minlength: 2,
-                        mayusculaPrimero: /^([A-Z]{1})[A-Za-z0-9áéíóúñ .,]+/
-                    },
-                    idioma: {
-                        minlength: 2,
-                        mayusculaPrimero: /^([A-Z]{1})[A-Za-z0-9áéíóúñ .,]+/
-                    },
-                    anno_graduado: {
-                        minlength: 4,
-                        digits: true
-                    }
-                },
-                invalidHandler: function (event, validator) {
-                    if (validator.errorList.length) {
-                        $('#nav-tab a[href="#' + jQuery(validator.errorList[0].element).closest(
-                            ".tab-pane").attr('id') + '"]').tab('show')
-                    }
-                }
-            });
-        })
+	                    apellidos: {
+        	                required: true,
+                	        minlength: 2,
+                        	mayusculaPrimero: /^([A-Z]{1})[A-Za-z0-9áéíóúñ .,]+/
+	                    },
+        	            ci: {
+                	        required: true,
+                        	minlength: 11,
+	                        digits: true,
+        	                remote: `{% url 'ver_ci' %}${$id_worker}`
+                	    },
+	                    //codigo_interno: {
+        	            //    minlength: 3,
+                	    //    maxlength: 3,
+                            //    required: true,
+	                    //    digits: true,
+        	            //    remote: `{% url 'ver_codigo_interno' %}${$id_worker}`
+                	    //},
+	                    usuario: {
+        	                required: true,
+                	        remote: `{% url 'ver_usuario' %}${$id_worker}`
+	                    },
+        	            org_plantilla: {
+                	        required: true,
+                        	digits: true
+	                    },
+        	            residencia: {
+                	        required: true,
+                        	minlength: 2,
+	                        mayusculaPrimero: /^([A-Z]{1})[A-Za-z0-9áéíóúñ .,]+/
+        	            },
+                	    estatura: {
+                        	min: 1.40,
+	                        max: 2.40
+        	            },
+                	    peso: {
+                        	min: 35,
+	                        max: 150
+        	            },
+                	    centro_graduacion: {
+                        	minlength: 2,
+	                        mayusculaPrimero: /^([A-Z]{1})[A-Za-z0-9áéíóúñ .,]+/
+        	            },
+                	    pais_graduacion: {
+                        	minlength: 2,
+	                        mayusculaPrimero: /^([A-Z]{1})[A-Za-z0-9áéíóúñ .,]+/
+        	            },
+                	    idioma: {
+                        	minlength: 2,
+	                        mayusculaPrimero: /^([A-Z]{1})[A-Za-z0-9áéíóúñ .,]+/
+        	            },
+                	    anno_graduado: {
+                        	minlength: 4,
+	                        digits: true
+        	            }
+                	},
+	                invalidHandler: function (event, validator) {
+        	            if (validator.errorList.length) {
+                	        $('#nav-tab a[href="#' + jQuery(validator.errorList[0].element).closest(
+                        	    ".tab-pane").attr('id') + '"]').tab('show')
+	                    }
+        	        }
+	            });
+        	});
+        });
+        
     </script>
 {% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'layouts/_base_list_datatable.html' %}
+{% load sge_url sge_inclusion %}
+
+{% block delete_error_message %}
+    Imposible eliminar tipo de actividad porque tiene asociada al menos una actividad
+{% endblock %}
+
+{% block table_header %}
+    <th>Nombre</th>
+    <th>Valor</th>
+{% endblock %}
+
+{% block table_body %}
+    <td>{{ item.nombre_tipo_act }}</td>
+    <td>{{ item.valor }}</td>
+    {% submit_row %}
+{% endblock %}
+
+{% block table_foot %}
+    <th>Nombre</th>
+    <th>Valor</th>
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends "layouts/_base_module.html" %}
+{% load sge_url %}
+
+{% block title %}Entrada de Datos{% endblock %}
+
+{% block styles %}
+    {{ block.super }}
+    <style>
+        li a i {
+            padding-right: .5rem;
+            padding-left: .5rem;
+        }
+
+        #sidebar ul ul a:hover {
+            background: #3a444c
+        }
+
+        #sidebar ul a.active {
+            background: #455A64
+        }
+
+        #sidebar ul ul a.active {
+            background: #3a444c
+        }
+    </style>
+{% endblock %}
+
+{% block sidebar_title %}Entrada de Datos{% endblock %}
+{% block sidebar_home_url %}{% url 'entrada-datos_home' %}{% endblock %}
+{% block sidebar_list %}
+    <li>
+        <a class="{% if model_name == 'inversionista' %}active{% endif %}"
+           href="{% url 'inversionista_list' %}">
+            <i class="fa fa-briefcase"></i>
+            Inversionista
+        </a>
+    </li>
+    {% with ot=request.resolver_match.url_name|is_x_menu:"ot" %}
+        <li>
+            <a href="#pageSubmenu1" class="dropdown-toggle"
+               data-toggle="collapse" aria-expanded="{% if ot %}true{% else %}false{% endif %}">
+                <i class="fa fa-won"></i>
+                Ordenes de Trabajo
+            </a>
+            <ul class="collapse list-unstyled {% if ot %}show{% endif %}" id="pageSubmenu1">
+                <li>
+                    <a class="{% if model_name == 'area' %}active{% endif %}"
+                       href="{% url 'area_list' %}">
+                        Áreas
+                    </a>
+                </li>
+                <li>
+                    <a class="{% if model_name == 'servicio' %}active{% endif %}"
+                       href="{% url 'servicio_list' %}">
+                        Servicios
+                    </a>
+                </li>
+                <li>
+                    <a class="{% if model_name == 'ot' %}active{% endif %}"
+                       href="{% url 'ot_list' %}">
+                        Ordenes de Trabajo
+                    </a>
+                </li>
+            </ul>
+        </li>
+    {% endwith %}
+    {% with actividad=request.resolver_match.url_name|is_x_menu:"actividad" %}
+        <li>
+            <a href="#homeSubmenu2" data-toggle="collapse" class="dropdown-toggle"
+               aria-expanded="{% if actividad %}true{% else %}false{% endif %}">
+                <i class="fa fa-folder"></i>
+                Actividades
+            </a>
+            <ul class="collapse list-unstyled{% if actividad %} show{% endif %}" id="homeSubmenu2">
+                <li>
+                    <a class="{% if model_name == 'tipoactividad' %}active{% endif %}"
+                       href="{% url 'tipoactividad_list' %}">
+                        Tipo de Actividad
+                    </a>
+                </li>
+                <li>
+                    <a class="{% if model_name == 'actividad' %}active{% endif %}"
+                       href="{% url 'actividad_list' %}">
+                        Actividad
+                    </a>
+                </li>
+            </ul>
+        </li>
+    {% endwith %}
+{% endblock %}

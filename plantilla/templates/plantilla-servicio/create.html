@@ -1,0 +1,41 @@
+{% extends 'layouts/crud/_base_create-update.html' %}
+{% load widget_tweaks %}
+
+{% block form_elements %}
+    {{ form.non_field_errors }}
+    <div class="col-lg-6 col-12 pt-2">
+        {{ form.servicio.label_tag }}
+        {{ form.servicio.errors }}
+        {{ form.servicio }}
+    </div>
+    <div class="col-lg-6 col-12 pt-2">
+        {{ form.especialidad.label_tag }}
+        {{ form.especialidad.errors }}
+        {{ form.especialidad }}
+    </div>
+    <div class="col-lg-8 col-12">
+        {{ form.cargo.label_tag }}
+        {{ form.cargo.errors }}
+        {{ form.cargo }}
+    </div>
+    <div class="col-lg-2 col-6">
+        {{ form.escala_salarial.label_tag }}
+        {{ form.escala_salarial.errors }}
+        {{ form.escala_salarial }}
+    </div>
+    <div class="col-lg-2 col-6">
+        {{ form.cant_plazas.label_tag }}
+        {{ form.cant_plazas.errors }}
+        {{ form.cant_plazas }}
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    {{ block.super }}
+
+    <script>
+    $(document).ready(function () {
+        $("#id_servicio").val({{ servicio_id }});
+    })
+    </script>
+{% endblock %}

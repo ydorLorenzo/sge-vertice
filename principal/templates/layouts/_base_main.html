@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>SGE VERTICE | {% block title %}Dashboard{% endblock %}</title>
+
+    <!-- Bootstrap core CSS -->
+    {% block favicon %}
+        <link rel="shortcut icon" href="{% static 'favicon_sge.ico' %}">
+    {% endblock %}
+    <link type="text/css" href="{% static 'css/sidebar/bootstrap.min.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'font-aweson/css/font-awesome.min.css' %} " rel="stylesheet">
+    <!-- Custom styles -->
+    <link type="text/css" href="{% static 'css/custom.css' %}?v=1.0.1" rel="stylesheet">
+    <link type="text/css" href="{% static 'css/custom-main.css' %}?v=1.0.1" rel="stylesheet">
+
+    <link type="text/css" href="{% static 'css/sidebar/mdb.min.css' %}?v=1.0.0" rel="stylesheet">
+    <link type="text/css" href="{% static 'css/sidebar/style5.css' %}?v=1.0.3" rel="stylesheet">
+
+    {% block styles %}
+    {% endblock %}
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top dark-green py-0 navbar-size">
+    {% block header_left %}
+        <img src="{% static 'img/logo_sq_w.png' %}" class="logo" alt="Logo Entidad">
+        <a class="navbar-brand" href="#" title="SGE Logo">
+            &nbsp;&nbsp;Sistema de Gestión Empresarial VERTICE
+        </a>
+    {% endblock %}
+    <div class="navbar-collapse collapse" id="navbarColor01">
+        <ul class="navbar-nav ml-auto mr-2">
+            <li class="nav-item mr-2 text-white">
+                <span class="welcome-message mt-2">
+                    Bienvenido(a) {{ request.user.first_name }}
+                </span>
+            </li>
+            <li class="btn-group">
+                <a class="btn btn-sm btn-primary" href="{% url 'admin:index' %}"
+                   style="text-transform: none">
+                    <i class="fa fa-gears text-white icon-absolute" title="Administraci&oacute;n"></i>
+                </a>
+                <a class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+                <ul class="dropdown-menu dropdown-menu-right text-center">
+                    <li class="dropdown-header">Acciones</li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'admin:index' %}">
+                            <i class="fa fa-gear text-dark" title="Administraci&oacute;n"></i>
+                            Administraci&oacute;n.
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" id="fullscreen" href="javascript:">
+                            <i class="fa fa-angle-up text-dark" title="Inicio"></i>
+                            Pantalla Completa.
+                        </a>
+                    </li>
+                    <li class="dropdown-divider"></li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'logout' %}">
+                            <i class="fa fa-sign-out text-dark" title="Cerrar sesi&oacute;n"></i>
+                            Cerrar sesi&oacute;n.
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+<div class="wrapper mt-navbar">
+    {% block base_sidebar %}{% endblock %}
+    <div class="w-100">
+        {% block navbar_up %}{% endblock %}
+        <div id="content">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</div>
+
+{% block modals %}{% endblock %}
+<!-- /container -->
+
+<!-- Go top button -->
+<div id="topcontrol" class="go-up-button" title="Ir arriba">
+    <img src="{% static 'images/up.png' %}" alt="Up icon" class="logo">
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document, so the pages load faster -->
+<script type="text/javascript" src="{% static 'js/sidebar/jquery-3.3.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/sidebar/popper.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/sidebar/bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/sidebar/mdb.min.js' %}"></script>
+
+{% block javascript %}{% endblock %}
+
+</body>
+</html>

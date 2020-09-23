@@ -1,0 +1,12 @@
+{% extends 'includes/submit_buttons.html' %}
+{% load sge_perms %}
+
+{% block extra_buttons %}
+    {% if request.current_app|add_perm:'suplemento' %}
+        <a
+           class="badge badge-pill badge-secondary">
+            <i class="fa fa-plus" title="Agregar suplemento a la OT"
+               style="color: white;"></i>
+        </a>
+    {% endif %}
+{% endblock %}

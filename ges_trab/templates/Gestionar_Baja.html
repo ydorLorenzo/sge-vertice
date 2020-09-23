@@ -1,20 +1,20 @@
-
-
 {% extends "base.html" %}
 {% load static %}
+{% load filters %}
+
 {% block title %}Gestionar Bajas{% endblock %}
 {% block styles %}
+    <link href="{% static 'plugins/select2/select2.min.css' %}" type="text/css" media="screen" rel="stylesheet">
     <style type="text/css">
         td, th {
-            padding: 1px!important;
+            padding: 1px 5px !important;
         }
     </style>
 {% endblock %}
 {% block migas %}
     <ol class="breadcrumb" style="margin-top: 56px; opacity: 0.9; position: fixed;
     top: 0; right: 0; left: 0; z-index: 1000;">
-        <li class="breadcrumb-item"><a href="/home/">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="/home/">Trabajadores</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Inicio</a></li>
         <li class="breadcrumb-item active" aria-current="page">Gestionar Bajas</li>
     </ol>
 {% endblock %}
@@ -31,32 +31,32 @@
             <div class="col-lg-12">
                 <table class="display" cellspacing="0" width="100%" id="tabla" style="font-size: small">
                     <thead>
-                    <tr style="width:10px; text-align: center">
-                        <th style="width: 15px"><strong>No.</strong></th>
-                        <th style="width: 140px"><strong>Nombre y apellidos</strong></th>
-                        <th style="width: 25px"><strong>CI</strong></th>
-                        <th style="width: 110px"><strong>Área de Trabajo</strong></th>
-                        <th style="width: 110px"><strong>Motivo de la Baja</strong></th>
-                        <th style="width: 70px"><strong>Graduado de</strong></th>
-                        <th style="width: 10px"><strong>Cat</strong></th>
-                        <th style="width: 20px"><strong>Fecha de Baja</strong></th>
-                        <th style="width: 40px"><strong>Acciones</strong></th>
+                    <tr class="text-center">
+                        <th><strong>No.</strong></th>
+                        <th><strong>Nombre y apellidos</strong></th>
+                        <th><strong>CI</strong></th>
+                        <th><strong>Área de Trabajo</strong></th>
+                        <th><strong>Motivo de la Baja</strong></th>
+                        <th><strong>Graduado de</strong></th>
+                        <th><strong>Cat</strong></th>
+                        <th><strong>Fecha de Baja</strong></th>
+                        <th><strong>Acciones</strong></th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody style="line-height: 1.2">
 
                     {% for i in list_baja %}
 
                         <tr class="table-light">
-                            <td style="text-align: center"> {{ forloop.counter }} </td>
+                            <td class="text-center"> {{ forloop.counter }} </td>
                             <td>{{ i.primer_nombre }} {{ i.segundo_nombre }} {{ i.apellidos }}</td>
-                            <td style="text-align: center">{{ i.ci }}</td>
+                            <td class="text-center">{{ i.ci }}</td>
                             <td>{{ i.departamento }}</td>
-                            <td>{{ i.causa }}</td>
-                            <td>{{ i.especialidad }}</td>
-                            <td style="text-align: center">{{ i.categoria }}</td>
-                            <td style="text-align: center">{{ i.fecha_baja|date:"d/m/Y" }}</td>
-                            <td width="60" nowrap>
+                            <td>{{ motivos|get_item:i.motivo_baja|default_if_none:'<span class="text-warning">No establecido</span>' }}</td>
+                            <td>{{ i.especialidad|default_if_none:i.escolaridad }}</td>
+                            <td class="text-center">{{ i.categoria }}</td>
+                            <td class="text-center">{{ i.fecha_baja|date:"d/m/Y" }}</td>
+                            <td width="80" nowrap>
                                 <div class="icon-acciones" align="center">
 
                                     <a onclick=" return abrir_modal('{% url 'altabaja' i.pk %}')"
@@ -91,7 +91,6 @@
                     <button type="button" class="close" data-dismiss="modal">x</button>
                 </div>
                 <div class="modal-body">
-                    {% csrf_token %}
                     <div class="panel-body">
                         <div class="panel panel-default">
                             <div class="row" style="margin-bottom: 20px;">
@@ -104,7 +103,7 @@
                             </div>
                         </div>
                         <p style="text-align: center">Seleccione rango de fecha para generar el reporte.</p>
-                        <form method="post" action="{% url 'ExportarReporteBajas' %}">
+                        <form method="post" action="{% url 'export_bajas' %}">
                             {% csrf_token %}
                             <div class="row">
                                 <div class="col"></div>
@@ -115,7 +114,7 @@
                                     <input name="fecha_inic" type="text" class="form-control" id="fecha_inic" required>
                                 </div>
                                 <div class="col-sm-2" style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
-                                    <label style="font-weight: bold;" for="fecha_inic">Hasta:</label>
+                                    <label style="font-weight: bold;" for="fecha_fin">Hasta:</label>
                                 </div>
                                 <div class="col-sm-3" style="padding-left: 0;">
                                     <input name="fecha_fin" type="text" class="form-control" id="fecha_fin" title="Fecha Fin" required>
@@ -127,8 +126,7 @@
                                 <button type="submit" class="btn btn-primary" style="text-transform: none;">Generar
                                     Reporte
                                 </button>
-                                <button type="button" class="btn btn-danger" style="text-transform: none;"
-                                        data-dismiss="modal">
+                                <button type="button" class="btn btn-danger" style="text-transform: none;" data-dismiss="modal">
                                     Cancelar
                                 </button>
                             </div>
@@ -141,6 +139,8 @@
 
 {% endblock %}
 {% block javascript %}
+    <script type="text/javascript" src="{% static 'plugins/select2/select2.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'django_select2/django_select2.js' %}"></script>
     <script type="text/javascript">
 
         var getDate = function (input) {

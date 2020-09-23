@@ -1,0 +1,28 @@
+{% extends 'layouts/reports/_base_export_landscape_pdf.html' %}
+
+{% block table_title %}Defensa{% endblock %}
+
+{% block table_header %}
+    <th>No.</th>
+    <th>Nombres y Apellidos</th>
+    <th>Nombre del Área</th>
+    <th>Cargo</th>
+    <th>Dirección</th>
+    <th>Unidad</th>
+{% endblock %}
+
+{% block table_body %}
+    {% ifchanged item.orga_defensa %}
+        <tr><td colspan="6"><strong>Pertenecientes a:</strong> {{ item.orga_defensa }}</td></tr>
+    {% endifchanged %}
+    <tr></tr>
+    <tr>
+    <td width="5%">{{ forloop.counter }}</td>
+    <td>{{ item.nombre_completo }}</td>
+    <td>{{ item.departamento.nombre }}</td>
+    <td>{{ item.cargo.nombre }}</td>
+    <td>{{ item.direccion }}</td>
+    <td>{{ item.unidad_militar }}</td>
+    </tr>
+{% endblock table_body %}
+

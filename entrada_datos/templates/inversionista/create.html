@@ -1,0 +1,51 @@
+{% extends 'layouts/crud/_base_create-update.html' %}
+{% load widget_tweaks %}
+
+{% block form_elements %}
+    {{ form.non_field_errors }}
+    <div class="col-lg-6 col-12 mt-lg-0 mt-2">
+        {{ form.nombre_inv.label_tag }}
+        {{ form.nombre_inv.errors }}
+        {{ form.nombre_inv }}
+    </div>
+    <div class="col-lg-3 col-6">
+        {{ form.codigo_inv.label_tag }}
+        {{ form.codigo_inv.errors }}
+        {{ form.codigo_inv }}
+    </div>
+    <div class="col-lg-3 col-6">
+        {{ form.nit.label_tag }}
+        {{ form.nit.errors }}
+        {{ form.nit }}
+    </div>
+    <div class="col-lg-9 col-12 mt-2">
+        {{ form.direccion_inv.label_tag }}
+        {{ form.direccion_inv.errors }}
+        {{ form.direccion_inv }}
+    </div>
+    <div class="col-lg-3 col-12 mt-2">
+        {{ form.municipio_sucursal_inv.label_tag }}
+        {{ form.municipio_sucursal_inv.errors }}
+        {{ form.municipio_sucursal_inv }}
+    </div>
+    <div class="col-lg-3 col-6 mt-2">
+        {{ form.sucursal_mn_inv.label_tag }}
+        {{ form.sucursal_mn_inv.errors }}
+        {{ form.sucursal_mn_inv }}
+    </div>
+    <div class="col-lg-3 col-6 mt-2">
+        {{ form.cuenta_mn_inv.label_tag }}
+        {{ form.cuenta_mn_inv.errors }}
+        {{ form.cuenta_mn_inv }}
+    </div>
+    <div class="col-lg-3 col-6 mt-2">
+        {{ form.sucursal_usd_inv.label_tag }}
+        {{ form.sucursal_usd_inv.errors }}
+        {{ form.sucursal_usd_inv }}
+    </div>
+    <div class="col-lg-3 col-6 mt-2">
+        {{ form.cuenta_usd_inv.label_tag }}
+        {{ form.cuenta_usd_inv.errors }}
+        {{ form.cuenta_usd_inv }}
+    </div>
+{% endblock %}

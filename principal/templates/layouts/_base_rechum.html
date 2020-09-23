@@ -1,0 +1,276 @@
+{% extends 'layouts/_base_module.html' %}
+{% load sge_perms %}
+
+{% block title %}Recursos Humanos{% endblock %}
+
+{% block sidebar_title %}Recursos Humanos{% endblock %}
+{% block sidebar_home_url %}{% url 'rechum_home' %}{% endblock %}
+{% block sidebar_list %}
+    {% if user|has_module_perm:'adm' %}
+        <li>
+            <a href="#submenuAdministracion" class="dropdown-toggle"
+               data-toggle="collapse"
+               aria-expanded="{% if request.current_app == 'adm' %}true{% else %}false{% endif %}">
+                <i class="fa fa-gear"></i>
+                Administración
+            </a>
+            <ul class="collapse list-unstyled {% if request.current_app == 'adm' %}show{% endif %}"
+                id="submenuAdministracion">
+                <li>
+                    <a class="{% if model_name == 'unidadorg' %}active{% endif %}"
+                       href="{% url 'unidadorg_list' %}">
+                        Unidad Organizacional
+                    </a>
+                </li>
+                <li>
+                    <a class="{% if model_name == 'seccionsindical' %}active{% endif %}"
+                       href="{% url 'seccionsindical_list' %}">
+                        Sección Sindical
+                    </a>
+                </li>
+                <li>
+                    <a class="{% if model_name == 'departamento' %}active{% endif %}"
+                       href="{% url 'departamento_list' %}">
+                        Departamento
+                    </a>
+                </li>
+                <li>
+                    <a class="{% if model_name == 'cargo' %}active{% endif %}"
+                       href="{% url 'cargo_list' %}">
+                        Cargo
+                    </a>
+                </li>
+                <li>
+                    <a class="{% if model_name == 'calificacion' %}active{% endif %}"
+                       href="{% url 'calificacion_list' %}">
+                        Calificación
+                    </a>
+                </li>
+                <li>
+                    <a class="{% if model_name == 'especialidad' %}active{% endif %}"
+                       href="{% url 'especialidad_list' %}">
+                        Especialidad
+                    </a>
+                </li>
+            </ul>
+        </li>
+    {% endif %}
+    {% if user|has_module_perm:'ges_trab' %}
+        <li>
+            <a href="#submenuTrabajador" class="dropdown-toggle"
+               data-toggle="collapse"
+               aria-expanded="{% if request.current_app == 'ges_trab' %}true{% else %}false{% endif %}">
+                <i class="fa fa-users"></i>
+                Trabajadores
+            </a>
+            <ul class="collapse list-unstyled {% if request.current_app == 'ges_trab' %}show{% endif %}"
+                id="submenuTrabajador">
+                <li>
+                    <a class="{% if model_name == 'trabajador' %}active{% endif %}"
+                       href="{% url 'trabajador_list' %}">
+                        Trabajadores
+                    </a>
+                </li>
+                <li>
+                    <a class="{% if model_name == 'movimiento' %}active{% endif %}"
+                       href="#">
+                        Movimientos
+                    </a>
+                </li>
+                <li>
+                    <a class="{% if model_name == 'disponible' %}active{% endif %}"
+                       href="#">
+                        Disponibles
+                    </a>
+                </li>
+                <li>
+                    <a class="{% if model_name == 'bajaother' %}active{% endif %}"
+                       href="{% url 'bajaother_list' %}">
+                        Bajas
+                    </a>
+                </li>
+                <li>
+                    <a class="{% if model_name == 'tarjeta_snc' %}active{% endif %}"
+                       href="#">
+                        Tarjetas SNC
+                    </a>
+                </li>
+            </ul>
+        </li>
+    {% endif %}
+    {% if user|has_module_perm:'plantilla' %}
+        <li>
+            <a href="#submenuPlantilla" class="dropdown-toggle"
+               data-toggle="collapse"
+               aria-expanded="{% if request.current_app == 'plantilla' %}true{% else %}false{% endif %}">
+                <i class="fa fa-list-ul"></i>
+                Plantilla
+            </a>
+            <ul class="collapse list-unstyled {% if request.current_app == 'plantilla' %}show{% endif %}"
+                id="submenuPlantilla">
+                <li>
+                    <a class="{% if model_name == 'plantilla' %}active{% endif %}"
+                       href="{% url 'plantilla_list' %}">
+                        Plantilla
+                    </a>
+                </li>
+            </ul>
+        </li>
+    {% endif %}
+    {% if user|has_module_perm:'plantilla' %}
+        <li>
+            <a href="#submenuPlantilla" class="dropdown-toggle"
+               data-toggle="collapse"
+               aria-expanded="{% if request.current_app == 'plantilla' %}true{% else %}false{% endif %}">
+                <i class="fa fa-list-ul"></i>
+                Parte tiempo
+            </a>
+            <ul class="collapse list-unstyled {% if request.current_app == 'plantilla' %}show{% endif %}"
+                id="submenuPlantilla">
+                <li>
+                    <a class="{% if model_name == 'plantilla' %}active{% endif %}"
+                       href="{% url 'plantilla_list' %}">
+                        Plantilla
+                    </a>
+                </li>
+            </ul>
+        </li>
+    {% endif %}
+    {% if user|has_module_perm:'subsidio' %}
+        <li>
+            <a href="#submenuSubsidio" class="dropdown-toggle"
+               data-toggle="collapse"
+               aria-expanded="{% if request.current_app == 'subsidio' %}true{% else %}false{% endif %}">
+                <i class="fa fa-money"></i>
+                Subsidios
+            </a>
+            <ul class="collapse list-unstyled {% if request.current_app == 'subsidio' %}show{% endif %}"
+                id="submenuSubsidio">
+                <li>
+                    <a class="{% if model_name == 'subsidio' %}active{% endif %}"
+                       href="{% url 'trabajador_list' %}">
+                        Subsidios
+                    </a>
+                </li>
+            </ul>
+        </li>
+    {% endif %}
+    {% if user|has_module_perm:'ausentismo' %}
+        <li>
+            <a href="#submenuAusentismo" class="dropdown-toggle"
+               data-toggle="collapse"
+               aria-expanded="{% if request.current_app == 'ausentismo' %}true{% else %}false{% endif %}">
+                <i class="fa fa-bed"></i>
+                Ausentismos
+            </a>
+            <ul class="collapse list-unstyled {% if request.current_app == 'ausentismo' %}show{% endif %}"
+                id="submenuAusentismo">
+                <li>
+                    <a class="{% if model_name == 'ausentismo' %}active{% endif %}"
+                       href="{% url 'trabajador_list' %}">
+                        Ausentismos
+                    </a>
+                </li>
+            </ul>
+        </li>
+    {% endif %}
+    {% if user|has_module_perm:'datos_prenom' %}
+        <li>
+            <a href="#submenuDatosPrenom" class="dropdown-toggle"
+               data-toggle="collapse"
+               aria-expanded="{% if request.current_app == 'datos_prenom' %}true{% else %}false{% endif %}">
+                <i class="fa fa-pied-piper"></i>
+                Datos Prenómina
+            </a>
+            <ul class="collapse list-unstyled {% if request.current_app == 'datos_prenom' %}show{% endif %}"
+                id="submenuDatosPrenom">
+                <li>
+                    <a class="{% if model_name == 'trabajo_extraordinario' %}active{% endif %}"
+                       href="{% url 'trabajador_list' %}">
+                        Trabajo extraordinario
+                    </a>
+                </li>
+                <li>
+                    <a class="{% if model_name == 'vacaciones' %}active{% endif %}"
+                       href="#">
+                        Vacaciones
+                    </a>
+                </li>
+                <li>
+                    <a class="{% if model_name == 'alimentacion' %}active{% endif %}"
+                       href="#">
+                        Alimentación
+                    </a>
+                </li>
+            </ul>
+        </li>
+    {% endif %}
+    {% if user|has_module_perm:'prenomina15' %}
+        <li>
+            <a href="#submenuPrenom15" class="dropdown-toggle"
+               data-toggle="collapse"
+               aria-expanded="{% if request.current_app == 'prenomina15' %}true{% else %}false{% endif %}">
+                <i class="fa fa-pied-piper"></i>
+                Servicios Prenómina 15
+            </a>
+            <ul class="collapse list-unstyled {% if request.current_app == 'prenomina15' %}show{% endif %}"
+                id="submenuPrenom15">
+                <li>
+                    <a class="{% if model_name == 'plantilla_servicio' %}active{% endif %}"
+                       href="#">
+                        Plantilla Servicio
+                    </a>
+                </li>
+                <li>
+                    <a class="{% if model_name == 'trabajador_servicio' %}active{% endif %}"
+                       href="#">
+                        Trabajadores Servicio
+                    </a>
+                </li>
+            </ul>
+        </li>
+    {% endif %}
+    {% if perms %}
+        <li>
+            <a href="#submenuReportes" class="dropdown-toggle"
+               data-toggle="collapse"
+               aria-expanded="{% if request.current_app == 'subsidio' %}true{% else %}false{% endif %}">
+                <i class="fa fa-bar-chart"></i>
+                Reportes
+            </a>
+            <ul class="collapse list-unstyled {% if request.current_app == 'subsidio' %}show{% endif %}"
+                id="submenuReportes">
+                <li>
+                    <a class="{% if model_name == 'trabajador' %}active{% endif %}"
+                       href="{% url 'trabajador_list' %}">
+                        Trabajadores
+                    </a>
+                </li>
+                <li>
+                    <a class="{% if model_name == 'servicio' %}active{% endif %}"
+                       href="#">
+                        Plantilla
+                    </a>
+                </li>
+                <li>
+                    <a class="{% if model_name == 'movimiento' %}active{% endif %}"
+                       href="#">
+                        Subsidios
+                    </a>
+                </li>
+                <li>
+                    <a class="{% if model_name == 'movimiento' %}active{% endif %}"
+                       href="#">
+                        Ausentismos
+                    </a>
+                </li>
+                <li>
+                    <a class="{% if model_name == 'movimiento' %}active{% endif %}"
+                       href="#">
+                        Otros datos
+                    </a>
+                </li>
+            </ul>
+        </li>
+    {% endif %}
+{% endblock sidebar_list %}

@@ -1,0 +1,44 @@
+{% extends 'layouts/crud/_base_create-update.html' %}
+{% load widget_tweaks %}
+
+{% block styles %}{{ block.super }} {{ form.media.css }}{% endblock %}
+{% block javascript %}{{ block.super }} {{ form.media.js }}{% endblock %}
+
+{% block form_elements %}
+    {{ form.non_field_errors }}
+    <div class="col-lg-3 col-6">
+        {{ form.codigo_ot.label_tag }}
+        {{ form.codigo_ot.errors }}
+        {{ form.codigo_ot }}
+    </div>
+    <div class="col-lg-3 col-6">
+        {{ form.no_contrato.label_tag }}
+        {{ form.no_contrato.errors }}
+        {{ form.no_contrato }}
+    </div>
+    <div class="col-lg-6 col-12 mt-lg-0 mt-2">
+        {{ form.tipo_servicio.label_tag }}
+        {{ form.tipo_servicio.errors }}
+        {{ form.tipo_servicio }}
+    </div>
+    <div class="col-lg-3 col-6 mt-2">
+        {{ form.unidad.label_tag }}
+        {{ form.unidad.errors }}
+        {{ form.unidad }}
+    </div>
+    <div class="col-lg-3 col-6 mt-2">
+        {{ form.area.label_tag }}
+        {{ form.area.errors }}
+        {{ form.area }}
+    </div>
+    <div class="col-lg-6 col-12 mt-2">
+        {{ form.inversionista.label_tag }}
+        {{ form.inversionista.errors }}
+        {{ form.inversionista }}
+    </div>
+    <div class="col-12 mt-2">
+        {{ form.descripcion_ot.label_tag }}
+        {{ form.descripcion_ot.errors }}
+        {{ form.descripcion_ot }}
+    </div>
+{% endblock %}

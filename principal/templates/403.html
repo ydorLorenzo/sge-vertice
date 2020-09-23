@@ -1,0 +1,16 @@
+{% extends 'layouts/_base_main.html' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12 mt-3">
+            <i class="fa fa-minus-circle text-center w-100" style="font-size: 5rem; color: orangered"></i>
+        </div>
+        <div class="col-12 mt-5">
+            <p class="text-center">¡Usted no tiene acceso a esta funcionalidad!</p>
+            <div class="flex-center">
+                <input type="submit" class="btn btn-sm btn-primary mx-auto" onclick="history.back()"
+                       value="Vuelva a la página anterior">
+            </div>
+        </div>
+    </div>
+{% endblock %}

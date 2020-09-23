@@ -1,0 +1,25 @@
+{% extends 'layouts/_base_list_datatable.html' %}
+{% load sge_url sge_inclusion %}
+
+{% block delete_error_message %}
+    Imposible eliminar Actividad
+{% endblock %}
+
+{% block table_header %}
+    <th width="20%">Orden de trabajo</th>
+    <th width="10%">Código</th>
+    <th width="60%">Descripción</th>
+{% endblock %}
+
+{% block table_body %}
+    <td style="width: 100px">{{ item.orden_trab.codigo_ot }}</td>
+    <td>{{ item.codigo_act }}</td>
+    <td>{{ item.descripcion_act }}</td>
+    {% submit_row %}
+{% endblock %}
+
+{% block table_foot %}
+    <th>Orden de trabajo</th>
+    <th>Código</th>
+    <th>Descripción</th>
+{% endblock %}

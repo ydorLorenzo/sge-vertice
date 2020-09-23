@@ -1,0 +1,116 @@
+{% extends 'reports/trabajador/layout.html' %}
+{% load static filters %}
+
+{% block first_card_header %}{% endblock %}
+
+{% block header_reloaders %}
+    <div class="row">
+        <div class="col-12 px-3">
+            <div style="display:flex; justify-content: flex-end">
+                <form name="filters" class="mx-3" id="filters" method="post" action="{% url 'dist-esp-departamento_report' %}">
+                    {% csrf_token %}
+                    <div class="form-inline">
+                        <label class="pr-2" for="id_univ">Universidad:</label>
+                        <input id="id_univ" name="univ" class="form-control-sm mr-3" type="checkbox"
+                                {{ univ|yesno:"checked," }}/>
+                        <label class="pr-2 ml-3" for="id_dep">Departamento:</label>
+                        <input id="id_dep" name="get_by" value="dep" type="radio"
+                               class="form-control-sm mr-1" {% if get_by == 'dep' %}checked{% endif %}>
+                        <label class="pr-2 ml-1" for="id_unidad">Unidad Organizacional:</label>
+                        <input id="id_unidad" name="get_by" value="uni" type="radio"
+                               class="form-control-sm mr-1" {% if get_by == 'uni' %}checked{% endif %}>
+                        <label class="pr-2 ml-1" for="id_empresa">Empresa:</label>
+                        <input id="id_empresa" name="get_by" value="emp" type="radio"
+                               class="form-control-sm mr-1" {% if get_by == 'emp' %}checked{% endif %}>
+                    </div>
+                </form>
+                <div class="btn-group ml-3">
+                    <button id="submit_btn" class="btn btn-sm btn-primary waves-effect px-3">
+                        <i class="fa fa-refresh"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block table_header %}
+    {% if get_by in 'uni,dep' %}
+        <th></th>{% endif %}
+    {% if get_by == 'dep' %}
+        <th></th>{% endif %}
+    <th>Especialidad</th>
+    <th class="text-center">Cantidad</th>
+{% endblock table_header %}
+
+{% block table_body %}
+    {% for item in object_list %}
+        {% if item.unidad_org_id %}
+            {% ifchanged item.unidad_org_id %}
+                <tr class="row-title">
+                    <td colspan="4" class="font-weight-bold">{{ item.uni_nombre }}</td>
+                    {% if get_by == 'dep' %}
+                        <td style="display: none"></td>{% endif %}
+                    <td style="display: none"></td>
+                    <td style="display: none"></td>
+                </tr>
+            {% endifchanged %}
+        {% endif %}
+        {% if item.departamento_id %}
+            {% ifchanged item.departamento_id %}
+                <tr class="row-subtitle">
+                    <td><label hidden>{{ item.uni_nombre }}</label></td>
+                    <td colspan="3" class="font-weight-bold">{{ item.dep_nombre }}</td>
+                    <td style="display: none"></td>
+                    <td style="display: none"></td>
+                </tr>
+            {% endifchanged %}
+        {% endif %}
+        <tr class="row-body">
+            {% if get_by in 'uni,dep' %}
+                <td style="width: 4%"><label hidden>{{ item.uni_nombre }}</label></td>{% endif %}
+            {% if get_by == 'dep' %}
+                <td style="width: 4%"><label hidden>{{ item.dep_nombre }}</label></td>{% endif %}
+            <td>{{ item.esp_nombre }}</td>
+            <td class="text-center">{{ item.count }}</td>
+        </tr>
+    {% endfor %}
+{% endblock table_body %}
+
+{% block table_foot %}
+    {% if get_by in 'uni,dep' %}
+        <th></th>{% endif %}
+    {% if get_by == 'dep' %}
+        <th></th>{% endif %}
+    <th>Especialidad</th>
+    <th class="text-center">Cantidad</th>
+{% endblock table_foot %}
+
+{% block styles %}
+    {{ block.super }}
+    <style>
+        label.error {
+            font-size: 10px;
+            margin-left: 10px;
+            color: red;
+        }
+    </style>
+{% endblock styles %}
+
+{% block javascript %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'js/jszip.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/buttons.html5.min.js' %}"></script>
+    <script>
+        $("#submit_btn").on('click', function (e) {
+            e.preventDefault();
+            document.filters.action = window.location.pathname;
+            document.filters.submit();
+        });
+
+        $('#pdf_btn').on('click', function () {
+            document.filters.action = window.location.pathname + 'pdf/';
+            document.filters.submit();
+        })
+    </script>
+{% endblock javascript %}

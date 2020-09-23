@@ -1,0 +1,54 @@
+#topcontrol {
+    transition: 0.5s;
+}
+
+.logo {
+    height: 32px;
+}
+
+.dark-green {
+    background-color: #263238 !important;
+}
+
+.go-up-button {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    cursor: pointer;
+    z-index: 99999;
+    opacity: 0;
+}
+
+.pt-content-title {
+    padding-top: 50px;
+}
+
+i.fa.fa-gears.icon-absolute {
+    position: absolute;
+    display: block;
+    right: calc(50% - 6px);
+}
+
+a.navbar-brand {
+    font-size: 1.09rem;
+}
+
+.btn {
+    font-size: smaller !important;
+}
+
+#navbarColor01 a.dropdown-item {
+    padding-left: 10px !important;
+}
+
+#navbarColor01 li a i {
+    padding: 0;
+}
+
+span.welcome-message {
+    font-size: 0.875rem;
+}
+
+nav.navbar.navbar-size {
+    min-height: 40px;
+}

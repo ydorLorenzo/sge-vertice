@@ -1,0 +1,15 @@
+<div class="col-md-12">
+    <a {% if has_perm %}href="{% url url %}" {% else %}class="not-allowed"{% endif %}>
+        <div class="card card-module {% if not has_perm %}module-no-license{% endif %}"
+                {% if not has_perm %}
+             title="Usted no posee permisos para el módulo de Capital Humanos"
+                {% else %}
+             style="background-color:{{ color }}"
+                {% endif %}>
+            <i class="fa {{ icon_class }} card-module-icon"></i>
+            <div class="card-body">
+                <span class="text-uppercase">{{ nombre_modulo }}</span>
+            </div>
+        </div>
+    </a>
+</div>

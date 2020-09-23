@@ -146,7 +146,7 @@
         $('#id_nombre').prop("title", 'Nombre del servicio, comienza con mayúscula').attr("oninvalid", 'setCustomValidity("Campo obligatorio. Sólo letras y comienza con mayúscula")');
 
         $('#addButtonServicio').click(function () {
-            $('#popup form').prop('action', '/adicionar_servicio/');
+            $('#popup form').prop('action', '{% url "adicionarServicio" %}');
             $('#popup').modal('show');
         });
         {% if form.errors %}

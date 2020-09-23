@@ -26,7 +26,7 @@
             font-size: 10px;
         }
 
-        .dt-button.buttons-excel.buttons-html5, .dt-button.buttons-collection.buttons-colvis {
+        .dt-button.buttons-excel.buttons-html5, .dt-button.buttons-pdf.buttons-html5, .dt-button.buttons-collection.buttons-colvis {
             margin-left: 15px;
             border-radius: 3px;
             box-shadow: #47748b 1px 1px 1px;
@@ -36,7 +36,7 @@
             background-image: none;
         }
 
-        .dt-button.buttons-excel.buttons-html5:hover, .dt-button.buttons-collection.buttons-colvis:hover {
+        .dt-button.buttons-excel.buttons-html5:hover, .dt-button.buttons-pdf.buttons-html5:hover, .dt-button.buttons-collection.buttons-colvis:hover {
             margin-left: 15px;
             border-radius: 3px;
             box-shadow: #37474F 1px 1px 1px;
@@ -44,6 +44,28 @@
             background-color: #47748b !important;
             border-color: #47748b;
             background-image: none;
+        }
+
+        .dt-button.buttons-columnVisibility.active {
+            box-shadow: #37474F 1px 1px 1px !important;
+            color: #fff;
+            background-color: #47748b !important;
+            border-color: #47748b;
+            background-image: none !important;
+        }
+
+        .dt-button.buttons-columnVisibility {
+            box-shadow: #37474F 1px 1px 1px !important;
+            color: #fff;
+            background-color: #37474F !important;
+            border-color: #37474F;
+            background-image: none !important;
+        }
+
+        .dt-button-collection.fixed.three-column {
+            padding-bottom: 10px !important;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, .8) !important;
         }
 
 
@@ -70,17 +92,17 @@
                             <th style="text-align: center">Nombres y Apellidos</th>
                             <th style="text-align: center">Cat</th>
                             <th style="text-align: center">GE</th>
-                            <th style="text-align: center">Sal. Escala</th>
-                            <th style="text-align: center">Inc Res30</th>
-                            <th style="text-align: center">CIES</th>
-                            <th style="text-align: center">Antig</th>
-                            <th>Maest.</th>
-                            <th style="text-align: center">TarifaSE</th>
-                            <th style="text-align: center">TarifaPA</th>
-                            <th style="text-align: center">TarifaCIES</th>
-                            <th style="text-align: center">TarifaAntig</th>
-                            <th style="text-align: center">TarifaMT</th>
-                            <th style="text-align: center">SB</th>
+{#                            <th style="text-align: center">Sal. Escala</th>#}
+{#                            <th style="text-align: center">Inc Res30</th>#}
+{#                            <th style="text-align: center">CIES</th>#}
+{#                            <th style="text-align: center">Antig</th>#}
+{#                            <th>Maest.</th>#}
+{#                            <th style="text-align: center">TarifaSE</th>#}
+{#                            <th style="text-align: center">TarifaPA</th>#}
+{#                            <th style="text-align: center">TarifaCIES</th>#}
+{#                            <th style="text-align: center">TarifaAntig</th>#}
+{#                            <th style="text-align: center">TarifaMT</th>#}
+{#                            <th style="text-align: center">SB</th>#}
                             <th style="text-align: center">Horas Real</th>
                             <th style="text-align: center">Horas Creadas</th>
                             <th>SETRT</th>
@@ -118,17 +140,17 @@
                                 <td style="background-color: yellow; font-weight: bold">&nbsp;</td>
                                 <td>&nbsp;</td>
                                 <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
+{#                                <td>&nbsp;</td>#}
+{#                                <td>&nbsp;</td>#}
+{#                                <td>&nbsp;</td>#}
+{#                                <td>&nbsp;</td>#}
+{#                                <td>&nbsp;</td>#}
+{#                                <td>&nbsp;</td>#}
+{#                                <td>&nbsp;</td>#}
+{#                                <td>&nbsp;</td>#}
+{#                                <td>&nbsp;</td>#}
+{#                                <td>&nbsp;</td>#}
+{#                                <td>&nbsp;</td>#}
                                 <td>&nbsp;</td>
                                 <td>&nbsp;</td>
                                 <td>&nbsp;</td>
@@ -158,23 +180,23 @@
                             </tr>
                             {% for per in area.personas %}
                                 <tr>
-                                    <td style="text-align: center;">{{ forloop.counter }}</td>
+                                    <td style="text-align: center;">{{ per.no_loop }}</td>
                                     <td style="text-align: center;">{{ per.ci }}</td>
                                     <td style="text-align: center;">{{ per.no }}</td>
                                     <td>{{ per.nombre }}</td>
                                     <td style="text-align: center;">{{ per.categoria }}</td>
                                     <td style="text-align: center;">{{ per.ge }}</td>
-                                    <td style="text-align: center;">{{ per.sal_escala|replace }}</td>
-                                    <td style="text-align: center;">{{ per.incre_res|replace }}</td>
-                                    <td style="text-align: center;">{{ per.cies|replace }}</td>
-                                    <td style="text-align: center;">{{ per.antig|replace }}</td>
-                                    <td style="text-align: center;">{{ per.maestria|replace }}</td>
-                                    <td style="text-align: center;">{{ per.tarifa_se|replace }}</td>
-                                    <td style="text-align: center;">{{ per.tarifa_pa|replace }}</td>
-                                    <td style="text-align: center;">{{ per.tarifa_cies|replace }}</td>
-                                    <td style="text-align: center;">{{ per.tarifa_ant|replace }}</td>
-                                    <td style="text-align: center;">{{ per.tarifa_maest|replace }}</td>
-                                    <td style="text-align: center;">{{ per.salario_total|replace }}</td>
+{#                                    <td style="text-align: center;">{{ per.sal_escala|replace }}</td>#}
+{#                                    <td style="text-align: center;">{{ per.incre_res|replace }}</td>#}
+{#                                    <td style="text-align: center;">{{ per.cies|replace }}</td>#}
+{#                                    <td style="text-align: center;">{{ per.antig|replace }}</td>#}
+{#                                    <td style="text-align: center;">{{ per.maestria|replace }}</td>#}
+{#                                    <td style="text-align: center;">{{ per.tarifa_se|replace }}</td>#}
+{#                                    <td style="text-align: center;">{{ per.tarifa_pa|replace }}</td>#}
+{#                                    <td style="text-align: center;">{{ per.tarifa_cies|replace }}</td>#}
+{#                                    <td style="text-align: center;">{{ per.tarifa_ant|replace }}</td>#}
+{#                                    <td style="text-align: center;">{{ per.tarifa_maest|replace }}</td>#}
+{#                                    <td style="text-align: center;">{{ per.salario_total|replace }}</td>#}
                                     <td>&nbsp;</td>
                                     <td style="text-align: center;">{{ per.total_horas|replace }}</td>
                                     <td>{{ per.se_real|replace }}</td>
@@ -212,17 +234,17 @@
                                             <td>&nbsp;</td>
                                             <td style="text-align: center"></td>
                                             <td style="text-align: center"></td>
-                                            <td style="text-align: center"></td>
-                                            <td style="text-align: center"></td>
-                                            <td style="text-align: center"></td>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
+{#                                            <td style="text-align: center"></td>#}
+{#                                            <td style="text-align: center"></td>#}
+{#                                            <td style="text-align: center"></td>#}
+{#                                            <td>&nbsp;</td>#}
+{#                                            <td>&nbsp;</td>#}
+{#                                            <td>&nbsp;</td>#}
+{#                                            <td>&nbsp;</td>#}
+{#                                            <td>&nbsp;</td>#}
+{#                                            <td>&nbsp;</td>#}
+{#                                            <td>&nbsp;</td>#}
+{#                                            <td>&nbsp;</td>#}
                                             <td></td>
                                             <td style="text-align: center"></td>
                                             <td style="text-align: center"></td>
@@ -232,7 +254,15 @@
                                             <td style="text-align: center"></td>
                                             <td style="text-align: center"></td>
                                             <td style="text-align: center">{{ plano.tarifa |replace }}</td>
-                                            <td>{{ plano.formato }}({{ plano.porciento }}%)</td>
+                                            {% if plano.tipo_doc == 'LC' %}
+                                                <td>Listado</td>
+                                            {% elif plano.tipo_doc == 'MD' %}
+                                                <td>Memoria</td>
+                                            {% elif plano.tipo_doc == 'PR' %}
+                                                <td>Presupuesto</td>
+                                            {% else %}
+                                                <td>{{ plano.formato }}({{ plano.porciento }}%)</td>
+                                            {% endif %}
                                             <td>{{ plano.sigla }}</td>
                                             {% if plano.caso == 2 or plano.caso == 0 %}
                                                 <td style="text-align: center"> 1</td>
@@ -245,16 +275,16 @@
                                                 <td>&nbsp;</td>
                                             {% endif %}
                                             {% if plano.horas_creadas != 0 %}
-                                                <td style="text-align: center">{{ plano.valor|replace }}</td>
+                                                <td style="text-align: center">{{ plano.valor_real|replace }}</td>
                                             {% else %}
                                                 <td>&nbsp;</td>
                                             {% endif %}
-                                            <td></td>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                            <td></td>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
+                                            <td>{{ plano.incumplimiento_plano |replace}} %</td>
+                                            <td>{{ plano.incumplimiento_cpl |replace}} %</td>
+                                            <td>{{ plano.incumplimiento_calidad |replace}} %</td>
+                                            <td>{{ plano.incumplimiento_plano_valor |replace}}</td>
+                                            <td>{{ plano.incumplimiento_cpl_valor |replace}}</td>
+                                            <td>{{ plano.incumplimiento_calidad_valor |replace}}</td>
                                             {% if plano.caso != 1 %}
                                                 <td style="text-align: center">{{ plano.valor|replace }}</td>
                                             {% else %}
@@ -281,17 +311,17 @@
                                             <td>&nbsp;</td>
                                             <td>&nbsp;</td>
                                             <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                            <td style="text-align: center">&nbsp;</td>
-                                            <td style="text-align: center">&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
+{#                                            <td>&nbsp;</td>#}
+{#                                            <td>&nbsp;</td>#}
+{#                                            <td>&nbsp;</td>#}
+{#                                            <td>&nbsp;</td>#}
+{#                                            <td style="text-align: center">&nbsp;</td>#}
+{#                                            <td style="text-align: center">&nbsp;</td>#}
+{#                                            <td>&nbsp;</td>#}
+{#                                            <td>&nbsp;</td>#}
+{#                                            <td>&nbsp;</td>#}
+{#                                            <td>&nbsp;</td>#}
+{#                                            <td>&nbsp;</td>#}
                                             <td>&nbsp;</td>
                                             <td>&nbsp;</td>
                                             <td>&nbsp;</td>
@@ -302,7 +332,15 @@
                                             <td>&nbsp;</td>
                                             <td>&nbsp;</td>
                                             <td>{{ per.tarifa |replace }}</td>
-                                            <td>{{ plano.formato }}({{ plano.porciento }}%)
+                                            {% if plano.tipo_doc == 'LC' %}
+                                                <td>Listado</td>
+                                            {% elif plano.tipo_doc == 'MD' %}
+                                                <td>Memoria</td>
+                                            {% elif plano.tipo_doc == 'PR' %}
+                                                <td>Presupuesto</td>
+                                            {% else %}
+                                                <td>{{ plano.formato }}({{ plano.porciento }}%)</td>
+                                            {% endif %}
                                             <td>{{ plano.sigla }}</td>
                                             </td>
                                             {% if plano.caso == 2 or plano.caso == 0 %}
@@ -312,12 +350,12 @@
                                             {% endif %}
                                             <td style="text-align: center">{{ plano.horas_creadas_real|replace }}</td>
                                             <td style="text-align: center">{{ plano.valor_real|replace }}</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                            <td></td>
+                                            <td>{{ plano.incumplimiento_plano |replace}} %</td>
+                                            <td>{{ plano.incumplimiento_cpl |replace}} %</td>
+                                            <td>{{ plano.incumplimiento_calidad |replace}} %</td>
+                                            <td>{{ plano.incumplimiento_plano_valor |replace}}</td>
+                                            <td>{{ plano.incumplimiento_cpl_valor |replace}}</td>
+                                            <td>{{ plano.incumplimiento_calidad_valor |replace}}</td>
                                             {% if plano.caso != 1 %}
                                                 <td style="text-align: center">{{ plano.valor_real|replace }}</td>
                                             {% else %}
@@ -336,7 +374,7 @@
                                             <td>&nbsp;</td>
                                             <td>&nbsp;</td>
                                         </tr>
-                                        {% for can in plano.list_cant %}
+                                        {% for cat in plano.catalogo %}
                                             <tr>
                                                 <td>&nbsp;</td>
                                                 <td>&nbsp;</td>
@@ -344,17 +382,17 @@
                                                 <td></td>
                                                 <td></td>
                                                 <td>&nbsp;</td>
-                                                <td></td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td style="text-align: center">&nbsp;</td>
-                                                <td style="text-align: center">&nbsp;</td>
-                                                <td></td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td style="text-align: center">&nbsp;</td>
+{#                                                <td></td>#}
+{#                                                <td>&nbsp;</td>#}
+{#                                                <td>&nbsp;</td>#}
+{#                                                <td style="text-align: center">&nbsp;</td>#}
+{#                                                <td style="text-align: center">&nbsp;</td>#}
+{#                                                <td></td>#}
+{#                                                <td>&nbsp;</td>#}
+{#                                                <td>&nbsp;</td>#}
+{#                                                <td>&nbsp;</td>#}
+{#                                                <td>&nbsp;</td>#}
+{#                                                <td style="text-align: center">&nbsp;</td>#}
                                                 <td style="text-align: center">&nbsp;</td>
                                                 <td style="text-align: center"></td>
                                                 <td style="text-align: center"></td>
@@ -365,35 +403,35 @@
                                                 <td style="text-align: center">&nbsp;</td>
                                                 <td style="text-align: center">&nbsp;</td>
                                                 <td style="text-align: center">{{ per.tarifa |replace }}</td>
-                                                <td>{{ plano.formato }}
-                                                    ({{ plano.porciento }}%)
+                                                <td>{{ cat.formato }}
+                                                    ({{ cat.porciento }}%)
                                                 </td>
-                                                <td>{{ plano.sigla }}</td>
-                                                <td style="text-align: center"></td>
-                                                {% if plano.horas_creadas != 0 %}
-                                                    <td style="text-align: center">{{ plano.horas_creadas_real|replace }}</td>
+                                                <td>{{ cat.sigla }}</td>
+                                                <td style="text-align: center">C</td>
+                                                {% if cat.horas_creadas != 0 %}
+                                                    <td style="text-align: center">{{ cat.horas_creadas_real|replace }}</td>
                                                 {% else %}
                                                     <td>&nbsp;</td>
                                                 {% endif %}
-                                                <td style="text-align: center">{{ plano.valor_real|replace }}</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td></td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
+                                                <td style="text-align: center">{{ cat.valor_real|replace }}</td>
+                                                <td>{{ cat.incumplimiento_plano |replace}} %</td>
+                                                <td>{{ cat.incumplimiento_cpl |replace}} %</td>
+                                                <td>{{ cat.incumplimiento_calidad |replace}} %</td>
+                                                <td>{{ cat.incumplimiento_plano_valor |replace}}</td>
+                                                <td>{{ cat.incumplimiento_cpl_valor |replace}}</td>
+                                                <td>{{ cat.incumplimiento_calidad_valor |replace}}</td>
                                                 {% if plano.caso != 1 %}
-                                                    <td style="text-align: center">{{ plano.valor_real|replace }}</td>
+                                                    <td style="text-align: center">{{ cat.valor|replace }}</td>
                                                 {% else %}
                                                     <td>&nbsp;</td>
                                                 {% endif %}
                                                 {% if plano.caso == 2 %}
-                                                    <td style="text-align: center">{{ plano.valor_retenido_real|replace }}</td>
+                                                    <td style="text-align: center">{{ cat.valor_retenido|replace }}</td>
                                                 {% else %}
                                                     <td>&nbsp;</td>
                                                 {% endif %}
                                                 {% if plano.caso == 1 %}
-                                                    <td style="text-align: center">{{ plano.valor_retenido_real|replace }}</td>
+                                                    <td style="text-align: center">{{ cat.valor_retenido_real|replace }}</td>
                                                 {% else %}
                                                     <td>&nbsp;</td>
                                                 {% endif %}
@@ -410,17 +448,17 @@
                                     <td style="font-weight: bold">{{ per.nombre }}</td>
                                     <td style="text-align: center; font-weight: bold">{{ per.categoria }}</td>
                                     <td style="text-align: center; font-weight: bold">{{ per.ge }}</td>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td style="text-align: center"></td>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td></td>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
+{#                                    <td>&nbsp;</td>#}
+{#                                    <td>&nbsp;</td>#}
+{#                                    <td style="text-align: center"></td>#}
+{#                                    <td>&nbsp;</td>#}
+{#                                    <td>&nbsp;</td>#}
+{#                                    <td>&nbsp;</td>#}
+{#                                    <td></td>#}
+{#                                    <td>&nbsp;</td>#}
+{#                                    <td>&nbsp;</td>#}
+{#                                    <td>&nbsp;</td>#}
+{#                                    <td>&nbsp;</td>#}
                                     <td>&nbsp;</td>
                                     <td style="font-weight: bold; text-align: center">{{ per.total_horas|replace }}</td>
                                     <td style="font-weight: bold; text-align: center">{{ per.se_real|replace }}</td>
@@ -436,13 +474,13 @@
                                     <td style="font-weight: bold; text-align: center">{{ per.cant }}</td>
                                     <td style="font-weight: bold; text-align: center">{{ per.total_horas| replace }}</td>
                                     <td style="font-weight: bold; text-align: center">{{ per.total_valor|replace }}</td>
-                                    <td style="font-weight: bold; text-align: center">0</td>
-                                    <td style="font-weight: bold; text-align: center">0</td>
-                                    <td style="font-weight: bold; text-align: center">0</td>
-                                    <td style="font-weight: bold; text-align: center">0.00</td>
-                                    <td style="font-weight: bold; text-align: center">0.00</td>
-                                    <td style="font-weight: bold; text-align: center">0.00</td>
-                                    <td style="font-weight: bold; text-align: center">{{ per.total_valor|replace }}</td>
+                                    <td style="font-weight: bold; text-align: center">{{ per.incumplimiento_plano|replace }} %</td>
+                                    <td style="font-weight: bold; text-align: center">{{ per.incumplimiento_cpl|replace }} %</td>
+                                    <td style="font-weight: bold; text-align: center">{{ per.incumplimiento_calidad|replace }} %</td>
+                                    <td style="font-weight: bold; text-align: center">{{ per.incumplimiento_plano_valor|replace }} </td>
+                                    <td style="font-weight: bold; text-align: center">{{ per.incumplimiento_cpl_valor|replace }} </td>
+                                    <td style="font-weight: bold; text-align: center">{{ per.incumplimiento_calidad_valor|replace }} </td>
+                                    <td style="font-weight: bold; text-align: center">{{ per.sal_res15|replace }}</td>
                                     <td style="font-weight: bold; text-align: center">{{ per.total_retenido|replace }}</td>
                                     <td style="font-weight: bold; text-align: center">{{ per.retenido_ant|replace }}</td>
                                     <td style="font-weight: bold; text-align: center">{{ per.impacto|replace }}</td>
@@ -456,17 +494,17 @@
                                 <td style="font-weight: bold">Total</td>
                                 <td>&nbsp;</td>
                                 <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td></td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td></td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
+{#                                <td>&nbsp;</td>#}
+{#                                <td>&nbsp;</td>#}
+{#                                <td></td>#}
+{#                                <td>&nbsp;</td>#}
+{#                                <td>&nbsp;</td>#}
+{#                                <td>&nbsp;</td>#}
+{#                                <td>&nbsp;</td>#}
+{#                                <td></td>#}
+{#                                <td>&nbsp;</td>#}
+{#                                <td>&nbsp;</td>#}
+{#                                <td>&nbsp;</td>#}
                                 <td>&nbsp;</td>
                                 <td style="font-weight: bold; text-align: center">{{ area.horas_creadas_total|replace }}</td>
                                 <td style="font-weight: bold; text-align: center">{{ area.setrt|replace }}</td>
@@ -485,9 +523,9 @@
                                 <td style="font-weight: bold; text-align: center"></td>
                                 <td style="font-weight: bold; text-align: center"></td>
                                 <td style="font-weight: bold; text-align: center"></td>
-                                <td style="font-weight: bold; text-align: center">0.00</td>
-                                <td style="font-weight: bold; text-align: center">0.00</td>
-                                <td style="font-weight: bold; text-align: center">0.00</td>
+                                <td style="font-weight: bold; text-align: center">{{ area.incumplimiento_plano_valor|replace }}</td>
+                                <td style="font-weight: bold; text-align: center">{{ area.incumplimiento_cpl_valor|replace }}</td>
+                                <td style="font-weight: bold; text-align: center">{{ area.incumplimiento_calidad_valor|replace }}</td>
                                 <td style="font-weight: bold; text-align: center">{{ area.sal_res15|replace }}</td>
                                 <td style="font-weight: bold; text-align: center">{{ area.ret|replace }}</td>
                                 <td style="font-weight: bold; text-align: center">{{ area.ret_ant|replace }}</td>
@@ -502,17 +540,17 @@
                             <td style="font-weight: bold">Total</td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
-                            <td></td>
-                            <td>&nbsp;</td>
-                            <td></td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td></td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
+{#                            <td></td>#}
+{#                            <td>&nbsp;</td>#}
+{#                            <td></td>#}
+{#                            <td>&nbsp;</td>#}
+{#                            <td>&nbsp;</td>#}
+{#                            <td></td>#}
+{#                            <td>&nbsp;</td>#}
+{#                            <td>&nbsp;</td>#}
+{#                            <td>&nbsp;</td>#}
+{#                            <td>&nbsp;</td>#}
+{#                            <td>&nbsp;</td>#}
                             <td>&nbsp;</td>
                             <td style="font-weight: bold; text-align: center">{{horas|replace }}</td>
                             <td style="font-weight: bold; text-align: center">{{setrt|replace }}</td>
@@ -528,13 +566,13 @@
                             <td style="font-weight: bold; text-align: center">{{ cant_planos }}</td>
                             <td style="font-weight: bold; text-align: center">{{ horas|replace| replace }}</td>
                             <td style="font-weight: bold; text-align: center">{{ sal_res15_plano|replace }}</td>
-                            <td style="font-weight: bold; text-align: center">0.00</td>
-                            <td style="font-weight: bold; text-align: center">0.00</td>
-                            <td style="font-weight: bold; text-align: center">0.00</td>
-                            <td style="font-weight: bold; text-align: center">0.00</td>
-                            <td style="font-weight: bold; text-align: center">0.00</td>
-                            <td style="font-weight: bold; text-align: center">0.00</td>
-                            <td style="font-weight: bold; text-align: center">{{ sal_res15_plano|replace }}</td>
+                            <td style="font-weight: bold; text-align: center">0</td>
+                            <td style="font-weight: bold; text-align: center">0</td>
+                            <td style="font-weight: bold; text-align: center">0</td>
+                            <td style="font-weight: bold; text-align: center">{{ inc_plano|replace }}</td>
+                            <td style="font-weight: bold; text-align: center">{{ inc_cpl|replace }}</td>
+                            <td style="font-weight: bold; text-align: center">{{ inc_calidad|replace }}</td>
+                            <td style="font-weight: bold; text-align: center">{{ sal_res15|replace }}</td>
                             <td style="font-weight: bold; text-align: center">{{ ret|replace }}</td>
                             <td style="font-weight: bold; text-align: center">{{ ret_ant|replace }}</td>
                             <td style="font-weight: bold; text-align: center">{{ impacto|replace }}</td>
@@ -594,9 +632,30 @@
                         columns: ':visible',
                     },
                     messageTop: 'Entidad: Emp.Serv.de Ingeniería y Diseño Holguín',
+                },
+                {
+                    extend: 'pdfHtml5',
+                    download: 'open',
+                    exportOptions: {
+                          columns: ':visible',
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'A2'
+                },
+                {
+                    extend: 'colvis',
+                    stateSave: true,
+                    collectionLayout: 'fixed three-column',
+                    text: 'Mostrar',
+                    postfixButtons: [{
+                    extend: 'colvisGroup',
+                    text: 'Ver Todas',
+                    show: ':hidden'
+                    },]
                 }]
             });
         });
     </script>
 {% endblock %}
+
 

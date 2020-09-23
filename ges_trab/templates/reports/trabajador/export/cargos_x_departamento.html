@@ -1,0 +1,35 @@
+{% extends 'layouts/reports/_base_export_pdf.html' %}
+{% load filters %}
+
+{% block table_header %}
+    {% if get_by in 'uni,dep' %}<th></th>{% endif %}
+    {% if get_by == 'dep' %}<th></th>{% endif %}
+    <th class="text-left">Cargo</th>
+    <th class="text-left">Carrera</th>
+    <th>Cantidad</th>
+{% endblock %}
+
+{% block table_body %}
+    {% if item.unidad_org_id %}
+        {% ifchanged item.unidad_org_id %}
+            <tr>
+                <td colspan="{% if get_by == 'uni' %}4{% else %}5{% endif %}" style="font-weight: bold">{{ item.uni_nombre }}</td>
+            </tr>
+        {% endifchanged %}
+    {% endif %}
+    {% if item.departamento_id %}
+        {% ifchanged item.departamento_id %}
+            <tr>
+                <td></td>
+                <td colspan="4" style="font-weight: bold">{{ item.dep_nombre }}</td>
+            </tr>
+        {% endifchanged %}
+    {% endif %}
+    <tr>
+        {% if get_by in 'uni,dep' %}<td style="width: 6%"></td>{% endif %}
+        {% if get_by == 'dep' %}<td style="width: 6%"></td>{% endif %}
+        <td>{{ item.cargo_nombre }}</td>
+        <td>{{ item.esp_nombre }}</td>
+        <td style="text-align: center">{{ item.count }}</td>
+    </tr>
+{% endblock %}

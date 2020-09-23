@@ -1,19 +1,32 @@
 from django.db import models
-from adm.models import UnidadOrg, Departamento, Cargo
+
+from rechum.models import BaseUrls
+from adm.models import UnidadOrg, Departamento, Cargo, EscalaSalarial
 
 
-# Create your models here.
-
-
-class Plantilla(models.Model):
-    unidad = models.ForeignKey(UnidadOrg, on_delete=models.DO_NOTHING, default='')
-    departamento = models.ForeignKey(Departamento, on_delete=models.DO_NOTHING, default='')
-    cargo = models.ForeignKey(Cargo, on_delete=models.DO_NOTHING, default='')
+class Plantilla(BaseUrls, models.Model):
+    departamento = models.ForeignKey(Departamento, on_delete=models.CASCADE)
+    cargo = models.ForeignKey(Cargo, on_delete=models.CASCADE, related_name='plantilla')
+    escala_salarial = models.ForeignKey(EscalaSalarial, on_delete=models.SET_NULL, null=True)
     cant_plazas = models.PositiveIntegerField()
     disponibles = models.PositiveIntegerField(null=True, blank=True, editable=False)
 
+    @property
+    def unidad(self):
+        return self.departamento.unidad
+
     def __str__(self):
-        return '{} => {}'.format(self.departamento, self.cargo)
+        return '{} => {}'.format(self.cargo, self.escala_salarial.grupo)
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        if not self.id:
+            self.disponibles = self.cant_plazas
+        return super(Plantilla, self).save(force_insert, force_update, using, update_fields)
+
+    class Meta:
+        default_permissions = ['read', 'add', 'delete', 'change', 'export', 'report']
+        unique_together = ['departamento', 'cargo', 'escala_salarial']
 
 
 class Unidad:

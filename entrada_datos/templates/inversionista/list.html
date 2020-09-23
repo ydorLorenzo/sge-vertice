@@ -1,0 +1,28 @@
+{% extends 'layouts/_base_list_datatable.html' %}
+{% load sge_url sge_inclusion %}
+
+{% block delete_error_message %}
+    Imposible eliminar Inversionista porque está asociado a una OT
+{% endblock %}
+
+{% block table_header %}
+    <th>Código</th>
+    <th>Nombre</th>
+    <th>Dirección</th>
+    <th>N.I.T.</th>
+{% endblock %}
+
+{% block table_body %}
+    <td style="width: 100px">{{ item.codigo_inv }}</td>
+    <td>{{ item.nombre_inv }}</td>
+    <td>{{ item.direccion_inv }}</td>
+    <td>{{ item.nit }}</td>
+    {% submit_row %}
+{% endblock %}
+
+{% block table_foot %}
+    <th>Código</th>
+    <th>Nombre</th>
+    <th>Dirección</th>
+    <th>N.I.T.</th>
+{% endblock %}

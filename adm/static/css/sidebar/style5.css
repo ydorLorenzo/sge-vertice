@@ -31,6 +31,10 @@ a, a:hover, a:focus {
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
 }
 
+.navbar.fixed-top {
+    margin-bottom: 0;
+}
+
 .navbar-btn {
     box-shadow: none;
     outline: none !important;
@@ -60,14 +64,14 @@ a, a:hover, a:focus {
     min-width: 250px;
     max-width: 250px;
     background: #37474F;
-    margin-top: 60px;
+    min-height: 100vh;
     color: #fff;
     transition: all 0.6s cubic-bezier(0.945, 0.020, 0.270, 0.665);
     transform-origin: bottom left;
 }
 
 #sidebar.active {
-    margin-left: -250px;
+    margin-left: -200px;
     transform: rotateY(100deg);
 }
 
@@ -100,6 +104,21 @@ a, a:hover, a:focus {
     background: #455A64;
 }
 
+/* Select2 styles */
+span.selection > span.select2-selection.select2-selection--single {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    border-color: rgb(206, 212, 218);
+    height: calc(2.25rem + 2px);
+}
+span.selection > span.select2-selection.select2-selection--single > span.select2-selection__rendered {
+    padding-left: 12px;
+    line-height: 1.5;
+}
+span.selection > span.select2-selection.select2-selection--single > span.select2-selection__arrow {
+    height: calc(2.25rem + 2px);
+}
+
 
 a[data-toggle="collapse"] {
     position: relative;
@@ -110,6 +129,12 @@ a[data-toggle="collapse"] {
     position: absolute;
     top: 50%;
     right: 20px;
+    transform: translateY(-50%);
+}
+.sidebar .dropdown-toggle::after {
+    transform: rotate(-90deg);
+}
+.sidebar .dropdown-toggle[aria-expanded=true]::after {
     transform: translateY(-50%);
 }
 
@@ -149,13 +174,12 @@ a.article, a.article:hover {
 #content {
     width: 100%;
     padding: 20px;
-    min-height: 100vh;
     transition: all 0.3s;
 }
 
 #sidebarCollapse {
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    height: 32px;
     background: #f5f5f5;
     cursor: pointer;
 }
@@ -184,7 +208,7 @@ a.article, a.article:hover {
 #sidebarCollapse.active span {
     transform: none;
     opacity: 1;
-    margin: 5px auto;
+    margin: 3px auto;
 }
 
 
@@ -193,7 +217,7 @@ a.article, a.article:hover {
 ----------------------------------------------------- */
 @media (max-width: 768px) {
     #sidebar {
-        margin-left: -250px;
+        margin-left: -200px;
         transform: rotateY(90deg);
     }
 

@@ -1,0 +1,220 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card shadow">
+                <div class="card-header bg-white border-0">
+                    <div class="row" style="justify-content: space-between">
+                        <div class="form-inline ml-3">
+                            <label class="pr-2" for="tipo_reporte">Reporte:</label>
+                            <select id="tipo_reporte" class="form-control-sm">
+                                {% for key, value in tipo_reporte.items %}
+                                    <option value="{{ key }}" {% if reporte_id == key %}selected{% endif %}>
+                                        {{ value }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        {% block first_card_header %}
+                            <div {% if reporte_id == 2 %}style="display: none"{% endif %}>
+                                <label hidden for="alta_baja"></label>
+                                <input id="alta_baja" type="checkbox" {% if alta_baja %}checked{% endif %}
+                                       class="make-switch" data-off-color="danger"
+                                       data-on-text="&nbsp;Alta&nbsp;" data-off-text="&nbsp;Baja&nbsp;">
+                            </div>
+                        {% endblock %}
+                        <div class="btn-group mr-3">
+                            <a class="btn btn-sm btn-primary waves-effect mr-3 px-3" id="filter_btn"><i
+                                    class="fa fa-filter"></i></a>
+                            <a class="btn btn-sm btn-warning waves-effect px-3" id="pdf_btn">
+                                PDF
+                            </a>
+                            <a class="btn btn-sm btn-green waves-effect px-3 export" id="excel_btn" target="_blank"
+                               type="text/csv">
+                                EXCEL
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div id="extra_btns" class="card-header bg-white border-0 pt-0 pb-2" style="display: none">
+                    {% block header_reloaders %}{% endblock %}
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12">
+                            {% block content_report %}
+                                <div class="table-responsive">
+                                    <table class="table align-items-center table-flush" id="tabla_report"
+                                           cellspacing="0">
+                                        <thead>
+                                        <tr>
+                                            {% block table_header %}{% endblock %}
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% block table_body %}{% endblock %}
+                                        </tbody>
+                                        <tfoot>
+                                        <tr>
+                                            {% block table_foot %}{% endblock %}
+                                        </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            {% endblock %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block styles %}
+    {{ block.super }}
+    <link type="text/css" rel="stylesheet" href="{% static 'plugins/bootstrap-switch/css/bootstrap-switch.min.css' %}">
+    <style>
+        .table thead th {
+            color: #8898aa;
+            border-color: #777;
+            font-weight: bold;
+        }
+
+        .card.shadow {
+            background-color: #f6f9fc;
+        }
+
+        table.table td {
+            padding: 5px 10px;
+        }
+
+        table.table th {
+            padding: 5px 10px;
+        }
+
+        td a i.fa {
+            font-size: .75rem;
+        }
+
+        table th {
+            font-size: .95rem;
+        }
+
+        table td {
+            font-size: .9rem;
+        }
+
+        .table-flush td, .table-flush th {
+            border-right: 0;
+            border-left: 0;
+            vertical-align: middle;
+        }
+
+        .table-flush tbody tr:first-child td, .table-flush tbody tr:first-child th {
+            border-top: 0
+        }
+
+        .table-flush tbody tr:last-child td, .table-flush tbody tr:last-child th {
+            border-bottom: 0
+        }
+
+        .table-flush tbody tr:hover {
+            background-color: #546e78 !important;
+            color: #fff;
+        }
+
+        .table tr {
+            border-collapse: separate;
+            border-spacing: 2px;
+            border-color: gray;
+        }
+
+        .table {
+            margin-bottom: 0;
+        }
+
+        .row-body {
+            background-color: #fff;
+        }
+
+        .row-subtitle {
+            background-color: #f5f5f5;
+        }
+
+        .row-title {
+            background-color: #f0f0f0;
+        }
+
+        .input-daterange .input-group-addon {
+            margin-right: -1px;
+            margin-left: -1px;
+        }
+    </style>
+{% endblock styles %}
+
+{% block javascript %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'plugins/bootstrap-switch/js/bootstrap-switch.min.js' %}"></script>
+    <script>
+        $('.make-switch').bootstrapSwitch();
+
+        document.getElementById('tipo_reporte').addEventListener('change', function () {
+            navigate_report(this.value, true)
+        });
+        $('#alta_baja').on('switchChange.bootstrapSwitch', function (event, state) {
+            setTimeout(function () {
+                navigate_report($('#tipo_reporte').val(), state)
+            }, 500)
+        });
+
+        $('#filter_btn').on('click', function () {
+            $(this).toggleClass('btn-primary');
+            $(this).toggleClass('btn-light');
+            $('#extra_btns').toggle('hidden');
+        });
+
+        function navigate_report(report, alta_baja) {
+            console.log(report, alta_baja);
+            switch (report) {
+                case "1":
+                    const date = new Date();
+                    if (alta_baja) {
+                        window.location.href = "{% url 'altas-dept_report' %}" + date.getFullYear() + '/';
+                    } else {
+                        window.location.href = "{% url 'bajas-dept_report' %}" + date.getFullYear() + '/';
+                    }
+                    return;
+                case "2":
+                    window.location.href = "{% url 'dist-departamento_report' %}";
+                    return;
+                case "3":
+                    if (alta_baja) {
+                        window.location.href = "{% url 'altas-genero_report' %}";
+                    } else {
+                        window.location.href = "{% url 'bajas-genero_report' %}";
+                    }
+                    return;
+                case "4":
+                    if (alta_baja) {
+                        window.location.href = "{% url 'altas-piramide-edades_report' %}";
+                    } else {
+                        window.location.href = "{% url 'bajas-piramide-edades_report' %}";
+                    }
+                    return;
+                case "5":
+                    window.location.href = "{% url 'dist-esp-departamento_report' %}";
+                    return;
+                case "6":
+                    window.location.href = "{% url 'dist-cargo-departamento_report' %}";
+                    return;
+                case "7":
+                    window.location.href = "{% url 'altas-etnia_report' %}";
+                default:
+                    console.log('no entra a ninguno');
+                    return;
+            }
+        }
+    </script>
+{% endblock %}

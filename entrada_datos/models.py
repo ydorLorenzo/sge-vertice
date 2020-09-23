@@ -1,13 +1,10 @@
 from django.db import models
 
-
-# Create your models here.
-
-
+from rechum.models import BaseUrls
+from adm.models import Departamento
 
 
-
-class Inversionista(models.Model):
+class Inversionista(BaseUrls, models.Model):
     codigo_inv = models.CharField(max_length=12, blank=False, null=False, unique=True)
     nombre_inv = models.CharField(max_length=60, blank=False, null=False)
     direccion_inv = models.CharField(max_length=160, blank=False, null=False)
@@ -22,17 +19,18 @@ class Inversionista(models.Model):
         return '{} {}'.format(self.codigo_inv, self.nombre_inv)
 
 
-class Area (models.Model):
+class Area (BaseUrls, models.Model):
     codigo = models.PositiveIntegerField(null=False, blank=False)
+    area = models.ForeignKey(Departamento, on_delete=models.CASCADE, null=False, blank=False)
     nombre = models.CharField(max_length=20, null=False, unique=True, blank=False)
 
 
-class Servicio (models.Model):
+class Servicio (BaseUrls, models.Model):
     codigo = models.CharField(null=False, blank=False, unique=True, max_length=2)
     nombre = models.CharField(max_length=20, null=False, unique=True, blank=False)
 
 
-class OT(models.Model):
+class OT(BaseUrls, models.Model):
     codigo_ot = models.CharField(max_length=10, unique=True)
     descripcion_ot = models.CharField(max_length=100, null=False, blank=False)
     no_contrato = models.CharField(max_length=5, null=False, blank=False, unique=True)
@@ -47,7 +45,7 @@ class OT(models.Model):
         return '{} {}'.format(self.codigo_ot, self.descripcion_ot)
 
 
-class TipoActividad(models.Model):
+class TipoActividad(BaseUrls, models.Model):
     nombre_tipo_act = models.CharField(max_length=60, blank=False, null=False, unique=True)
     valor = models.PositiveIntegerField(unique=True)
 
@@ -55,7 +53,7 @@ class TipoActividad(models.Model):
         return '{}'.format(self.nombre_tipo_act)
 
 
-class Actividad(models.Model):
+class Actividad(BaseUrls, models.Model):
     tipo_act = models.ForeignKey(TipoActividad, on_delete=models.DO_NOTHING, default='', null=False, blank=False)
     codigo_act = models.PositiveIntegerField(null=False, blank=False)
     descripcion_act = models.CharField(max_length=100, null=False, blank=True)
@@ -71,7 +69,7 @@ class Actividad(models.Model):
         return '{} {}'.format(self.codigo_act, self.descripcion_act)
 
 
-class UnidadFacturacion(models.Model):
+class UnidadFacturacion(BaseUrls, models.Model):
     codigo_uf = models.CharField(max_length=12, blank=False, null=False)
     nombre_uf = models.CharField(max_length=60, blank=False, null=False)
     direccion_uf = models.CharField(max_length=160, blank=False, null=False)
@@ -86,7 +84,7 @@ class UnidadFacturacion(models.Model):
         return '{}'.format(self.nombre_uf)
 
 
-class Suplemento (models.Model):
+class Suplemento(BaseUrls, models.Model):
     orden_trab = models.ForeignKey(OT, on_delete=models.DO_NOTHING)
     monto = models.DecimalField(max_digits=7, decimal_places=2)
     fecha = models.DateField()

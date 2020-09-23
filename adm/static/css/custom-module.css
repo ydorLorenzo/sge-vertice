@@ -1,0 +1,88 @@
+ul ul ul a {
+    padding-left: 50px !important;
+}
+
+.my-list-style {
+    font-size: .75rem;
+}
+
+.has-error {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+li a i {
+    padding-right: .5rem;
+    padding-left: .5rem;
+}
+
+#sidebar.sidebar {
+    min-width: 200px;
+}
+
+#sidebar ul.components {
+    border-bottom: none;
+}
+
+#sidebar ul.components a {
+    font-size: .7rem;
+}
+
+#sidebar ul ul a:hover {
+    background: #3a444c
+}
+
+#sidebar ul a.active {
+    background: #455A64
+}
+
+#sidebar ul ul a.active {
+    background: #3a444c
+}
+
+#sidebar > .sidebar-content-fixed {
+    position: fixed;
+    width: 200px;
+    height: calc(100vh - 40px);
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+#sidebarCollapse {
+    margin-right: 10px;
+    border-radius: 100px;
+}
+
+/* DataTable Custom CSS */
+table.dataTable tbody td {
+    padding: 6px 10px!important;
+}
+table.dataTable.hover tbody tr:hover, table.dataTable.display tbody tr:hover {
+    background-color: #546e78 !important; /* #455A64 */
+    color: #fff;
+}
+table.dataTable.display tbody tr:hover > .sorting_1, table.dataTable.order-column.hover tbody tr:hover > .sorting_1 {
+  background-color: #495c64 !important; /* #37474F */
+    color: #fff!important;
+}
+table.dataTable.display tbody tr:hover > .sorting_2, table.dataTable.order-column.hover tbody tr:hover > .sorting_2 {
+  background-color: #4e6169 !important;
+    color: #fff!important;
+}
+table.dataTable.display tbody tr:hover > .sorting_3, table.dataTable.order-column.hover tbody tr:hover > .sorting_3 {
+  background-color: #53666e !important;
+    color: #fff!important;
+}
+
+/* Date range picker */
+.input-daterange input:first-of-type {
+    border-radius: .25rem 0 0 .25rem;
+}
+.input-daterange .input-group-addon .input-group-text {
+    border-radius: 0;
+}
+
+.mt-navbar {
+    margin-top: 40px;
+}
+

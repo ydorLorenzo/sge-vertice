@@ -1,0 +1,29 @@
+{% extends 'layouts/reports/_base_export_landscape_pdf.html' %}
+{% load filters %}
+
+{% block table_title %}Trabajadores por Contrato, Áreas y Categoría Ocupacional{% endblock %}
+
+{% block table_header %}
+    <th colspan="2">Código</th>
+    <th>Nombre y Apellidos</th>
+    <th>Área</th>
+    <th>Cargo</th>
+    <th>Cat. Ocup.</th>
+{% endblock %}
+
+{% block table_body %}
+    {% ifchanged rename|get_item:item.t_contrato %}
+        <tr>
+            <td colspan="6"><strong>{{ rename|get_item:item.t_contrato }}</strong></td>
+        </tr>
+    {% endifchanged %}
+    <tr>
+        <td width="3%"></td>
+        <td>{{ item.codigo_interno }}</td>
+        <td>{{ item.nombre_completo }}</td>
+        <td>{{ item.uni_nombre }} . {{ item.dep_nombre }}</td>
+        <td>{{ item.cargo_nombre }}</td>
+        <td style="text-align: center">{{ item.categoria }}</td>
+    </tr>
+{% endblock %}
+

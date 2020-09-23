@@ -1,5 +1,5 @@
 {% extends "base_pren15.html" %}
-{% load static %}
+{% load static filters %}
 {% block title %}Buscar Acta {% endblock %}
 {% block styles %}
     <style type="text/css">
@@ -62,7 +62,7 @@
                 <div class="col-12">
 
                     <div class="pull-right">
-                        <form method="post" action="{% url 'buscarActas' obra_id recibido_por %}" class="form-inline">
+                        <form method="post" action="{% url 'buscarActas' obra.id recibido_por alpha %}" class="form-inline">
                             {% csrf_token %}
                             <label style="font-weight: bold;" for="no_acta">No Acta:&nbsp;</label>
                             <select name="acta" id="acta" class="form-control form-control-sm" title="acta">
@@ -75,7 +75,7 @@
                         </form>
                             {% if export_acta %}
                                 <div class="text-right" style="color: white;">
-                                    <a href="{% url 'exportarActaEntrega' fecha recibido_por %}"
+                                    <a href="{% url 'exportarActaEntrega' obra.id act recibido_por alpha %}"
                                        class="btn btn-sm btn-success"
                                        style="font-size: smaller; font-weight: bold">
                                        <i class="fa fa-download"></i> Exportar a PDF</a>
@@ -91,7 +91,7 @@
                     <div class="row">
 
                         <div class="col-sm-12">
-                            <h6 style="text-align: center; font-weight: bold;">{{ obra }}</h6>
+                            <h6 style="text-align: center; font-weight: bold;">{{ obra.orden_trab.descripcion_ot }}</h6>
                         </div>
                         <div class="col-sm-12">
                             <h6>{{ act }}</h6>
@@ -101,11 +101,6 @@
                     <div class="row">
                         <div class="col-sm-4">
                             <h6 style="text-align: left;">Fecha: {{ fecha }}</h6>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <h6 style="text-align: left;">Elaborado Por: {{ elaborado_por.first_name }} {{ elaborado_por.last_name }}</h6>
                         </div>
                     </div>
                 </div>
@@ -122,25 +117,25 @@
                                 <th>Objeto</th>
                                 <th>No Plano</th>
                                 <th>Recurso</th>
-                                <th>Estado</th>
-                                <th>Fecha Estado</th>
                                 <th>Revisión</th>
                             </tr>
                             </thead>
                             <tbody>
                             {% for rev in list_planos %}
                                 <tr>
-                                    <td style="text-align: center; width: 4em">{{ forloop.counter }}</td>
-                                    <td style="text-align: center; width: 4em"> {{ rev.plano.corte }}</td>
-                                    <td style="text-align: center; width: 9em">{{ rev.plano.especialidad.siglas }}</td>
-                                    <td style="text-align: left">{{ rev.plano.nombre }}</td>
+                                    <td style="text-align: center; width: 3em">{{ forloop.counter }}</td>
+                                    <td style="text-align: center; width: 7em"> {{ rev.plano.corte }}</td>
+                                    <td style="text-align: left; width: 1em">{{ rev.plano.especialidad.siglas }}</td>
+                                    <td style="text-align: left; width: 10em">{{ rev.plano.nombre }}</td>
                                     <td style="text-align: center; width: 7em">{{ rev.plano.actividad.codigo_act }}</td>
                                     <td style="text-align: center; width: 6em">{{ rev.plano.objeto.codigo }}</td>
                                     <td style="text-align: center; width: 7em">{{ rev.plano.num }}</td>
                                     <td style="text-align: center; width: 7em ">{{ rev.plano.trabajador.primer_nombre }} {{ rev.plano.trabajador.segundo_nombre }}</td>
-                                    <td style="text-align: center; width: 6em">{{ rev.estado }}</td>
-                                    <td style="text-align: center; width: 9em">{{ rev.fecha_estado|date:"d/m/Y" }}</td>
-                                    <td style="text-align: center; width: 7em">{{ rev.no_rev }}</td>
+                                    {% if alpha == '1' or alpha == 1 %}
+                                        <td style="text-align: center; width: 7em">{{ rev.no_rev | convert2char }}</td>
+                                    {% else %}
+                                        <td style="text-align: center; width: 7em">{{ rev.no_rev }}</td>
+                                    {% endif %}
                                 </tr>
                             {% endfor %}
                             </tbody>
@@ -153,8 +148,6 @@
                             <th style="padding: 6px 6px !important;">Objeto</th>
                             <th style="padding: 6px 6px !important;">No. Plano </th>
                             <th style="padding: 6px 6px !important;">Recurso</th>
-                            <th style="padding: 6px 6px !important;">Estado</th>
-                            <th style="padding: 6px 6px !important;">Fecha Estado</th>
                             <th style="padding: 6px 6px !important;">Revision</th>
                             </tfoot>
                         </table>

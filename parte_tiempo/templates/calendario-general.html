@@ -1,0 +1,116 @@
+{% extends 'layouts/_base_rechum.html' %}
+{% load static %}
+
+{% block styles %}
+    {{ block.super }}
+    <link href="{% static 'plugins/fullcalendar-5.3.1/main.min.css' %}" rel="stylesheet"/>
+    <script src="{% static 'plugins/fullcalendar-5.3.1/main.min.js' %}"></script>
+    <script src="{% static 'plugins/fullcalendar-5.3.1/locales/es.js' %}"></script>
+{% endblock styles %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-6">
+            Trabajador:
+            <select class="form-control-sm" name="trabajadores" id="trabajadores">
+                <option value="">-----</option>
+                {% for trabajador in trabajadores %}
+                    {% ifchanged trabajador.departamento.unidad_id %}
+                        <option disabled style="background-color: #c5c5c5">{{ trabajador.departamento.unidad }}</option>
+                    {% endifchanged %}
+                    {% ifchanged trabajador.departamento_id %}
+                        <option disabled style="background-color: #e5e5e5"> - {{ trabajador.departamento }}</option>
+                    {% endifchanged %}
+                    <option value="{{ trabajador.id }}">{{ trabajador.nombre_completo }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-6"></div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div id="calendar"></div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block javascript %}
+    {{ block.super }}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialDate: '2020-09-12',
+                locale: 'es',
+                height: 'auto',
+                firstDay: 0,
+                editable: true,
+                selectable: true,
+                businessHours: true,
+                dayMaxEvents: true,
+                dateClick: function (info) {
+                    location.href = `{% url 'evento_create' %}?trabajador=${$('#trabajadores').val()}&date=${info.dateStr}`;
+                },
+                events: [
+                    {
+                        title: 'All day event',
+                        start: '2020-09-01'
+                    },
+                    {
+                        title: 'Long Event',
+                        start: '2020-09-07',
+                        end: '2020-09-10'
+                    },
+                    {
+                        groupId: 999,
+                        title: 'Repeating Event',
+                        start: '2020-09-09T16:00:00'
+                    },
+                    {
+                        groupId: 999,
+                        title: 'Repeating Event',
+                        start: '2020-09-16T16:00:00'
+                    },
+                    {
+                        title: 'Conference',
+                        start: '2020-09-11',
+                        end: '2020-09-13'
+                    },
+                    {
+                        title: 'Meeting',
+                        start: '2020-09-12T10:30:00',
+                        end: '2020-09-12T12:30:00'
+                    },
+                    {
+                        title: 'Lunch',
+                        start: '2020-09-12T12:00:00'
+                    },
+                    {
+                        title: 'Meeting',
+                        start: '2020-09-12T14:30:00'
+                    },
+                    {
+                        title: 'Happy Hour',
+                        start: '2020-09-12T17:30:00'
+                    },
+                    {
+                        title: 'Dinner',
+                        start: '2020-09-12T20:00:00'
+                    },
+                    {
+                        title: 'Birthday Party',
+                        start: '2020-09-13T07:00:00'
+                    },
+                    {
+                        title: 'Click for Google',
+                        url: 'http://google.com/',
+                        start: '2020-09-28'
+                    }
+                ]
+            });
+            calendar.render();
+        });
+    </script>
+{% endblock javascript %}

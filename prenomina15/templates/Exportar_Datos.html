@@ -120,7 +120,15 @@
                                             <td>{{ per.cargo }}</td>
                                             <td style="text-align: center">{{ per.ge }}</td>
                                             <td style="text-align: center">{{ per.sal_max|replace }}</td>
-                                            <td style="text-align: center">{{ plano.formato }}({{ plano.porciento }}%)</td>
+                                            {% if plano.tipo_doc == 'LC' %}
+                                                <td style="text-align: center">Listado</td>
+                                            {% elif plano.tipo_doc == 'MD' %}
+                                                <td style="text-align: center">Memoria</td>
+                                            {% elif plano.tipo_doc == 'PR' %}
+                                                <td style="text-align: center">Presupuesto</td>
+                                            {% else %}
+                                                <td style="text-align: center">{{ plano.formato }}({{ plano.porciento }}%)</td>
+                                            {% endif %}
                                             <td style="text-align: center">{{ plano.tarifa |replace }}</td>
                                             <td style="text-align: center">{{ plano.etapa }}</td>
                                             {% if plano.caso == 2 or plano.caso == 0 %}
@@ -129,13 +137,13 @@
                                                 <td>&nbsp;</td>
                                             {% endif %}
                                             <td hidden style="text-align: center">{{ plano.horas_creadas|replace }}</td>
-                                            <td hidden style="text-align: center">{{ plano.valor|replace }}</td>
+                                            <td hidden style="text-align: center">{{ plano.valor_real|replace }}</td>
                                             {% if plano.horas_creadas != 0 %}
                                                 <td style="text-align: center">{{ plano.horas_creadas|replace }}</td>
                                             {% else %}
                                                 <td>&nbsp;</td>
                                             {% endif %}
-                                            <td style="text-align: center">{{ plano.valor|replace }}</td>
+                                            <td style="text-align: center">{{ plano.valor_real|replace }}</td>
                                             {% if plano.caso == 0 %}
                                                 <td style="text-align: center">X</td>
                                             {% else %}
@@ -147,7 +155,7 @@
                                                 <td>&nbsp;</td>
                                             {% endif %}
                                             {% if plano.caso == 2 %}
-                                                <td style="text-align: center">{{ plano.retenido|replace }}</td>
+                                                <td style="text-align: center">{{ plano.valor_retenido_real|replace }}</td>
                                             {% else %}
                                                 <td>&nbsp;</td>
                                             {% endif %}
@@ -176,7 +184,15 @@
                                             <td>{{ per.cargo }}</td>
                                             <td style="text-align: center">{{ per.ge }}</td>
                                             <td style="text-align: center">{{ per.sal_max|replace }}</td>
-                                            <td style="text-align: center">{{ plano.formato }}({{ plano.porciento }}%)</td>
+                                            {% if plano.tipo_doc == 'LC' %}
+                                                <td style="text-align: center">Listado</td>
+                                            {% elif plano.tipo_doc == 'MD' %}
+                                                <td style="text-align: center">Memoria</td>
+                                            {% elif plano.tipo_doc == 'PR' %}
+                                                <td style="text-align: center">Presupuesto</td>
+                                            {% else %}
+                                                <td style="text-align: center">{{ plano.formato }}({{ plano.porciento }}%)</td>
+                                            {% endif %}
                                             <td style="text-align: center">{{ per.tarifa |replace }}</td>
                                             <td style="text-align: center">{{ plano.etapa }}</td>
                                             {% if plano.caso == 2 or plano.caso == 0 %}
@@ -185,7 +201,7 @@
                                                 <td>&nbsp;</td>
                                             {% endif %}
                                             <td hidden style="text-align: center">{{ plano.horas_creadas|replace }}</td>
-                                            <td hidden style="text-align: center">{{ plano.valor|replace }}</td>
+                                            <td hidden style="text-align: center">{{ plano.valor_real|replace }}</td>
                                             {% if plano.horas_creadas != 0 %}
                                                 <td style="text-align: center">{{ plano.horas_creadas_real|replace }}</td>
                                             {% else %}
@@ -226,25 +242,25 @@
                                                 <td>&nbsp;</td>
                                             {% endif %}
                                         </tr>
-                                        {% for can in plano.list_cant %}
+                                        {% for cat in plano.catalogo %}
                                             <tr>
                                                 <td>&nbsp;</td>
                                                 <td>&nbsp;</td>
                                                 <td style="text-align: center">&nbsp;</td>
                                                 <td style="text-align: center">&nbsp;</td>
-                                                <td style="text-align: center">{{ plano.formato }}({{ plano.porciento }}%)</td>
+                                                <td style="text-align: center">{{ cat.formato }}({{ cat.porciento }}%)</td>
                                                 <td style="text-align: center">{{ per.tarifa |replace }}</td>
                                                 <td style="text-align: center">{{ plano.etapa }}</td>
                                                 <td>&nbsp;</td>
                                                 <td hidden
-                                                    style="text-align: center">{{ plano.horas_creadas|replace }}</td>
-                                                <td hidden style="text-align: center">{{ plano.valor|replace }}</td>
+                                                    style="text-align: center">{{ cat.horas_creadas|replace }}</td>
+                                                <td hidden style="text-align: center">{{ cat.valor_real|replace }}</td>
                                                 {% if plano.horas_creadas != 0 %}
-                                                    <td style="text-align: center">{{ plano.horas_creadas_real|replace }}</td>
+                                                    <td style="text-align: center">{{ cat.horas_creadas_real|replace }}</td>
                                                 {% else %}
                                                     <td>&nbsp;</td>
                                                 {% endif %}
-                                                <td style="text-align: center">{{ plano.valor_real|replace }}</td>
+                                                <td style="text-align: center">{{ cat.valor_real|replace }}</td>
                                                 {% if plano.caso == 0 %}
                                                     <td style="text-align: center">X</td>
                                                 {% else %}
@@ -256,17 +272,17 @@
                                                     <td>&nbsp;</td>
                                                 {% endif %}
                                                 {% if plano.caso == 2 %}
-                                                    <td style="text-align: center">{{ plano.valor_retenido_real|replace }}</td>
+                                                    <td style="text-align: center">{{ cat.valor_retenido_real|replace }}</td>
                                                 {% else %}
                                                     <td>&nbsp;</td>
                                                 {% endif %}
                                                 {% if plano.caso != 1 %}
-                                                    <td style="text-align: center">{{ plano.valor_total_real|replace }}</td>
+                                                    <td style="text-align: center">{{ cat.valor_total_real|replace }}</td>
                                                 {% else %}
                                                     <td>&nbsp;</td>
                                                 {% endif %}
                                                 {% if plano.caso == 1 %}
-                                                    <td style="text-align: center">{{ plano.valor_retenido_real|replace }}</td>
+                                                    <td style="text-align: center">{{ cat.valor_retenido_real|replace }}</td>
                                                 {% else %}
                                                     <td>&nbsp;</td>
                                                 {% endif %}

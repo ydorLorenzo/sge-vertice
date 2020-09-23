@@ -1,11 +1,18 @@
 from django import forms
+from django_select2.forms import Select2Widget
+
 from .models import *
+from adm.models import UnidadOrg
 
 
 class ActividadForm(forms.ModelForm):
     class Meta:
         model = Actividad
         fields = ['descripcion_act', 'orden_trab', 'codigo_act', 'numero', 'valor_act', 'prod_tecleada']
+        widgets = {
+            'orden_trab': Select2Widget,
+            'tipo_act': Select2Widget
+        }
 
     def __init__(self, *args, **kwargs):
         super(ActividadForm, self).__init__(*args, **kwargs)
@@ -29,7 +36,13 @@ class InversionistaForm(forms.ModelForm):
 class OTForm(forms.ModelForm):
     class Meta:
         model = OT
-        fields = ['descripcion_ot', 'no_contrato', 'inversionista', 'unidad', 'codigo_ot']
+        fields = '__all__'
+        widgets = {
+            'inversionista': Select2Widget,
+            'tipo_servicio': Select2Widget,
+            'area': Select2Widget,
+            'unidad': Select2Widget
+        }
 
     def __init__(self, *args, **kwargs):
         super(OTForm, self).__init__(*args, **kwargs)
@@ -40,7 +53,7 @@ class OTForm(forms.ModelForm):
 class TipoActividadForm(forms.ModelForm):
     class Meta:
         model = TipoActividad
-        fields = ['nombre_tipo_act', 'valor']
+        fields = '__all__'
 
     def __init__(self, *args, **kwargs):
         super(TipoActividadForm, self).__init__(*args, **kwargs)
@@ -49,12 +62,15 @@ class TipoActividadForm(forms.ModelForm):
 
 
 class AreaForm(forms.ModelForm):
+    unidad = forms.ModelChoiceField(UnidadOrg.objects, label=u'Unidad Organizacional:', widget=Select2Widget)
     class Meta:
         model = Area
-        fields = ['codigo', 'nombre']
+        fields = '__all__'
+        widgets = {'area': Select2Widget}
 
     def __init__(self, *args, **kwargs):
         super(AreaForm, self).__init__(*args, **kwargs)
+        self.fields['area'].queryset = Departamento.objects.filter(dirige_id__isnull=True)
         for field in iter(self.fields):
             self.fields[field].widget.attrs.update({'class': 'form-control'})
 

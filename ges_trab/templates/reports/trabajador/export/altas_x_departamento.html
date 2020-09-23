@@ -1,0 +1,9 @@
+{% extends 'reports/trabajador/export/bajas_x_departamento.html' %}
+
+{% block table_title %}Listado de Altas ({% if month %}{{ month }}-{% endif %}{{ year }}){% endblock %}
+
+{% block fecha_th %}contrato{% endblock %}
+
+{% block fecha_td %}
+    {{ item.fecha_contrato|date:"d/m/y" }}
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'layouts/_base_list_datatable.html' %}
+{% load sge_url sge_perms sge_inclusion %}
+
+{% block delete_error_message %}
+    Imposible eliminar Orden de trabajo porque tiene asociada actividades
+{% endblock %}
+
+{% block table_header %}
+    <th>Código</th>
+    <th>Descripción</th>
+    <th>Número de contrato</th>
+    <th>Valor del contrato</th>
+{% endblock %}
+
+{% block table_body %}
+    <td style="width: 100px">{{ item.codigo_ot }}</td>
+    <td>{{ item.descripcion_ot }}</td>
+    <td>{{ item.no_contrato }}</td>
+    <td>{{ item.valor_contrato }}</td>
+    {% submit_row_extra_buttons %}
+{% endblock %}
+
+{% block table_foot %}
+    <th>Código</th>
+    <th>Descripción</th>
+    <th>Número de contrato</th>
+    <th>Valor del contrato</th>
+{% endblock %}

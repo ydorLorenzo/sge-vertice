@@ -1,43 +1,51 @@
 from django.db import models
+
 from ges_trab.models import Trabajador
-
-
-# Create your models here.
+from rechum.models import BaseUrls
 
 
 class TrabajoExtraordinario(models.Model):
-    codigo_trab = models.ForeignKey(Trabajador, on_delete=models.CASCADE, default='')
-    desde = models.DateField(verbose_name='Fecha de inicio', blank=False, null=False)
-    hasta = models.DateField(verbose_name='Fecha de fin', blank=False, null=False)
-    cant_horas = models.PositiveIntegerField(verbose_name='Cantidad de horas', blank=False, null=False)
+    codigo_trab = models.ForeignKey(Trabajador, on_delete=models.CASCADE, default='', verbose_name="trabajador")
+    desde = models.DateField('fecha de inicio')
+    hasta = models.DateField('fecha de fin')
+    cant_horas = models.PositiveIntegerField('cantidad de horas')
 
     def __str__(self):
         return '{} => ({} / {})'.format(self.codigo_trab, self.desde, self.hasta)
 
+    class Meta:
+        verbose_name_plural = "trabajos extraordinarios"
 
-class Vacaciones(models.Model):
-    codigo_trab = models.ForeignKey(Trabajador, on_delete=models.CASCADE, default='')
-    fecha = models.DateField(verbose_name='Fecha de solicitud', blank=False, null=False)
-    cant_dias = models.PositiveIntegerField(verbose_name='Cantidad de días', blank=False, null=False)
-    desde = models.DateField(verbose_name='Fecha Inicio', blank=False, null=False)
-    hasta = models.DateField(verbose_name='Fecha Fin', blank=False, null=False)
-    incorporacion = models.DateField(verbose_name='Fecha Fin', blank=False, null=False)
-    horas = models.PositiveIntegerField(verbose_name='Cantidad de horas a descontar', blank=False, null=False)
-    horas1 = models.PositiveIntegerField(verbose_name='Cantidad de horas a descontar mes próximo', blank=False,
-                                         null=False, default=0)
-    jefe_area = models.CharField(verbose_name='Jefe de Área', max_length=60, null=False, blank=False)
-    director = models.CharField(verbose_name='Aprobado:', max_length=60, null=False, blank=False)
+
+class Vacaciones(BaseUrls, models.Model):
+    codigo_trab = models.ForeignKey(Trabajador, on_delete=models.CASCADE, default='', verbose_name='trabajador')
+    fecha = models.DateField(verbose_name='fecha de solicitud')
+    cant_dias = models.PositiveIntegerField('cantidad de días')
+    desde = models.DateField('fecha inicio')
+    hasta = models.DateField('fecha fin')
+    incorporacion = models.DateField('fecha de inincorporación')
+    horas = models.PositiveIntegerField(verbose_name='cantidad de horas a descontar')
+    horas1 = models.PositiveIntegerField(verbose_name='cantidad de horas a descontar mes próximo', default=0)
+    jefe_area = models.CharField('jefe de área', max_length=60)
+    director = models.CharField('aprobado por', max_length=60)
 
     def __str__(self):
         return '{} => {}'.format(self.codigo_trab, self.fecha)
 
+    class Meta:
+        verbose_name_plural = 'vacaciones'
 
-class Alimentacion(models.Model):
-    codigo_trab = models.ForeignKey(Trabajador, on_delete=models.CASCADE, default='')
-    desde = models.DateField(verbose_name='Fecha de inicio', blank=False, null=False)
-    hasta = models.DateField(verbose_name='Fecha de fin', blank=False, null=False)
-    cant_dias = models.PositiveIntegerField(verbose_name='Días trabajados', blank=False, null=False)
-    cant_dias_dieta = models.PositiveIntegerField(verbose_name='Días dieta', blank=True, null=True, default=0)
+
+class Alimentacion(BaseUrls, models.Model):
+    codigo_trab = models.ForeignKey(Trabajador, on_delete=models.CASCADE, default='', verbose_name='trabajador')
+    desde = models.DateField('fecha de inicio')
+    hasta = models.DateField('fecha de fin')
+    cant_dias = models.PositiveIntegerField('días trabajados')
+    cant_dias_dieta = models.PositiveIntegerField('días dieta', blank=True, null=True, default=0)
 
     def __str__(self):
         return '{} => {} => {}'.format(self.codigo_trab, self.desde, self.cant_dias)
+
+    class Meta:
+        verbose_name = "alimentación"
+        verbose_name_plural = "alimentaciones"

@@ -1,0 +1,81 @@
+{% extends "layouts/_base_main.html" %}
+{% block styles %}
+    <style type="text/css">
+        a:active, a:active * {
+            outline: none;
+        {# quita el borde de punticos alrededor del link visitado #}
+        }
+
+        a:focus, a:focus * {
+            outline: none;
+        {# quita el borde de punticos alrededor del link visitado #}
+        }
+
+        .my-card-icon {
+            font-size: 40px;
+            margin-top: 20px;
+        }
+
+        .card-disabled {
+            pointer-events: none;
+            background-color: #dfdfdf !important;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            color: #9f9f9f;
+            cursor: default;
+        }
+
+        .pr3-color {
+            background-color: #FAFAD2;
+        }
+
+        .adm-color {
+            background-color: #87CEFA;
+        }
+
+        .prenomina15-color {
+            background-color: #90EE90;
+        }
+
+        .entrada_datos-color {
+            background-color: #FFC0CB;
+        }
+
+        .ventas-color {
+            background-color: #D3D3D3;
+        }
+
+        .facturacion-color {
+            background-color: #DDA0DD;
+        }
+
+        .costo-color {
+            background-color: #F08080;
+        }
+
+        .coninsu-color {
+            background-color: #FFA07A;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="row">
+        {% for key, value in modules.items %}
+            <div class="col-3">
+                <a {% if key in perms %}href="{% url 'home_'|add:key %}" {% else %}class="card-disabled"
+                   disabled{% endif %}>
+                    <div class="card text-center mb-3 font-weight-bold
+                            {{ key|add:'-color' }} {% if key not in perms %}card-disabled{% endif %}"
+                            {% if key not in perms %}
+                                title="Usted no posee permisos para el modulo de {{ value.title }}"
+                            {% endif %}>
+                        <i class="fa {{ value.icon }} text-center my-card-icon"></i>
+                        <div class="card-body">
+                            <span>{{ value.title|upper }}</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

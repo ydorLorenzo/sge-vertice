@@ -1,0 +1,31 @@
+{% extends 'layouts/crud/_base_create-update.html' %}
+{% load widget_tweaks %}
+
+{% block form_elements %}
+    {{ form.non_field_errors }}
+    <div class="col-lg-4 col-12 pt-2">
+        {{ form.unidad.label_tag }}
+        {{ form.unidad.errors }}
+        {{ form.unidad }}
+    </div>
+    <div class="col-lg-4 col-12 pt-lg-2 pt-0">
+        {{ form.departamento.label_tag }}
+        {{ form.departamento.errors }}
+        {{ form.departamento }}
+    </div>
+    <div class="col-lg-4 col-12 pt-lg-2 pt-0">
+        {{ form.escala_salarial.label_tag }}
+        {{ form.escala_salarial.errors }}
+        {{ form.escala_salarial }}
+    </div>
+    <div class="col-lg-8 col-12">
+        {{ form.cargo.label_tag }}
+        {{ form.cargo.errors }}
+        {{ form.cargo }}
+    </div>
+    <div class="col-lg-4 col-12">
+        {{ form.cant_plazas.label_tag }}
+        {{ form.cant_plazas.errors }}
+        {{ form.cant_plazas }}
+    </div>
+{% endblock %}

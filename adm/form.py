@@ -1,4 +1,6 @@
 from django import forms
+from django_select2.forms import Select2Widget
+
 from .models import *
 
 
@@ -27,6 +29,11 @@ class DepartamentoForm(forms.ModelForm):
     class Meta:
         model = Departamento
         fields = ['codigo', 'nombre', 'unidad', 'seccion', 'dirige']
+        widgets = {
+            'dirige': Select2Widget,
+            'seccion': Select2Widget,
+            'unidad': Select2Widget
+        }
 
     def __init__(self, *args, **kwargs):
         super(DepartamentoForm, self).__init__(*args, **kwargs)
@@ -66,6 +73,7 @@ class EspecialidadForm(forms.ModelForm):
     class Meta:
         model = Especialidad
         fields = ['calificacion', 'codigo', 'nombre']
+        widgets = {'calificacion': Select2Widget}
 
     def __init__(self, *args, **kwargs):
         super(EspecialidadForm, self).__init__(*args, **kwargs)

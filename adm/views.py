@@ -3,8 +3,13 @@ from django.contrib.auth.models import _user_has_module_perms
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.http.response import HttpResponseRedirect
+from django.http import JsonResponse
+from django.db.models import F
 from django.views import generic
+from django.urls import reverse_lazy
 
+from principal.decorators import module_permission_required
+from rechum.views import SgeListView, SgeCreateView, SgeUpdateView, SgeDetailView, SgeDeleteView
 from .form import *
 
 
@@ -30,14 +35,283 @@ def login_up(request):
     else:
         return render(request, 'login.html')
 
-#@permission_required('adm',login_url='home_principal')
+@module_permission_required('adm')
 def home(request):
-    permiso_app_adm = _user_has_module_perms(request.user, 'adm')
-    if permiso_app_adm:
-        context = {'request': request}
-        return render(request, 'home.html', context)
-    else:
-        return redirect('home_principal')
+    return render(request, 'home.html')
+
+
+# Unidad Organizacional
+# Listar
+class UnidadOrgListView(SgeListView):
+    permission_required = 'adm.read_unidadorg'
+    raise_exception = True
+    model = UnidadOrg
+    template_name = 'unidad-org/list.html'
+
+
+# Crear
+class UnidadOrgCreateView(SgeCreateView):
+    permission_required = 'adm.add_unidadorg'
+    model = UnidadOrg
+    fields = ['nombre']
+    template_name = 'unidad-org/create.html'
+    success_url = reverse_lazy('unidadorg_create')
+
+
+# Editar
+class UnidadOrgUpdateView(SgeUpdateView):
+    model = UnidadOrg
+    fields = ['nombre']
+    template_name = 'unidad-org/create.html'
+    permission_required = 'adm.change_unidadorg'
+    success_url = reverse_lazy('unidadorg_list')
+
+
+# Detalle
+class UnidadOrgDetailView(SgeDetailView):
+    model = UnidadOrg
+    template_name = 'unidad-org/detail.html'
+    permission_required = 'adm.read_unidadorg'
+
+
+# Delete
+class UnidadOrgDeleteView(SgeDeleteView):
+    model = UnidadOrg
+    permission_required = 'adm.delete_unidadorg'
+    success_url = reverse_lazy('unidadorg_list')
+
+
+# Sección Sindical
+class SecSinListView(SgeListView):
+    permission_required = 'adm.read_seccionsindical'
+    raise_exception = True
+    model = SeccionSindical
+    template_name = 'seccion-sindical/list.html'
+
+
+class SecSinCreateView(SgeCreateView):
+    permission_required = 'adm.add_seccionsindical'
+    model = SeccionSindical
+    fields = ['nombre']
+    template_name = 'seccion-sindical/create.html'
+    success_url = reverse_lazy('seccionsindical_create')
+
+
+class SecSinUpdateView(SgeUpdateView):
+    permission_required = 'adm.change_seccionsindical'
+    model = SeccionSindical
+    fields = ['nombre']
+    template_name = 'seccion-sindical/create.html'
+    success_url = reverse_lazy('seccionsindical_list')
+
+
+class SecSinDetailView(SgeDetailView):
+    permission_required = 'adm.read_seccionsindical'
+    model = SeccionSindical
+    template_name = 'seccion-sindical/detail.html'
+
+
+class SecSinDeleteView(SgeDeleteView):
+    permission_required = 'adm.delete_seccionsindical'
+    model = SeccionSindical
+    success_url = reverse_lazy('seccionsindical_list')
+
+
+# Departamento
+class DepListView(SgeListView):
+    permission_required = 'adm.read_departamento'
+    raise_exception = True
+    model = Departamento
+    template_name = 'departamento/list.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        object_list = self.model.objects.all()
+        if self.kwargs.get('unidad_id'):
+            unidad_id = self.kwargs.get('unidad_id')
+            unidad = UnidadOrg.objects.filter(pk=unidad_id)[0]
+            self.extra_context = {'unidad': unidad.nombre}
+            object_list = object_list.filter(unidad_id=unidad_id)
+        from django.db.models import F
+        object_list = object_list.annotate(
+            unidad_nombre=F('unidad__nombre'),
+            seccion_nombre=F('seccion__nombre')
+        )
+        return super().get_context_data(object_list=object_list, **kwargs)
+
+
+class DepCreateView(SgeCreateView):
+    permission_required = 'adm.add_departamento'
+    model = Departamento
+    form_class = DepartamentoForm
+    template_name = 'departamento/create.html'
+    success_url = reverse_lazy('departamento_create')
+
+
+class DepUpdateView(SgeUpdateView):
+    permission_required = 'adm.change_departamento'
+    model = Departamento
+    form_class = DepartamentoForm
+    template_name = 'departamento/create.html'
+    success_url = reverse_lazy('departamento_list')
+
+
+class DepDetailView(SgeDetailView):
+    permission_required = 'adm.read_departamento'
+    model = Departamento
+    template_name = 'departamento/detail.html'
+
+
+class DepDeleteView(SgeDeleteView):
+    permission_required = 'adm.delete_departamento'
+    model = Departamento
+    success_url = reverse_lazy('departamento_list')
+
+
+# Escala Salarial
+class EscSalListView(SgeListView):
+    permission_required = 'adm.read_escalasalarial'
+    raise_exception = True
+    model = EscalaSalarial
+    template_name = 'escala-salarial/list.html'
+
+
+class EscSalCreateView(SgeCreateView):
+    permission_required = 'adm.add_escalasalarial'
+    model = EscalaSalarial
+    # form_class =
+    fields = '__all__'
+    template_name = 'escala-salarial/create.html'
+    success_url = reverse_lazy('escalasalarial_create')
+
+
+class EscSalUpdateView(SgeUpdateView):
+    permission_required = 'adm.change_escalasalarial'
+    model = EscalaSalarial
+    # form_class = UnidadOrgForm
+    fields = '__all__'
+    template_name = 'escala-salarial/create.html'
+    success_url = reverse_lazy('escalasalarial_list')
+
+
+class EscSalDetailView(SgeDetailView):
+    permission_required = 'adm.read_escalasalarial'
+    model = EscalaSalarial
+    template_name = 'escala-salarial/detail.html'
+
+
+class EscSalDeleteView(SgeDeleteView):
+    model = EscalaSalarial
+    permission_required = 'adm.delete_escalasalarial'
+    success_url = reverse_lazy('escalasalarial_list')
+
+
+# Cargo
+class CargoListView(SgeListView):
+    permission_required = 'adm.read_cargo'
+    raise_exception = True
+    model = Cargo
+    template_name = 'cargo/list.html'
+
+
+class CargoCreateView(SgeCreateView):
+    permission_required = 'adm.add_cargo'
+    model = Cargo
+    fields = ['codigo', 'nombre']
+    template_name = 'cargo/create.html'
+    success_url = reverse_lazy('cargo_create')
+
+
+class CargoUpdateView(SgeUpdateView):
+    permission_required = 'adm.change_cargo'
+    model = Cargo
+    fields = ['codigo', 'nombre']
+    template_name = 'cargo/create.html'
+    success_url = reverse_lazy('cargo_list')
+
+
+class CargoDetailView(SgeDetailView):
+    permission_required = 'adm.read_cargo'
+    model = Cargo
+    template_name = 'cargo/detail.html'
+
+
+class CargoDeleteView(SgeDeleteView):
+    permission_required = 'adm.delete_cargo'
+    model = Cargo
+    success_url = reverse_lazy('cargo_list')
+
+
+# Calificación
+class CalListView(SgeListView):
+    permission_required = 'adm.read_calificacion'
+    raise_exception = True
+    model = Calificacion
+    template_name = 'calificacion/list.html'
+
+
+class CalCreateView(SgeCreateView):
+    permission_required = 'adm.add_calificacion'
+    model = Calificacion
+    fields = ['codigo', 'nombre']
+    template_name = 'calificacion/create.html'
+    success_url = reverse_lazy('calificacion_create')
+
+
+class CalUpdateView(SgeUpdateView):
+    permission_required = 'adm.change_calificacion'
+    model = Calificacion
+    fields = ['codigo', 'nombre']
+    template_name = 'calificacion/create.html'
+    success_url = reverse_lazy('calificacion_list')
+
+
+class CalDetailView(SgeDetailView):
+    permission_required = 'adm.read_calificacion'
+    model = Calificacion
+    template_name = 'calificacion/detail.html'
+
+
+class CalDeleteView(SgeDeleteView):
+    permission_required = 'adm.delete_calificacion'
+    model = Calificacion
+    success_url = reverse_lazy('calificacion_list')
+
+
+# Unidad Organizacional
+# Listar
+class EspListView(SgeListView):
+    permission_required = 'adm.read_especialidad'
+    raise_exception = True
+    model = Especialidad
+    template_name = 'especialidad/list.html'
+
+
+class EspCreateView(SgeCreateView):
+    permission_required = 'adm.add_especialidad'
+    model = Especialidad
+    form_class = EspecialidadForm
+    template_name = 'especialidad/create.html'
+    success_url = reverse_lazy('especialidad_create')
+
+
+class EspUpdateView(SgeUpdateView):
+    permission_required = 'adm.change_especialidad'
+    model = Especialidad
+    form_class = EspecialidadForm
+    template_name = 'especialidad/create.html'
+    success_url = reverse_lazy('especialidad_list')
+
+
+class EspDetailView(SgeDetailView):
+    permission_required = 'adm.read_especialidad'
+    model = Especialidad
+    template_name = 'especialidad/detail.html'
+
+
+class EspDeleteView(SgeDeleteView):
+    permission_required = 'adm.delete_especialidad'
+    model = Especialidad
+    success_url = reverse_lazy('especialidad_list')
 
 
 def logout_view(request):

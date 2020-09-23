@@ -15,8 +15,7 @@
 {% block migas %}
     <ol class="breadcrumb" style="margin-top: 56px; opacity: 0.9; position: fixed;
     top: 0; right: 0; left: 0; z-index: 1000;">
-        <li class="breadcrumb-item"><a href="/home/">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="/home/">Plantilla</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Inicio</a></li>
         <li class="breadcrumb-item active" aria-current="page">Gestionar Plantilla</li>
     </ol>
 {% endblock %}
@@ -278,7 +277,7 @@
             var id_seleccionado = $('#id_unidad')[0].value;
             $('#id_departamento').html(''); //esta linea lo que hace es limpiar el segundo select para volverlo a llenar luego con los valores que se obtendran en la peticion ajax
 
-            $.get("/Dpto_por_unidad/" + id_seleccionado + "/",
+            $.get("{% url 'gestionarPlantilla' %}Dpto_por_unidad/" + id_seleccionado + "/",
                 function (data) {
                     var datos = data[0].result;
                     console.info(datos);
@@ -299,7 +298,7 @@
             var id_seleccionado = this.value;
             $('#id_departamento').html(''); //esta linea lo que hace es limpiar el segundo select para volverlo a llenar luego con los valores que se obtendran en la peticion ajax
 
-            $.get("/Dpto_por_unidad/" + id_seleccionado + "/",
+            $.get("{% url 'gestionarPlantilla' %}Dpto_por_unidad/" + id_seleccionado + "/",
                 function (data) {
                     var datos = data[0].result;
                     console.info(datos);
@@ -319,7 +318,7 @@
         $('#id_cant_plazas').prop("min", '1').prop("max", '15').prop("title", 'Valor entre 1 y 15').attr("oninvalid", 'setCustomValidity("Campo obligatorio. Valor entre 1 y 15")');
         $('#cantPlazasModal #id_cant_plazas').prop("min", '1').prop("max", '15').prop("title", 'Valor entre 1 y 15').attr("oninvalid", 'setCustomValidity("Campo obligatorio. Valor entre 1 y 15")');
         $('#addButtonPlantilla').click(function () {
-            $('#popup form').prop('action', '/adicionar_plantilla/');
+            $('#popup form').prop('action', '{% url "adicionarPlantilla" %}');
             $('#popup').modal('show');
         });
 

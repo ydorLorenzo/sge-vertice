@@ -1,0 +1,82 @@
+<div class="modal-dialog modal-lg-8">
+    <div class="modal-content">
+        <form id="actualizarArea" role="form" action="{% url 'area_edit' pk %}"
+              method="post">
+            <div class="modal-header">
+                <h5><strong>Actualizar Área</strong></h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                {% csrf_token %}
+                <div class="panel panel-default">
+                    <div class="row" style="margin-bottom: 20px;">
+                        {% if form.errors %}
+                            <div class="alert alert-danger"
+                                 style="width: 100%; text-align: center; margin: 0 auto; padding: 0 10px; border-radius: 0;">
+                                <p>{{ form.codigo.errors }}</p>
+                                <p>{{ form.nombre.errors }}</p>
+                                <p>{{ form.area.errors }}</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3"><strong>Código:</strong>{{ form.codigo }}</div>
+                        <div class="col-sm-9">
+                            <strong>Unidad:</strong>
+                            <select name="unidad" id="act_unidad_id" class="form-control">
+                                <option selected>---------</option>
+                                {% for unidad in unidades %}
+                                    <option value="{{ unidad.id }}">{{ unidad.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <strong>Área:</strong>
+                            {{ form.area }}
+                        </div>
+                        <div class="col-sm-12 mt-3">
+                            <strong>Nombre:</strong>
+                            {{ form.nombre }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-lg-12 text-right">
+                    <input id="update" type="submit" class="btn btn-primary" name="submit"
+                           value="Actualizar">
+                    <button type="button" class="btn btn-danger" onclick="return close_re_useful_modal()">
+                        Cancelar
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function select_departamentos() {
+        var id_seleccionado = this.value | 0;
+        $('#id_area').html('');
+
+        $.get(`/Dpto_por_unidad/${id_seleccionado}/area/`, function (data) {
+            var departamentos = data[0].result;
+            if (departamentos.length !== 0) {
+                console.log(departamentos.length);
+                $('#id_area').append(`<option>---------</option>`);
+                for (var departamento in departamentos) {
+                    $('#id_area').append(
+                        `<option value="${departamentos[departamento].id}">
+                             ${departamentos[departamento].nombre}
+                        </option>`
+                    );
+                }
+            } else {
+                $('#id_area').append(`<option class="text-warning">No hay departamentos para mostrar.</option>`);
+            }
+        });
+    }
+
+    // Unidad Organizacional OnChange
+    $('#act_unidad_id').on('change', select_departamentos);
+</script>

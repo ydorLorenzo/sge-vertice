@@ -44,7 +44,7 @@
 {% block migas %}
     <ol class="breadcrumb" style="margin-top: 56px; opacity: 0.9; position: fixed;
     top: 0; right: 0; left: 0; z-index: 1000;">
-        <li class="breadcrumb-item"><a href="/home/">Sistema de Gesti&oacute;n Recursos Humanos</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'home_principal' %}">Sistema de Gesti&oacute;n Recursos Humanos</a></li>
         <li class="breadcrumb-item active" aria-current="page">Inicio</li>
     </ol>
 {% endblock %}
@@ -59,12 +59,12 @@
                             <!-- Content -->
                             <h4 class="font-weight-bold mb-0">Administraci&oacute;n General</h4>
                             <hr>
-                            <p><a href="{% url 'gestionarUnidadOrg' %}">Gestionar Unidad Org.</a></p>
-                            <p><a href="{% url 'gestionarSeccionSindical' %}">Gestionar Sección Sindical</a></p>
-                            <p><a href="{% url 'gestionarDepartamento' %}"> Gestionar Departamento</a></p>
-                            <p><a href="{% url 'gestionarCargo' %}">Gestionar Cargo</a></p>
-                            <p><a href="{% url 'gestionarCalificacion' %}">Gestionar Calificación</a></p>
-                            <p><a href="{% url 'gestionarEspecialidad' %}">Gestionar Especialidad</a></p>
+                            <p><a href="{% url 'gestionarUnidadOrg' %}">Unidades Organizacionales</a></p>
+                            <p><a href="{% url 'gestionarSeccionSindical' %}">Secciones Sindicales</a></p>
+                            <p><a href="{% url 'gestionarDepartamento' %}">Departamentos</a></p>
+                            <p><a href="{% url 'gestionarCargo' %}">Cargos</a></p>
+                            <p><a href="{% url 'gestionarCalificacion' %}">Calificaciones</a></p>
+                            <p><a href="{% url 'gestionarEspecialidad' %}">Especialidades</a></p>
                             <hr>
                         </div>
                     </div>
@@ -101,12 +101,11 @@
                             <!-- Content -->
                             <h4 class="font-weight-bold mb-0">Trabajadores</h4>
                             <hr>
-                            <p><a href="{% url 'GestionarTrabajador' %}">Gestionar Altas</a></p>
-                            <p><a href="{% url 'AdicionarTrabajador' %}">Dar Alta</a></p>
-                            <p><a href="{% url 'ListarMovimiento' %}">Gestionar Movimiento</a></p>
-                            <p><a href="{% url 'TrabajadoresDisponibles' %}">Gestionar Disponibles</a></p>
-                            <p><a href="{% url 'GestionarBaja' %}">Gestionar Bajas</a></p>
-                            <p><a href="{% url 'gestionarRegistroTarjetaSNC' %}">Gestionar Registros Tarjeta SNC</a></p>
+                            <p><a href="{% url 'GestionarTrabajador' %}">Altas</a></p>
+                            <p><a href="{% url 'AdicionarTrabajador' %}">Alta Trabajador</a></p>
+                            <p><a href="{% url 'ListarMovimiento' %}">Movimientos</a></p>
+                            <p><a href="{% url 'TrabajadoresDisponibles' %}">Disponibles</a></p>
+                            <p><a href="{% url 'gestionarRegistroTarjetaSNC' %}">Registros Tarjeta SNC</a></p>
                             <hr>
                         </div>
                     </div>
@@ -116,13 +115,12 @@
                     <div class="face back">
                         <!-- Image-->
                         <div class="card-up">
-                            <img class="card-img-top"
-                                 src="{% static 'images/photo6.jpg' %}"
+                            <img class="card-img-top" src="{% static 'images/photo6.jpg' %}"
                                  alt="Image with a photo of clouds.">
                         </div>
                         <!-- Avatar -->
-                        <div class="avatar mx-auto white"><img
-                                src="{% static 'images/icon6.png' %}"
+                        <div class="avatar mx-auto white">
+                            <img src="{% static 'images/icon6.png' %}"
                                 class="rounded-circle" alt="Sample avatar image.">
                         </div>
                         <!-- Content -->
@@ -143,12 +141,21 @@
                             <!-- Content -->
                             <h4 class="font-weight-bold mb-0">Plantilla</h4>
                             <hr>
-                            <p><a href="{% url 'gestionarPlantilla' %}">Gestionar Plantilla</a></p>
-                            <p><a href="{% url 'visualizarReportePlantilla' %}">Reporte plantilla general</a></p>
-                            <p><a href="{% url 'visualizarReportePlantillaGraduados' %}">Reporte plantilla recién
-                                graduados</a></p>
-                            <p><a href="{% url 'visualizarReportePlantillaContratos' %}">Reporte plantilla contratos</a>
-                            </p>
+                            <p><a href="{% url 'gestionarPlantilla' %}">
+                                Gestionar Plantilla
+                            </a></p>
+                            <p><a href="{% url 'plantilla-general' %}">
+                                Plantilla General
+                            </a></p>
+                            <p><a href="{% url 'plantilla-ci' %}">
+                                Plantilla Contratos Indeterminados
+                            </a></p>
+                            <p><a href="{% url 'plantilla-rg' %}">
+                                Plantilla Recién Graduados
+                            </a></p>
+                            <p><a href="{% url 'plantilla-cd' %}">
+                                Plantilla Contratos
+                            </a></p>
                             <hr>
                         </div>
                     </div>
@@ -196,14 +203,11 @@
                     <div class="face back">
                         <!-- Image-->
                         <div class="card-up">
-                            <img class="card-img-top"
-                                 src="{% static 'images/photo4.jpg' %}"
-                                 alt="Image with a photo of clouds.">
+                            <img class="card-img-top" src="{% static 'images/photo4.jpg' %}" alt="Imagen Subsidios">
                         </div>
                         <!-- Avatar -->
-                        <div class="avatar mx-auto white"><img
-                                src="{% static 'images/icon4.jpg' %}"
-                                class="rounded-circle" alt="Sample avatar image.">
+                        <div class="avatar mx-auto white">
+                            <img src="{% static 'images/icon4.jpg' %}" class="rounded-circle" alt="Avatar Subsidios">
                         </div>
                         <!-- Content -->
                         <div class="card-body">
@@ -227,7 +231,7 @@
                             <h4 class="font-weight-bold mb-0">Ausentismo</h4>
                             <hr>
                             <p><a href="{% url 'gestionarAusentismo' %}">Gestionar Ausentismo</a></p>
-                            <p><a data-toggle="modal" href="#modalReporteAusentismo">Mostrar Listado de Ausentismo</a>
+                            <p><a data-toggle="modal" href="#modalReporteAusentismo">Listado de Ausentismo</a>
                             </p>
                             <hr>
                         </div>
@@ -238,14 +242,11 @@
                     <div class="face back">
                         <!-- Image-->
                         <div class="card-up">
-                            <img class="card-img-top"
-                                 src="{% static 'images/photo33.jpg' %}"
-                                 alt="Image with a photo of clouds.">
+                            <img class="card-img-top" src="{% static 'images/photo33.jpg' %}" alt="Imagen Ausentismo">
                         </div>
                         <!-- Avatar -->
-                        <div class="avatar mx-auto white"><img
-                                src="{% static 'images/icon3.jpg' %}"
-                                class="rounded-circle" alt="Sample avatar image.">
+                        <div class="avatar mx-auto white">
+                            <img src="{% static 'images/icon3.jpg' %}" class="rounded-circle" alt="Avatar Ausentismo">
                         </div>
                         <!-- Content -->
                         <div class="card-body">
@@ -261,12 +262,20 @@
                 <div id="card-6" class="card-rotating effect__click text-center h-100 w-100 flipped">
                     <!-- Front Side -->
                     <div class="face front">
-                        <div class="card-body">
+                        <div class="card-body" style="font-size: .75rem">
                             <!-- Content -->
-                            <h4 class="font-weight-bold mb-0">Reportes</h4>
+                            <h4 class="font-weight-bold mb-0">Informaciones</h4>
                             <hr>
-                            <p></p>
-                            <p></p>
+                            <p><a href="{% url 'informaciones_trabajador' %}">Altas</a></p>
+                            <p><a href="{% url 'GestionarBaja' %}">Bajas</a></p>
+                            <p><a href="{% url 'trabajador_reports' %}">Informaciones Altas</a></p>
+                            <p><a href="{% url 'trabajadores-contrato_report' %}">Altas por Contrato</a></p>
+                            <p><a href="{% url 'calzado_export' %}">Reporte Calzado</a></p>
+                            <hr>
+                            <p><a href="{% url 'asignado-a-defensa_report' %}">Listado Defensa</a></p>
+                            <p><a href="{% url 'resumen-defensa_report' %}">Situación en la Defensa</a></p>
+                            <p><a href="{% url 'registro-militar_report' %}">Registro Militar</a></p>
+                            <p><a href="{% url 'choferes-defensa_report' %}">Choferes en la Defensa</a></p>
                             <hr>
                         </div>
                     </div>
@@ -276,18 +285,15 @@
                     <div class="face back">
                         <!-- Image-->
                         <div class="card-up">
-                            <img class="card-img-top"
-                                 src="{% static 'images/photo2.jpg' %}"
-                                 alt="Image with a photo of clouds.">
+                            <img class="card-img-top" src="{% static 'images/photo2.jpg' %}" alt="Imagen Informaciones">
                         </div>
                         <!-- Avatar -->
-                        <div class="avatar mx-auto white"><img
-                                src="{% static 'images/icon2.jpg' %}"
-                                class="rounded-circle" alt="Sample avatar image.">
+                        <div class="avatar mx-auto white">
+                            <img src="{% static 'images/icon2.jpg' %}" class="rounded-circle" alt="Avatar Informaciones">
                         </div>
                         <!-- Content -->
                         <div class="card-body">
-                            <h4 class="font-weight-bold mb-3">Reportes</h4>
+                            <h4 class="font-weight-bold mb-3">Informaciones</h4>
                         </div>
                     </div>
                     <!-- Back Side -->

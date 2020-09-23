@@ -1,0 +1,20 @@
+{% extends 'layouts/crud/_base_detail.html' %}
+
+{% block detail_elements %}
+    <dt class="col-md-4 col-sm-12">Nombre:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.nombre_completo }}</dd>
+    <dt class="col-md-4 col-sm-12">Sexo:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.sexo }}</dd>
+    <dt class="col-md-4 col-sm-12">Código:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.codigo_interno }}</dd>
+    <dt class="col-md-4 col-sm-12">Especialidad:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.especialidad }}</dd>
+    <dt class="col-md-4 col-sm-12">Cargo:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.cargo }}</dd>
+    <dt class="col-md-4 col-sm-12">Escala Salarial:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.escala_salarial }}</dd>
+    <dt class="col-md-4 col-sm-12">Unidad Organizacional:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.unidad_org }}</dd>
+    <dt class="col-md-4 col-sm-12">Departamento:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.departamento }}</dd>
+{% endblock %}

@@ -1,25 +1,46 @@
 <div class="modal-dialog">
     <div class="modal-content">
-        <form role="form" action="{%url 'altabaja' baja.id%}" method="post">{% csrf_token %}
-                <div class="modal-header">
-            <h5><strong>Alta Trabajador</strong></h5>
-            <button type="button" class="close" data-dismiss="modal">x</button>
-        </div>
-        <div class="modal-body">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <p>¿Estás seguro que desea dar de alta al Trabajador <strong>" {{baja.primer_nombre}} {{baja.segundo_nombre}} {{baja.apellidos}}"</strong>?</p>
+        {{ baja.media.css }}
+        <form role="form" action="{% url 'altabaja' pk %}" method="post">
+            {% csrf_token %}
+            <div class="modal-header">
+                <h5><strong>Alta Trabajador</strong></h5>
+                <button type="button" class="close" data-dismiss="modal">x</button>
+            </div>
+            <div class="modal-body">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <!-- <p>¿Estás seguro que desea dar de alta al Trabajador <strong>" {{baja.primer_nombre}} {{baja.segundo_nombre}} {{baja.apellidos}}"</strong>?</p> -->
+                        <div class="row">
+                            <div class="col-md-12">Nombre completo: {{ baja.primer_nombre }} {{ baja.segundo_nombre }} {{ baja.apellidos }}</div>
+                            <div class="col-md-12">Código: {{ baja.codigo_interno }}</div>
+                            <div class="col-md-12">Fecha contrato: {{ baja.fecha_contrato }}</div>
+                            <div class="col-md-12">Unidad organizacional: {{ baja.unidad_org }}</div>
+                            <div class="col-md-12">Departamento: {{ baja.departamento }}</div>
+                            <div class="col-md-12">Cargo: {{ baja.cargo }}</div>
+                            <div class="col-md-12">Categoría ocupacional: {{ baja.categoria }}</div>
+                            <div class="col-md-12">Organización en plantilla: {{ baja.org_plantilla }}</div>
+                            <div class="col-md-12">Tipo de plantilla: {{ baja.t_plantilla }}</div>
+                            <div class="col-md-12">Tipo de contrato: {{ baja.t_contrato }}</div>
+                            <div class="col-md-12">Fuerza de ingreso: {{ baja.fuerza_i }}</div>
+                            <div class="col-md-12">Tipo de pago: {{ baja.t_pago }}</div>
+                            <div class="col-md-12">Escala salarial: {{ baja.escala_salarial }}</div>
+                            <div class="col-md-12">CIES: {{ baja.cies }}</div>
+                            <div class="col-md-12">Antigüedad: {{ baja.antiguedad }}</div>
+                            <div class="col-md-12">Motivo alta: {{ baja.motivo_alta }}</div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="modal-footer">
-            <div class="col-lg-12 text-right">
-                <input type="submit" class="btn btn-danger" name="submit" value="alta">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">
-                    Cancelar
-                </button>
+            <div class="modal-footer">
+                <div class="col-lg-12 text-right">
+                    <input type="submit" class="btn btn-danger" name="submit" disabled value="alta">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">
+                        Cancelar
+                    </button>
+                </div>
             </div>
-        </div>
         </form>
+        {{ baja.media.js }}
     </div>
 </div>

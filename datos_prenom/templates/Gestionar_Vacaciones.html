@@ -12,8 +12,7 @@
 {% block migas %}
     <ol class="breadcrumb" style="margin-top: 56px; opacity: 0.9; position: fixed;
     top: 0; right: 0; left: 0; z-index: 1000;">
-        <li class="breadcrumb-item"><a href="/home/">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="/home/">Datos Pren&oacute;mina</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Inicio</a></li>
         <li class="breadcrumb-item active" aria-current="page">Gestionar Vacaciones</li>
     </ol>
 {% endblock %}
@@ -199,7 +198,7 @@
             });
 
         $('#addButtonVacaciones').click(function () {
-            $('#popup form').prop('action', '/adicionar_vacaciones/');
+            $('#popup form').prop('action', '{% url 'adicionarVacaciones' %}');
             $('#popup').modal('show');
         });
         {% if form.errors or edit %}

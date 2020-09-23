@@ -154,30 +154,16 @@
                                 </div>
                                 <br>
                                     <div class="row">
-                                    {% if pago_aprobado == 0 %}
-                                        <div class="col-sm-2">
-                                          <strong>Aprobado:</strong>
-                                          <select name="aprobado" id="id_aprobado" class="form-control" title="aprobado">
-                                               <option           >NO</option>
-                                               <option value="SI">SI</option>
-                                          </select>
-                                      </diV>
-                                    {% elif pago_aprobado == 1 %}
-                                        <div class="col-sm-2">
-                                          <strong>Aprobado:</strong>
-                                          <select name="aprobado" id="id_aprobado" class="form-control" title="aprobado">
-                                               <option           >SI</option>
-                                               <option value="NO">NO</option>
-                                          </select>
+                                        <div class="col-sm-5" style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
+                                            <label style="font-weight: bold;" for="fecha_pago">Pago Correspondiente a:</label>
                                         </div>
-                                    {% else %}
-                                        <div class="col-sm-10">
-                                              <strong>Aprobado en revision #{{ rev_pago }}</strong>
-                                                <select name="aprobado" id="id_aprobado" class="form-control" title="aprobado" style="visibility:hidden">
-                                                     <option>----</option>
-                                                </select>
+                                        <div class="col-sm-4" style="padding-left: 0;">
+                                            <div class="input-group">
+                                                <input type="text" name="fecha_pago" id="fecha_pago" class="form-control" value="{{ fecha_pago|date:"d/m/Y" }}">
+                                                <span class="input-group-append" style="background-color: lightgray; width: 28px">
+                                                    <i class="fa fa-calendar" style="margin-left: 5px; padding-top: 10px; font-size: large; "></i></span>
+                                            </div>
                                         </div>
-                                    {% endif %}
                                     </div>
 
                             </div>
@@ -255,6 +241,12 @@
             return new Date(input.date.valueOf());
         };
 
+        $('#id_fecha_vpc').datepicker({
+            uiLibrary: 'bootstrap4',
+            iconsLibrary: 'font-awesome',
+            language: 'es'
+        });
+
         $('#id_fecha_estado, #id_fecha_revision').prop("readonly", true).datepicker({
             uiLibrary: 'bootstrap4',
             iconsLibrary: 'font-awesome',
@@ -262,6 +254,12 @@
         });
 
         $('#id_fecha_vpc').datepicker({
+            uiLibrary: 'bootstrap4',
+            iconsLibrary: 'font-awesome',
+            language: 'es'
+        });
+
+        $('#fecha_pago').datepicker({
             uiLibrary: 'bootstrap4',
             iconsLibrary: 'font-awesome',
             language: 'es'

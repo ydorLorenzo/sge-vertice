@@ -1,0 +1,25 @@
+{% extends 'layouts/_base_list_datatable.html' %}
+{% load sge_url sge_inclusion %}
+
+{% block delete_error_message %}
+    Imposible eliminar Especialidad
+{% endblock %}
+
+{% block table_header %}
+    <th>Código</th>
+    <th>Nombre</th>
+{#    <th>Calificación</th>#}
+{% endblock table_header %}
+
+{% block table_body %}
+    <td>{{ item.codigo }}</td>
+    <td>{{ item.nombre }}</td>
+{#    <td>{{ item.calificacion }}</td>#}
+    {% submit_row %}
+{% endblock table_body %}
+
+{% block table_foot %}
+    <th>Código</th>
+    <th>Nombre</th>
+{#    <th>Calificación</th>#}
+{% endblock table_foot %}

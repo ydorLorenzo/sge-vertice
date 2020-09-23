@@ -1,0 +1,10 @@
+{% extends 'layouts/crud/_base_detail.html' %}
+
+{% block detail_elements %}
+    <dt class="col-md-4 col-sm-12">Código:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.codigo }}</dd>
+    <dt class="col-md-4 col-sm-12">Nombre:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.nombre }}</dd>
+    <dt class="col-md-4 col-sm-12">Área:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.area }}</dd>
+{% endblock %}

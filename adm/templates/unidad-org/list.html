@@ -1,0 +1,24 @@
+{% extends 'layouts/_base_list_datatable.html' %}
+{% load sge_url sge_inclusion %}
+
+{% block delete_error_message %}
+    Imposible eliminar Unidad Organizacional
+{% endblock %}
+
+{% block table_header %}
+    <th>ID</th>
+    <th>Nombre</th>
+{% endblock table_header %}
+
+{% block table_body_outside %}
+    <tr onclick="window.location.href = `{% url 'departamento_unidad_list' item.id %}`">
+    <td>{{ item.id }}</td>
+    <td>{{ item.nombre }}</td>
+    {% submit_row %}
+    </tr>
+{% endblock table_body_outside %}
+
+{% block table_foot %}
+    <th>ID</th>
+    <th>Nombre</th>
+{% endblock table_foot %}

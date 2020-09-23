@@ -1,0 +1,64 @@
+{% extends 'layouts/_base_list_datatable.html' %}
+{% load sge_url sge_inclusion %}
+
+{% block extra_title %}
+    {% if servicio %}
+        <br/>
+        <span style="font-size: 1rem">
+            <a class="badge badge-light" href="{% url 'obra-servicio_list' %}">
+                <i class="fa fa-arrow-circle-left"></i> Atrás
+            </a> /
+            {{ servicio }}
+        </span>
+    {% endif %}
+{% endblock %}
+
+{% block delete_error_message %}
+    Imposible eliminar Plantilla
+{% endblock %}
+
+{% block create_url %}{% url 'plantillaservicio_create' servicio_id %}{% endblock %}
+
+{% block table_header %}
+    <th>Cargo</th>
+    <th>Escala Salarial</th>
+    <th>Plazas</th>
+    <th>Disponibles</th>
+{% endblock table_header %}
+
+{% block table_body_outside %}
+    <tr>
+    <td>{{ item.cargo }}</td>
+    <td>{{ item.escala_salarial.grupo }}</td>
+    <td>{{ item.cant_plazas }}</td>
+    <td>{{ item.disponibles }}</td>
+    <td>
+        {% if request.app_name|add:'.change_'|add:model_name in perms %}
+            <a href="{% url model_name|add:'_update' item.servicio_id item.pk %}" onclick="event.stopPropagation()"
+               class="badge badge-pill badge-primary">
+                <i class="fa fa-edit fa-submit-buttons-round" title="Editar {{ verbose_name|title }}"
+                   style="color: white;"></i>
+            </a>
+        {% endif %}
+        {% if request.app_name|add:'.delete_'|add:model_name in perms %}
+            <a onclick="event.stopPropagation(); open_re_useful_modal('{% url model_name|add:'_delete' item.servicio_id item.pk %}')"
+               class="badge badge-pill badge-danger">
+                <i class="fa fa-trash fa-submit-buttons-round" title="Eliminar {{ verbose_name|title }}"
+                   style="color: white;"></i>
+            </a>
+        {% endif %}
+        {% if request.app_name|add:'.change_'|add:model_name in perms %}
+            <a onclick="event.stopPropagation()" class="badge badge-pill badge-info">
+                <i class="fa fa-users fa-submit-buttons-round" title="Trabajadores"></i>
+            </a>
+        {% endif %}
+    </td>
+    </tr>
+{% endblock table_body_outside %}
+
+{% block table_foot %}
+    <th>Cargo</th>
+    <th>Escala Salarial</th>
+    <th>Plazas</th>
+    <th>Disponibles</th>
+{% endblock table_foot %}

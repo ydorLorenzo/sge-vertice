@@ -2,6 +2,7 @@
 {% load static %}
 {% block title %}Administrar Orden de Trabajo{% endblock %}
 {% block styles %}
+    {{ form.media.css }}
     <style type="text/css">
         .has-error {
             border-color: #dc3545;
@@ -215,6 +216,7 @@
 {% endblock %}
 
 {% block javascript %}
+    {{ form.media.js }}
     <script type="text/javascript">
         function validarFormulario() {
             if (validarNoCont() && validarNombre() && validarCodigo()) {
@@ -273,7 +275,7 @@
         $('#id_solicitud').prop("title", 'Solicitud').attr("oninvalid", 'setCustomValidity("Campo obligatorio.Alfanumérico")');
 
         $('#addButtonOT').click(function () {
-            $('#popup form').prop('action', '/adicionar_ot/');
+            $('#popup form').prop('action', '{% url "adicionarOT" %}');
             $('#popup').modal('show');
         });
 

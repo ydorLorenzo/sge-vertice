@@ -1,0 +1,28 @@
+{% extends 'layouts/reports/_base_export_pdf.html' %}
+
+{% block table_title %}Registro Militar{% endblock %}
+
+{% block table_header %}
+    <th>No.</th>
+    <th>Apellidos</th>
+    <th>Nombres</th>
+    <th>Área de Trabajo</th>
+    <th>Cargo</th>
+    <th>E.M.Mcpal</th>
+    <th>S Defensa</th>
+    <th>Lugar</th>
+{% endblock %}
+
+{% block table_body %}
+    <tr>
+        <td width="5%">{{ forloop.counter }}</td>
+        <td width="18%">{{ item.apellidos }}</td>
+        <td width="10%">{{ item.primer_nombre }} {% if item.segundo_nombre %}{{ item.segundo_nombre }}{% endif %}</td>
+        <td width="17%">{{ item.departamento.nombre }}</td>
+        <td width="20%">{{ item.cargo.nombre }}</td>
+        <td width="10%">{{ item.estado_mayor }}</td>
+        <td width="10%">{{ item.orga_defensa }}</td>
+        <td width="10%">{{ item.unidad_militar }}</td>
+    </tr>
+{% endblock %}
+

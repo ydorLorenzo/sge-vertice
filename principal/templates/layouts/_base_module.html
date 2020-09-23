@@ -1,0 +1,91 @@
+{% extends 'layouts/_base_main.html' %}
+{% load static %}
+
+{% block styles %}
+    <!-- DataTables core CSS -->
+    <link type="text/css" href="{% static 'css/jquery.dataTables.min.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'css/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+    <!-- Export buttons DataTable -->
+    <link type="text/css" href="{% static 'css/buttons.dataTables.min.css' %}" rel="stylesheet">
+    <!-- Datepicker core CSS -->
+    <link type="text/css" href="{% static 'plugins/bootstrap-datepicker/bootstrap-datepicker3.css' %}"
+          rel="stylesheet">
+    <!-- Custom CSS -->
+    <link type="text/css" href="{% static 'css/custom-module.css' %}?v=1.0.4" rel="stylesheet">
+
+    <style>
+    .light-gray {
+        background: #455A64!important;
+    }
+    .light-gray > a:hover, .light-gray > a.active {
+        background-color: whitesmoke;
+        color: #0b2a41;
+    }
+    .navbar-modules > a {
+        padding: 5px 10px!important;
+    }
+    </style>
+{% endblock %}
+
+{% block header_left %}
+    <button type="button" id="sidebarCollapse" class="navbar-btn">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <a class="navbar-brand" href="{% url 'home_principal' %}">Sistema de Gestión Empresarial VERTICE</a>
+    <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarColor01"
+            aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+{% endblock %}
+
+{% block base_sidebar %}
+    <nav id="sidebar" class="sidebar">
+        <div class="sidebar-content-fixed">
+            <div class="sidebar-header">
+                <h6 class="text-center"><strong>{% block sidebar_title %}{% endblock %}</strong></h6>
+            </div>
+            <ul class="list-unstyled components my-list-style">
+                <a class="pl-2" href="{% block sidebar_home_url %}{% endblock %}">Menú</a>
+                <br>
+                {% block sidebar_list %}
+                {% endblock %}
+            </ul>
+        </div>
+    </nav>
+{% endblock base_sidebar %}
+
+{% block navbar_up %}
+    <nav class="navbar navbar-expand-md navbar-dark navbar-modules light-gray py-0 mb-0" style="font-size: .6rem">
+        <a class="btn btn-sm {% if request.current_app == 'adm' or request.current_app == 'ges_trab' %}active{% endif %}" href="{% url 'rechum_home' %}">Capital Humano</a>
+        <a class="btn btn-sm {% if request.current_app == 'prenomina15' %}active{% endif %}" href="{% url 'home_pren15' %}">Prenómina 15</a>
+        <a class="btn btn-sm {% if request.current_app == 'entrada_datos' %}active{% endif %}" href="{% url 'home_ent_dat' %}">Entrada de Datos</a>
+        <a class="btn btn-sm {% if request.current_app == 'pr3' %}active{% endif %}" href="{% url 'home_pr3' %}">PR3</a>
+    </nav>
+{% endblock navbar_up %}
+
+{% block content %}
+    <div class="text-center">
+        {% block content_title %}{% endblock %}
+    </div>
+    {% block content_inner %}{% endblock %}
+{% endblock %}
+
+{% block modals %}
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript" src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/dataTables.bootstrap4.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/dataTables.buttons.min.js' %}"></script>
+
+    <!-- Custom app performance -->
+    <script type="text/javascript" src="{% static 'js/app.js' %}?v=1.0.5"></script>
+
+    <!-- Datepicker js -->
+    <script type="text/javascript"
+            src="{% static 'bootstrap-datepicker/js/bootstrap-datepicker.js' %}"></script>
+    <script type="text/javascript"
+            src="{% static 'plugins/bootstrap-datepicker/locales/bootstrap-datepicker.es.min.js' %}"></script>
+{% endblock %}

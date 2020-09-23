@@ -34,7 +34,8 @@
 
         }
 
-        .dt-button.buttons-excel.buttons-html5, .dt-button.buttons-collection.buttons-colvis {
+        .dt-button.buttons-excel.buttons-html5, .dt-button.buttons-pdf.buttons-html5, .dt-button.buttons-collection.buttons-colvis {
+
             margin-left: 15px;
             border-radius: 3px;
             box-shadow: #47748b 1px 1px 1px;
@@ -44,7 +45,7 @@
             background-image: none;
         }
 
-        .dt-button.buttons-excel.buttons-html5:hover, .dt-button.buttons-collection.buttons-colvis:hover {
+        .dt-button.buttons-excel.buttons-html5:hover, .dt-button.buttons-pdf.buttons-html5:hover, .dt-button.buttons-collection.buttons-colvis:hover {
             margin-left: 15px;
             border-radius: 3px;
             box-shadow: #37474F 1px 1px 1px;
@@ -129,6 +130,14 @@
                                     {{ plano_filter.form.obra.label_tag }}
                                     {% render_field plano_filter.form.obra class="form-control" %}
                                 </div>
+                                <div class="form-group col-sm-8 col-md-3">
+                                    {{ plano_filter.form.tipo_doc.label_tag }}
+                                    {% render_field plano_filter.form.tipo_doc class="form-control" %}
+                                </div>
+                                <div class="form-group col-sm-8 col-md-3">
+                                    {{ plano_filter.form.etapa.label_tag }}
+                                    {% render_field plano_filter.form.etapa class="form-control" %}
+                                </div>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-sm btn-primary" style="font-weight: bold">
@@ -158,9 +167,10 @@
                         <thead>
                         <tr>
                             <th>Corte</th>
-                            <th style="text-align: center; ">Esp</th>
-                            <th style="text-align: center; ">Nombre del Plano</th>
-                            <th style=" text-align: center;">Act</th>
+                            <th style="text-align: center">Esp</th>
+                            <th style="text-align: center">Nombre del Plano</th>
+                            <th style="text-align: center">Etapa</th>
+                            <th style="text-align: center">Act</th>
                             <th style="text-align: center;">Obj</th>
                             <th style="text-align: center; ">N&uacute;m</th>
                             <th style="text-align: center;">Inicio</th>
@@ -189,6 +199,7 @@
                                 {% endif %}
                                 <td align="center" style="width: 5px">{{ i.especialidad.siglas }}</td>
                                 <td style="width: 150px">{{ i.nombre }}</td>
+                                <td style="width: 50px; text-align: center">{{ i.etapa }}</td>
                                 <td align="center" style="width: 30px">{{ i.actividad.codigo_act }}</td>
                                 <td align="center" style="width: 10px">{{ i.objeto.codigo }} {{ i.objeto.nombre }}</td>
                                 <td align="center" style="width: 60px">{{ i.num }}</td>
@@ -197,11 +208,11 @@
                                 <td style="width: 130px">{{ i.trabajador }}</td>
                                 {% if i.cant > 1 %}
                                     {% if i.porciento == '0.3' %}
-                                        <td align="center" style="width: 25px">{{ i.cant }}{{ i.formato }} (30%)</td>
+                                        <td align="center" style="width: 25px">Catalogo({{ i.cant }}) {{ i.formato }} (30%)</td>
                                     {% elif i.porciento == '0.7' %}
-                                        <td align="center" style="width: 25px">{{ i.cant }}{{ i.formato }} (70%)</td>
+                                        <td align="center" style="width: 25px">Catalogo({{ i.cant }}) {{ i.formato }} (70%)</td>
                                     {% else %}
-                                        <td align="center" style="width: 25px">{{ i.cant }}{{ i.formato }} (100%)</td>
+                                        <td align="center" style="width: 25px">Catalogo({{ i.cant }}) {{ i.formato }} (100%)</td>
                                     {% endif %}
                                 {% else %}
                                     {% if i.porciento == '0.3' %}
@@ -265,6 +276,7 @@
                         <th style="padding: 6px 6px !important;">Corte</th>
                         <th style="padding: 6px 6px !important;">Especialidad</th>
                         <th style="padding: 6px 6px !important;">Nombre</th>
+                        <th style="padding: 6px !important">Etapa</th>
                         <th style="padding: 6px 6px !important;">Act</th>
                         <th style="padding: 6px 6px !important;">Objeto</th>
                         <th style="padding: 6px 6px !important;">Número</th>
@@ -299,8 +311,9 @@
                     <div class="panel panel-default">
                         <p></p>
                         <div class="row">
-                            <div class="col-sm-6"><strong> Obra:</strong>{{ form.obra }}</div>
+                            <div class="col-sm-4"><strong> Obra:</strong>{{ form.obra }}</div>
                             <div class="col-sm-6"><strong> Actividad:</strong>{{ form.actividad }}</div>
+                            <div class="col-sm-2"><strong> Etapa:</strong>{{ form.etapa }}</div>
                         </div>
                         <br>
                         <div class="row">
@@ -312,7 +325,6 @@
                             <div class="col-sm-2"><strong> Tipo doc:</strong>{{ form.tipo_doc }}</div>
                             <div class="col-sm-2"><strong> Formato:</strong>{{ form.formato }}</div>
                             <div class="col-sm-2"><strong> Numero:</strong>{{ form.num }}</div>
-                            <div class="col-sm-2"><strong> Cantidad:</strong>{{ form.cant }}</div>
                             <div class="col-sm-2"><strong> Porciento:</strong>{{ form.porciento }}</div>
                             <div class="col-sm-2"><strong> Corte:</strong>{{ form.corte }}</div>
                         </div>
@@ -385,18 +397,18 @@
                                 </div>
                             </div>
                             <br>
-
-                                    <div class="row">
-                                        <strong id="id_aprobado_en" hidden class="col-sm-10"> </strong>
-                                      <div name="aprobado_div" id="id_aprobado_div" class="col-sm-2">
-                                          <strong id="id_aprobado_rev">Aprobado:</strong>
-                                          <select name="aprobado" id="id_aprobado" class="form-control" title="aprobado" >
-                                             <option selected value="NO">NO </option>
-                                             <option value="SI">SI </option>
-                                          </select>
-                                      </div>
+                            <div class="row">
+                                <div class="col-sm-5" style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
+                                    <label style="font-weight: bold;" for="fecha_pago">Pago Correspondiente a:</label>
+                                </div>
+                                <div class="col-sm-4" style="padding-left: 0;">
+                                    <div class="input-group">
+                                        <input type="text" name="fecha_pago" id="fecha_pago" class="form-control" value="{{ fecha_pago|date:"d/m/Y" }}">
+                                        <span class="input-group-append"
+                                              style="background-color: lightgray; width: 28px"><i class="fa fa-calendar" style="margin-left: 5px; padding-top: 10px; font-size: large; "></i></span>
                                     </div>
-
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -427,14 +439,10 @@
         {% endif %}
 
         exp_numero = "^([01]{1})[0-9]{4}$";
-        exp_cant = "^[0-9]{1,2}$";
         exp_nombre = "^([A-ZÁ]{1})[A-Za-z0-9áéíóúñÁÉÍÓÚÑ /).,+-_'/(]+$";
         $('#id_num').prop("title", 'Este campo solo acepta valores numéricos').attr("oninvalid",
             'setCustomValidity("Campo obligatorio. Solo acepta valores numéricos")');
         $('#id_nombre').prop("title", 'Este campo comienza con mayúscula').attr("oninvalid", 'setCustomValidity("Campo obligatorio.Empieza con mayúscula")');
-        $('#id_cant').prop("title", 'Este campo solo acepta valores numéricos').attr("oninvalid",
-            'setCustomValidity("Campo obligatorio. Solo acepta valores numéricos")').prop("min", '1').prop("max", '15');
-
 
         exp_texto = "^([A-Z]{1})[A-Za-z0-9áéíóúñÁÉÍÓÚ .-]+$";
         $('#id_entregado, #id_observaciones').prop("title", 'Alfanumérico y comienza con mayúscula').attr("oninvalid", 'setCustomValidity("Campo obligatorio.Alfanumérico y comienza con mayúscula")');
@@ -450,15 +458,6 @@
             }
         }
 
-        function validarCant() {
-            if ($('#id_cant')[0].value.match(exp_cant)) {
-                $('#id_cant').removeClass('has-error');
-                return true;
-            } else {
-                $('#id_cant').addClass('has-error');
-                return false;
-            }
-        }
 
         function validarNombre() {
             if ($('#id_nombre')[0].value.match(exp_nombre)) {
@@ -471,7 +470,7 @@
         }
 
         function validarFormulario() {
-            if (validarNumero() && validarCant() && validarNombre()) {
+            if (validarNumero() && validarNombre()) {
                 $('#enviar').removeAttr('disabled');
             } else {
                 $('#enviar').attr('disabled', '');
@@ -487,7 +486,7 @@
             validarFormulario();
         });
 
-        $("#id_num,#id_nombre, #id_cant").on('change', function () {
+        $("#id_num,#id_nombre").on('change', function () {
             validarFormulario();
         }).on('keyup', function () {
             validarFormulario();
@@ -539,6 +538,15 @@
                         columns: ':visible',
                     },
                     messageTop: 'Listado de Planos.',
+                },
+                {
+                    extend: 'pdfHtml5',
+                    text: 'Exportar PDF',
+                    download: 'open',
+                    exportOptions: {
+                         columns: ':visible',
+                        },
+                    orientation: 'landscape',
                 },
                     {
                         extend: 'colvis',
@@ -595,6 +603,12 @@
         var getDate = function (input) {
             return new Date(input.date.valueOf());
         };
+
+        $('#fecha_pago').datepicker({
+            uiLibrary: 'bootstrap4',
+            iconsLibrary: 'font-awesome',
+            language: 'es'
+        });
 
         $('#id_fecha_ini').datepicker({
             startDate: '+5d',
@@ -699,8 +713,12 @@
             var rev_pag = nombre[2];
             if (rev_pag[1] === "N") {
                 $("#id_aprobado_div").prop('hidden', false);
+                $("#id_aprobado").prop('hidden', false);
+                $("#id_aprobado_en").prop('hidden', true);
+                $("#id_aprobado_rev").prop('hidden', false);
             }
             else {
+                $("#id_aprobado_div").prop('hidden', true);
                 $("#id_aprobado").prop('hidden', true);
                 $("#id_aprobado_en").prop('hidden', false);
                 $("#id_aprobado_rev").prop('hidden', true);

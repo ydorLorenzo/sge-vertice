@@ -1,0 +1,30 @@
+@page {
+    size: letter portrait; /* height: 27.94cm; width: 21.59cm; */
+    margin: 1.5cm;
+    /*@frame header_frame { !* Static frame *!*/
+        /* -pdf-frame-content: header_content;*/
+        /* left: 1cm;*/
+        /* width: 25.7cm;*/
+        /* top: 0.5cm;*/
+        /*height: 2cm;*/
+        /* for debugging the layout */
+    /*}*/
+    @frame col1_frame { /* Content frame 1 */
+        left: 1.5cm;
+        width: 18.59cm;
+        top: 1.9cm;
+        height: 24.14cm;
+        -pdf-frame-border: 1;
+        /* for debugging the layout */
+    }
+    @frame footer_frame {
+        /* Static frame */
+        -pdf-frame-content: footer_content;
+        left: 1.5cm;
+        width: 18.59cm;
+        top: 26.04cm;
+        height: 1.9cm;
+        -pdf-frame-border: 1;
+        /* for debugging the layout */
+    }
+}

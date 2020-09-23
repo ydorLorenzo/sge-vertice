@@ -1,4 +1,5 @@
 from django import forms
+from django.db.models import Q
 from .models import *
 
 
@@ -27,7 +28,7 @@ class AlimentacionForm(forms.ModelForm):
 
 
 class VacacionesForm(forms.ModelForm):
-    jefe_area = forms.ModelChoiceField(queryset=Trabajador.objects.filter(cargo__nombre__icontains='(EP)'))
+    jefe_area = forms.ModelChoiceField(queryset=Trabajador.objects.filter(Q(cargo__nombre__icontains='(EP)') | Q(cargo__nombre__istartswith='Director')))
     director = forms.ModelChoiceField(queryset=Trabajador.objects.filter(cargo__nombre__istartswith='Director'))
 
     class Meta:

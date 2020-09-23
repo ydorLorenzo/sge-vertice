@@ -2,7 +2,6 @@ import datetime
 
 from django.db import models
 
-# Create your models here.
 from adm.models import UnidadOrg, Departamento
 from ges_trab.models import Trabajador
 

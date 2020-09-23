@@ -1,0 +1,8 @@
+<input list="{{ widget.name }}" id="id_{{ widget.name }}" class="form-control">
+<datalist id="{{ widget.name }}">
+    {% for group_name, group_choices, group_index in widget.optgroups %}
+        {% for option in group_choices %}
+            <option value="{{ option.label|stringformat:'s' }}">
+        {% endfor %}
+    {% endfor %}
+</datalist>

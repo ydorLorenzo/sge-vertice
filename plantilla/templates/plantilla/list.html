@@ -1,0 +1,41 @@
+{% extends 'layouts/_base_list_datatable.html' %}
+{% load sge_url sge_inclusion %}
+
+{% block extra_title %}
+    {% if departamento %}
+        <br /><span style="font-size: 1rem"><a href="{% url 'unidadorg_list' %}">Unidades</a> / <a href="{% url 'departamento_unidad_list' unidad_id %}">Departamentos {{ unidad }}</a></span>
+    {% endif %}
+{% endblock %}
+
+{% block delete_error_message %}
+    Imposible eliminar Plantilla
+{% endblock %}
+
+{% block table_header %}
+    <th>Cargo</th>
+    <th>Escala Salarial</th>
+    <th>Plazas</th>
+    <th>Disponibles</th>
+{% endblock table_header %}
+
+{% block table_body %}
+    <td>{{ item.cargo }}</td>
+    <td>{{ item.escala_salarial.grupo }}</td>
+    <td>{{ item.cant_plazas }}</td>
+    <td>{{ item.disponibles }}</td>
+    {% submit_row %}
+{% endblock table_body %}
+
+{% block table_foot %}
+    <th>Cargo</th>
+    <th>Escala Salarial</th>
+    <th>Plazas</th>
+    <th>Disponibles</th>
+{% endblock table_foot %}
+
+{% block extra_buttons %}
+    <a class="btn btn-sm btn-info font-smaller" data-toggle="modal" data-target="#filter" role="button">
+        <i class="fa fa-filter mr-1"></i>
+        Filtros
+    </a>
+{% endblock %}

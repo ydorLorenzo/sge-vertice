@@ -1,0 +1,160 @@
+{
+  "options": [
+    {
+      "key": "autoclose",
+      "value": false
+    },
+    {
+      "key": "assumeNearbyYear",
+      "value": false
+    },
+    {
+      "key": "beforeShowDay",
+      "value": null
+    },
+    {
+      "key": "beforeShowMonth",
+      "value": null
+    },
+    {
+      "key": "beforeShowYear",
+      "value": null
+    },
+    {
+      "key": "beforeShowDecade",
+      "value": null
+    },
+    {
+      "key": "beforeShowCentury",
+      "value": null
+    },
+    {
+      "key": "calendarWeeks",
+      "value": false
+    },
+    {
+      "key": "clearBtn",
+      "value": false
+    },
+    {
+      "key": "container",
+      "value": "body"
+    },
+    {
+      "key": "datesDisabled",
+      "value": []
+    },
+    {
+      "key": "daysOfWeekDisabled",
+      "value": []
+    },
+    {
+      "key": "daysOfWeekHighlighted",
+      "value": []
+    },
+    {
+      "key": "defaultViewMode",
+      "value": "today"
+    },
+    {
+      "key": "disabledTouchKeyboard",
+      "value": false
+    },
+    {
+      "key": "enableOnReadonly",
+      "value": true
+    },
+    {
+      "key": "endDate",
+      "value": "Infinity"
+    },
+    {
+      "key": "forceParce",
+      "value": true
+    },
+    {
+      "key": "format",
+      "value": "mm/dd/yyyy"
+    },
+    {
+      "key": "immediateUpdates",
+      "value": false
+    },
+    {
+      "key": "inputs",
+      "value": null
+    },
+    {
+      "key": "keepEmptyValues",
+      "value": false
+    },
+    {
+      "key": "keyboardNavigation",
+      "value": true
+    },
+    {
+      "key": "language",
+      "value": "en"
+    },
+    {
+      "key": "maxViewMode",
+      "value": "4 or 'centuries'"
+    },
+    {
+      "key": "minViewMode",
+      "value": "0 or 'days'"
+    },
+    {
+      "key": "multidate",
+      "value": false
+    },
+    {
+      "key": "multidateSeparator",
+      "value": ","
+    },
+    {
+      "key": "orientation",
+      "value": "auto"
+    },
+    {
+      "key": "showOnFocus",
+      "value": true
+    },
+    {
+      "key": "startDate",
+      "value": "-Infinity"
+    },
+    {
+      "key": "startView",
+      "value": "0 or 'days'"
+    },
+    {
+      "key": "templates",
+      "value": null
+    },
+    {
+      "key": "title",
+      "value": ""
+    },
+    {
+      "key": "todayBtn",
+      "value": false
+    },
+    {
+      "key": "todayHighlight",
+      "value": true
+    },
+    {
+      "key": "toggleActive",
+      "value": false
+    },
+    {
+      "key": "weekStart",
+      "value": 0
+    },
+    {
+      "key": "zIndexOffset",
+      "value": 10
+    }
+  ]
+}

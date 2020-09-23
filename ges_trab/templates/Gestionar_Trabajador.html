@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% load static %}
 {% load widget_tweaks %}
-{% block title %}Gestionar Altas{% endblock %}
+{% block title %}Altas{% endblock %}
 {% block styles %}
     <style>
-        .dt-button {
-            margin-left: 100px !important;
+        .dt-buttons {
+            margin-left: 20px !important;
         }
 
         /* .dataTables_wrapper .dt-buttons {
@@ -20,14 +20,13 @@
 {% block migas %}
     <ol class="breadcrumb" style="margin-top: 56px; opacity: 0.9; position: fixed;
     top: 0; right: 0; left: 0; z-index: 1000;">
-        <li class="breadcrumb-item"><a href="/home/">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="/home/">Trabajadores</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Gestionar Altas</li>
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Inicio</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Altas</li>
     </ol>
 {% endblock %}
 
 {% block content %}
-    <div class=content align="center"><h5><strong>Gestionar Altas</strong></h5></div>
+    <div class=content align="center"><h5><strong>Listado Trabajadores</strong></h5></div>
     <br>
     <div class="row" style="float: right">
         <a class="btn btn-success" style="font-size: smaller" href="{% url 'AdicionarTrabajador' %}"><i
@@ -63,10 +62,6 @@
                             <div class="form-group col-sm-4 col-md-2">
                                 {{ trabajador_filter.form.cat_cient.label_tag }}
                                 {% render_field trabajador_filter.form.cat_cient class="form-control" %}
-                            </div>
-                            <div class="form-group col-sm-4 col-md-2">
-                                {{ trabajador_filter.form.s_pago.label_tag }}
-                                {% render_field trabajador_filter.form.s_pago class="form-control" %}
                             </div>
                             <div class="form-group col-sm-4 col-md-2">
                                 {{ trabajador_filter.form.t_plantilla.label_tag }}
@@ -148,7 +143,9 @@
                     <th style="width: 100px">Nombre(s)</th>
                     <th style="width: 100px">Apellidos</th>
                     <th style="width: 20px" class="text-center">Grupo</th>
+                    <th style="width: 70px">Unidad Org.</th>
                     <th style="width: 90px">Departamento</th>
+                    <th style="width: 90px">Cargo</th>
                     <th style="width: 20px" class="text-center">Nivel</th>
                     <th style="width: 60px">Especialidad</th>
                     <th style="width: 20px">Sexo</th>
@@ -163,14 +160,16 @@
                         <td align="center">{{ i.codigo_interno }}</td>
                         <td align="center">{{ i.ci }}</td>
                         <td align="center">{{ i.categoria }}</td>
-                        <td>{{ i.primer_nombre }} {{ i.segundo_nombre }}</td>
+                        <td>{{ i.primer_nombre }} {% if i.segundo_nombre %}{{ i.segundo_nombre }}{% endif %}</td>
                         <td>{{ i.apellidos }}</td>
                         <td align="center">{{ i.escala_salarial.grupo }}</td>
+                        <td>{{ i.unidad_org }}</td>
                         <td>{{ i.departamento }}</td>
+                        <td>{{ i.cargo }}</td>
                         <td align="center">{{ i.escolaridad }}</td>
                         <td>{{ i.especialidad.nombre }}</td>
                         <td>{{ i.sexo }}</td>
-                        <td align="center">{{ i.fecha_alta|date:"d/m/Y" }}</td>
+                        <td align="center" data-sort="{{i.fecha_alta|date:'Ymd'}}">{{ i.fecha_alta|date:"d/m/Y" }}</td>
                         <td>
                             <div class="icon-acciones" align="center">
                                 <a href="{{ i.geturl }}"
@@ -213,7 +212,9 @@
                 <th style="padding: 6px 6px !important;">Nombre</th>
                 <th style="padding: 6px 6px !important;">Apellidos</th>
                 <th style="padding: 6px 6px !important;">Grupo Escala</th>
+                <th style="padding: 6px 6px !important;">Unidad Org.</th>
                 <th style="padding: 6px 6px !important;">Departamento</th>
+                <th style="padding: 6px !important;">Cargo</th>
                 <th style="padding: 6px 6px !important;">Escolaridad</th>
                 <th style="padding: 6px 6px !important;">Especialidad</th>
                 <th style="">Sexo</th>
@@ -246,37 +247,98 @@
                                 {% endif %}
                             </div>
                         </div>
-                        <p style="text-align: center">Seleccione rango de fecha para generar el reporte.</p>
-                        <form method="post" action="{% url 'ExportarReporteAltas' %}">
-                            {% csrf_token %}
-                            <div class="row">
-                                <div class="col"></div>
-                                <div class="col-sm-2" style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
-                                    <label style="font-weight: bold;" for="fecha_inic">Desde:</label>
-                                </div>
-                                <div class="col-sm-3" style="padding-left: 5px;">
-                                    <input name="fecha_inic" type="text" class="form-control" id="fecha_inic" required>
-                                </div>
-                                <div class="col-sm-2" style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
-                                    <label style="font-weight: bold;" for="fecha_inic">Hasta:</label>
-                                </div>
-                                <div class="col-sm-3" style="padding-left: 0;">
-                                    <input name="fecha_fin" type="text" class="form-control" id="fecha_fin"
-                                           title="Fecha Fin" required>
-                                </div>
-                                <div class="col"></div>
-                            </div>
+                        <label for="tipo_reporte">Seleccione el tipo de reporte:</label>
+                        <select id="tipo_reporte">
+                            <option value="1">Mes</option>
+<!--                            <option value="2">Año</option> -->
+                            <option value="3">Rango de fecha</option>
+                        </select>
+                        <div id="rango-fecha-report" style="display: none">
                             <br>
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary" style="text-transform: none;">Generar
-                                    Reporte
-                                </button>
-                                <button type="button" class="btn btn-danger" style="text-transform: none;"
-                                        data-dismiss="modal">
-                                    Cancelar
-                                </button>
-                            </div>
-                        </form>
+                            <form method="post" action="{% url 'export_altas' %}">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-sm-2 offset-sm-1"
+                                         style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
+                                        <label style="font-weight: bold;" for="fecha_inic">Desde:</label>
+                                    </div>
+                                    <div class="col-sm-3" style="padding-left: 5px;">
+                                        <input name="fecha_inic" type="text" class="form-control" id="fecha_inic"
+                                               required readonly>
+                                    </div>
+                                    <div class="col-sm-2"
+                                         style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
+                                        <label style="font-weight: bold;" for="fecha_fin">Hasta:</label>
+                                    </div>
+                                    <div class="col-sm-3" style="padding-left: 0;">
+                                        <input name="fecha_fin" type="text" class="form-control" id="fecha_fin"
+                                               title="Fecha Fin" required readonly>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary" style="text-transform: none;">Generar
+                                        Reporte
+                                    </button>
+                                    <button type="button" class="btn btn-danger" style="text-transform: none;"
+                                            data-dismiss="modal">
+                                        Cancelar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        <div id="month-report" style="display: block">
+                            <br>
+                            <form method="post" id="form-month-report" data-action="{% url 'export_altas' %}">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-sm-3 offset-sm-3">
+                                        <label for="mes_reporte" class="font-weight-bold">Mes:</label>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <input name="mes_reporte" type="text" class="form-control" id="mes_reporte"
+                                               title="Mes Reporte" required readonly/>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="modal-footer">
+                                    <button type="submit" id="month_report_button" class="btn btn-primary"
+                                            style="text-transform: none">
+                                        Generar Reporte
+                                    </button>
+                                    <button type="button" class="btn btn-danger" style="text-transform: none"
+                                            data-dismiss="modal">
+                                        Cancelar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        <div id="year-report" style="display: none">
+                            <br>
+                            <form method="post" id="form-year-report" data-action="{% url 'export_altas' %}">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-sm-3 offset-sm-3">
+                                        <label for="year_reporte" class="font-weight-bold">Año:</label>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <input name="year_reporte" type="text" class="form-control" id="year_reporte"
+                                               title="Año Reporte" required readonly/>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="modal-footer">
+                                    <button type="submit" id="year_report_button" class="btn btn-primary"
+                                            style="text-transform: none">
+                                        Generar Reporte
+                                    </button>
+                                    <button type="button" class="btn btn-danger" style="text-transform: none"
+                                            data-dismiss="modal">
+                                        Cancelar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -284,6 +346,63 @@
     </div>
 {% endblock %}
 {% block javascript %}
+    <script src="{% static 'js/buttons.colVis.min.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            $("#tipo_reporte").on('change', function () {
+                var form = this.value;
+                if (form == 1) {
+                    $("#month-report").attr("style", "");
+                    $("#year-report").attr("style", "display: none");
+                    $("#rango-fecha-report").attr("style", "display: none")
+                } else if (form == 2) {
+                    $("#month-report").attr("style", "display: none");
+                    $("#year-report").attr("style", "");
+                    $("#rango-fecha-report").attr("style", "display: none")
+                } else if (form == 3) {
+                    $("#month-report").attr("style", "display: none");
+                    $("#year-report").attr("style", "display: none");
+                    $("#rango-fecha-report").attr("style", "")
+                }
+            });
+            $("#mes_reporte").datepicker({
+                minViewMode: 1,
+                startView: 1,
+                autoclose: true,
+                format: 'M yyyy',
+                language: 'es',
+                uiLibrary: 'bootstrap4'
+            }).on('changeDate', function (ev) {
+                $("#form-month-report").attr('action', `${$("#form-month-report").attr('data-action')}${ev.date.getFullYear()}/${ev.date.getMonth()+1}/`)
+            });
+            $("#year_reporte").datepicker({
+                minViewMode: 2,
+                maxViewMode: 3,
+                startView: 2,
+                autoclose: true,
+                format: 'yyyy',
+                language: 'es',
+                uiLibrary: 'bootstrap4'
+            }).on('changeDate', function (ev) {
+                $("#form-year-report").attr('action', `${$("#form-year-report").attr('data-action')}${ev.date.getFullYear()}/`)
+            });
+            $("#fecha_inic").datepicker({
+                autoclose: true,
+                language: 'es',
+                format: 'yyyy-mm-dd',
+                uiLibrary: 'bootstrap4'
+            }).on('changeDate', function (ev) {
+                $("#fecha_fin").datepicker("setStartDate", new Date(ev.date.setDate(ev.date.getDate() + 1)))
+            });
+            $("#fecha_fin").datepicker({
+                autoclose: true,
+                language: 'es',
+                format: 'yyyy-mm-dd',
+                uiLibrary: 'bootstrap4'
+            });
+
+        })
+    </script>
     <script type="text/javascript">
         $('#id_datenac_0,#id_datenac_1,#id_datealta_0, #id_datealta_1, #id_datecontrato_0, #id_datecontrato_1').datepicker({
             uiLibrary: 'bootstrap4',
@@ -301,34 +420,6 @@
         var getDate = function (input) {
             return new Date(input.date.valueOf());
         };
-
-        $("#fecha_inic").prop("readonly", true).datepicker({
-            uiLibrary: 'bootstrap4',
-            language: 'es',
-            format: 'yyyy-mm-dd'
-        });
-
-        $("#fecha_fin").prop("readonly", true).datepicker({
-            uiLibrary: 'bootstrap4',
-            language: 'es',
-            format: 'yyyy-mm-dd'
-        });
-
-        $('#fecha_inic').datepicker({
-            startDate: '+5d',
-            endDate: '+35d'
-        }).on('changeDate',
-            function (selected) {
-                $('#fecha_fin').datepicker('setStartDate', getDate(selected));
-            });
-
-        $('#fecha_fin').datepicker({
-            startDate: '+6d',
-            endDate: '+36d'
-        }).on('changeDate',
-            function (selected) {
-                $('#fecha_inic').datepicker('setEndDate', getDate(selected));
-            });
 
         $(document).ready(function () {
             var table = $('#tabla_trabajador').DataTable({
@@ -353,7 +444,27 @@
                 },
                 dom: 'lBfrtip',
                 buttons: [
-                    'pdf', 'csv'
+                    {
+                        extend: 'pdf',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    }, {
+                        extend: 'excelHtml5',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    }, {
+                        extend: 'colvis',
+                        stateSave: true,
+                        collectionLayout: 'fixed three-column',
+                        text: 'Mostrar',
+                        postfixButtons: [{
+                            extend: 'colvisGroup',
+                            text: 'Ver Todas',
+                            show: ':hidden'
+                       }]
+                    }
                 ],
             });
 

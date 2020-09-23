@@ -1,0 +1,33 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="row w-100 pl-3">
+                <div class="col-9">
+                    <h3 class="mb-0">Error eliminando {{ verbose_name|title }} #{{ object.id }}</h3>
+                </div>
+                <div class="col-3 text-right" style="font-size: 1.3rem">
+                    {% if request.current_app|read_perm:model_name in perms %}
+                        <a class="mr-1"
+                           onclick="open_re_useful_modal(`{% url model_name|add:'_detail' object.id %}`)">
+                            <i class="fa fa-file text-secondary"></i>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="alert alert-warning" role="alert">
+                Estás seguro que desea eliminar <strong>{{ verbose_name|title }} {{ object }}</strong> ?
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="row w-100">
+                <div class="col-8 offset-2 text-center">
+                    <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">
+                        OK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

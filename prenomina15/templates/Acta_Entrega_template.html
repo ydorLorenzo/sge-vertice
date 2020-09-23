@@ -1,4 +1,4 @@
-{% load static %}
+{% load static filters %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -74,10 +74,6 @@
                 <tr>
                     <th style="text-align: left; font-size: 12px; font-weight: normal">Fecha: {{ fecha }}</th>
                 </tr>
-                <tr>
-                    <th style="text-align: left; font-size: 12px; font-weight: normal">Elaborado
-                        Por: {{ elaborado_por.first_name }} {{ elaborado_por.last_name }}</th>
-                </tr>
             </table>
         </div>
         <table class="table" id="mi_tabla" style="border-collapse: collapse; border-spacing: 1px;">
@@ -86,30 +82,30 @@
                 <th style="width: 30px">No</th>
                 <th style="width: 100px">Corte</th>
                 <th style="width: 55px">Especialidad</th>
-                <th style="width: 300px; text-align: left">&nbsp;&nbsp;Nombre del plano</th>
+                <th style="width: 420px; text-align: left">&nbsp;&nbsp;Nombre del plano</th>
                 <th style="width: 40px">Actividad</th>
                 <th style="width: 65px">Objeto</th>
                 <th style="width: 75px">No Plano</th>
                 <th style="width: 120px; text-align: left">Recurso</th>
-                <th style="width: 40px">Estado</th>
-                <th style="width: 110px">Fecha Estado</th>
                 <th style="width: 45px">Revisión</th>
             </tr>
             </thead>
             <tbody>
             {% for rev in list_rev %}
                 <tr>
-                    <td align="center">{{ forloop.counter }}</td>
-                    <td> {{ rev.plano.corte }}</td>
-                    <td>{{ rev.plano.especialidad.siglas }}</td>
-                    <td style="text-align: left">&nbsp;&nbsp;{{ rev.plano.nombre }}</td>
-                    <td>{{ rev.plano.actividad.codigo_act }}</td>
-                    <td>{{ rev.plano.objeto.codigo }}</td>
-                    <td>{{ rev.plano.num }}</td>
-                    <td style="text-align: left">{{ rev.plano.trabajador.primer_nombre }} {{ rev.plano.trabajador.segundo_nombre }}</td>
-                    <td>{{ rev.estado }}</td>
-                    <td>{{ rev.fecha_estado|date:"d/m/Y" }}</td>
-                    <td>{{ rev.no_rev }}</td>
+                    <td style="text-align: center">{{ forloop.counter }}</td>
+                    <td style="text-align: center">{{ rev.plano.corte }}</td>
+                    <td style="text-align: center">{{ rev.plano.especialidad.siglas }}</td>
+                    <td style="text-align: left">  {{ rev.plano.nombre }}</td>
+                    <td style="text-align: center">{{ rev.plano.actividad.codigo_act }}</td>
+                    <td style="text-align: center">{{ rev.plano.objeto.codigo }}</td>
+                    <td style="text-align: center">{{ rev.plano.num }}</td>
+                    <td style="text-align: left">  {{ rev.plano.trabajador.primer_nombre }} {{ rev.plano.trabajador.segundo_nombre }}</td>
+                    {% if alpha == '1' or alpha == 1 %}
+                        <td style="text-align: center">{{ rev.no_rev | convert2char }}</td>
+                    {% else %}
+                        <td style="text-align: center">{{ rev.no_rev }}</td>
+                    {% endif %}
                 </tr>
             {% endfor %}
 

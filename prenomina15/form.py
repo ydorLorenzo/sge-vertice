@@ -34,11 +34,21 @@ class ObjetoForm(forms.ModelForm):
 class PlanoForm(forms.ModelForm):
     class Meta:
         model = Plano
-        fields = ['num', 'objeto', 'nombre', 'formato', 'obra', 'especialidad', 'trabajador', 'fecha_fin', 'cant',
-                  'actividad', 'fecha_ini', 'porciento', 'corte', 'tipo_doc']
+        fields = ['num', 'objeto', 'nombre', 'formato', 'obra', 'especialidad', 'trabajador', 'fecha_fin',
+                  'actividad', 'fecha_ini', 'porciento', 'corte', 'tipo_doc', 'etapa']
 
     def __init__(self, *args, **kwargs):
         super(PlanoForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+
+class PenalizacionForm(forms.ModelForm):
+    class Meta:
+        model = Plano
+        fields = ['trabajador', 'corte', 'incumplimiento_plano', 'incumplimiento_cpl', 'incumplimiento_calidad']
+
+    def __init__(self, *args, **kwargs):
+        super(PenalizacionForm, self).__init__(*args, **kwargs)
         for field in iter(self.fields):
             self.fields[field].widget.attrs.update({'class': 'form-control'})
 

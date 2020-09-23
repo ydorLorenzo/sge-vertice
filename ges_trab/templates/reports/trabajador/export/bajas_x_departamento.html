@@ -1,0 +1,35 @@
+{% extends 'layouts/reports/_base_export_pdf.html' %}
+
+{% block table_header %}
+    <th style="width: 2%"></th>
+    <th style="width: 2%"></th>
+    <th style="width: 29%;">Nombres y apellidos</th>
+    <th style="width: 5%">Categ.</th>
+    <th style="width: 15%">Fecha {% block fecha_th %}baja{% endblock %}</th>
+    <th style="width: 32%">Cargo</th>
+    <th style="width: 7%;">Esc</th>
+    <th style="width: 18%">Especialidad</th>
+{% endblock %}
+
+{% block table_body %}
+    {% ifchanged item.unidad_org_id %}
+        <tr>
+            <td colspan="8" class="text-left"><strong>{{ item.unidad_nombre }}</strong></td>
+        </tr>
+    {% endifchanged %}
+    {% ifchanged item.departamento_id %}
+        <tr>
+            <td style="width: 2%"></td>
+            <td colspan="7" class="text-left" style="width: 98%;left:0"><strong>{{ item.departamento_nombre }}</strong></td>
+        </tr>
+    {% endifchanged %}
+    <tr>
+        <td colspan="2" style="width: 4%"></td>
+        <td style="width: 29%">{{ item.primer_nombre }} {{ item.segundo_nombre }} {{ item.apellidos }}</td>
+        <td style="width: 5%; text-align: center">{{ item.categoria }}</td>
+        <td style="width: 15%; text-align: center">{% block fecha_td %}{{ item.fecha_baja|date:"d/m/y" }}{% endblock %}</td>
+        <td style="width: 32%">{{ item.cargo_nombre }}</td>
+        <td style="width: 7%; text-align: center">{{ item.escolaridad }}</td>
+        <td style="width: 18%; text-align: center">{{ item.especialidad_nombre|default_if_none:item.escolaridad }}</td>
+    </tr>
+{% endblock %}

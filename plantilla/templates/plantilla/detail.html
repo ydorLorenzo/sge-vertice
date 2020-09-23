@@ -1,0 +1,14 @@
+{% extends 'layouts/crud/_base_detail.html' %}
+
+{% block detail_elements %}
+    <dt class="col-md-4 col-sm-12">Unidad organizacional:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.unidad }}</dd>
+    <dt class="col-md-4 col-sm-12">Departamento:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.departamento }}</dd>
+    <dt class="col-md-4 col-sm-12">Cargo:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.cargo }}</dd>
+    <dt class="col-md-4 col-sm-12">Cantidad de plazas:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.cant_plazas }}</dd>
+    <dt class="col-md-4 col-sm-12">Disponibles:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.disponibles }}</dd>
+{% endblock %}

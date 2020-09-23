@@ -1,0 +1,183 @@
+{% extends "base_pren15.html" %}
+{% load static %}
+{% load filters %}
+{% block title %}Conciliación de Planos por OO{% endblock %}
+{% block styles %}
+    <style type="text/css">
+        #tabla_datos_paginate a:hover {
+            background-color: #007bff !important;
+            color: white;
+            border: solid 1px;
+            border-color: #0062cc !important;
+            transition: color .25s ease-in-out, background-color .25s ease-in-out, border-color .25s ease-in-out, border .25s ease-in-out;
+        }
+
+        td, th {
+            padding: 2px !important;
+        }
+
+        table.dataTable td.focus {
+            outline: 1px solid #ac1212;
+            outline-offset: -3px;
+            background-color: #f8e6e6 !important;
+        }
+
+        table.dataTable td, table.dataTable th {
+            font-size: 11px;
+        }
+
+        .dt-button.buttons-excel.buttons-html5, .dt-button.buttons-collection.buttons-colvis {
+            margin-left: 15px;
+            border-radius: 3px;
+            box-shadow: #47748b 1px 1px 1px;
+            color: #fff;
+            background-color: #37474F !important;
+            border-color: #37474F;
+            background-image: none;
+        }
+
+        .dt-button.buttons-excel.buttons-html5:hover, .dt-button.buttons-collection.buttons-colvis:hover {
+            margin-left: 15px;
+            border-radius: 3px;
+            box-shadow: #37474F 1px 1px 1px;
+            color: #fff;
+            background-color: #47748b !important;
+            border-color: #47748b;
+            background-image: none;
+        }
+
+    </style>
+{% endblock %}
+{% block content %}
+    <!-- Page Content Holder -->
+    <div id="content" style="padding-top: 100px; padding-right: 0;">
+
+        <div class=content align="center"><h5 style="font-weight: bold">Conciliación de Planos por OO</h5></div>
+        <div class="container" role="main"
+             style="padding-right: 0; margin-left: 0; font-size: smaller; position: relative; max-width: none; margin-right: 0px;">
+            <br>
+            <div class="row" style="width: 100%">
+                <div class="col-lg-12">
+                    <h6 style="font-weight: bold;font-size: 12px">Total de planos Mes : {{ total_planos }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Retenidos: {{ retenido }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pagar
+                        100%: {{ completo }}</h6>
+                    <table id="tabla_datos" class="display" cellspacing="0"
+                           style="width: 100%; max-width: 100% !important;">
+                        <thead id="tabla_datos_head">
+                        <tr>
+                            <th style="text-align: center">Etapa</th>
+                            <th style="text-align: center">Objetos de Obra</th>
+                            <th style="text-align: center">Plan de planos a entregar según cronograma</th>
+                            <th style="text-align: center">Real de planos entregados</th>
+                            <th style="text-align: center">Total de planos a facturar al 90 %</th>
+                            <th style="text-align: center">Total de planos a facturar al 100 %</th>
+                            <th style="text-align: center">Total de planos a facturar al 10 % VPC</th>
+                            <th style="text-align: center">Total de planos a facturar al 10 % RET_ANT</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for etapa in etapas %}
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td style="background-color: yellow; font-weight: bold"> {{ etapa.codigo }}</td>
+                                <td style="background-color: yellow; font-weight: bold">&nbsp;</td>
+                                <td style="background-color: yellow; font-weight: bold">{{ etapa.nombre }}</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                                {% for objeto in etapa.objetos %}
+                                        <tr>
+                                            <td>{{ objeto.actividad }}</td>
+                                            <td>{{ objeto.codigo }} {{ objeto.nombre }}</td>
+                                            <td style="text-align: center">{{ objeto.total_planos_plan }} </td>
+                                            <td style="text-align: center">{{ objeto.total_planos_real }}</td>
+                                            <td style="text-align: center">{{ objeto.total_planos_vpc_90 }}</td>
+                                            <td style="text-align: center">{{ objeto.total_planos_vpc_100 }}</td>
+                                            <td style="text-align: center">{{ objeto.total_planos_vpc_ret }}</td>
+                                            <td style="text-align: center">{{ objeto.total_planos_vpc_ret_ant }}</td>
+                                        </tr>
+                                {% endfor %}
+                                <tr style="background-color: cyan">
+                                    <td style="font-weight: bold">Total </td>
+                                    <td>&nbsp;</td>
+                                    <td style="text-align: center">{{ etapa.total_planos_plan }} </td>
+                                    <td style="text-align: center">{{ etapa.total_planos_real }}</td>
+                                    <td style="text-align: center">{{ etapa.total_planos_vpc_90 }}</td>
+                                    <td style="text-align: center">{{ etapa.total_planos_vpc_100 }}</td>
+                                    <td style="text-align: center">{{ etapa.total_planos_vpc_ret }}</td>
+                                    <td style="text-align: center">{{ etapa.total_planos_vpc_ret_ant }}</td>
+                                </tr>
+                        {% endfor %}
+                                <tr style="background-color: #00b0ff">
+                                    <td style="font-weight: bold">Totales</td>
+                                    <td>&nbsp;</td>
+                                    <td style="text-align: center">{{ total_planos_plan }} </td>
+                                    <td style="text-align: center">{{ total_planos_real }}</td>
+                                    <td style="text-align: center">{{ total_planos_vpc_90 }}</td>
+                                    <td style="text-align: center">{{ total_planos_vpc_100 }}</td>
+                                    <td style="text-align: center">{{ total_planos_vpc_ret }}</td>
+                                    <td style="text-align: center">{{ total_planos_vpc_ret_ant }}</td>
+                                </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // DataTable
+            var table = $('#tabla_datos').DataTable({
+                "language": {
+                    processing: "Procesando...",
+                    search: "Buscar:",
+                    lengthMenu: "Mostrar _MENU_ registros",
+                    info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    infoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    infoFiltered: "(filtrado de un total de _MAX_ registros)",
+                    infoPostFix: "",
+                    loadingRecords: "Cargando...",
+                    zeroRecords: "No se encontraron resultados",
+                    emptyTable: "Ningún dato disponible en esta tabla",
+                    paginate: {
+                        first: "Último",
+                        previous: "Anterior",
+                        next: "Siguiente",
+                        last: "Último"
+                    }
+                },
+                "ordering": false,
+                fixedHeader: {
+                    header: true,
+                    headerOffset: $('#navbar').height() + 22
+                },
+                keys: true,
+                dom: 'lBfrtip',
+                bFilter: false,
+                bInfo: false,
+                bLengthChange: false,
+                bPaginate: false,
+                buttons: [{
+                    extend: 'excelHtml5',
+                    autoFilter: true,
+                    text: 'Exportar Excel',
+                    filename: 'Datos Prenómina',
+                    bom: true,
+                    sheetName: 'Datos Prenómina',
+                    exportOptions: {
+                        columns: ':visible',
+                    },
+                    messageTop: 'Entidad: Emp.Serv.de Ingeniería y Diseño Holguín',
+                }]
+            });
+        });
+    </script>
+{% endblock %}
+
+

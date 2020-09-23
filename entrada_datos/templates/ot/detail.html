@@ -1,0 +1,21 @@
+{% extends 'layouts/crud/_base_detail.html' %}
+{% load filters %}
+
+{% block detail_elements %}
+    <dt class="col-md-4 col-sm-12">Código:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.codigo_ot }}</dd>
+    <dt class="col-md-4 col-sm-12">Descripción:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.descripcion_ot }}</dd>
+    <dt class="col-md-4 col-sm-12">Número del contrato:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.no_contrato }}</dd>
+    <dt class="col-md-4 col-sm-12">Valor del contrato:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.valor_contrato }}</dd>
+    <dt class="col-md-4 col-sm-12">Tipo de servicio:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.tipo_servicio }}</dd>
+    <dt class="col-md-4 col-sm-12">Inversionista:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.inversionista }}</dd>
+    <dt class="col-md-4 col-sm-12">Unidad:</dt>
+    <dd class="col-md-8 col-sm-12">{{ dict|get_item:object.unidad }}</dd>
+    <dt class="col-md-4 col-sm-12">Área:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.area }}</dd>
+{% endblock %}

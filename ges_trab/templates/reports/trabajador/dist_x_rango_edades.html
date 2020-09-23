@@ -1,0 +1,7 @@
+{% extends 'reports/trabajador/layout_chart.html' %}
+{% load static %}
+
+{% block javascript %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'js/highcharts/modules/funnel.js' %}"></script>
+{% endblock %}

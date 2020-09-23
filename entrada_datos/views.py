@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect
 from django.views import generic
 from .form import *
 from rechum.my_decorators import context_add_perm
+from adm.models import UnidadOrg, Departamento
 
 
 #@permission_required('entrada_datos','home_principal')
@@ -35,9 +36,13 @@ def gestionar_inversionista(request):
 @permission_required('entrada_datos.read_area','home_principal')
 def gestionar_area(request):
     areas = Area.objects.all()
+    unidades = UnidadOrg.objects.all()
     form = AreaForm(request.POST or None)
+    if request.POST:
+        form.fields['area'].queryset = Departamento.objects.filter(dirige_id__isnull=True)
     context = {'request': request,
                'list_area': areas,
+               'list_unidades': unidades,
                'form': form}
     context = context_add_perm(request, context, 'entrada_datos', 'area')
     return render(request, 'Gestionar_Area.html', context)
@@ -212,7 +217,7 @@ def adicionar_actividad(request):
                            'errores': 'Inténtelo de nuevo. Ha ocurrido un error de Base de Datos'}
                 return render(request, 'Gestionar_Actividad.html', context)
             ot.save()
-            return redirect('/actividad/')
+            return redirect('gestionarActividad')
     if request.method == 'POST':
         actividades = TipoActividad.objects.all()
         list_act = Actividad.objects.all()

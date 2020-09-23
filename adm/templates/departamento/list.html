@@ -1,0 +1,36 @@
+{% extends 'layouts/_base_list_datatable.html' %}
+{% load sge_url sge_inclusion %}
+
+{% block extra_title %}
+    {% if unidad %}
+        <br /><span style="font-size: 1rem"><a href="{% url 'unidadorg_list' %}">{{ unidad }}</a></span>
+    {% endif %}
+{% endblock %}
+
+{% block delete_error_message %}
+    Imposible eliminar Unidad Organizacional
+{% endblock %}
+
+{% block table_header %}
+    <th>Unidad Organizacional</th>
+    <th>Código</th>
+    <th>Nombre</th>
+    <th>Sección Sindical</th>
+{% endblock table_header %}
+
+{% block table_body_outside %}
+    <tr onclick="window.location.href = `{% url 'plantilla_departamento_list' item.id %}`">
+        <td>{{ item.unidad_nombre }}</td>
+        <td>{{ item.codigo }}</td>
+        <td>{{ item.nombre }}</td>
+        <td>{{ item.seccion_nombre }}</td>
+        {% submit_row %}
+    </tr>
+{% endblock table_body_outside %}
+
+{% block table_foot %}
+    <th>Unidad Organizacional</th>
+    <th>Código</th>
+    <th>Nombre</th>
+    <th>Sección Sindical</th>
+{% endblock table_foot %}

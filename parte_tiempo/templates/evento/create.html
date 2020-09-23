@@ -1,0 +1,43 @@
+{% extends 'layouts/crud/_base_create-update.html' %}
+{% load widget_tweaks %}
+
+{% block form_elements %}
+    {{ form.non_field_errors }}
+    <div class="col-lg-9 col-12 pt-2">
+        {{ form.nombre.label_tag }}
+        {{ form.nombre.errors }}
+        {{ form.nombre }}
+    </div>
+    <div class="col-lg-3 col-12 pt-0 pt-lg-2">
+        {{ form.todo_dia.label_tag }}
+        {{ form.todo_dia.errors }}
+        {{ form.todo_dia }}
+    </div>
+    <div class="col-lg-4 col-12">
+        {{ form.fecha_inicio.label_tag }}
+        {{ form.fecha_inicio.errors }}
+        {{ form.fecha_inicio }}
+    </div>
+    <div class="col-lg-4 col-12">
+        {{ form.fecha_fin.label_tag }}
+        {{ form.fecha_fin.errors }}
+        {{ form.fecha_fin }}
+    </div>
+    <div class="col-lg-4 col-12">
+        {{ form.tipo_evento.label_tag }}
+        {{ form.tipo_evento.errors }}
+        {{ form.tipo_evento }}
+    </div>
+    <div class="col-12">
+        {{ form.comentario.label_tag }}
+        {{ form.comentario.errors }}
+        {{ form.comentario }}
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    {{ block.super }}
+    <script>
+    $('#fecha_inicio_id').val('{{ fecha_inicio }}');
+    </script>
+{% endblock javascript %}

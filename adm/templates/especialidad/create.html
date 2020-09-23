@@ -1,0 +1,21 @@
+{% extends 'layouts/crud/_base_create-update.html' %}
+{% load widget_tweaks %}
+
+{% block form_elements %}
+    {{ form.non_field_errors }}
+    <div class="col-lg-4 col-12">
+        {{ form.codigo.label_tag }}
+        {{ form.codigo.errors }}
+        {{ form.codigo }}
+    </div>
+    <div class="col-lg-8 col-12 pt-lg-0 pt-2">
+        {{ form.nombre.label_tag }}
+        {{ form.nombre.errors }}
+        {{ form.nombre }}
+    </div>
+    <div class="col-12 pt-2">
+        {{ form.calificacion.label_tag }}
+        {{ form.calificacion.errors }}
+        {{ form.calificacion }}
+    </div>
+{% endblock %}

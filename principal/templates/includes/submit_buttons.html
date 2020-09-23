@@ -1,0 +1,21 @@
+{% if change or delete %}
+    <td>
+        <div class="icon-acciones text-center">
+            {% if change %}
+                <a href="{% url model_name|add:'_update' pk %}" onclick="event.stopPropagation()"
+                   class="badge badge-pill badge-primary">
+                    <i class="fa fa-edit fa-submit-buttons-round" title="Editar {{ verbose_name|title }}"
+                       style="color: white;"></i>
+                </a>
+            {% endif %}
+            {% if delete %}
+                <a onclick="event.stopPropagation(); open_re_useful_modal('{% url model_name|add:'_delete' pk %}')"
+                   class="badge badge-pill badge-danger">
+                    <i class="fa fa-trash fa-submit-buttons-round" title="Eliminar {{ verbose_name|title }}"
+                       style="color: white;"></i>
+                </a>
+            {% endif %}
+            {% block extra_buttons %}{% endblock %}
+        </div>
+    </td>
+{% endif %}

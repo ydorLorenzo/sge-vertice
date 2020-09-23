@@ -1,0 +1,485 @@
+{% extends "base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+{% block title %}Altas{% endblock %}
+{% block styles %}
+    <style>
+        .dt-buttons {
+            margin-left: 20px !important;
+        }
+
+        /* .dataTables_wrapper .dt-buttons {
+         float:none;
+         text-align:center;
+       }*/
+    </style>
+
+
+{% endblock %}
+
+{% block migas %}
+    <ol class="breadcrumb" style="margin-top: 56px; opacity: 0.9; position: fixed;
+    top: 0; right: 0; left: 0; z-index: 1000;">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Inicio</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Altas</li>
+    </ol>
+{% endblock %}
+
+{% block content %}
+    <div class=content align="center"><h5><strong>Listado Trabajadores</strong></h5></div>
+    <br>
+    <div class="row" style="float: right">
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#popup"
+                style="background-color: rebeccapurple; border-color: rebeccapurple; font-size: small"><i
+                class="fa fa-file-pdf-o"></i> Listado PDF
+        </button>&nbsp;
+        <a class="btn btn-info" data-toggle="collapse" href="#collapseExample" role="button"
+           aria-expanded="false" aria-controls="collapseExample" style="font-size: small">
+               <i class="fa fa-search"></i> Avanzada
+        </a>
+    </div>
+    <br>
+    <br>
+    <div class="container" role="main" style="width:100%; font-size: smaller">
+        <div class="collapse" id="collapseExample">
+            <div class="card card-body">
+                <!--FORMULARIO DE FILTROS-->
+                <form method="get">
+                    <div class="well">
+                        <h6 style="margin-top: 0">Filtros</h6>
+                        <div class="row">
+                            <div class="form-group col-sm-4 col-md-2">
+                                {{ trabajador_filter.form.sexo.label_tag }}
+                                {% render_field trabajador_filter.form.sexo class="form-control" %}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-2">
+                                {{ trabajador_filter.form.etnia.label_tag }}
+                                {% render_field trabajador_filter.form.etnia class="form-control" %}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-2">
+                                {{ trabajador_filter.form.cat_cient.label_tag }}
+                                {% render_field trabajador_filter.form.cat_cient class="form-control" %}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-2">
+                                {{ trabajador_filter.form.t_plantilla.label_tag }}
+                                {% render_field trabajador_filter.form.t_plantilla class="form-control" %}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-2">
+                                {{ trabajador_filter.form.t_contrato.label_tag }}
+                                {% render_field trabajador_filter.form.t_contrato class="form-control" %}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-2">
+                                {{ trabajador_filter.form.escala_salarial.label_tag }}
+                                {% render_field trabajador_filter.form.escala_salarial class="form-control" %}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-2">
+                                {{ trabajador_filter.form.categoria.label_tag }}
+                                {% render_field trabajador_filter.form.categoria class="form-control" %}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-4">
+                                {{ trabajador_filter.form.cargo.label_tag }}
+                                {% render_field trabajador_filter.form.cargo class="form-control" %}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-4">
+                                {{ trabajador_filter.form.departamento.label_tag }}
+                                {% render_field trabajador_filter.form.departamento class="form-control" %}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-2">
+                                {{ trabajador_filter.form.por_cies.label_tag }}
+                                {% render_field trabajador_filter.form.por_cies class="form-control" %}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-2">
+                                {{ trabajador_filter.form.por_anti.label_tag }}
+                                {% render_field trabajador_filter.form.por_anti class="form-control" %}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-2">
+                                {{ trabajador_filter.form.orga_defensa.label_tag }}
+                                {% render_field trabajador_filter.form.orga_defensa class="form-control" %}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-2">
+                                {{ trabajador_filter.form.anno_graduado.label_tag }}
+                                {% render_field trabajador_filter.form.anno_graduado class="form-control" %}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-2">
+                                {{ trabajador_filter.form.motivo_alta.label_tag }}
+                                {% render_field trabajador_filter.form.motivo_alta class="form-control" %}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-4">
+                                {{ trabajador_filter.form.datealta.label_tag }}
+                                {% render_field trabajador_filter.form.datealta class="form-control" %}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-4">
+                                {{ trabajador_filter.form.datecontrato.label_tag }}
+                                {% render_field trabajador_filter.form.datecontrato class="form-control" %}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-4">
+                                {{ trabajador_filter.form.datenac.label_tag }}
+                                {% render_field trabajador_filter.form.datenac class="form-control" %}
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-search"></span> Buscar
+                    </button>
+                </form>
+            </div>
+            <br>
+            <!--AKI TERMINA EL FORMULARIO DE FILTROS-->
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-lg-12" style="font-size: smaller">
+            <table class="display" cellspacing="0" width="100%" id="tabla_trabajador">
+                <thead>
+                <tr>
+                    <th style="width: 15px" class="text-center">No</th>
+                    <th style="width: 15px" class="text-center">Cód</th>
+                    <th style="width: 20px" class="text-center">CI</th>
+                    <th style="width: 5px" class="text-center">Cat</th>
+                    <th style="width: 100px">Nombre(s)</th>
+                    <th style="width: 100px">Apellidos</th>
+                    <th style="width: 20px" class="text-center">Grupo</th>
+                    <th style="width: 70px">Unidad Org.</th>
+                    <th style="width: 90px">Departamento</th>
+                    <th style="width: 90px">Cargo</th>
+                    <th style="width: 20px" class="text-center">Nivel</th>
+                    <th style="width: 60px">Especialidad</th>
+                    <th>Año Graduación</th>
+                    <th>Centro Graduación</th>
+                    <th style="width: 20px">Sexo</th>
+                    <th style="width: 20px" class="text-center">Fecha Alta</th>
+                    <th style="width: 60px">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for i in trabajador_filter.qs %}
+                    <tr class="table-light">
+                        <td align="center"> {{ forloop.counter }} </td>
+                        <td align="center">{{ i.codigo_interno }}</td>
+                        <td align="center">{{ i.ci }}</td>
+                        <td align="center">{{ i.categoria }}</td>
+                        <td>{{ i.primer_nombre }} {% if i.segundo_nombre %}{{ i.segundo_nombre }}{% endif %}</td>
+                        <td>{{ i.apellidos }}</td>
+                        <td align="center">{{ i.escala_salarial.grupo }}</td>
+                        <td>{{ i.unidad_org }}</td>
+                        <td>{{ i.departamento }}</td>
+                        <td>{{ i.cargo }}</td>
+                        <td align="center">{{ i.escolaridad }}</td>
+                        <td>{{ i.especialidad.nombre }}</td>
+                        <td>{% if i.anno_graduado %}{{ i.anno_graduado }}{% endif %}</td>
+                        <td>{{ i.centro_graduacion }}</td>
+                        <td>{{ i.sexo }}</td>
+                        <td align="center" data-sort="{{i.fecha_alta|date:'Ymd'}}">{{ i.fecha_alta|date:"d/m/Y" }}</td>
+                        <td>
+                            <div class="icon-acciones" align="center">
+                                <a href="{% url 'ReporteContrato' i.pk %}"
+                                   class="badge badge-pill badge-warning"
+                                   style="color: white; background-color: orangered">
+                                    <i class="fa fa-file-text" title="Contrato Trabajador"></i>
+                                </a>
+                                <a href="{% url 'MovimientoNominaAlta' i.pk %}"
+                                   class="badge badge-pill badge-secondary" style="background-color: orangered">
+                                    <i class="fa fa-file-text" title="Movimiento de Nómina"></i>
+                                </a>
+                                <a href="{% url 'AcuerdoConfidencialidad' i.pk %}"
+                                   class="badge badge-pill badge-secondary" style="background-color: orangered">
+                                    <i class="fa fa-file-text" title="Acuerdo de Confidencialidad"></i>
+                                </a>
+                                <a href="{% url 'SolicCuentaUser' i.pk %}"
+                                   class="badge badge-pill badge-secondary" style="background-color: orangered">
+                                    <i class="fa fa-file-text" title="Solicitud de Cuenta de Usuario"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+                <tfoot>
+                <td style="padding: 6px 6px !important;"></td>
+                <th style="padding: 6px 6px !important;">Código</th>
+                <th style="padding: 6px 6px !important;">CI</th>
+                <th style="padding: 6px 6px !important;">Categoría</th>
+                <th style="padding: 6px 6px !important;">Nombre</th>
+                <th style="padding: 6px 6px !important;">Apellidos</th>
+                <th style="padding: 6px 6px !important;">Grupo Escala</th>
+                <th style="padding: 6px 6px !important;">Unidad Org.</th>
+                <th style="padding: 6px 6px !important;">Departamento</th>
+                <th style="padding: 6px !important;">Cargo</th>
+                <th style="padding: 6px 6px !important;">Escolaridad</th>
+                <th style="padding: 6px 6px !important;">Especialidad</th>
+                <th style="padding: 6px 6px !important;">Año Graduación</th>
+                <th style="padding: 6px 6px !important;">Centro Graduación</th>
+                <th style="">Sexo</th>
+                <th style="padding: 6px 6px !important;">Fecha Alta</th>
+                <td style="padding: 6px 6px !important;"></td>
+                </tfoot>
+
+            </table>
+        </div>
+    </div>
+    <div id="delete" class="modal fade" role="dialog"></div>
+
+    <div id="popup" class="modal fade" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5><strong>Reporte de Altas</strong></h5>
+                    <button type="button" class="close" data-dismiss="modal">x</button>
+                </div>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <div class="panel-body">
+                        <div class="panel panel-default">
+                            <div class="row" style="margin-bottom: 20px;">
+                                {% if error_add %}
+                                    <div class="alert alert-danger"
+                                         style="width: 100%; text-align: center; margin: 0 auto; padding: 0 10px; border-radius: 0;">
+                                        <p>{{ error_add }}</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <label for="tipo_reporte">Seleccione el tipo de reporte:</label>
+                        <select id="tipo_reporte">
+                            <option value="1">Mes</option>
+                            <option value="2">Año</option>
+                            <option value="3">Rango de fecha</option>
+                        </select>
+                        <div id="rango-fecha-report" style="display: none">
+                            <br>
+                            <form method="post" action="{% url 'export_altas' %}">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-sm-2 offset-sm-1"
+                                         style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
+                                        <label style="font-weight: bold;" for="fecha_inic">Desde:</label>
+                                    </div>
+                                    <div class="col-sm-3" style="padding-left: 5px;">
+                                        <input name="fecha_inic" type="text" class="form-control" id="fecha_inic"
+                                               required readonly>
+                                    </div>
+                                    <div class="col-sm-2"
+                                         style="padding-right: 0; padding-left: 30px; padding-top: 8px;">
+                                        <label style="font-weight: bold;" for="fecha_fin">Hasta:</label>
+                                    </div>
+                                    <div class="col-sm-3" style="padding-left: 0;">
+                                        <input name="fecha_fin" type="text" class="form-control" id="fecha_fin"
+                                               title="Fecha Fin" required readonly>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary" style="text-transform: none;">Generar
+                                        Reporte
+                                    </button>
+                                    <button type="button" class="btn btn-danger" style="text-transform: none;"
+                                            data-dismiss="modal">
+                                        Cancelar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        <div id="month-report" style="display: block">
+                            <br>
+                            <form method="post" id="form-month-report" data-action="{% url 'export_altas' %}">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-sm-3 offset-sm-3">
+                                        <label for="mes_reporte" class="font-weight-bold">Mes:</label>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <input name="mes_reporte" type="text" class="form-control" id="mes_reporte"
+                                               title="Mes Reporte" required readonly/>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="modal-footer">
+                                    <button type="submit" id="month_report_button" class="btn btn-primary"
+                                            style="text-transform: none">
+                                        Generar Reporte
+                                    </button>
+                                    <button type="button" class="btn btn-danger" style="text-transform: none"
+                                            data-dismiss="modal">
+                                        Cancelar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        <div id="year-report" style="display: none">
+                            <br>
+                            <form method="post" id="form-year-report" data-action="{% url 'export_altas' %}">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-sm-3 offset-sm-3">
+                                        <label for="year_reporte" class="font-weight-bold">Año:</label>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <input name="year_reporte" type="text" class="form-control" id="year_reporte"
+                                               title="Año Reporte" required readonly/>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="modal-footer">
+                                    <button type="submit" id="year_report_button" class="btn btn-primary"
+                                            style="text-transform: none">
+                                        Generar Reporte
+                                    </button>
+                                    <button type="button" class="btn btn-danger" style="text-transform: none"
+                                            data-dismiss="modal">
+                                        Cancelar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascript %}
+    <script src="{% static 'js/buttons.colVis.min.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            $("#tipo_reporte").on('change', function () {
+                var form = this.value;
+                if (form == 1) {
+                    $("#month-report").attr("style", "");
+                    $("#year-report").attr("style", "display: none");
+                    $("#rango-fecha-report").attr("style", "display: none")
+                } else if (form == 2) {
+                    $("#month-report").attr("style", "display: none");
+                    $("#year-report").attr("style", "");
+                    $("#rango-fecha-report").attr("style", "display: none")
+                } else if (form == 3) {
+                    $("#month-report").attr("style", "display: none");
+                    $("#year-report").attr("style", "display: none");
+                    $("#rango-fecha-report").attr("style", "")
+                }
+            });
+            $("#mes_reporte").datepicker({
+                minViewMode: 1,
+                startView: 1,
+                autoclose: true,
+                format: 'M yyyy',
+                language: 'es',
+                uiLibrary: 'bootstrap4'
+            }).on('changeDate', function (ev) {
+                $("#form-month-report").attr('action', `${$("#form-month-report").attr('data-action')}${ev.date.getFullYear()}/${ev.date.getMonth()+1}/`)
+            });
+            $("#year_reporte").datepicker({
+                minViewMode: 2,
+                maxViewMode: 3,
+                startView: 2,
+                autoclose: true,
+                format: 'yyyy',
+                language: 'es',
+                uiLibrary: 'bootstrap4'
+            }).on('changeDate', function (ev) {
+                $("#form-year-report").attr('action', `${$("#form-year-report").attr('data-action')}${ev.date.getFullYear()}/`)
+            });
+            $("#fecha_inic").datepicker({
+                autoclose: true,
+                language: 'es',
+                format: 'yyyy-mm-dd',
+                uiLibrary: 'bootstrap4'
+            }).on('changeDate', function (ev) {
+                $("#fecha_fin").datepicker("setStartDate", new Date(ev.date.setDate(ev.date.getDate() + 1)))
+            });
+            $("#fecha_fin").datepicker({
+                autoclose: true,
+                language: 'es',
+                format: 'yyyy-mm-dd',
+                uiLibrary: 'bootstrap4'
+            });
+
+        })
+    </script>
+    <script type="text/javascript">
+        $('#id_datenac_0,#id_datenac_1,#id_datealta_0, #id_datealta_1, #id_datecontrato_0, #id_datecontrato_1').datepicker({
+            uiLibrary: 'bootstrap4',
+            iconsLibrary: 'font-awesome',
+            language: 'es'
+        });
+
+        $("#id_anno_graduado").datepicker({
+            format: "yyyy",
+            viewMode: "years",
+            minViewMode: "years"
+        });
+
+
+        var getDate = function (input) {
+            return new Date(input.date.valueOf());
+        };
+
+        $(document).ready(function () {
+            var table = $('#tabla_trabajador').DataTable({
+
+                "language": {
+                    processing: "Procesando...",
+                    search: "Buscar:",
+                    lengthMenu: "Mostrar _MENU_ registros",
+                    info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    infoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    infoFiltered: "(filtrado de un total de _MAX_ registros)",
+                    infoPostFix: "",
+                    loadingRecords: "Cargando...",
+                    zeroRecords: "No se encontraron resultados",
+                    emptyTable: "Ningún dato disponible en esta tabla",
+                    paginate: {
+                        first: "Último",
+                        previous: "Anterior",
+                        next: "Siguiente",
+                        last: "Último"
+                    }
+                },
+                dom: 'lBfrtip',
+                buttons: [
+                    {
+                        extend: 'pdf',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    }, {
+                        extend: 'excelHtml5',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    }, {
+                        extend: 'colvis',
+                        stateSave: true,
+                        collectionLayout: 'fixed three-column',
+                        text: 'Mostrar',
+                        postfixButtons: [{
+                            extend: 'colvisGroup',
+                            text: 'Ver Todas',
+                            show: ':hidden'
+                       }]
+                    }
+                ],
+            });
+
+            // Setup - add a text input to each footer cell
+            $('#tabla_trabajador').find('tfoot th').each(function () {
+                var title = $(this).text();
+                $(this).html('<input class="form-control" style="font-size: smaller" type="text" placeholder="Buscar ' + title + '" />');
+            });
+
+            // Apply the search
+            table.columns().every(function () {
+                var that = this;
+
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'layouts/crud/_base_create-update.html' %}
+{% load widget_tweaks %}
+
+{% block styles %}{{ block.super }} {{ form.media.css }}{% endblock %}
+{% block javascript %}{{ block.super }} {{ form.media.js }}{% endblock %}
+
+{% block form_elements %}
+    {{ form.non_field_errors }}
+    <div class="col-lg-3 col-6">
+        {{ form.codigo_act.label_tag }}
+        {{ form.codigo_act.errors }}
+        {{ form.codigo_act }}
+    </div>
+    <div class="col-lg-3 col-6">
+        {{ form.numero.label_tag }}
+        {{ form.numero.errors }}
+        {{ form.numero }}
+    </div>
+    <div class="col-lg-6 col-12 mt-lg-0 mt-2">
+        {{ form.tipo_act.label_tag }}
+        {{ form.tipo_act.errors }}
+        {{ form.tipo_act }}
+    </div>
+    <div class="col-lg-3 col-6 mt-2">
+        {{ form.valor_act.label_tag }}
+        {{ form.valor_act.errors }}
+        {{ form.valor_act }}
+    </div>
+    <div class="col-lg-3 col-6 mt-2">
+        {{ form.prod_tecleada.label_tag }}
+        {{ form.prod_tecleada.errors }}
+        {{ form.prod_tecleada }}
+    </div>
+    <div class="col-lg-6 col-12 mt-2">
+        {{ form.orden_trab.label_tag }}
+        {{ form.orden_trab.errors }}
+        {{ form.orden_trab }}
+    </div>
+    <div class="col-12 mt-2">
+        {{ form.descripcion_act.label_tag }}
+        {{ form.descripcion_act.errors }}
+        {{ form.descripcion_act }}
+    </div>
+    <div class="col-lg-6 col-12 mt-lg-0 mt-2">
+        {{ form.venta.label_tag }}
+        {{ form.venta.errors }}
+        {{ form.venta }}
+    </div>
+{% endblock %}

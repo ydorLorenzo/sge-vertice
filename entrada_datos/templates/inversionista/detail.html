@@ -1,0 +1,22 @@
+{% extends 'layouts/crud/_base_detail.html' %}
+
+{% block detail_elements %}
+    <dt class="col-md-4 col-sm-12">Código:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.codigo_inv }}</dd>
+    <dt class="col-md-4 col-sm-12">Nombre:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.nombre_inv }}</dd>
+    <dt class="col-md-4 col-sm-12">N.I.T.</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.nit }}</dd>
+    <dt class="col-md-4 col-sm-12">Dirección:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.direccion_inv }}</dd>
+    <dt class="col-md-4 col-sm-12">Municipio de la sucursal:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.municipio_sucursal_inv }}</dd>
+    <dt class="col-md-4 col-sm-12">Sucursal MN:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.sucursal_mn_inv }}</dd>
+    <dt class="col-md-4 col-sm-12">Cuenta bancaria MN:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.cuenta_mn_inv }}</dd>
+    <dt class="col-md-4 col-sm-12">Sucursal USD:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.sucursal_usd_inv }}</dd>
+    <dt class="col-md-4 col-sm-12">Cuenta bancaria USD:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.cuenta_usd_inv }}</dd>
+{% endblock %}

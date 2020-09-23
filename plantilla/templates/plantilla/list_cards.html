@@ -1,0 +1,23 @@
+{% extends 'layouts/_base_rechum.html' %}
+
+
+{% block content_title %}Plantillas{% endblock %}
+
+{% block content_inner %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                {% for item in list_objects %}
+                    {% ifchanged item.departamento.unidad_id %}
+                        <div class="card-header">
+                            <h4>{{ item.departamento.unidad.nombre }}</h4>
+                        </div>
+                    {% endifchanged %}
+                    <div class="card-body">
+                        <h5>{{ item.departamento.nombre }}</h5>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock content_inner %}

@@ -1,0 +1,22 @@
+{% extends 'layouts/_base_entrada_datos.html' %}
+{% load highcharts_tags %}
+
+{% block content_title %}<h3>Módulo Entrada de Datos</h3>{% endblock %}
+
+{% block content_inner %}
+    <div id="container" style="height: 400px; min-width: 310px; max-width: 1200px; margin: 0 auto"></div>
+{% endblock content_inner %}
+
+{% block javascript %}
+    {{ block.super }}
+
+    {% highcharts_js 1 0 0 0 %}
+
+    <script>
+    $(function() {
+        $.getJSON("{% url 'drilldown' %}", function(data) {
+            $("#container").highcharts(data)
+        });
+    })
+    </script>
+{% endblock javascript %}

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <style>
+        @page {
+            size: letter landscape;
+            @frame col1_frame {  /* Content frame 1 */
+                left: 1cm; width: 25.7cm; top: 1cm; height: 19cm;
+            }
+            @frame footer_frame {  /* Static frame */
+                -pdf-frame-content:footer_content;
+                left: 1cm; width: 25.7cm; top: 20cm; height: 2cm;
+            }
+        }
+    </style>
+    <style type="text/css">
+        .container {
+            width: 600px;
+            text-align: center;
+        }
+
+        .title {
+            font-size: 20px;
+            text-align: left;
+        }
+
+        td {
+            padding: 4px;
+            border-top: 1px solid #dddddd;
+            vertical-align: middle;
+        }
+
+        th {
+            vertical-align: bottom;
+            border-bottom: 2px solid #dddddd;
+            text-align: center;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <p class="title"><strong>{{ title }}</strong></p>
+    <div></div>
+    {% regroup queryset by unidad_nombre as unidad_list %}
+    {% for unidad in unidad_list %}
+        <table class="display table table-striped" cellspacing="0" width="100%" id="tabla">
+            <thead>
+            <tr>
+                <th style="width: 10px; margin-right: 0;">Area</th>
+                <th style="width: auto;">Cargo</th>
+                <th style="width: 20px;">Cat. Oc.</th>
+                <th style="width: 10px;">&nbsp;</th>
+                <th style="width: auto;">Nombre y Apellidos</th>
+                <th style="width: 25px;">Sexo</th>
+                <th style="width: 200px;">Exped. Laboral</th>
+                <th style="width: 150px;">Niv Educ.</th>
+                <th style="width: 200px;">Grupo Esc.</th>
+                <th style="width: 100px;">Total Salario</th>
+                <th style="width: 100px;">Sal. Escala</th>
+                <th style="width: 100px;">Sal. Jor 240/260</th>
+                <th style="width: 100px;">Incr Res30</th>
+                <th style="width: 100px;">Coef CIES</th>
+                <th style="width: 100px;">Plus</th>
+                <th style="width: 100px;">Antig</th>
+                <th style="width: 100px;">Sal Maest.</th>
+                <th style="width: 100px;">Fecha Alta</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td colspan="18" style="font-weight: bold; text-align: left">{{ unidad.grouper }}</td>
+            </tr>
+            {% for trab in unidad.list %}
+                {% ifchanged trab.dpto_nombre %}
+                    <tr>
+                        <td colspan="18"
+                            style="font-weight: bold; text-align: left; padding-left: 30px !important;">{{ trab.dpto_nombre }}</td>
+                    </tr>
+                {% endifchanged %}
+                <tr>
+                    <td></td>
+                    <td style="text-align: left">{{ trab.cargo_nombre }}</td>
+                    <td style="text-align: right">{{ trab.categoria }}</td>
+                    <td style="text-align: center">{{ trab.t_plantilla }}</td>
+                    <td style="text-align: left">{{ trab.nombre_completo }}</td>
+                    <td>{{ trab.sexo }}</td>
+                    <td>{{ trab.ci }}</td>
+                    <td>{{ trab.escolaridad }}</td>
+                    <td>{{ trab.grupo_escala }}</td>
+                    <td>{{ trab.salario_total }}</td>
+                    <td>{{ trab.salario_escala }}</td>
+                    <td>{{ trab.salario_jornada_laboral }}</td>
+                    <td>{{ trab.incre_res }}</td>
+                    <td>{{ trab.cies }}</td>
+                    <td>{{ trab.sal_plus }}</td>
+                    <td>{{ trab.antiguedad }}</td>
+                    <td>{{ trab.sal_cat_cient }}</td>
+                    <td>{{ trab.fecha_contrato|date:"d/m/Y" }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <h5 style="text-align: right">Total de Trabajadores de {{ unidad.grouper }} &nbsp;&nbsp;&nbsp;&nbsp; {{ unidad.list|length }}</h5>
+        {% if not forloop.last %}
+            <pdf:nextpage/>
+        {% endif %}
+    {% endfor %}
+</div>
+
+<!-- Contenido del pie de página 'footer_frame' -->
+<div id="footer_content">
+    <div style="float: right">Sistema Gestión Recursos Humanos &copy; Empresa de Servicios de Ingeniería y Diseño de
+        Holguín - VERTICE 2018
+    </div>
+    página <pdf:pagenumber/> de <pdf:pagecount/>
+</div>
+</body>
+</html>
+

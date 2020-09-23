@@ -1,39 +1,44 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static i18n %}
 {% block title %}Reporte Plantilla{% endblock %}
 {% block styles %}
     <style type="text/css">
         th {
             padding: 10px 5px !important;
         }
-
+        .btn-green{background-color:#388e3c!important;color:#fff!important}
+        .btn-green:hover{background-color:#3fa044}
     </style>
 {% endblock %}
 {% block migas %}
     <ol class="breadcrumb" style="margin-top: 56px; opacity: 0.9; position: fixed;
     top: 0; right: 0; left: 0; z-index: 1000;">
-        <li class="breadcrumb-item"><a href="/home/">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="/home/">Plantilla</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Inicio</a></li>
         <li class="breadcrumb-item active" aria-current="page">Vista previa Reporte Plantilla</li>
     </ol>
 {% endblock %}
 {% block content %}
-    <div class=content align="center" style="font-size: smaller; width: 1000px;"><h5><strong>Plantilla de Cargos y el Registro de
+    <div class=content align="center" style="font-size: smaller; width: 1000px;"><h5><strong>Plantilla de Cargos y el
+        Registro de
         Trabajadores</strong></h5></div>
-    <div class="text-right" style="color: white;"><a href="{% url 'exportarReportePlantilla' %}" class="btn btn-success"
-                                                     style="font-size: small"><i
-            class="fa fa-download"></i> Exportar a PDF</a></div>
+    <div class="text-right" style="color: white;">
+        <a href="{% url 'exportarReportePlantilla' %}" class="btn btn-sm btn-success" style="font-size: small">
+            <i class="fa fa-download"></i> Exportar a PDF
+        </a>
+        <a class="btn btn-sm btn-green waves-effect px-3 export" id="excel_btn" target="_blank" type="text/csv">
+            EXCEL
+        </a>
+    </div>
     <p></p>
     <div class="row">
         <div class="col-lg-12">
-            <table class="display table table-striped" cellspacing="0" id="tabla"
-                   style="margin-left: -7%; width: 110%;">
-                <thead>
+            <table class="display table table-striped" cellspacing="0" id="tabla_report"
+                   style="width: 100%;">
+                <thead style="font-size: .8rem">
                 <tr>
                     <th>Area</th>
                     <th>Cargo</th>
                     <th>Cat. Oc.</th>
-                    <th></th>
                     <th>Nombre y Apellidos</th>
                     <th>Sexo</th>
                     <th>Exped. Laboral</th>
@@ -41,7 +46,7 @@
                     <th>Grupo Esc.</th>
                     <th>Total Salario</th>
                     <th>Sal. Escala</th>
-                    <th>Sal. Jor 240/260</th>
+                    <th>Sal. Jor 208</th>
                     <th>Incr Res30</th>
                     <th>Coef CIES</th>
                     <th>Plus</th>
@@ -50,46 +55,75 @@
                     <th>Fecha Alta</th>
                 </tr>
                 </thead>
-                <tbody>
-                {% for uni in unidades %}
-                    <tr>
-                        <td colspan="18"
-                            style="font-weight: bold; text-align: left">
-                            {{ uni.nombre }}</td>
-                    </tr>
-                    {% for dep in uni.departamentos %}
+                <tbody style="font-size: .75rem">
+                {% for uni in queryset %}
+                    {% ifchanged uni.unidad_org_id %}
                         <tr>
-                            <td colspan="18"
-                                style="font-weight: bold; text-align: left; padding-left: 30px !important;">
-                                {{ dep.nombre }}</td>
+                            <td colspan="17" style="font-weight: bold; text-align: left">{{ uni.unidad_nombre }}</td>
+                            <td style="display: none"></td>
+                            <td style="display: none"></td>
+                            <td style="display: none"></td>
+                            <td style="display: none"></td>
+                            <td style="display: none"></td>
+                            <td style="display: none"></td>
+                            <td style="display: none"></td>
+                            <td style="display: none"></td>
+                            <td style="display: none"></td>
+                            <td style="display: none"></td>
+                            <td style="display: none"></td>
+                            <td style="display: none"></td>
+                            <td style="display: none"></td>
+                            <td style="display: none"></td>
+                            <td style="display: none"></td>
+                            <td style="display: none"></td>
                         </tr>
-                        {% for trab in dep.trabajadores %}
-                            <tr>
-                                <td></td>
-                                <td>{{ trab.data.nombreCargo }}</td>
-                                <td>{{ trab.data.categoria }}</td>
-                                <td>{{ trab.data.t_plantilla }}</td>
-                                <td>{{ trab.data.nombre }} {{ trab.data.segundo_nombre }} {{ trab.data.apellidos }}</td>
-                                <td>{{ trab.data.sexo }}</td>
-                                <td>{{ trab.data.ci }}</td>
-                                <td>{{ trab.data.escolaridad }}</td>
-                                <td>{{ trab.data.grupoEscala }}</td>
-                                <td>{{ trab.data.salario_total }}</td>
-                                <td>{{ trab.data.salario_escala }}</td>
-                                <td>{{ trab.data.salario_jornada_laboral }}</td>
-                                <td>{{ trab.data.incre_res }}</td>
-                                <td>{{ trab.data.cies }}</td>
-                                <td>{{ trab.data.sal_plus }}</td>
-                                <td>{{ trab.data.antiguedad }}</td>
-                                <td>{{ trab.data.sal_cat_cient }}</td>
-                                <td>{{ trab.data.fecha_contrato|date:"d/m/Y" }}</td>
-                            </tr>
-                        {% endfor %}
-                    {% endfor %}
+                    {% endifchanged %}
+                    {% ifchanged uni.departamento_id %}
+                        <tr>
+                            <td colspan="17" style="font-weight: bold; text-align: left; padding-left: 30px !important;">{{ uni.dpto_nombre }}</td>
+                            <td style="display: none"></td>
+                            <td style="display: none"></td>
+                            <td style="display: none"></td>
+                            <td style="display: none"></td>
+                            <td style="display: none"></td>
+                            <td style="display: none"></td>
+                            <td style="display: none"></td>
+                            <td style="display: none"></td>
+                            <td style="display: none"></td>
+                            <td style="display: none"></td>
+                            <td style="display: none"></td>
+                            <td style="display: none"></td>
+                            <td style="display: none"></td>
+                            <td style="display: none"></td>
+                            <td style="display: none"></td>
+                            <td style="display: none"></td>
+                        </tr>
+                    {% endifchanged %}
+                    <tr>
+                        <td></td>
+                        <td>{{ uni.cargo_nombre }}</td>
+                        <td style="width: 40px">{{ uni.categoria }} &nbsp;&nbsp;&nbsp; {{ uni.t_plantilla }}</td>
+                        <td>{{ uni.primer_nombre }} {{ uni.segundo_nombre }} {{ uni.apellidos }}</td>
+                        <td>{{ uni.sexo }}</td>
+                        <td>{{ uni.ci }}</td>
+                        <td>{{ uni.escolaridad }}</td>
+                        <td>{{ uni.grupo_escala }}</td>
+                        {% language 'en' %}
+                        <td>{{ uni.salario_total }}</td>
+                        <td>{{ uni.salario_escala }}</td>
+                        <td>{{ uni.salario_jornada_laboral }}</td>
+                        <td>{{ uni.incre_res }}</td>
+                        <td>{{ uni.cies }}</td>
+                        <td>{{ uni.sal_plus }}</td>
+                        <td>{{ uni.antiguedad }}</td>
+                        <td>{{ uni.sal_cat_cient }}</td>
+                        {% endlanguage %}
+                        <td>{{ uni.fecha_contrato|date:"d/m/Y" }}</td>
+                    </tr>
                 {% endfor %}
                 </tbody>
             </table>
-            <h5 style="text-align: right">Existen en total {{ cant_registros_bd }} registros en la Base de Datos</h5>
+            <h5 style="text-align: right">Existen en total {{ queryset|length }} registros en la Base de Datos</h5>
         </div>
     </div>
 

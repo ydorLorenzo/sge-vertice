@@ -1,0 +1,244 @@
+{% extends "layouts/_base_list_datatable.html" %}
+{% load static widget_tweaks %}
+
+{% block title %}Gestionar Altas{% endblock %}
+
+{% block extra_buttons %}
+{#    <button type="button" class="btn btn-sm font-smaller" data-toggle="modal" data-target="#popup"#}
+{#            style="background-color: rebeccapurple; border-color: rebeccapurple"><i#}
+{#            class="fa fa-bar-chart"></i> Reportes#}
+{#    </button>#}
+    <a class="btn btn-sm btn-info font-smaller" data-toggle="collapse" href="#collapseFilters" role="button"
+       aria-expanded="false" aria-controls="collapseFilters"><i
+            class="fa fa-search"></i>
+        Filtros
+    </a>
+{% endblock %}
+
+{% block filters %}
+    {% comment %}
+        <div class="collapse" id="collapseFilters">
+            <div class="card card-body">
+                <!--FORMULARIO DE FILTROS-->
+                <form method="get">
+                    <div class="well">
+                        <h6 style="margin-top: 0">Filtros</h6>
+                        <div class="row">
+                            <div class="form-group col-sm-4 col-md-2">
+                                {{ trabajador_filter.form.sexo.label_tag }}
+                                {% render_field trabajador_filter.form.sexo class="form-control" %}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-2">
+                                {{ trabajador_filter.form.etnia.label_tag }}
+                                {% render_field trabajador_filter.form.etnia class="form-control" %}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-2">
+                                {{ trabajador_filter.form.cat_cient.label_tag }}
+                                {% render_field trabajador_filter.form.cat_cient class="form-control" %}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-2">
+                                {{ trabajador_filter.form.s_pago.label_tag }}
+                                {% render_field trabajador_filter.form.s_pago class="form-control" %}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-2">
+                                {{ trabajador_filter.form.t_plantilla.label_tag }}
+                                {% render_field trabajador_filter.form.t_plantilla class="form-control" %}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-2">
+                                {{ trabajador_filter.form.t_contrato.label_tag }}
+                                {% render_field trabajador_filter.form.t_contrato class="form-control" %}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-2">
+                                {{ trabajador_filter.form.escala_salarial.label_tag }}
+                                {% render_field trabajador_filter.form.escala_salarial class="form-control" %}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-2">
+                                {{ trabajador_filter.form.categoria.label_tag }}
+                                {% render_field trabajador_filter.form.categoria class="form-control" %}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-4">
+                                {{ trabajador_filter.form.cargo.label_tag }}
+                                {% render_field trabajador_filter.form.cargo class="form-control" %}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-4">
+                                {{ trabajador_filter.form.departamento.label_tag }}
+                                {% render_field trabajador_filter.form.departamento class="form-control" %}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-2">
+                                {{ trabajador_filter.form.por_cies.label_tag }}
+                                {% render_field trabajador_filter.form.por_cies class="form-control" %}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-2">
+                                {{ trabajador_filter.form.por_anti.label_tag }}
+                                {% render_field trabajador_filter.form.por_anti class="form-control" %}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-2">
+                                {{ trabajador_filter.form.orga_defensa.label_tag }}
+                                {% render_field trabajador_filter.form.orga_defensa class="form-control" %}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-2">
+                                {{ trabajador_filter.form.anno_graduado.label_tag }}
+                                {% render_field trabajador_filter.form.anno_graduado class="form-control" %}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-2">
+                                {{ trabajador_filter.form.motivo_alta.label_tag }}
+                                {% render_field trabajador_filter.form.motivo_alta class="form-control" %}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-4">
+                                {{ trabajador_filter.form.datealta.label_tag }}
+                                {% render_field trabajador_filter.form.datealta class="form-control" %}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-4">
+                                {{ trabajador_filter.form.datecontrato.label_tag }}
+                                {% render_field trabajador_filter.form.datecontrato class="form-control" %}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-4">
+                                {{ trabajador_filter.form.datenac.label_tag }}
+                                {% render_field trabajador_filter.form.datenac class="form-control" %}
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-search"></span> Buscar
+                    </button>
+                </form>
+            </div>
+            <br>
+            <!--AKI TERMINA EL FORMULARIO DE FILTROS-->
+        </div>
+    {% endcomment %}
+{% endblock filters %}
+
+{% block table_header %}
+    <th class="text-center">Cód</th>
+    <th>Nombre</th>
+    {#    <th class="text-center">CI</th>#}
+    <th class="text-center">Cat</th>
+    <th class="text-center">Grupo</th>
+    <th>Departamento</th>
+    <th>Especialidad</th>
+    <th>Sexo</th>
+    <th class="text-center">Alta</th>
+{% endblock table_header %}
+
+{% block table_body_outside %}
+    <tr>
+        <td class="text-center" onclick="open_re_useful_modal(`{% url model_name|add:'_detail' item.id %}`)">
+            {{ item.codigo_interno }}
+        </td>
+        <td>{{ item.primer_nombre }} {{ item.segundo_nombre }} {{ item.apellidos }}</td>
+        {#<td class="text-center">{{ item.ci }}</td>#}
+        <td class="text-center">{{ item.categoria }}</td>
+        <td class="text-center">{{ item.grupo_escala }}</td>
+        <td>{{ item.departamento_nombre }}</td>
+        <td>{{ item.especialidad_nombre|default_if_none:item.escolaridad }}</td>
+        <td class="text-center">{{ item.sexo }}</td>
+        <td class="text-center"><span
+                style="display: none">{{ item.fecha_alta|date:"Ymd" }}</span>{{ item.fecha_alta|date:"d/m/Y" }}</td>
+        <td>
+            <div class="icon-acciones text-center">
+                <a href="{% url 'trabajador_update' item.pk %}"
+                   class="badge badge-pill badge-primary">
+                    <i class="fa fa-edit" title="Editar Trabajador" style="color: white;"></i>
+                </a>
+
+                <a onclick="return open_re_useful_modal('{% url 'bajaeliminar' item.pk %}')"
+                   class="badge badge-pill badge-danger">
+                    <i class="fa fa-arrow-down" title="Baja al Trabajador" style="color: white;"></i>
+                </a>
+                <a class="badge badge-pill badge-light dropdown-toggle dropdown-toggle-split" role="button"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                   onclick="open_re_useful_modal(`{% url 'trabajador_dropdown_menu' item.pk %}`, `{{ item.pk }}`)">
+                    <i class="fa fa-list-ul"></i>
+                </a>
+                <div class="dropdown-menu" style="min-width: 270px" id="dropdown_{{ item.pk }}"></div>
+            </div>
+        </td>
+    </tr>
+{% endblock table_body_outside %}
+
+{% block table_foot %}
+    <th style="padding: 6px 6px !important;">Código</th>
+    <th style="padding: 6px 6px !important;">Nombre</th>
+    {#<th style="padding: 6px 6px !important;">CI</th>#}
+    <th style="padding: 6px 6px !important;">Categoría</th>
+    <th style="padding: 6px 6px !important;">Grupo</th>
+    <th style="padding: 6px 6px !important;">Departamento</th>
+    <th style="padding: 6px 6px !important;">Especialidad</th>
+    <th style="">Sexo</th>
+    <th style="padding: 6px 6px !important;">Alta</th>
+{% endblock table_foot %}
+
+{% block styles %}
+    {{ block.super }}
+
+    <style>
+        a.badge.dropdown-toggle:after {
+            display: none;
+        }
+    </style>
+{% endblock %}
+
+{% block javascript %}
+    {{ block.super }}
+
+    <script type="text/javascript">  // Styles filters
+    $(`#id_fecha_contrato,#id_datenac_0,#id_datenac_1,#id_datealta_0,#id_datealta_1,#id_datecontrato_0,#id_datecontrato_1`).datepicker({
+        uiLibrary: 'bootstrap4',
+        iconsLibrary: 'font-awesome',
+        language: 'es'
+    });
+
+    $("#id_anno_graduado").datepicker({
+        format: "yyyy",
+        viewMode: "years",
+        minViewMode: "years"
+    });
+
+
+    var getDate = function (input) {
+        return new Date(input.date.valueOf());
+    };
+
+    $("#fecha_inic").prop("readonly", true).datepicker({
+        uiLibrary: 'bootstrap4',
+        language: 'es',
+        format: 'yyyy-mm-dd'
+    });
+
+    $("#fecha_fin").prop("readonly", true).datepicker({
+        uiLibrary: 'bootstrap4',
+        language: 'es',
+        format: 'yyyy-mm-dd'
+    });
+
+    $('#fecha_inic').datepicker({
+        startDate: '+5d',
+        endDate: '+35d'
+    }).on('changeDate', function (selected) {
+        $('#fecha_fin').datepicker('setStartDate', getDate(selected));
+    });
+
+    $('#fecha_fin').datepicker({
+        startDate: '+6d',
+        endDate: '+36d'
+    }).on('changeDate', function (selected) {
+        $('#fecha_inic').datepicker('setEndDate', getDate(selected));
+    });
+    </script>
+    <script type="text/javascript"> // Styles table
+
+        // Apply the search
+        table.columns().every(function () {
+            var that = this;
+
+            $('input', this.footer()).on('keyup change', function () {
+                if (that.search() !== this.value) {
+                    that
+                        .search(this.value)
+                        .draw();
+                }
+            });
+        });
+    </script>
+{% endblock %}

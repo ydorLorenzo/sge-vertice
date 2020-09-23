@@ -1,0 +1,22 @@
+{% extends 'layouts/reports/_base_export_pdf.html' %}
+
+{% block table_title %}Ubicación en la Defensa de los Choferes{% endblock %}
+
+{% block table_header %}
+    <th>No.</th>
+    <th>Nombres y Apellidos</th>
+    <th>Cargo</th>
+    <th>Org. Defensa</th>
+    <th>Lugar</th>
+{% endblock table_header %}
+
+{% block table_body %}
+    <tr>
+    <td width="5%">{{ forloop.counter }}</td>
+    <td>{{ item.nombre_completo }}</td>
+    <td>{{ item.cargo_nombre }}</td>
+    <td>{{ item.orga_defensa }}</td>
+    <td>{{ item.unidad_militar }}</td>
+    </tr>
+{% endblock table_body %}
+

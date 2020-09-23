@@ -8,4 +8,4 @@ class PlanoFilter(django_filters.FilterSet):
 
     class Meta:
         model = Plano
-        fields = ['estado', 'vpc', 'fecha_pago', 'fecha_vpc', 'obra']
+        fields = ['estado', 'vpc', 'fecha_pago', 'fecha_vpc', 'obra', 'tipo_doc', 'etapa']

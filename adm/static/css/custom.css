@@ -24,6 +24,16 @@ tfoot {
     padding: 0;
 }
 
+.errorlist > li {
+    font-size: .7rem;
+    color: #dc3545;
+}
+
+.error {
+    font-size: .7rem;
+    color: #dc3545;
+}
+
 .modal-body.mio {
     padding-top: 0 !important;
 }
@@ -36,7 +46,6 @@ body {
 }
 
 .form-signin {
-    max-width: 330px !important;
     padding: 15px !important;
     margin: 0 auto !important;
 }
@@ -58,7 +67,7 @@ body {
 }
 
 .form-signin input[type="password"] {
-    margin-bottom: 40px !important;
+    margin-bottom: 20px !important;
     border-top-right-radius: 0 !important;
     border-top-left-radius: 0 !important;
 }
@@ -75,6 +84,32 @@ body {
     z-index: 2 !important;
 }
 
-.btn{
+.btn {
     font-size: smaller;
+}
+
+.font-sm {
+    font-size: .795rem!important;
+}
+.btn.btn-sm.font-smaller {
+    font-size: .64rem!important;
+}
+
+.fa-submit-buttons-round {
+    line-height: 1rem;
+}
+
+/* django-select2 styles */
+span.selection > span.select2-selection.select2-selection--single {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    border-color: rgb(206, 212, 218);
+    height: calc(2.25rem + 2px);
+}
+span.selection > span.select2-selection.select2-selection--single > span.select2-selection__rendered {
+    padding-left: 12px;
+    line-height: 1.5;
+}
+span.selection > span.select2-selection.select2-selection--single > span.select2-selection__arrow {
+    height: calc(2.25rem + 2px);
 }

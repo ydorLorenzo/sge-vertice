@@ -1,0 +1,293 @@
+{% extends 'reports/trabajador/layout.html' %}
+{% load static %}
+
+{% block header_reloaders %}
+    <div class="row">
+        <div class="col-12 px-3">
+            <div style="display:flex; justify-content: flex-end">
+                <div class="form-inline mr-3">
+                    <label class="pr-2" for="periodo">Período:</label>
+                    <select id="periodo" class="form-control">
+                        <option value="1" {% if year and not month %}selected{% endif %}>Año</option>
+                        <option value="2" {% if month %}selected{% endif %}>Mes</option>
+                        <option value="3" {% if from_date %}selected{% endif %}>Rango</option>
+                    </select>
+                </div>
+                <form class="mx-3" id="form_year" method="post" data-action="{% url 'altas-dept_report' %}">
+                    {% csrf_token %}
+                    <div class="form-inline">
+                        <label class="pr-2" for="date-year">Año:</label>
+                        <input id="date-year" class="form-control text-center" value="{{ date|date:'Y' }}" readonly
+                               required/>
+                    </div>
+                </form>
+                <form class="mx-3" id="form_month" method="post">
+                    {% csrf_token %}
+                    <div class="form-inline">
+                        <label class="pr-2" for="date-month">Mes:</label>
+                        <input id="date-month" class="form-control text-center" value="{{ date|date:'M. Y' }}"
+                               readonly
+                               required/>
+                    </div>
+                </form>
+                <form class="mx-3" id="form_range" method="post">
+                    {% csrf_token %}
+                    <div class="form-inline input-daterange">
+                        <label class="pr-2" for="date-range-from">Rango:</label>
+                        <label hidden for="date-range-to"></label>
+                        <input type="text" id="date-range-from" class="form-control"
+                               value="{{ from_date|date:'Y-m-d' }}"
+                               readonly required/>
+                        <div class="input-group-addon p-0">
+                            <div class="input-group-text">a</div>
+                        </div>
+                        <input type="text" id="date-range-to" class="form-control"
+                               value="{{ to_date|date:'Y-m-d' }}"
+                               readonly required/>
+                    </div>
+                </form>
+                <div class="btn-group ml-3">
+                    <button id="submit_btn" class="btn btn-sm btn-primary waves-effect px-3">
+                        <i class="fa fa-refresh"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block table_header %}
+    <th></th>
+    <th></th>
+    <th>Nombre y Apellidos</th>
+    <th class="text-center">Categ.</th>
+    <th class="text-center">{% block fecha_head %}Contrato{% endblock %}</th>
+    <th>Cargo</th>
+    <th>Esc.</th>
+    <th>Especialidad</th>
+{% endblock table_header %}
+
+{% block table_body %}
+    {% for item in object_list %}
+        {% ifchanged item.unidad_org_id %}
+            <tr class="row-title">
+                <td colspan="8" class="font-weight-bold">{{ item.unidad_nombre }}</td>
+                <td style="display: none"></td>
+                <td style="display: none"></td>
+                <td style="display: none"></td>
+                <td style="display: none"></td>
+                <td style="display: none"></td>
+                <td style="display: none"></td>
+                <td style="display: none"></td>
+            </tr>
+        {% endifchanged %}
+        {% ifchanged item.departamento_id %}
+            <tr class="row-subtitle">
+                <td style="width: 2%"></td>
+                <td colspan="7" class="font-weight-bold">{{ item.departamento_nombre }}</td>
+                <td style="display: none"></td>
+                <td style="display: none"></td>
+                <td style="display: none"></td>
+                <td style="display: none"></td>
+                <td style="display: none"></td>
+                <td style="display: none"></td>
+            </tr>
+        {% endifchanged %}
+        <tr class="row-body">
+            <td style="width: 2%"></td>
+            <td style="width: 2%"></td>
+            <td style="width: 26%">{{ item.primer_nombre }} {{ item.segundo_nombre }} {{ item.apellidos }}</td>
+            <td style="width: 5%" class="text-center">{{ item.categoria }}</td>
+            <td style="width: 15%" class="text-center">
+                {% block fecha_body %}{{ item.fecha_alta|date:"d/m/y" }}{% endblock %}</td>
+            <td style="width: 26%">{{ item.cargo_nombre }}</td>
+            <td style="width: 7%">{{ item.escolaridad }}</td>
+            <td>{{ item.especialidad_nombre|default_if_none:item.escolaridad }}</td>
+        </tr>
+    {% endfor %}
+{% endblock table_body %}
+
+{% block table_foot %}
+    <th></th>
+    <th></th>
+    <th>Nombre y Apellidos</th>
+    <th>Categ.</th>
+    <th>{% block fecha_foot %}Contrato{% endblock %}</th>
+    <th>Cargo</th>
+    <th>Esc.</th>
+    <th>Especialidad</th>
+{% endblock table_foot %}
+
+{% block styles %}
+    {{ block.super }}
+    {#    <link rel="stylesheet" href="{% static 'fonts/roboto-regular.css' %}"/>#}
+    <style>
+        label.error {
+            font-size: 10px;
+            margin-left: 10px;
+            color: red;
+        }
+    </style>
+{% endblock styles %}
+
+{% block javascript %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'js/jszip.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/pdfmake.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/vfs_fonts.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/buttons.html5.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery-validation-1.17.0/jquery.validate.min.js' %}"></script>
+    <script>
+        function initialize_dates() {
+            $date_year.datepicker({
+                language: 'es',
+                autoclose: true,
+                minViewMode: 2,
+                startView: 2,
+                endDate: '+0d',
+                format: 'yyyy',
+            });
+            $date_month.datepicker({
+                language: 'es',
+                autoclose: true,
+                minViewMode: 1,
+                startView: 1,
+                endDate: '+0d',
+                format: 'M. yyyy',
+            });
+            $date_from.datepicker({
+                language: 'es',
+                autoclose: true,
+                format: 'yyyy-mm-dd',
+                endDate: '-2d',
+            }).on('changeDate', function (selected) {
+                $date_to.datepicker('setStartDate', selected.date)
+            });
+            $date_to.datepicker({
+                language: 'es',
+                autoclose: true,
+                startDate: $date_from.datepicker('getDate'),
+                format: 'yyyy-mm-dd',
+            });
+        }
+
+        function update_inline_form(val) {
+            switch (val) {
+                case "1":
+                    $form_year.show();
+                    $form_month.hide();
+                    $form_range.hide();
+                    return false;
+                case "2":
+                    $form_year.hide();
+                    $form_month.show();
+                    $form_range.hide();
+                    return false;
+                case "3":
+                    $form_year.hide();
+                    $form_month.hide();
+                    $form_range.show();
+                    return false;
+                default:
+                    $form_year.hide();
+                    $form_month.hide();
+                    $form_range.hide();
+            }
+        }
+
+        const $periodo = $('#periodo'),
+            $form_year = $('#form_year'),
+            $form_month = $('#form_month'),
+            $form_range = $('#form_range'),
+            $date_year = $('#date-year'),
+            $date_month = $('#date-month'),
+            $date_from = $('#date-range-from'),
+            $date_to = $('#date-range-to'),
+            $pdf_btn = $('#pdf_btn'),
+            month_format = {
+                'Ene': 'Jan',
+                'Feb': 'Feb',
+                'Mar': 'Mar',
+                'Abr': 'Apr',
+                'May': 'May',
+                'Jun': 'Jun',
+                'Jul': 'Jul',
+                'Ago': 'Aug',
+                'Sep': 'Sep',
+                'Oct': 'Oct',
+                'Nov': 'Nov',
+                'Dic': 'Dec'
+            },
+            action = $form_year.attr('data-action');
+
+        initialize_dates();
+        update_inline_form($periodo.val());
+
+        $periodo.on('change', function () {
+            update_inline_form(this.value)
+        });
+
+        $date_year.on('change', function () {
+            $form_year.attr('action', action + this.value + '/');
+        });
+        $date_month.on('change', function () {
+            const date = $date_month.datepicker('getDate');
+            $form_month.attr('action', action + date.getFullYear() + '/' + (date.getMonth() + 1) + '/');
+        });
+        $date_from.on('change', function () {
+            if (!this.value) return;
+            let date_to = $date_to.datepicker('getFormattedDate');
+            if (!date_to.length) {
+                date_to = this.value;
+                $date_to.datepicker('setDate', this.value);
+            }
+            $form_range.attr('action', action + this.value + '/' + date_to + '/');
+        });
+        $date_to.on('change', function () {
+            if (!this.value) return;
+            let date_from = $date_from.datepicker('getFormattedDate');
+            if (!date_from.length) {
+                date_from = this.value;
+                $date_from.datepicker('setDate', this.value);
+            }
+            $form_range.attr('action', action + date_from + '/' + this.value + '/');
+        });
+
+        $("#submit_btn").on('click', function (e) {
+            e.preventDefault();
+            const $form = $('form:visible');
+            $form.validate();
+            $form.submit();
+        });
+
+        $(document).ready(function () {
+            $pdf_btn.attr('href', window.location.pathname + 'pdf/');
+
+            if ($date_year.val().length) {
+                $form_year.attr('action', action + $date_year.val() + '/');
+            }
+            if ($date_month.val().length) {
+                let date = $date_month.datepicker('getDate');
+                $form_month.attr('action', action + date.getFullYear() + '/' + (date.getMonth() + 1) + '/');
+            }
+            if ($date_from.val().length) {
+                let date_from = $date_from.datepicker('getFormattedDate'),
+                    date_to = $date_to.datepicker('getFormattedDate');
+                $form_range.attr('action', action + date_from + '/' + date_to + '/');
+            }
+
+            var rows = [];
+            $('#tabla_report').find('tbody tr').each(function () {
+                rows.push({columns: []});
+                $(this).find('td').each(function () {
+                    if (!this.style.display) {
+                        rows[rows.length - 1].columns.push([{
+                            text: this.innerText,
+                            width: this.colSpan > 1 || !this.style.width ? '*' : this.style.width
+                        }])
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock javascript %}
