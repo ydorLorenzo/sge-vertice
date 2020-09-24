@@ -153,7 +153,6 @@ def adicionar_plantilla(request):
     form = PlantillaForm(request.POST or None)
     if form.is_valid():
         plantilla = Plantilla(
-            unidad=form.cleaned_data['unidad'],
             departamento=form.cleaned_data['departamento'],
             cargo=form.cleaned_data['cargo'],
             cant_plazas=form.cleaned_data['cant_plazas'],

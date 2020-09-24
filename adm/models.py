@@ -59,6 +59,8 @@ class Departamento(BaseUrls, models.Model):
     cargos = models.ManyToManyField(Cargo, through='plantilla.Plantilla', through_fields=('departamento', 'cargo'))
 
     def __str__(self):
+        if self.dirige_id is not None:
+            return "%s - %s" % (self.dirige.nombre, self.nombre)
         return self.nombre
 
     class Meta:

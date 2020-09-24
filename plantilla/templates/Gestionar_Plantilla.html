@@ -284,7 +284,7 @@
                     if (datos.length !== 0) {
                         for (var departamento in datos) {
                             console.info(departamento);
-                            $('#id_departamento').append('<option value="' + datos[departamento].id + '">' + datos[departamento].codigo +' ' + datos[departamento].nombre + '</option>');
+                            $('#id_departamento').append('<option value="' + datos[departamento].id + '">' + (datos[departamento].dirige_nombre ? datos[departamento].dirige_nombre + ' - ' : '') + datos[departamento].nombre + '</option>');
                         }
                     } else {
                         $('#id_departamento').append('No hay tareas para mostrar.');
@@ -305,7 +305,7 @@
                     if (datos.length !== 0) {
                         for (var departamento in datos) {
                             console.info(departamento);
-                            $('#id_departamento').append('<option value="' + datos[departamento].id + '">' + datos[departamento].codigo +' ' + datos[departamento].nombre + '</option>');
+                            $('#id_departamento').append('<option value="' + datos[departamento].id + '">' + (datos[departamento].dirige_nombre ? datos[departamento].dirige_nombre + ' - ' : '') + datos[departamento].nombre + '</option>');
                         }
                     } else {
                         $('#id_departamento').append('No hay tareas para mostrar.');
