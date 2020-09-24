@@ -315,8 +315,8 @@
         });
 
 
-        $('#id_cant_plazas').prop("min", '1').prop("title", 'Valor mayor o igual a 1').attr("oninvalid", 'setCustomValidity("Campo obligatorio. Valor mayor o igual a 1")');
-        $('#cantPlazasModal #id_cant_plazas').prop("min", '1').prop("title", 'Valor valor mayor o igual a 1').attr("oninvalid", 'setCustomValidity("Campo obligatorio. Valor mayor o igual a 1")');
+        $('#id_cant_plazas').prop("min", '1').prop("max", '100').prop("title", 'Valor mayor o igual a 1').attr("oninvalid", 'setCustomValidity("Campo obligatorio. Valor mayor o igual a 1")');
+        $('#cantPlazasModal #id_cant_plazas').prop("min", '1').prop("max", '100').prop("title", 'Valor valor mayor o igual a 1').attr("oninvalid", 'setCustomValidity("Campo obligatorio. Valor mayor o igual a 1")');
         $('#addButtonPlantilla').click(function () {
             $('#popup form').prop('action', '{% url "adicionarPlantilla" %}');
             $('#popup').modal('show');
