@@ -161,6 +161,29 @@
                     </a>
                 </div>
                 {% endcomment %}
+                {% if user|has_module_perm:'adm' or user|has_module_perm:'ges_trab' or user|has_module_perm:'ausentismo' or user|has_module_perm:'datos_prenom' or user|has_module_perm:'plantilla' or user|has_module_perm:'subsidio' %}
+                    <div class="col-3">
+                        <a href="{% url "rechum_home" %}">
+                            <div class="card"
+                                 style="text-align: center; margin-bottom: 10px; background-color:#7c6ecd; font-weight: bold">
+                                <i class="fa fa-users"
+                                   style="font-size: 40px; text-align: center; margin-top: 20px;"></i>
+                                <div class="card-body">
+                                    <span>CAPITAL HUMANO (new)</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    {% comment %}
+                        <div class="card" title="Usted no posee permisos para el módulo de Capital Humanos"
+                             style="text-align: center; margin-bottom: 10px; background-color:lightskyblue; font-weight: bold">
+                            <i class="fa fa-users" style="font-size: 40px; text-align: center; margin-top: 20px;"></i>
+                            <div class="card-body">
+                                <span>CAPITAL HUMANO</span>
+                            </div>
+                        </div>
+                    {% endcomment %}
+                {% endif %}
             </div>
         </div>
     </div>

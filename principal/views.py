@@ -26,5 +26,4 @@ def home_principal(request):
         'primer_nombre', 'segundo_nombre', 'apellidos', 'fecha_cumple',
         'unidad_nombre', 'dep_nombre', 'dep_padre', 'foto'
     ).order_by("fecha_cumple")
-    print(workers_birthday)
     return render(request, 'home_principal.html', {'birthdays': workers_birthday})

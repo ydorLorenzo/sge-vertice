@@ -117,16 +117,16 @@
             </ul>
         </li>
     {% endif %}
-    {% if user|has_module_perm:'plantilla' %}
+    {% if user|has_module_perm:'parte_tiempo' %}
         <li>
-            <a href="#submenuPlantilla" class="dropdown-toggle"
+            <a href="#submenuParteTiempo" class="dropdown-toggle"
                data-toggle="collapse"
                aria-expanded="{% if request.current_app == 'parte_tiempo' %}true{% else %}false{% endif %}">
                 <i class="fa fa-list-ul"></i>
                 Parte tiempo
             </a>
             <ul class="collapse list-unstyled {% if request.current_app == 'parte_tiempo' %}show{% endif %}"
-                id="submenuPlantilla">
+                id="submenuParteTiempo">
                 <li>
                     <a class="{% if model_name == 'evento' or request.resolver_match.url_name == 'evento_list' %}active{% endif %}"
                        href="{% url 'evento_list' %}">

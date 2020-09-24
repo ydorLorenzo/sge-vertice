@@ -1,3 +1,15 @@
 __pycache__/
 /.idea/*
 /venv/*
+/adm/migrations/*
+/ausentismo/migrations/*
+/datos_prenom/migrations/*
+/entrada_datos/migrations/*
+/facturacion/migrations/*
+/ges_trab/migrations/*
+/parte_tiempo/migrations/*
+/plantilla/migrations/*
+/pr3/migrations/*
+/prenomina15/migrations/*
+/principal/migrations/*
+/subsidio/migrations/*
