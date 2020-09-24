@@ -67,4 +67,12 @@
 {% block javascript %}
     {{ block.super }}
     {{ form.media.js }}
+    <script>
+    $('.inline-date').datepicker({
+        uiLibrary: 'bootstrap4',
+        iconsLibrary: 'font-awesome',
+        language: 'es',
+        autoclose: true
+    })
+    </script>
 {% endblock javascript %}

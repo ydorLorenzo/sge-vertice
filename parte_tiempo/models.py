@@ -80,7 +80,7 @@ class Evento(models.Model):
     fecha_fin = models.DateTimeField(blank=True, null=True)
     todo_dia = models.BooleanField(default=True)
     background = models.BooleanField(default=False)
-    tipo_evento = models.ForeignKey(TipoEvento, on_delete=models.DO_NOTHING)
+    tipo_evento = models.ForeignKey(TipoEvento, on_delete=models.DO_NOTHING, verbose_name='tipo de incidencia')
 
     @property
     def calendario(self):

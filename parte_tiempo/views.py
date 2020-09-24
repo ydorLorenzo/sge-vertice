@@ -96,7 +96,6 @@ def refract_events(events_qs):
         end=F('fecha_fin'),
         color=F('tipo_evento__color')
     ).values('id', 'calendar', 'calendar_id', 'title', 'start', 'end', 'color')
-    print(all_events)
     return all_events
 
 
@@ -109,7 +108,9 @@ class EventoCreate(SgeCreateView):
 
     def get_context_data(self, **kwargs):
         context = super(EventoCreate, self).get_context_data()
-        context['fecha_inicio'] = self.request.GET.get('date', datetime.datetime.today().strftime('%d/%m/%Y'))
+        tmp = self.request.GET.get('date', datetime.datetime.today().strftime('%Y-%m-%d')).split('-')
+        tmp.reverse()
+        context['fecha_inicio'] = '/'.join(tmp)
         return context
 
     def form_valid(self, form):

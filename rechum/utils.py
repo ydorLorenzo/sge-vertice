@@ -4,7 +4,7 @@ from . import settings
 from django.http import HttpResponse
 from django.template.loader import get_template
 from django.utils.html import escape
-from django.forms.fields import DateField
+from django.forms.fields import DateField, DateTimeField
 from xhtml2pdf import pisa
 
 
@@ -29,8 +29,8 @@ def add_bootstrap_css_field_classes(fn):
     def as_widget_with_bootstrap_classes(self, widget=None, attrs=None, only_initial=False):
         if attrs is None:
             attrs = {'class': 'form-control'}
-        if isinstance(self.field, DateField):
-            attrs = {'class': 'inline-date form-control'}
+        if isinstance(self.field, DateField) or isinstance(self.field, DateTimeField):
+            attrs = {'class': 'inline-date form-control', 'autocomplete': 'off'}
         if self.field.required:
             attrs.update({
                 'oninvalid': "this.setCustomValidity('Este campo es requerido.')",

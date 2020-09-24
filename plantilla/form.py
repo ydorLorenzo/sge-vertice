@@ -3,32 +3,16 @@ from django.core.exceptions import NON_FIELD_ERRORS
 from django_select2.forms import ModelSelect2Widget
 
 from .models import Plantilla
-from adm.models import UnidadOrg, Departamento, Cargo
+from adm.models import UnidadOrg, Cargo
 from prenomina15.models import PlantillaServicio
 
 
 class PlantillaForm(forms.ModelForm):
-    unidad = forms.ModelChoiceField(
-        label=u'Unidad organizacional',
-        queryset=UnidadOrg.objects.all(),
-        widget=ModelSelect2Widget(
-            model=UnidadOrg,
-            search_fields=['nombre__icontains']
-        )
-    )
-    departamento = forms.ModelChoiceField(
-        label=u'Departamento',
-        queryset=Departamento.objects.all(),
-        widget=ModelSelect2Widget(
-            model=Departamento,
-            search_fields=['nombre__icontains'],
-            dependent_fields={'unidad': 'unidad'}
-        )
-    )
+    unidad = forms.ChoiceField(choices=UnidadOrg.objects.values_list('id', 'nombre'))
 
     class Meta:
         model = Plantilla
-        fields = ['cargo', 'cant_plazas', 'escala_salarial']
+        fields = ('cargo', 'cant_plazas', 'escala_salarial', 'departamento')
         error_messages = {
             NON_FIELD_ERRORS: {
                 'unique_together': 'Los campos %(field_labels)s de %(model_name)s no son únicos.'

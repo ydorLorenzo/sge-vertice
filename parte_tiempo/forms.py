@@ -1,16 +1,9 @@
 from django import forms
 
-from .models import Evento, TipoEvento
+from .models import Evento
 
 
 class EventoCreateForm(forms.ModelForm):
-
-    def __init__(self, *args, **kwargs):
-        super(EventoCreateForm, self).__init__(*args, **kwargs)
-        for field in iter(self.fields):
-            self.fields[field].widget.attrs.update({'class': 'form-control'})
-        self.fields['fecha_inicio'].widget.attrs.update({'class': 'form-control inline-date'})
-        self.fields['fecha_fin'].widget.attrs.update({'class': 'form-control inline-date'})
 
     class Meta:
         model = Evento
