@@ -315,8 +315,8 @@
         });
 
 
-        $('#id_cant_plazas').prop("min", '1').prop("max", '15').prop("title", 'Valor entre 1 y 15').attr("oninvalid", 'setCustomValidity("Campo obligatorio. Valor entre 1 y 15")');
-        $('#cantPlazasModal #id_cant_plazas').prop("min", '1').prop("max", '15').prop("title", 'Valor entre 1 y 15').attr("oninvalid", 'setCustomValidity("Campo obligatorio. Valor entre 1 y 15")');
+        $('#id_cant_plazas').prop("min", '1').prop("title", 'Valor mayor o igual a 1').attr("oninvalid", 'setCustomValidity("Campo obligatorio. Valor mayor o igual a 1")');
+        $('#cantPlazasModal #id_cant_plazas').prop("min", '1').prop("title", 'Valor valor mayor o igual a 1').attr("oninvalid", 'setCustomValidity("Campo obligatorio. Valor mayor o igual a 1")');
         $('#addButtonPlantilla').click(function () {
             $('#popup form').prop('action', '{% url "adicionarPlantilla" %}');
             $('#popup').modal('show');
@@ -325,7 +325,7 @@
         var exp = "^[0-9]{1,2}$";
         function validarPlaza() {
             var cadena = $('#id_cant_plazas')[0].value;
-            if (!(cadena.match(exp) && cadena <= 15)) {
+            if (!(cadena.match(exp))) {
                 $('#id_cant_plazas').addClass('has-error');
                 return false;
             } else {
@@ -336,7 +336,7 @@
 
         function validarPlazaPopup() {
             var cadena = $('#cantPlazasModal #id_cant_plazas')[0].value;
-            if (!(cadena.match(exp) && cadena <= 15)) {
+            if (!(cadena.match(exp))) {
                 $('#cantPlazasModal #id_cant_plazas').addClass('has-error');
                 return false;
             } else {
