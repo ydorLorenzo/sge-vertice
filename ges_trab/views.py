@@ -3,30 +3,22 @@ from datetime import datetime, date
 from decimal import Decimal
 
 from django.contrib.auth.decorators import permission_required
-from django.db.models import F, Q, Sum, Count
+from django.db.models import F, Sum, Count
 from django.core.exceptions import ObjectDoesNotExist
-from django.forms import inlineformset_factory
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect
-from django.template.loader import get_template
-from xhtml2pdf import pisa
 
-from plantilla.models import Plantilla, Cargo
-from rechum.utils import link_callback, generate_pisa_report
+from plantilla.models import Cargo
+from rechum.utils import generate_pisa_report
 from rechum.views import SgeListView, SgeCreateView, SgeDetailView, SgeUpdateView, SgeDeleteView, TemplateView
-from adm.models import EscalaSalarial, Especialidad, UnidadOrg, Departamento
+from adm.models import EscalaSalarial, Especialidad
 from .filters import TrabajadorFilter
 from .forms import *
 from .models import *
 
 check = False
 
-# @permission_required('ges_trab', login_url='home_principal')
-# def search(request):
-#     user_list = User.objects.all()
-#     user_filter = UserFilter(request.GET, queryset=user_list)
-#     return render(request, 'search/user_list.html', {'filter': user_filter})
 MOTIVOS_BAJA = [
     {"key": '01', "value": 'Rescisión del contrato a voluntad del trabajador'},
     {"key": '02', "value": 'Motivos salariales'},
@@ -309,9 +301,7 @@ def adicionar_trabajador_inline(request, trabajador_id=None):
                 trabajador_salario_total = ((salario_escala / Decimal(
                     190.60)) * 208) + incre_res + cies + sal_plus + sal_cond_anor + antiguedad + trabajador.sal_cat_cient
                 trabajador.salario_total = round(trabajador_salario_total, 2)
-                print('Slario Total=> ', trabajador.salario_total)
             # Esto es para registrar el movimiento
-            # print("es valido")
             if trabajador_id:
                 departamento_form = form.cleaned_data['departamento'].nombre
                 cargo_form = form.cleaned_data['cargo'].nombre
@@ -361,7 +351,6 @@ def adicionar_trabajador_inline(request, trabajador_id=None):
                 disponible = Disponible()
                 disponible.trabajador_id = trabajador.pk
                 disponible.fecha = dt_base.datetime.today()
-                # print(trabajador_id)
                 disponible.save()
             form.save()
             inline.save()
@@ -369,7 +358,6 @@ def adicionar_trabajador_inline(request, trabajador_id=None):
                 return redirect('GestionarTrabajador')
             elif request.POST.get("guardaradicionar"):
                 return HttpResponse('AdicionarTrabajador')
-                # return redirect('AdicionarTrabajador')
     else:
         inline = NucleoFamiliarFormSet(instance=trabajador)
         if trabajador_id is None:
@@ -552,9 +540,10 @@ def check_plantilla(request):
 
 ###
 # Web view reports
-###     1: 'Listado por departamentos',
+###
 
 REPORTS = {
+    # 1: 'Listado por departamentos',
     2: 'Distribución por departamentos',
     3: 'Distribución por género',
     7: 'Distribución por etnia',
@@ -756,8 +745,8 @@ def all_bajas_report(request, year, month=None):
 
 @permission_required('ges_trab.export_trabajador', raise_exception=True)
 def exportar_altas(request):
-    from_date = request.GET.get('fecha_inic', None)
-    to_date = request.GET.get('fecha_fin', None)
+    from_date = request.POST.get('fecha_inic', None)
+    to_date = request.POST.get('fecha_fin', None)
     template_path = 'reports/trabajador/export/altas_x_departamento.html'
     context = _request_workers_date_delta(from_date, to_date, True)
     return generate_pisa_report(context, template_path, context['title'])
@@ -822,7 +811,7 @@ def dist_cargo_x_dep_report(request):
     return generate_pisa_report(context, template_name, context['title'])
 
 
-#@permission_required('ges_trab.export_trabajador', raise_exception=True)
+# @permission_required('ges_trab.export_trabajador', raise_exception=True)
 def export_ubicacion_en_defensa(request):
     objects_list = Alta.objects.values('orga_defensa').annotate(
         count=Count('id')
