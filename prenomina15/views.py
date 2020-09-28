@@ -3568,7 +3568,7 @@ def request_report_anexo(fecha_inic, fecha_fin, obra, horas, request):
                             per.total_horas += c.horas_creadas
                             per.pagar += c.valor
                         if plano.caso == 1:
-                            per.total_retenido += c.retenido
+                            per.total_retenido += c.valor_retenido
                             per.retenido_ant += c.valor_retenido
                             per.pagar += plano.pagar
                             per.total_horas += plano.horas_creadas
