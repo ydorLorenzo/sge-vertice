@@ -1,19 +1,19 @@
-import datetime
-
-from django.core.validators import MaxValueValidator, validate_image_file_extension
+from auditlog import registry, models as auditlog_models
+from django.core.validators import validate_image_file_extension
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-from auditlog import registry, models as auditlog_models
 
 from adm import models as adm
 from plantilla.models import Plantilla
-from rechum.validators import *
 from rechum.models import BaseUrls
+from rechum.validators import *
 
 
 class Actividad(BaseUrls, models.Model):
-    descripcion = models.CharField('descripción', max_length=60, blank=True, null=True, validators=[general_name_validator])
+    descripcion = models.CharField('descripción', max_length=60, validators=[
+        general_name_validator
+    ], blank=True, null=True)
 
     def __str__(self):
         return self.descripcion
@@ -21,6 +21,25 @@ class Actividad(BaseUrls, models.Model):
     class Meta:
         default_permissions = ['read', 'add', 'delete', 'change', 'export', 'report']
         verbose_name_plural = "actividades"
+
+
+class PersonaQuerySet(models.QuerySet):
+    def altas(self):
+        return self.filter(fecha_baja__isnull=True)
+
+    def bajas(self):
+        return self.filter(fecha_baja__isnull=False)
+
+
+class PersonasManager(models.Manager):
+    def get_queryset(self):
+        return PersonaQuerySet(self.model, using=self._db)
+
+    def altas(self):
+        return self.get_queryset().altas()
+
+    def bajas(self):
+        return self.get_queryset().bajas()
 
 
 class Trabajador(BaseUrls, models.Model):
@@ -45,7 +64,8 @@ class Trabajador(BaseUrls, models.Model):
     estado_civil = models.CharField(max_length=10, choices=ESTADO_OPT, default=ESTADO_OPT[0])
     hijos = models.PositiveIntegerField('cantidad de hijos', default=0, blank=True)
     LICENCIA_OPT = (('0', 'Primera'), ('1', 'Segunda'), ('2', 'Tercera'), ('3', 'Cuarta'), ('4', 'Quinta'))
-    licencia = models.CharField('licencia de conducción', max_length=20, blank=True, choices=LICENCIA_OPT, default='No procede')
+    licencia = models.CharField('licencia de conducción', max_length=20, blank=True, choices=LICENCIA_OPT,
+                                default='No procede')
     enfermedades = models.CharField('enfermedades que padece', max_length=100, default='Ninguna', blank=True)
     direccion = models.CharField('dirección', max_length=500)
     telefono = models.CharField('teléfono', max_length=8, blank=True)
@@ -53,16 +73,20 @@ class Trabajador(BaseUrls, models.Model):
         MinAgeValidator(15), MaxAgeValidator(85)
     ])
     org_plantilla = models.PositiveIntegerField('organización en la plantilla')
-    unidad_org = models.ForeignKey(adm.UnidadOrg, on_delete=models.DO_NOTHING, verbose_name='unidad organizacional')
-    departamento = models.ForeignKey(adm.Departamento, on_delete=models.DO_NOTHING, verbose_name='departamento', related_name='trabajadores')
+    unidad_org = models.ForeignKey(adm.UnidadOrg, on_delete=models.DO_NOTHING, verbose_name='unidad organizacional',
+                                   related_name='trabajadores')
+    departamento = models.ForeignKey(adm.Departamento, on_delete=models.DO_NOTHING, verbose_name='departamento',
+                                     related_name='trabajadores')
     cargo = models.ForeignKey(adm.Cargo, on_delete=models.DO_NOTHING, verbose_name='cargo')
     codigo_interno = models.CharField('código interno', max_length=3, unique=True, validators=[RegexValidator(
         regex='^[0-9]{3}$',
         message=_('Código interno inválido. Código de 3 números.')
     )])
-    usuario = models.CharField('usuario', max_length=20, blank=True, null=True, default='Ninguno', validators=[RegexValidator(
-        regex=' ', inverse_match=True, message=_('Usuario inválido. El valor no puede contener espacios.'))
-    ])
+    usuario = models.CharField('usuario', max_length=20, blank=True, null=True, default='Ninguno',
+                               validators=[RegexValidator(
+                                   regex=' ', inverse_match=True,
+                                   message=_('Usuario inválido. El valor no puede contener espacios.'))
+                               ])
     residencia = models.CharField('municipio de residencia', max_length=20)
     # Datos laborales y salariales
     CATEGORIA_OPT = (('A', 'Administrativo'), ('C', 'Cuadro '), ('O', 'Operario'), ('S', 'Servicio'),
@@ -71,7 +95,8 @@ class Trabajador(BaseUrls, models.Model):
     PLANTILLA_OPT = (('A', 'Administrativo'), ('P', 'Productivo'))
     t_plantilla = models.CharField('tipo de plantilla', choices=PLANTILLA_OPT, max_length=15, blank=True)
     CONTRATO_OPT = (
-        ('1', 'Nombramiento'), ('2', 'Indeterminado'), ('3', 'Determinado por tiempo definido'), ('4', 'Adiestramiento'),
+        ('1', 'Nombramiento'), ('2', 'Indeterminado'), ('3', 'Determinado por tiempo definido'),
+        ('4', 'Adiestramiento'),
         ('5', 'Disponible'),
         ('6', 'A prueba'), ('7', 'Determinado por sustitución de trabajador'))
     t_contrato = models.CharField('tipo de contrato', choices=CONTRATO_OPT, max_length=20)
@@ -87,7 +112,8 @@ class Trabajador(BaseUrls, models.Model):
     POR_CIES_OPT = (('0', '0%'), ('1', '30%'), ('2', '50%'))
     por_cies = models.CharField('% CIES', max_length=3, choices=POR_CIES_OPT, default=POR_CIES_OPT[0])
     cies = models.DecimalField('CIES', max_digits=5, decimal_places=2)
-    sal_plus = models.DecimalField('salario plus', max_digits=5, decimal_places=2, default=0.0, validators=[MinValueValidator(0.0)])
+    sal_plus = models.DecimalField('salario plus', max_digits=5, decimal_places=2, default=0.0,
+                                   validators=[MinValueValidator(0.0)])
     sal_cond_anor = models.DecimalField('salario condiciones anormales', max_digits=5, decimal_places=2, default=0.0)
     POR_ANTI_OPT = (('0', '0%'), ('1', '5%'), ('2', '10%'))
     por_anti = models.CharField("% antigüedad", choices=POR_ANTI_OPT, max_length=3, default=POR_ANTI_OPT[0])
@@ -127,8 +153,10 @@ class Trabajador(BaseUrls, models.Model):
     ORG_OPT = (('1', 'UJC'), ('2', 'PCC'))
     militancia = models.CharField(max_length=5, choices=ORG_OPT, blank=True)
     org_masas = models.CharField('organizaciones de masas', max_length=20, validators=[general_name_validator])
-    org_prof = models.CharField('organizaciones profesionales', max_length=20, blank=True, validators=[general_name_validator])
-    org_cult = models.CharField('organizaciones culturales', max_length=20, blank=True, validators=[general_name_validator])
+    org_prof = models.CharField('organizaciones profesionales', max_length=20, blank=True,
+                                validators=[general_name_validator])
+    org_cult = models.CharField('organizaciones culturales', max_length=20, blank=True,
+                                validators=[general_name_validator])
 
     # Talla
     zapato = models.CharField(max_length=4)
@@ -162,6 +190,8 @@ class Trabajador(BaseUrls, models.Model):
     )
     motivo_baja = models.CharField(max_length=2, choices=MOTIVOS_BAJA, null=True, blank=True)
     history = auditlog_models.AuditlogHistoryField()
+    objects = models.Manager()
+    personas = PersonasManager()
 
     def geturl(self):
         return reverse('EditarTrabajador', kwargs={'trabajador_id': self.id})
@@ -185,6 +215,7 @@ class Alta(Trabajador):
 
     class Meta:
         proxy = True
+        ordering = ['departamento__codigo', 'org_plantilla']
 
 
 class BajaOther(Trabajador):
@@ -302,8 +333,8 @@ class Baja(models.Model):
     fecha_baja = models.DateField(verbose_name="Fecha de baja")
     fecha_disponible = models.DateField(blank=True, verbose_name="Fecha de inicio disponibilidad", null=True)
     fecha_ingreso = models.DateField(verbose_name="Fecha de ingreso al organismo")
-    especialidad = models.ForeignKey(adm.Especialidad, on_delete=models.DO_NOTHING, verbose_name="Especialidad", null=True,
-                                     blank=True)
+    especialidad = models.ForeignKey(adm.Especialidad, on_delete=models.DO_NOTHING, verbose_name="Especialidad",
+                                     null=True, blank=True)
     anno_graduado = models.PositiveIntegerField(verbose_name="Año de graduado", null=True, blank=True)
     ESCOLARIDAD_OPT = (
         ('6to', '6to Grado'), ('9no', '9no Grado'), ('12mo', '12mo Grado'), ('TM', 'Técnico Medio'),

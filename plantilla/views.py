@@ -102,10 +102,8 @@ class PlantillaServicioCreateView(SgeCreateView):
         return success_url.format(**self.object.__dict__)
 
     def get_context_data(self, **kwargs):
-        srv_id = self.kwargs.get('servicio_id')
-        kwargs['list_url'] = reverse_lazy('plantillaservicio_list', kwargs={'servicio_id': srv_id})
-        kwargs['create_url'] = reverse_lazy('plantillaservicio_create', kwargs={'servicio_id': srv_id})
-        kwargs['servicio_id'] = srv_id
+        update_create_kwargs(self.kwargs.get('servicio_id'))
+        kwargs.update(update_create_kwargs(self.kwargs.get('servicio_id')))
         return super().get_context_data(**kwargs)
 
 
@@ -120,10 +118,8 @@ class PlantillaServicioUpdateView(SgeUpdateView):
         return success_url.format(**self.object.__dict__)
 
     def get_context_data(self, **kwargs):
-        srv_id = self.kwargs.get('servicio_id')
-        kwargs['list_url'] = reverse_lazy('plantillaservicio_list', kwargs={'servicio_id': srv_id})
-        kwargs['create_url'] = reverse_lazy('plantillaservicio_create', kwargs={'servicio_id': srv_id})
-        kwargs['servicio_id'] = srv_id
+        update_create_kwargs(self.kwargs.get('servicio_id'))
+        kwargs.update(update_create_kwargs(self.kwargs.get('servicio_id')))
         return super().get_context_data(**kwargs)
 
 
@@ -134,6 +130,14 @@ class PlantillaServicioDeleteView(SgeDeleteView):
     def get_success_url(self):
         success_url = reverse_lazy('plantillaservicio_list', kwargs={'servicio_id': self.kwargs.get('servicio_id')})
         return success_url.format(**self.object.__dict__)
+
+
+def update_create_kwargs(srv_id):
+    return {
+        'list_url': reverse_lazy('plantillaservicio_list', kwargs={'servicio_id': srv_id}),
+        'create_url': reverse_lazy('plantillaservicio_create', kwargs={'servicio_id': srv_id}),
+        'servicio_id': srv_id
+    }
 
 
 ########################################################################
@@ -227,7 +231,9 @@ def eliminar_plantilla(request, pk):
 # @permission_required('plantilla', login_url='home_principal')
 def dpto_por_unidad(request, pk, area=None):
     if area:
-        departamentos = Departamento.objects.filter(unidad=pk, dirige_id__isnull=True).order_by('codigo').values('nombre', 'id', 'codigo')
+        departamentos = Departamento.objects.filter(
+            unidad=pk, dirige_id__isnull=True
+        ).order_by('codigo').values('nombre', 'id', 'codigo')
     else:
         departamentos = Departamento.objects.filter(unidad=pk).annotate(dirige_nombre=F('dirige__nombre')).values(
             'nombre', 'id', 'codigo', 'dirige_nombre'
@@ -275,7 +281,7 @@ def request_report():
     return {'queryset': queryset}
 
 
-#def request_plantilla_all():
+# def request_plantilla_all():
 #    queryset = Alta.objects.annotate(
 #        unidad_nombre=F('unidad_org__nombre'),
 #        dpto_nombre=F('departamento__nombre'),
@@ -407,15 +413,14 @@ def request_report_otro():
     return {'unidades': unidades, 'cant_registros_bd': cant_registros_bd, 'total': total}
 
 
-
 @permission_required('plantilla.report_plantilla', login_url='home_principal')
 def reporte(request):
     return render(request, 'Reporte_Plantilla.html', request_report())
 
 
-#@permission_required('plantilla.report_plantilla', login_url='home_principal')
-#def reporte_plantilla_general(request):
-#    return render(request, 'plantilla_general.html', request_plantilla_all())
+# @permission_required('plantilla.report_plantilla', login_url='home_principal')
+# def reporte_plantilla_general(request):
+#     return render(request, 'plantilla_general.html', request_plantilla_all())
 
 
 def link_callback(uri, rel):
@@ -686,11 +691,13 @@ def request_report_contratos():
 
     return {'unidades': unidades, 'cant_registros_bd': cant_registros_bd, 'total': total}
 
-@permission_required('plantilla.report_plantilla' ,login_url='home_principal')
+
+@permission_required('plantilla.report_plantilla',  login_url='home_principal')
 def reporte_contratos(request):
     return render(request, 'Reporte_Plantilla_Contratos.html', request_report_contratos())
 
-@permission_required('plantilla.export_plantilla' ,login_url='home_principal')
+
+@permission_required('plantilla.export_plantilla', login_url='home_principal')
 def exportar_contratos(request):
     template_path = 'Reporte_Plantilla_Contratos_template.html'
     context = request_report_contratos()
@@ -813,4 +820,3 @@ def _request_listado_calzado():
         cargo_nombre=F('cargo__nombre')
     ).order_by('departamento__codigo', 'org_plantilla')
     return {'object_list': queryset}
-

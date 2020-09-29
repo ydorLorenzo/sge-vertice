@@ -1,5 +1,5 @@
 {% extends 'layouts/_base_rechum.html' %}
-{% load static %}
+{% load static filters %}
 
 {% block styles %}
     {{ block.super }}
@@ -9,27 +9,174 @@
 {% endblock styles %}
 
 {% block content %}
+    {#    <form method="post" action="{% url 'evento_list' %}" id="reload_calendar_form">#}
+    {#        {% csrf_token %}#}
+    {#        <div class="row">#}
+    {#            <div class="col-3">#}
+    {#                <label>#}
+    {#                    Unidad Organizacional#}
+    {#                    <select class="form-control" name="unidad" id="id_unidad">#}
+    {#                        <option>-----</option>#}
+    {#                        {% for uni in unidades %}#}
+    {#                            <option value="{{ uni.id }}">{{ uni.nombre }}</option>#}
+    {#                        {% endfor %}#}
+    {#                    </select>#}
+    {#                </label>#}
+    {#            </div>#}
+    {#            <div class="col-7">#}
+    {#                <label>#}
+    {#                    Trabajador#}
+    {#                    <select class="form-control" id="id_trabajador" name="trabajador">#}
+    {#                        <option>-----</option>#}
+    {#                    </select>#}
+    {#                </label>#}
+    {#            </div>#}
+    {#            <div class="col-2">#}
+    {#                <label class="w-100">#}
+    {#                    <button class="btn btn-sm m-auto" id="reload_calendar" style="position: relative;bottom: 0">#}
+    {#                        Seleccionar#}
+    {#                    </button>#}
+    {#                </label>#}
+    {#            </div>#}
+    {#        </div>#}
+    {#    </form>#}
+    {#        <label>#}
+    {#            Trabajador:#}
+    {#            <select class="form-control-sm" name="trabajadores" id="trabajadores">#}
+    {#                <option value="">-----</option>#}
+    {#                {% for trabajador in trabajadores %}#}
+    {#                    {% ifchanged trabajador.departamento.unidad_id %}#}
+    {#                        <option disabled style="background-color: #c5c5c5">{{ trabajador.departamento.unidad }}</option>#}
+    {#                    {% endifchanged %}#}
+    {#                    {% ifchanged trabajador.departamento_id %}#}
+    {#                        <option disabled style="background-color: #e5e5e5"> - {{ trabajador.departamento }}</option>#}
+    {#                    {% endifchanged %}#}
+    {#                    <option value="{{ trabajador.id }}">{{ trabajador.nombre_completo }}</option>#}
+    {#                {% endfor %}#}
+    {#            </select>#}
+    {#        </label>#}
+    {#        </div>#}
+    {#        <div class="col-6"></div>#}
     <div class="row">
-        <div class="col-6">
-            Trabajador:
-            <select class="form-control-sm" name="trabajadores" id="trabajadores">
-                <option value="">-----</option>
-                {% for trabajador in trabajadores %}
-                    {% ifchanged trabajador.departamento.unidad_id %}
-                        <option disabled style="background-color: #c5c5c5">{{ trabajador.departamento.unidad }}</option>
-                    {% endifchanged %}
-                    {% ifchanged trabajador.departamento_id %}
-                        <option disabled style="background-color: #e5e5e5"> - {{ trabajador.departamento }}</option>
-                    {% endifchanged %}
-                    <option value="{{ trabajador.id }}">{{ trabajador.nombre_completo }}</option>
-                {% endfor %}
-            </select>
+        <div class="col-8">
+            <h3>Incidencias Generales Empresa</h3>
         </div>
-        <div class="col-6"></div>
-    </div>
-    <div class="row">
+        <div class="col-4 align-items-end">
+            <div class="btn-group">
+                <button class="btn btn-sm btn-purple" data-toggle="collapse" href="#collapseFilters"
+                        role="button" aria-expanded="false" aria-controls="collapseFilters">
+                    <i class="fa fa-filter"></i> Filtrar
+                </button>
+                <button class="btn btn-sm btn-amber"><i class="fa fa-file-pdf-o"></i> PDF</button>
+                <button class="btn btn-sm btn-green"><i class="fa fa-file-excel-o"></i> EXCEL</button>
+            </div>
+        </div>
+        <div class="col-12 collapse" id="collapseFilters">
+            <div class="card card-body">
+                <form method="get">
+                    <div class="well">
+                        <div class="row">
+                            <div class="col-3">
+                                <label>
+                                    Unidad Organizacional
+                                    <select class="form-control" name="unidad" id="id_unidad">
+                                        <option>-----</option>
+                                        {% for uni in unidades %}
+                                            <option value="{{ uni.id }}">{{ uni.nombre }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </label>
+                            </div>
+                            <div class="col-7">
+                                <label>
+                                    Trabajador
+                                    <select class="form-control" id="id_trabajador" name="trabajador">
+                                        <option>-----</option>
+                                    </select>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-search"></span> Buscar
+                    </button>
+                </form>
+            </div>
+        </div>
         <div class="col-12">
             <div id="calendar"></div>
+        </div>
+        <div class="col-12">
+            <table id="table_report" cellspacing="0">
+                <thead>
+                <tr style="text-align: center">
+                    <th rowspan="3">No.</th>
+                    <th rowspan="3">Cód</th>
+                    <th rowspan="3">Nombre y apellidos</th>
+                    <th colspan="17">DISTRIBUCIÓN DEL TIEMPO</th>
+                    <th rowspan="3" colspan="{{ 16 }}">Horas a Pagar</th>
+                    <th colspan="9">RESUMEN TIEMPO NO TRABAJADO</th>
+                    <th colspan="7">RESUMEN ACT AJENAS</th>
+                    <th rowspan="3">Horas a Desc</th>
+                </tr>
+                <tr>
+                    <th rowspan="2">Horas Mes</th>
+                    {% for _ in ''|center:32 %}
+                        {% if forloop.even %}
+                            <th>{{ forloop.counter }}</th>
+                        {% endif %}
+                    {% endfor %}
+                    <th colspan="8">DESCUENTO</th>
+                    <th rowspan="2">Tiempo Total</th>
+                    <th colspan="6">DESCUENTO</th>
+                    <th rowspan="2">Tiempo Total</th>
+                </tr>
+                <tr>
+                    {% for _ in ''|center:32 %}
+                        {% if forloop.odd %}
+                            <th>{{ forloop.counter }}</th>
+                        {% endif %}
+                    {% endfor %}
+                    <th>AJ</th>
+                    <th>AI</th>
+                    <th>V</th>
+                    <th>EF</th>
+                    <th>LSS</th>
+                    <th>Res.339</th>
+                    <th>TF</th>
+                    <th>Otr</th>
+                    <th>MI</th>
+                    <th>VP</th>
+                    <th>Fer. Res 15</th>
+                    <th>AC</th>
+                    <th>Mov</th>
+                    <th>Fr</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for trab in unidades.1.trabajadores.personas.altas %}
+                    {% ifchanged trab.departamento %}
+                        <tr>
+                            <td colspan="38">{{ trab.departamento }}</td>
+                        </tr>
+                    {% endifchanged %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ trab.codigo_interno }}</td>
+                        <td>{{ trab.nombre_completo }}</td>
+                        <td>240.00</td>
+                        <td>8</td>
+                        <td>8</td>
+                        <td>8</td>
+                        <td>8</td>
+                        <td>8</td>
+                        <td>8</td>
+                        <td>8</td>
+                        <td>8</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 {% endblock content %}
@@ -38,6 +185,46 @@
     {{ block.super }}
 
     <script>
+        const unidad = document.getElementById('id_unidad');
+        const trabajador = document.getElementById('id_trabajador');
+
+        unidad.addEventListener('change', function () {
+            trabajador.innerHTML = '';
+            $.ajax({
+                type: 'get',
+                url: '{% url "unidadorg_list" %}' + unidad.value + '/trabajadores/',
+                dataType: 'json',
+                success: function (data) {
+                    var opt = document.createElement('option');
+                    opt.value = '';
+                    opt.innerHTML = '-----';
+                    trabajador.appendChild(opt);
+                    data.forEach(function (trab) {
+                        opt = document.createElement('option');
+                        opt.value = trab['id'];
+                        opt.innerHTML = `${trab['primer_nombre']} ${trab['segundo_nombre'] ? trab['segundo_nombre'] + ' ' : ''}${trab['apellidos']}`;
+                        trabajador.appendChild(opt);
+                    })
+                },
+                error: function () {
+                    alert('error')
+                }
+            });
+        });
+
+        var table = $("#table_report").DataTable({
+            language: {
+                url: '/static/localizacion/es_ES.json'
+            },
+            aaSorting: [],
+            scrollCollapse: true,
+            scrollY: h - 340,
+            paging: false,
+            columnDefs: [
+                {searchable: false, orderable: false, targets: count}
+            ]
+        });
+
         document.addEventListener('DOMContentLoaded', function () {
             var calendarEl = document.getElementById('calendar');
 
@@ -50,8 +237,10 @@
                 businessHours: true,
                 dayMaxEvents: true,
                 dateClick: function (info) {
-                    var queries = '?', trab = $('#trabajadores').val();
-                    if(trab) { queries += 'trabajador=' + trab }
+                    var queries = '?';
+                    if (trabajador.value) {
+                        queries += 'trabajador=' + trabajador.value
+                    }
                     queries += '&date=' + info.dateStr;
                     location.href = `{% url 'evento_create' %}${queries}`;
                 },

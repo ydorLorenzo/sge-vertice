@@ -544,12 +544,13 @@ def check_plantilla(request):
 
 REPORTS = {
     # 1: 'Listado por departamentos',
-    2: 'Distribución por departamentos',
+    2: 'Distribución por áreas',
     3: 'Distribución por género',
     7: 'Distribución por etnia',
     4: 'Distribución por rango edades',
     5: 'Carreras por departamentos',
-    6: 'Cargos por departamentos'
+    6: 'Cargos por departamentos',
+    8: 'Total por áreas'
 }
 
 
@@ -658,6 +659,12 @@ def dist_cargos_x_dep(request):
     context = _request_cargos_x_dep(univ, get_by)
     context.update({'tipo_reporte': REPORTS, 'reporte_id': 6, 'univ': univ, 'get_by': get_by})
     return render(request, 'reports/trabajador/dist_cargos_x_dept.html', context)
+
+
+@permission_required('ges_trab.export_trabajador', raise_exception=True)
+def total_x_areas(request):
+    context = {}
+    return render(request, 'reports/trabajador/total_x_area.html', context)
 
 
 ###

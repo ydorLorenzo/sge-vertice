@@ -42,7 +42,8 @@ urlpatterns = [
         path('eliminar_familiar/<int:nucleofamiliar_id>/', views.eliminar_familiar, name='EliminarFamiliar'),
         path('alta/<int:pk>/', views.daralta, name='altabaja'),
         path('select_salarioescala/<int:pk>/', views.salarioescala_por_escalasarial, name='SelectEscalasalarial'),
-        path('select_especialidad/<int:calificacion_id>/', views.calificacion_especialidad, name='CalificacionEspecialidad'),
+        path('select_especialidad/<int:calificacion_id>/', views.calificacion_especialidad,
+             name='CalificacionEspecialidad'),
         path('select_cargos/<int:departamento_id>/', views.cargos_disponibles, name='CargosDisponibles'),
         path('ed_trabajador/<int:trabajador_id>/', views.adicionar_trabajador_inline, name='EditarTrabajador'),
         path('ver_codigo_interno/', views.check_codigo, name='ver_codigo_interno'),
@@ -54,7 +55,8 @@ urlpatterns = [
         path('ver_usuario/<int:pk>', views.check_usuario, name='ver_usuario'),
     ])),
     path('exportar_movimientos/', views.exportar_movimientos, name='ExportarReporteMovimientos'),
-    path('exportar_suplemento_contrato/<int:pk>/', views.exportar_suplemento_contrato, name='ExportarSuplementoContrato'),
+    path('exportar_suplemento_contrato/<int:pk>/', views.exportar_suplemento_contrato,
+         name='ExportarSuplementoContrato'),
     path('exportar_altas/', views.exportar_altas, name='export_altas'),
     path('exportar_altas/<yyyy:year>/', views.all_altas_report, name='export_altas_year'),
     path('exportar_altas/<yyyy:year>/<mm:month>/', views.all_altas_report, name='export_altas_month'),
@@ -104,6 +106,10 @@ urlpatterns = [
         path('cargo-x-departamento/', include([
             path('', views.dist_cargos_x_dep, name='dist-cargo-departamento_report'),
             path('pdf/', views.dist_cargo_x_dep_report, name='dist-cargo-departamento_export')
+        ])),
+        path('totales-x-area/', include([
+            path('', views.total_x_areas, name='total-x-areas_report'),
+            path('pdf/', views.total_x_areas, name='total-x-areas_export')
         ])),
         path('resumen-defensa/', views.export_ubicacion_en_defensa, name='resumen-defensa_report'),
         path('registro-militar/', views.registro_defensa, name='registro-militar_report'),

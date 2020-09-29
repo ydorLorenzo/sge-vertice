@@ -8,7 +8,6 @@ from rechum.urls import *
 
 
 urlpatterns = [
-#    path('', views.login_up, name='login_up'),
     path('home/', views.home, name='home'),
     path('administracion/', include([
         path('unidades-organizacionales/', include([
@@ -16,6 +15,7 @@ urlpatterns = [
             path('agregar/', views.UnidadOrgCreateView.as_view(), name='unidadorg_create'),
             path('<int:pk>/actualizar/', views.UnidadOrgUpdateView.as_view(), name='unidadorg_update'),
             path('<int:pk>/', views.UnidadOrgDetailView.as_view(), name='unidadorg_detail'),
+            path('<int:pk>/trabajadores/', views.trab_unidad, name='trab-unidad'),
             path('<int:pk>/eliminar/', views.UnidadOrgDeleteView.as_view(), name='unidadorg_delete')
         ])),
         path('secciones-sindicales/', include([

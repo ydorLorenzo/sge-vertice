@@ -1,10 +1,11 @@
-from django.db import models
-from django.contrib.auth.models import User
 from auditlog import registry, models as auditlog_models
+from django.contrib.auth.models import User
+from django.db import models
+from django.urls import reverse_lazy
 
 from adm.models import EscalaSalarial, Cargo
-from ges_trab.models import Trabajador
 from entrada_datos.models import OT, Actividad
+from ges_trab.models import Trabajador
 from rechum.models import BaseUrls
 
 
@@ -60,7 +61,6 @@ class Obra(BaseUrls, models.Model):
     usuarios = models.ManyToManyField(User)
     owner = models.CharField(max_length=20, editable=False, default='admin', verbose_name="dueño")
     activa = models.BooleanField(default=True)
-
 
     def __str__(self):
         return self.nombre
@@ -123,7 +123,8 @@ class TrabajadorServicio(BaseUrls, models.Model):
     ord_plant = models.PositiveIntegerField('orden en la plantilla', default=0)
     fecha_inicio = models.DateField()
     fecha_fin = models.DateField()
-    por_cies = models.CharField('por ciento CIES', max_length=1, choices=PorCientoCIES.choices, default=PorCientoCIES.PORCIENTO_0)
+    por_cies = models.CharField(
+        'por ciento CIES', max_length=1, choices=PorCientoCIES.choices, default=PorCientoCIES.PORCIENTO_0)
 
     def __str__(self):
         return self.trabajador.nombre_completo + " " + self.servicio.nombre
@@ -179,15 +180,19 @@ class Plano(BaseUrls, models.Model):
     rev_vpc = models.IntegerField(editable=False, blank=True, null=True)
     rev_pago = models.IntegerField(editable=False, blank=True, null=True)
     DOC_OPT = (('PL', 'PL'), ('MD', 'MD'), ('LC', 'LC'), ('PR', 'PR'))
-    tipo_doc = models.CharField('tipo de documento', max_length=2, blank=False, default='PL', editable=True, choices=DOC_OPT)
+    tipo_doc = models.CharField('tipo de documento', max_length=2, blank=False, default='PL', editable=True,
+                                choices=DOC_OPT)
     ETAPA_OPT = (('IB', 'IB'), ('ID', 'ID'), ('PTE D', 'PTE Decoración'))
     etapa = models.CharField(max_length=15, default='IB', editable=True, choices=ETAPA_OPT)
     incumplimiento_plano = models.IntegerField('incumplimiento en plano', editable=True, default=0)
     incumplimiento_cpl = models.IntegerField('incumplimiento en CPL', editable=True, default=0)
     incumplimiento_calidad = models.IntegerField('incumplimiento en calidad', editable=True, default=0)
-    incumplimiento_plano_valor = models.DecimalField('valor de incumplimiento en plano', max_digits=6, decimal_places=2, editable=False,default=0.00)
-    incumplimiento_cpl_valor = models.DecimalField('valor de incumplimiento en CPL', max_digits=6, decimal_places=2, editable=False, default=0.00)
-    incumplimiento_calidad_valor = models.DecimalField('valor de incumplimiento en calidad', max_digits=6, decimal_places=2, editable=False, default=0.00)
+    incumplimiento_plano_valor = models.DecimalField('valor de incumplimiento en plano', max_digits=6, decimal_places=2,
+                                                     editable=False, default=0.00)
+    incumplimiento_cpl_valor = models.DecimalField('valor de incumplimiento en CPL', max_digits=6, decimal_places=2,
+                                                   editable=False, default=0.00)
+    incumplimiento_calidad_valor = models.DecimalField('valor de incumplimiento en calidad', max_digits=6,
+                                                       decimal_places=2, editable=False, default=0.00)
     valor_pen = models.DecimalField('valor de penalización', max_digits=6, decimal_places=2, default=0.00)
     history = auditlog_models.AuditlogHistoryField()
 
@@ -206,9 +211,12 @@ class Catalogo(BaseUrls, models.Model):
     valor_real = models.DecimalField(max_digits=6, decimal_places=2, default=0.00)
     valor_total = models.DecimalField(max_digits=6, decimal_places=2, editable=False, default=0.00)
     valor_total_real = models.DecimalField(max_digits=6, decimal_places=2, editable=False, default=0.00)
-    incumplimiento_plano_valor = models.DecimalField('valor de incumplimiento en plano', max_digits=6, decimal_places=2, editable=False,default=0.00)
-    incumplimiento_cpl_valor = models.DecimalField('valor de incumplimiento en CPL', max_digits=6, decimal_places=2, editable=False, default=0.00)
-    incumplimiento_calidad_valor = models.DecimalField('valor de incumplimiento en calidad', max_digits=6, decimal_places=2, editable=False, default=0.00)
+    incumplimiento_plano_valor = models.DecimalField('valor de incumplimiento en plano', max_digits=6, decimal_places=2,
+                                                     editable=False, default=0.00)
+    incumplimiento_cpl_valor = models.DecimalField('valor de incumplimiento en CPL', max_digits=6, decimal_places=2,
+                                                   editable=False, default=0.00)
+    incumplimiento_calidad_valor = models.DecimalField('valor de incumplimiento en calidad', max_digits=6,
+                                                       decimal_places=2, editable=False, default=0.00)
     valor_pen = models.DecimalField('valor de penalización', max_digits=6, decimal_places=2, default=0.00)
     history = auditlog_models.AuditlogHistoryField()
 
@@ -225,6 +233,7 @@ class Revision(BaseUrls, models.Model):
     estado = models.CharField(max_length=3, choices=ESTADO_OPT, default='GE')
     history = auditlog_models.AuditlogHistoryField()
 
+
 class Etapas:
     nombre = ''
     objetos = []
@@ -235,7 +244,6 @@ class Etapas:
     total_planos_vpc_100 = ''
     total_planos_vpc_ret = ''
     total_planos_vpc_ret_ant = ''
-
 
     def __init__(self, nombre, objetos, cant, total_planos_plan, total_planos_real, total_planos_vpc_90,
                  total_planos_vpc_100, total_planos_vpc_ret, total_planos_vpc_ret_ant):
@@ -249,6 +257,7 @@ class Etapas:
         self.total_planos_vpc_ret = total_planos_vpc_ret
         self.total_planos_vpc_ret_ant = total_planos_vpc_ret_ant
 
+
 class Objetos:
     codigo = ''
     nombre = ''
@@ -259,7 +268,6 @@ class Objetos:
     total_planos_vpc_100 = ''
     total_planos_vpc_ret = ''
     total_planos_vpc_ret_ant = ''
-
 
     def __init__(self, codigo, nombre, etapa, total_planos_plan, total_planos_real, total_planos_vpc_90,
                  total_planos_vpc_100, total_planos_vpc_ret, total_planos_vpc_ret_ant):
@@ -272,6 +280,7 @@ class Objetos:
         self.total_planos_vpc_100 = total_planos_vpc_100
         self.total_planos_vpc_ret = total_planos_vpc_ret
         self.total_planos_vpc_ret_ant = total_planos_vpc_ret_ant
+
 
 class Esp:
     nombre = ''
@@ -363,7 +372,6 @@ class Cat:
         self.valor_pen = valor_pen
 
 
-
 class Plan:
     nombre = ''
     codigo = ''
@@ -450,7 +458,6 @@ class Plan:
         self.obra = obra
 
 
-
 class Corte:
     nombre = ''
     descripcion = ''
@@ -484,14 +491,12 @@ class Penalizaciones:
         self.inc_cpl = inc_cpl
         self.inc_calidad = inc_calidad
 
+
 class Cortes_Penalizaciones:
     corte = ''
 
-
     def __init__(self, corte):
         self.corte = corte
-
-
 
 
 class Especial:
@@ -541,7 +546,8 @@ class Area:
 
     def __init__(self, nombre, personas, cant, codigo, horas_creadas_total, setrt, inc_res_30, cies, ant, maest,
                  total_dev_30, cant_planos, total_horas, sal_res15, sal_res15_plano, ret, ret_ant, impacto,
-                 sal_tot_dev, incumplimiento_plano_valor=None, incumplimiento_cpl_valor=None, incumplimiento_calidad_valor=None,
+                 sal_tot_dev, incumplimiento_plano_valor=None, incumplimiento_cpl_valor=None,
+                 incumplimiento_calidad_valor=None,
                  valor_pen=None):
         self.nombre = nombre
         self.personas = personas
@@ -623,7 +629,6 @@ class Trab:
     total_valor_pen = 0.00
     sal_res15 = 0.00
 
-
     def __init__(self, no, nombre, ge, sal_max, tarifa, planos, total_horas, total_valor, total_retenido,
                  total_pagar, cant, dpto, retenido_ant, pagar, trab_id, ci, categoria, sal_escala, cies, incre_res,
                  antig, maestria, tarifa_se, tarifa_pa, tarifa_cies, tarifa_maest, tarifa_ant, salario_total,
@@ -681,7 +686,6 @@ class Trab:
         self.obras = obras
 
 
-
 class Obr:
     id_obra = 0
     obra = ''
@@ -720,6 +724,7 @@ class Obr:
         self.retenido = retenido
         self.retenido_ant = retenido_ant
         self.valor_total = valor_total
+
 
 registry.auditlog.register(Plano)
 registry.auditlog.register(Revision)
