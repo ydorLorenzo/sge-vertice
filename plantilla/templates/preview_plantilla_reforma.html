@@ -1,0 +1,9 @@
+{% extends "preview_plantilla.html" %}
+
+{% block plantilla_anterior_header %}{% endblock %}
+
+{% block plantilla_reforma_body %}
+    <td>{{ trab.calcular_salario_total_reforma }}</td>
+    <td>{{ trab.salario_escala_reforma }}</td>
+    <td>{{ trab.salario_cat_cient }}</td>
+{% endblock %}

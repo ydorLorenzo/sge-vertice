@@ -59,11 +59,13 @@
                 <th style="width: 200px;">Grupo Esc.</th>
                 <th style="width: 100px;">Total Salario</th>
                 <th style="width: 100px;">Sal. Escala</th>
+                {% block plantilla_anterior_header %}
                 <th style="width: 100px;">Sal. Jor 240/260</th>
                 <th style="width: 100px;">Incr Res30</th>
                 <th style="width: 100px;">Coef CIES</th>
                 <th style="width: 100px;">Plus</th>
                 <th style="width: 100px;">Antig</th>
+                {% endblock %}
                 <th style="width: 100px;">Sal Maest.</th>
                 <th style="width: 100px;">Fecha Alta</th>
             </tr>
@@ -89,6 +91,7 @@
                     <td>{{ trab.ci }}</td>
                     <td>{{ trab.escolaridad }}</td>
                     <td>{{ trab.grupo_escala }}</td>
+                    {% block plantilla_reforma_body %}
                     <td>{{ trab.salario_total }}</td>
                     <td>{{ trab.salario_escala }}</td>
                     <td>{{ trab.salario_jornada_laboral }}</td>
@@ -97,6 +100,7 @@
                     <td>{{ trab.sal_plus }}</td>
                     <td>{{ trab.antiguedad }}</td>
                     <td>{{ trab.sal_cat_cient }}</td>
+                    {% endblock %}
                     <td>{{ trab.fecha_contrato|date:"d/m/Y" }}</td>
                 </tr>
             {% endfor %}

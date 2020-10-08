@@ -754,6 +754,16 @@ def preview_plantilla_rg(request):
     return render(request, 'preview_plantilla.html', context)
 
 
+@permission_required('plantilla.read_plantilla', raise_exception=True)
+def preview_plantilla_rf(request):
+    context = {
+        'queryset': request_plantilla_all(),
+        'title': 'PLANTILLA REFORMA SALARIAL',
+        'export_pdf': 'plantilla-rf_export'
+    }
+    return render(request, 'preview_plantilla_reforma.html', context)
+
+
 @permission_required('plantilla.export_plantilla', login_url='home_principal')
 def export_plantilla_general(request):
     context = {
@@ -790,8 +800,18 @@ def export_plantilla_ci(request):
     return export_factory(context)
 
 
-def export_factory(context):
-    template_path = 'export_plantilla.html'
+@permission_required('plantilla.export_plantilla', raise_exception=True)
+def export_plantilla_rf(request):
+    context = {
+        'queryset': request_plantilla_all(),
+        'title': 'Plantilla Reforma Salarial'
+    }
+    return export_factory(context, 'export_plantilla_reforma.html')
+
+
+def export_factory(context, template_path=None):
+    if template_path is None:
+        template_path = 'export_plantilla.html'
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="{context["title"]}.pdf"'
 

@@ -41,6 +41,8 @@ urlpatterns = [
              name='plantilla-rg_export'),
         path('plantilla-contratos-determinados/', views.preview_plantilla_cd, name='plantilla-cd'),
         path('plantilla-contratos-determinados/exportar/', views.export_plantilla_cd, name='plantilla-cd_export'),
+        path('plantilla-reforma/', views.preview_plantilla_rf, name='plantilla-rf'),
+        path('plantilla-reforma/exportar/', views.export_plantilla_rf, name='plantilla-rf_export'),
         path('calzado/', views.calzado_medios_de_proteccion, name='calzado_export')
     ]))
 ]
