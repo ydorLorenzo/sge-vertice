@@ -378,7 +378,7 @@ def bajaeliminar(request, pk):
         )
     else:
         causal = request.POST.get('causa', None)
-        now_date_str = datetime.strftime(datetime.now(), '%d/%m/%Y')
+        now_date_str = datetime.now().strftime('%d/%m/%Y')
         fecha_baja_str = request.POST.get('fecha_baja', now_date_str)
         fecha_baja = datetime.strptime(fecha_baja_str, '%d/%m/%Y')
         plantilla = Plantilla.objects.filter(cargo_id=trabajador.cargo_id,
