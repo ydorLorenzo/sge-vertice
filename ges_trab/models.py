@@ -202,6 +202,26 @@ class Trabajador(BaseUrls, models.Model):
             return '%s %s %s' % (self.primer_nombre, self.segundo_nombre, self.apellidos)
         return '%s %s' % (self.primer_nombre, self.apellidos)
 
+    def calcular_salario_total_reforma(self):
+        sal_total = adm.EscalaSalarialReforma.objects.get(grupo=self.escala_salarial.grupo).salario_escala
+        if self.cat_cient == '2':
+            sal_total += 400        # valore referente no real todo verificar valores reales
+        elif self.cat_cient == '3':
+            sal_total += 800        # valore referente no real todo verificar valores reales
+        return sal_total
+
+    @property
+    def salario_escala_reforma(self):
+        return adm.EscalaSalarialReforma.objects.get(grupo=self.escala_salarial.grupo).salario_escala
+
+    @property
+    def salario_cat_cient(self):
+        if self.cat_cient == '2':
+            return 400
+        if self.cat_cient == '3':
+            return 800
+        return 0
+
     def __str__(self):
         return self.nombre_completo
 
