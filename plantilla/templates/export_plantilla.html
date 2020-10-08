@@ -45,7 +45,7 @@
     <div></div>
     {% regroup queryset by unidad_nombre as unidad_list %}
     {% for unidad in unidad_list %}
-        <table class="display table table-striped" cellspacing="0" width="100%" id="tabla">
+        <table class="display table table-striped" cellspacing="0" width="100%" id="tabla" repeat="1">
             <thead>
             <tr>
                 <th style="width: 10px; margin-right: 0;">Area</th>
@@ -72,12 +72,12 @@
             </thead>
             <tbody>
             <tr>
-                <td colspan="18" style="font-weight: bold; text-align: left">{{ unidad.grouper }}</td>
+                <td colspan="{% block unidad_cols %}18{% endblock %}" style="font-weight: bold; text-align: left">{{ unidad.grouper }}</td>
             </tr>
             {% for trab in unidad.list %}
                 {% ifchanged trab.dpto_nombre %}
                     <tr>
-                        <td colspan="18"
+                        <td colspan="{% block dep_cols %}18{% endblock %}"
                             style="font-weight: bold; text-align: left; padding-left: 30px !important;">{{ trab.dpto_nombre }}</td>
                     </tr>
                 {% endifchanged %}
