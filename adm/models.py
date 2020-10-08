@@ -82,7 +82,7 @@ class EscalaSalarial(BaseUrls, models.Model):
 
 
 class EscalaSalarialReforma(BaseUrls, models.Model):
-    grupo = models.CharField(max_length=3, unique=True)
+    grupo = models.CharField(max_length=8, unique=True)
     coeficiente = models.DecimalField(max_digits=16, decimal_places=15, validators=[positive_number_validator])
     salario_escala = models.DecimalField(max_digits=6, decimal_places=2, validators=[positive_number_validator])
 
