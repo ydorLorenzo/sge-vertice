@@ -81,6 +81,19 @@ class EscalaSalarial(BaseUrls, models.Model):
         verbose_name_plural = 'escalas salariales'
 
 
+class EscalaSalarialReforma(BaseUrls, models.Model):
+    grupo = models.CharField(max_length=3, unique=True)
+    coeficiente = models.DecimalField(max_digits=16, decimal_places=15, validators=[positive_number_validator])
+    salario_escala = models.DecimalField(max_digits=6, decimal_places=2, validators=[positive_number_validator])
+
+    def __str__(self):
+        return self.grupo
+
+    class Meta:
+        verbose_name = 'escala salarial reforma'
+        verbose_name_plural = 'escalas salariales reforma'
+
+
 class CIES(BaseUrls, models.Model):
     escala = models.ForeignKey(EscalaSalarial, on_delete=models.CASCADE, verbose_name='escala salarial')
     tecnico = models.BooleanField('técnico')
