@@ -48,7 +48,7 @@ class Tematica(BaseUrls, models.Model):
 class ActividadCapacitacion(BaseUrls, models.Model):
     nombre = models.CharField(max_length=150)
     codigo = models.CharField('código', max_length=10, primary_key=True)
-    tipo_actividad = models.ForeignKey(TipoActividadCapacitacion, on_delete=models.CASCADE)
+    tipo_actividad = models.ForeignKey(TipoActividadCapacitacion, on_delete=models.CASCADE, null=True)
     form = models.CharField(max_length=10)  # todo eliminar despues de hacer el loaddata
     tematica = models.ForeignKey(Tematica, on_delete=models.CASCADE, null=True)
     institucion = models.CharField('institución', max_length=150, null=True)
