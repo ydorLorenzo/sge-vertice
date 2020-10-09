@@ -50,28 +50,25 @@ class Ausencia(models.Model):
         return '{} => {} => {}'.format(self.codigo_trab, self.fecha, self.causal)
 
 
-class Mes:
-    ENERO = 1
-    FEBRERO = 2
-    MARZO = 3
-    ABRIL = 4
-    MAYO = 5
-    JUNIO = 6
-    JULIO = 7
-    AGOSTO = 8
-    SEPTIEMBRE = 9
-    OCTUBRE = 10
-    NOVIEMBRE = 11
-    DICIEMBRE = 12
-
-    choices = ((ENERO, 'Enero'), (FEBRERO, 'Febrero'), (MARZO, 'Marzo'), (ABRIL, 'Abril'), (MAYO, 'Mayo'),
-               (JUNIO, 'Junio'), (JULIO, 'Julio'), (AGOSTO, 'Agosto'), (SEPTIEMBRE, 'Septiembre'), (OCTUBRE, 'Octubre'),
-               (NOVIEMBRE, 'Noviembre'), (DICIEMBRE, 'Diciembre'))
+MESES = {
+    1: 'Enero',
+    2: 'Febrero',
+    3: 'Marzo',
+    4: 'Abril',
+    5: 'Mayo',
+    6: 'Junio',
+    7: 'Julio',
+    8: 'Agosto',
+    9: 'Septiembre',
+    10: 'Octubre',
+    11: 'Noviembre',
+    12: 'Diciembre'
+}
 
 
 class TarjetaCNC(models.Model):
     codigo_trab = models.ForeignKey(Trabajador, on_delete=models.CASCADE, default='', verbose_name='Trabajador')
-    mes = models.PositiveSmallIntegerField(choices=Mes.choices, default=int(datetime.datetime.now().month), validators=[
+    mes = models.PositiveSmallIntegerField(default=int(datetime.datetime.now().month), validators=[
         MaxValueValidator(12), MinValueValidator(1)
     ])
     anno = models.PositiveSmallIntegerField(verbose_name='año', default=int(datetime.datetime.now().year), validators=[
@@ -83,6 +80,10 @@ class TarjetaCNC(models.Model):
     @property
     def trabajador(self):
         return self.codigo_trab
+
+    @property
+    def mes_str(self):
+        return MESES[self.mes]
 
     @property
     def fecha_primer_dia_mes(self):
