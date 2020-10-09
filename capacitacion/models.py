@@ -1,10 +1,5 @@
 from auditlog import registry, models as auditlog_models
-from django.core.validators import validate_image_file_extension
 from django.db import models
-from django.urls import reverse
-from django.utils.translation import gettext_lazy as _
-
-from adm import models as adm
 from ges_trab.models import Trabajador
 from plantilla.models import Plantilla
 from rechum.models import BaseUrls
@@ -21,6 +16,7 @@ class ModoFormacion(BaseUrls, models.Model):
 
     class Meta:
         default_permissions = ['read', 'add', 'delete', 'change', 'export', 'report']
+
 
 class TipoActividadCapacitacion(BaseUrls, models.Model):
     nombre = models.CharField(max_length=150)
@@ -79,6 +75,7 @@ class ActividadCapacitacionTrabajadores(BaseUrls, models.Model):
 
     class Meta:
         default_permissions = ['read', 'add', 'delete', 'change', 'export', 'report']
+
 
 class Ponencia(BaseUrls, models.Model):
     actividad_trabajador = models.ForeignKey(ActividadCapacitacionTrabajadores, on_delete=models.CASCADE, null=False)

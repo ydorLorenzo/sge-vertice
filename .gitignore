@@ -13,3 +13,4 @@ __pycache__/
 /prenomina15/migrations/*
 /principal/migrations/*
 /subsidio/migrations/*
+/capacitacion/migrations/*

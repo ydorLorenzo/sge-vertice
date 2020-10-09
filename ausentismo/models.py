@@ -71,10 +71,10 @@ class Mes:
 
 class TarjetaCNC(models.Model):
     codigo_trab = models.ForeignKey(Trabajador, on_delete=models.CASCADE, default='', verbose_name='Trabajador')
-    mes = models.PositiveSmallIntegerField(choices=Mes.choices, default=datetime.datetime.now().month, validators=[
+    mes = models.PositiveSmallIntegerField(choices=Mes.choices, default=int(datetime.datetime.now().month), validators=[
         MaxValueValidator(12), MinValueValidator(1)
     ])
-    anno = models.PositiveSmallIntegerField(verbose_name='año', default=datetime.datetime.now().year, validators=[
+    anno = models.PositiveSmallIntegerField(verbose_name='año', default=int(datetime.datetime.now().year), validators=[
         MaxValueValidator(2150), MinValueValidator(1900)
     ])
     cant_dias = models.PositiveIntegerField(verbose_name='cant. días')
