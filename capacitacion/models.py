@@ -75,6 +75,8 @@ class ActividadCapacitacionTrabajadores(BaseUrls, models.Model):
 
     class Meta:
         default_permissions = ['read', 'add', 'delete', 'change', 'export', 'report']
+        verbose_name = 'actividad capacitación trabajadores'
+        verbose_name_plural = 'actividades capacitación trabajadores'
 
 
 class Ponencia(BaseUrls, models.Model):
