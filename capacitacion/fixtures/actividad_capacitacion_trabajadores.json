@@ -90194,7 +90194,7 @@
     "model": "capacitacion.actividadcapacitaciontrabajadores",
     "fields": {
       "id": "12547",
-      "actividad_id": "15/8",
+      "actividad_id": "158",
       "codigo_trabajador": "260",
       "evaluacion": null,
       "tomo": null,
