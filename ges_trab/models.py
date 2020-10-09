@@ -10,7 +10,7 @@ from rechum.models import BaseUrls
 from rechum.validators import *
 
 
-class Actividad(BaseUrls, models.Model):
+class Actividad(BaseUrls):
     descripcion = models.CharField('descripción', max_length=60, validators=[
         general_name_validator
     ], blank=True, null=True)
@@ -42,7 +42,7 @@ class PersonasManager(models.Manager):
         return self.get_queryset().bajas()
 
 
-class Trabajador(BaseUrls, models.Model):
+class Trabajador(BaseUrls):
     # Datos personales del trabajador
     primer_nombre = models.CharField(max_length=20, validators=[person_name_validator])
     segundo_nombre = models.CharField(max_length=20, blank=True, null=True, validators=[person_name_validator])
@@ -245,7 +245,7 @@ class BajaOther(Trabajador):
         proxy = True
 
 
-class Movimiento(BaseUrls, models.Model):
+class Movimiento(BaseUrls):
     fecha = models.DateField(max_length=20, verbose_name="Fecha del movimiento", blank=True, null=True)
     trabajador = models.ForeignKey(Trabajador, on_delete=models.CASCADE)
     TIPO_OPT = (('1', 'Promoción'), ('2', 'Cambio de área'), ('3', 'Ambos'))
