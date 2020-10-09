@@ -8,7 +8,7 @@ from rechum.validators import *
 
 class ModoFormacion(BaseUrls, models.Model):
     nombre = models.CharField(max_length=150)
-    codigo = models.CharField('código', max_length=5)
+    codigo = models.CharField('código', max_length=5, primary_key=True)
     history = auditlog_models.AuditlogHistoryField()
 
     def __str__(self):
@@ -20,7 +20,7 @@ class ModoFormacion(BaseUrls, models.Model):
 
 class TipoActividadCapacitacion(BaseUrls, models.Model):
     nombre = models.CharField(max_length=150)
-    codigo = models.CharField('código', max_length=2)
+    codigo = models.CharField('código', max_length=3, primary_key=True)
     modo_formacion = models.ForeignKey(ModoFormacion, on_delete=models.CASCADE, null=True)
     history = auditlog_models.AuditlogHistoryField()
 
@@ -33,7 +33,7 @@ class TipoActividadCapacitacion(BaseUrls, models.Model):
 
 class Tematica(BaseUrls, models.Model):
     nombre = models.CharField(max_length=150)
-    codigo = models.CharField('código', max_length=2)
+    codigo = models.CharField('código', max_length=2, primary_key=True)
     history = auditlog_models.AuditlogHistoryField()
 
     def __str__(self):
@@ -47,7 +47,7 @@ class Tematica(BaseUrls, models.Model):
 
 class ActividadCapacitacion(BaseUrls, models.Model):
     nombre = models.CharField(max_length=150)
-    codigo = models.CharField('código', max_length=10)
+    codigo = models.CharField('código', max_length=10, primary_key=True)
     tipo_actividad = models.ForeignKey(TipoActividadCapacitacion, on_delete=models.CASCADE)
     tematica = models.ForeignKey(Tematica, on_delete=models.CASCADE)
     institucion = models.CharField('institución', max_length=150)
