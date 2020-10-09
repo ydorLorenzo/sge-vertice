@@ -1,0 +1,58 @@
+[
+  {
+    "model": "capacitacion.tematica",
+    "fields": {
+      "nombre": "Gestión de Capital Humano",
+      "codigo": "05"
+    }
+  },
+  {
+    "model": "capacitacion.tematica",
+    "fields": {
+      "nombre": "Gestión de Seguridad de la Información",
+      "codigo": "06"
+    }
+  },
+  {
+    "model": "capacitacion.tematica",
+    "fields": {
+      "nombre": "Gestión de la Energía",
+      "codigo": "07"
+    }
+  },
+  {
+    "model": "capacitacion.tematica",
+    "fields": {
+      "nombre": "Tècnica",
+      "codigo": "08"
+    }
+  },
+  {
+    "model": "capacitacion.tematica",
+    "fields": {
+      "nombre": "Gestión Ambiental",
+      "codigo": "01"
+    }
+  },
+  {
+    "model": "capacitacion.tematica",
+    "fields": {
+      "nombre": "Gestión de Calidad",
+      "codigo": "02"
+    }
+  },
+  {
+    "model": "capacitacion.tematica",
+    "fields": {
+      "nombre": "Gestión Seguridad y Salud en el Trabajo",
+      "codigo": "03"
+    }
+  },
+  {
+    "model": "capacitacion.tematica",
+    "fields": {
+      "nombre": "Comunicación Institucional",
+      "codigo": "04"
+    }
+  }
+]

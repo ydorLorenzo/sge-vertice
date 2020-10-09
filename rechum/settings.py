@@ -93,6 +93,10 @@ TEMPLATES = [
     },
 ]
 
+FIXTURE_DIRS = (
+   os.path.join(BASE_DIR, 'capacitacion/fixtures/'),
+)
+
 WSGI_APPLICATION = 'rechum.wsgi.application'
 
 
