@@ -1,0 +1,274 @@
+[
+  {
+    "model": "capacitacion.tipoactividadcapacitacion",
+    "fields": {
+      "codigo": "01",
+      "nombre": "Recalificación de choferes",
+      "modo_formacion": "25"
+    }
+  },
+  {
+    "model": "capacitacion.tipoactividadcapacitacion",
+    "fields": {
+      "codigo": "02",
+      "nombre": "Maestría",
+      "modo_formacion": "07"
+    }
+  },
+  {
+    "model": "capacitacion.tipoactividadcapacitacion",
+    "fields": {
+      "codigo": "03",
+      "nombre": "Doctorado",
+      "modo_formacion": "08"
+    }
+  },
+  {
+    "model": "capacitacion.tipoactividadcapacitacion",
+    "fields": {
+      "codigo": "11",
+      "nombre": "Entrenamiento",
+      "modo_formacion": "04"
+    }
+  },
+  {
+    "model": "capacitacion.tipoactividadcapacitacion",
+    "fields": {
+      "codigo": "12",
+      "nombre": "Diplomado",
+      "modo_formacion": "06"
+    }
+  },
+  {
+    "model": "capacitacion.tipoactividadcapacitacion",
+    "fields": {
+      "codigo": "13",
+      "nombre": "Curso Postgrado",
+      "modo_formacion": "05"
+    }
+  },
+  {
+    "model": "capacitacion.tipoactividadcapacitacion",
+    "fields": {
+      "codigo": "20",
+      "nombre": "Curso",
+      "modo_formacion": "25"
+    }
+  },
+  {
+    "model": "capacitacion.tipoactividadcapacitacion",
+    "fields": {
+      "codigo": "21",
+      "nombre": "Entrenam en Puesto de Trabajo",
+      "modo_formacion": "04"
+    }
+  },
+  {
+    "model": "capacitacion.tipoactividadcapacitacion",
+    "fields": {
+      "codigo": "30",
+      "nombre": "Conferencia",
+      "modo_formacion": "25"
+    }
+  },
+  {
+    "model": "capacitacion.tipoactividadcapacitacion",
+    "fields": {
+      "codigo": "31",
+      "nombre": "Charlas",
+      "modo_formacion": "25"
+    }
+  },
+  {
+    "model": "capacitacion.tipoactividadcapacitacion",
+    "fields": {
+      "codigo": "32",
+      "nombre": "Ciclo de Charlas",
+      "modo_formacion": "25"
+    }
+  },
+  {
+    "model": "capacitacion.tipoactividadcapacitacion",
+    "fields": {
+      "codigo": "33",
+      "nombre": "Exposiciones",
+      "modo_formacion": "25"
+    }
+  },
+  {
+    "model": "capacitacion.tipoactividadcapacitacion",
+    "fields": {
+      "codigo": "34",
+      "nombre": "Video Técnico",
+      "modo_formacion": "25"
+    }
+  },
+  {
+    "model": "capacitacion.tipoactividadcapacitacion",
+    "fields": {
+      "codigo": "35",
+      "nombre": "Taller",
+      "modo_formacion": "25"
+    }
+  },
+  {
+    "model": "capacitacion.tipoactividadcapacitacion",
+    "fields": {
+      "codigo": "36",
+      "nombre": "Debate Científico",
+      "modo_formacion": "25"
+    }
+  },
+  {
+    "model": "capacitacion.tipoactividadcapacitacion",
+    "fields": {
+      "codigo": "37",
+      "nombre": "Intercambio de Experiencias",
+      "modo_formacion": "25"
+    }
+  },
+  {
+    "model": "capacitacion.tipoactividadcapacitacion",
+    "fields": {
+      "codigo": "38",
+      "nombre": "Jornada Científica",
+      "modo_formacion": "25"
+    }
+  },
+  {
+    "model": "capacitacion.tipoactividadcapacitacion",
+    "fields": {
+      "codigo": "39",
+      "nombre": "Conferencia Especializada",
+      "modo_formacion": "25"
+    }
+  },
+  {
+    "model": "capacitacion.tipoactividadcapacitacion",
+    "fields": {
+      "codigo": "40",
+      "nombre": "Visita Técnica",
+      "modo_formacion": "25"
+    }
+  },
+  {
+    "model": "capacitacion.tipoactividadcapacitacion",
+    "fields": {
+      "codigo": "41",
+      "nombre": "Turismo Técnico",
+      "modo_formacion": "25"
+    }
+  },
+  {
+    "model": "capacitacion.tipoactividadcapacitacion",
+    "fields": {
+      "codigo": "50",
+      "nombre": "Forum",
+      "modo_formacion": "25"
+    }
+  },
+  {
+    "model": "capacitacion.tipoactividadcapacitacion",
+    "fields": {
+      "codigo": "51",
+      "nombre": "Simposio",
+      "modo_formacion": "25"
+    }
+  },
+  {
+    "model": "capacitacion.tipoactividadcapacitacion",
+    "fields": {
+      "codigo": "52",
+      "nombre": "Congreso",
+      "modo_formacion": "25"
+    }
+  },
+  {
+    "model": "capacitacion.tipoactividadcapacitacion",
+    "fields": {
+      "codigo": "53",
+      "nombre": "Encuentro",
+      "modo_formacion": "25"
+    }
+  },
+  {
+    "model": "capacitacion.tipoactividadcapacitacion",
+    "fields": {
+      "codigo": "54",
+      "nombre": "Seminario",
+      "modo_formacion": "25"
+    }
+  },
+  {
+    "model": "capacitacion.tipoactividadcapacitacion",
+    "fields": {
+      "codigo": "55",
+      "nombre": "Mesa Redonda",
+      "modo_formacion": "25"
+    }
+  },
+  {
+    "model": "capacitacion.tipoactividadcapacitacion",
+    "fields": {
+      "codigo": "56",
+      "nombre": "Panel",
+      "modo_formacion": "25"
+    }
+  },
+  {
+    "model": "capacitacion.tipoactividadcapacitacion",
+    "fields": {
+      "codigo": "57",
+      "nombre": "Concurso",
+      "modo_formacion": "25"
+    }
+  },
+  {
+    "model": "capacitacion.tipoactividadcapacitacion",
+    "fields": {
+      "codigo": "58",
+      "nombre": "Feria",
+      "modo_formacion": "25"
+    }
+  },
+  {
+    "model": "capacitacion.tipoactividadcapacitacion",
+    "fields": {
+      "codigo": "65",
+      "nombre": "Evento",
+      "modo_formacion": "25"
+    }
+  },
+  {
+    "model": "capacitacion.tipoactividadcapacitacion",
+    "fields": {
+      "codigo": "22",
+      "nombre": "Autopreparación",
+      "modo_formacion": "25"
+    }
+  },
+  {
+    "model": "capacitacion.tipoactividadcapacitacion",
+    "fields": {
+      "codigo": "42",
+      "nombre": "Coloquio",
+      "modo_formacion": "25"
+    }
+  },
+  {
+    "model": "capacitacion.tipoactividadcapacitacion",
+    "fields": {
+      "codigo": "66",
+      "nombre": "Adiestramiento",
+      "modo_formacion": "03"
+    }
+  },
+  {
+    "model": "capacitacion.tipoactividadcapacitacion",
+    "fields": {
+      "codigo": "25",
+      "nombre": "Curso de Computación",
+      "modo_formacion": "12"
+    }
+  }
+]

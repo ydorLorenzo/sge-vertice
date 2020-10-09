@@ -49,6 +49,7 @@ class ActividadCapacitacion(BaseUrls, models.Model):
     nombre = models.CharField(max_length=150)
     codigo = models.CharField('código', max_length=10, primary_key=True)
     tipo_actividad = models.ForeignKey(TipoActividadCapacitacion, on_delete=models.CASCADE)
+    form = models.CharField(max_length=10) # todo eliminar despues de hacer el loaddata
     tematica = models.ForeignKey(Tematica, on_delete=models.CASCADE)
     institucion = models.CharField('institución', max_length=150)
     lugar = models.CharField(max_length=20)
@@ -69,7 +70,7 @@ class ActividadCapacitacion(BaseUrls, models.Model):
 
 class ActividadCapacitacionTrabajadores(BaseUrls, models.Model):
     actividad = models.ForeignKey(ActividadCapacitacion, on_delete=models.CASCADE)
-    trabajador = models.ForeignKey(Trabajador, on_delete=models.CASCADE)
+    codigo_trabajador = models.CharField(max_length=3, null=True)  # todo cambiar por ref a trabajador
     evaluacion = models.CharField('evaluación', max_length=30, null=True)
     tomo = models.CharField(max_length=20, null=True)
     folio = models.CharField(max_length=20, null=True)
