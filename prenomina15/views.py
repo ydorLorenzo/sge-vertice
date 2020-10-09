@@ -1743,6 +1743,7 @@ def request_report(fecha_inic, fecha_fin, obra, request):
     return {'especialidades': especialidades, 'fecha_inic': fecha_inic, 'fecha_fin': fecha_fin, 'obras': obras,
             'total_planos': total_planos, 'completo': completo, 'retenido': retenido}
 
+
 def request_report_cp(fecha_inic, fecha_fin, obra, request):
     result = Plano.objects.annotate(
         nombre_obj=F('objeto__nombre')
@@ -1865,6 +1866,7 @@ def request_report_cp(fecha_inic, fecha_fin, obra, request):
             'total_planos_real': total_planos_real, 'total_planos_vpc_90': total_planos_vpc_90,
             'total_planos_vpc_100': total_planos_vpc_100, 'total_planos_vpc_ret': total_planos_vpc_ret,
             'total_planos_vpc_ret_ant': total_planos_vpc_ret_ant}
+
 
 def request_report_certifico(fecha_ini, fecha_fin, obra):
     corte = Plano.objects.filter(corte__isnull=False, obra=obra).order_by('fecha_pago').values('corte').distinct()
@@ -2317,7 +2319,6 @@ def request_report_pren(fecha_inic, fecha_fin, obra, request):
             'cant_planos': cant_planos, 'sal_res15_plano': sal_res15_plano, 'ret': ret, 'ret_ant': ret_ant,
             'impacto': impacto, 'sal_total_dev': sal_total_dev, 'sal_res15': sal_res15, 'inc_plano': inc_plano,
             'inc_cpl': inc_cpl, 'inc_calidad': inc_calidad}
-
 
 
 def request_report_pren_trab(fecha_inic, fecha_fin, request):
@@ -2793,6 +2794,7 @@ def request_report_pren_trab(fecha_inic, fecha_fin, request):
             'cant_planos': cant_planos, 'sal_res15_plano': sal_res15_plano, 'ret': ret, 'ret_ant': ret_ant,
             'impacto': impacto, 'sal_total_dev': sal_total_dev, 'sal_res15': sal_res15, 'inc_plano': inc_plano,
             'inc_cpl': inc_cpl, 'inc_calidad': inc_calidad}
+
 
 def request_report_pren_serv(fecha_inic, fecha_fin, request):
     sql = """
@@ -3295,10 +3297,6 @@ def request_report_pren_serv(fecha_inic, fecha_fin, request):
             'cant_planos': cant_planos, 'sal_res15_plano': sal_res15_plano, 'ret': ret, 'ret_ant': ret_ant,
             'impacto': impacto, 'sal_total_dev': sal_total_dev, 'sal_res15': sal_res15, 'inc_plano': inc_plano,
             'inc_cpl': inc_cpl, 'inc_calidad': inc_calidad}
-
-
-
-
 
 
 def request_report_anexo(fecha_inic, fecha_fin, obra, horas, request):

@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'plantilla',
     'subsidio',
     'ausentismo',
+    'capacitacion',
     'datos_prenom',
     'widget_tweaks',
     'django_filters',
