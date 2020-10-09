@@ -8,7 +8,7 @@ from rechum.validators import *
 
 class ModoFormacion(BaseUrls, models.Model):
     nombre = models.CharField(max_length=150)
-    codigo = models.CharField('código', max_length=5, unique=True)
+    codigo = models.CharField('código', max_length=5)
     history = auditlog_models.AuditlogHistoryField()
 
     def __str__(self):
@@ -20,7 +20,7 @@ class ModoFormacion(BaseUrls, models.Model):
 
 class TipoActividadCapacitacion(BaseUrls, models.Model):
     nombre = models.CharField(max_length=150)
-    codigo = models.CharField('código', max_length=2, unique=True)
+    codigo = models.CharField('código', max_length=2)
     modo_formacion = models.ForeignKey(ModoFormacion, on_delete=models.CASCADE, null=True)
     history = auditlog_models.AuditlogHistoryField()
 
@@ -46,13 +46,13 @@ class Tematica(BaseUrls, models.Model):
 
 
 class ActividadCapacitacion(BaseUrls, models.Model):
-    nombre = models.CharField(max_length=150, null=False)
-    codigo = models.CharField('código', max_length=10, unique=True)
-    tipo_actividad = models.ForeignKey(TipoActividadCapacitacion, on_delete=models.CASCADE, null=False)
-    tematica = models.ForeignKey(Tematica, on_delete=models.CASCADE, null=False)
-    institucion = models.CharField('institución', max_length=150, null=False)
-    lugar = models.CharField(max_length=20, null=False)
-    profesor = models.CharField(max_length=150, null=False)
+    nombre = models.CharField(max_length=150)
+    codigo = models.CharField('código', max_length=10)
+    tipo_actividad = models.ForeignKey(TipoActividadCapacitacion, on_delete=models.CASCADE)
+    tematica = models.ForeignKey(Tematica, on_delete=models.CASCADE)
+    institucion = models.CharField('institución', max_length=150)
+    lugar = models.CharField(max_length=20)
+    profesor = models.CharField(max_length=150)
     fecha_ini = models.DateField('fecha de inicio')
     fecha_fin = models.DateField('fecha de fin')
     cant_horas = models.PositiveIntegerField('cantidad de horas', default=0)
@@ -68,8 +68,8 @@ class ActividadCapacitacion(BaseUrls, models.Model):
 
 
 class ActividadCapacitacionTrabajadores(BaseUrls, models.Model):
-    actividad = models.ForeignKey(ActividadCapacitacion, on_delete=models.CASCADE, null=False)
-    trabajador = models.ForeignKey(Trabajador, on_delete=models.CASCADE, null=False)
+    actividad = models.ForeignKey(ActividadCapacitacion, on_delete=models.CASCADE)
+    trabajador = models.ForeignKey(Trabajador, on_delete=models.CASCADE)
     evaluacion = models.CharField('evaluación', max_length=30, null=True)
     tomo = models.CharField(max_length=20, null=True)
     folio = models.CharField(max_length=20, null=True)
@@ -82,7 +82,7 @@ class ActividadCapacitacionTrabajadores(BaseUrls, models.Model):
 
 
 class Ponencia(BaseUrls, models.Model):
-    actividad_trabajador = models.ForeignKey(ActividadCapacitacionTrabajadores, on_delete=models.CASCADE, null=False)
+    actividad_trabajador = models.ForeignKey(ActividadCapacitacionTrabajadores, on_delete=models.CASCADE)
     titulo = models.CharField('título', max_length=150)
     premio = models.CharField('código', max_length=30)
     instancia = models.CharField(max_length=30)
