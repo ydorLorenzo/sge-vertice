@@ -33,7 +33,7 @@ class TipoActividadCapacitacion(BaseUrls, models.Model):
 
 class Tematica(BaseUrls, models.Model):
     nombre = models.CharField(max_length=150)
-    codigo = models.CharField('código', max_length=2, unique=True)
+    codigo = models.CharField('código', max_length=2)
     history = auditlog_models.AuditlogHistoryField()
 
     def __str__(self):
@@ -41,6 +41,8 @@ class Tematica(BaseUrls, models.Model):
 
     class Meta:
         default_permissions = ['read', 'add', 'delete', 'change', 'export', 'report']
+        verbose_name = 'temática'
+        verbose_name_plural = 'temáticas'
 
 
 class ActividadCapacitacion(BaseUrls, models.Model):
