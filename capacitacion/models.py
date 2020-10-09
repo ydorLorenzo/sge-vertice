@@ -56,9 +56,9 @@ class ActividadCapacitacion(BaseUrls, models.Model):
     profesor = models.CharField(max_length=150, null=True)
     fecha_ini = models.CharField('fecha de inicio', max_length=30)
     fecha_fin = models.CharField('fecha de fin', max_length=30)
-    cant_horas = models.PositiveIntegerField('cantidad de horas', default=0)
-    importe_MN = models.DecimalField(max_digits=6, decimal_places=2, editable=False, default=0.00)
-    importe_USD = models.DecimalField(max_digits=6, decimal_places=2, editable=False, default=0.00)
+    cant_horas = models.CharField('cantidad de horas', max_length=9, null=True)
+    importe_MN = models.CharField(max_length=9, null=True)
+    importe_USD = models.CharField(max_length=9, null=True)
     history = auditlog_models.AuditlogHistoryField()
 
     def __str__(self):
