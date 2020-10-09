@@ -50,27 +50,30 @@ class Ausencia(models.Model):
         return '{} => {} => {}'.format(self.codigo_trab, self.fecha, self.causal)
 
 
-MESES = {
-    1: 'Enero',
-    2: 'Febrero',
-    3: 'Marzo',
-    4: 'Abril',
-    5: 'Mayo',
-    6: 'Junio',
-    7: 'Julio',
-    8: 'Agosto',
-    9: 'Septiembre',
-    10: 'Octubre',
-    11: 'Noviembre',
-    12: 'Diciembre'
-}
+class Mes:
+    ENERO = 'Enero'
+    FEBRERO = 'Febrero'
+    MARZO = 'Marzo'
+    ABRIL = 'Abril'
+    MAYO = 'Mayo'
+    JUNIO = 'Junio'
+    JULIO = 'Julio'
+    AGOSTO = 'Agosto'
+    SEPTIEMBRE = 'Septiembre'
+    OCTUBRE = 'Octubre'
+    NOVIEMBRE = 'Noviembre'
+    DICIEMBRE = 'Diciembre'
+
+    choices = ((ENERO, 'Enero'), (FEBRERO, 'Febrero'), (MARZO, 'Marzo'), (ABRIL, 'Abril'), (MAYO, 'Mayo'),
+               (JUNIO, 'Junio'), (JULIO, 'Julio'), (AGOSTO, 'Agosto'), (SEPTIEMBRE, 'Septiembre'), (OCTUBRE, 'Octubre'),
+               (NOVIEMBRE, 'Noviembre'), (DICIEMBRE, 'Diciembre'))
 
 
 class TarjetaCNC(models.Model):
     codigo_trab = models.ForeignKey(Trabajador, on_delete=models.CASCADE, default='', verbose_name='Trabajador')
-    mes = models.PositiveSmallIntegerField(default=int(datetime.datetime.now().month), validators=[
+    mes = models.CharField(choices=Mes.choices, default=datetime.datetime.now().strftime('%m'), validators=[
         MaxValueValidator(12), MinValueValidator(1)
-    ])
+    ], max_length=10)
     anno = models.PositiveSmallIntegerField(verbose_name='año', default=int(datetime.datetime.now().year), validators=[
         MaxValueValidator(2150), MinValueValidator(1900)
     ])
@@ -81,18 +84,6 @@ class TarjetaCNC(models.Model):
     def trabajador(self):
         return self.codigo_trab
 
-    @property
-    def mes_str(self):
-        return MESES[self.mes]
-
-    @property
-    def fecha_primer_dia_mes(self):
-        return datetime.datetime.strptime(str(self.mes) + '/' + str(self.anno), '%m/%Y')
-
-    @property
-    def fecha_ultimo_dia_mes(self):
-        return self.fecha_primer_dia_mes + relativedelta(months=1, days=-1)
-
     def __str__(self):
-        return '{} => {} => {}'.format(self.codigo_trab, str(self.mes) + '/' + str(self.anno),
+        return '{} => {} => {}'.format(self.codigo_trab, self.mes + '/' + str(self.anno),
                                        self.salario)
