@@ -52,7 +52,7 @@ class ActividadCapacitacion(BaseUrls, models.Model):
     form = models.CharField(max_length=10)  # todo eliminar despues de hacer el loaddata
     tematica = models.ForeignKey(Tematica, on_delete=models.CASCADE, null=True)
     institucion = models.CharField('institución', max_length=150)
-    lugar = models.CharField(max_length=40)
+    lugar = models.CharField(max_length=100, null=True)
     profesor = models.CharField(max_length=150, null=True)
     fecha_ini = models.CharField('fecha de inicio', max_length=30)
     fecha_fin = models.CharField('fecha de fin', max_length=30)
