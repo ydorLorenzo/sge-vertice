@@ -68,8 +68,8 @@ class ActividadCapacitacion(BaseUrls, models.Model):
 
     class Meta:
         default_permissions = ['read', 'add', 'delete', 'change', 'export', 'report']
-        verbose_name = 'actividad de capacitación'
-        verbose_name_plural = 'actividades de capacitación'
+        verbose_name = 'actividad capacitación'
+        verbose_name_plural = 'actividades capacitación'
 
 class ActividadCapacitacionTrabajadores(BaseUrls, models.Model):
     actividad = models.ForeignKey(ActividadCapacitacion, on_delete=models.CASCADE)
