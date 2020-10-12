@@ -16,7 +16,8 @@ class ModoFormacion(BaseUrls, models.Model):
 
     class Meta:
         default_permissions = ['read', 'add', 'delete', 'change', 'export', 'report']
-
+        verbose_name = 'modo de formación'
+        verbose_name_plural = 'modos de formación'
 
 class TipoActividadCapacitacion(BaseUrls, models.Model):
     nombre = models.CharField(max_length=150)
@@ -29,7 +30,8 @@ class TipoActividadCapacitacion(BaseUrls, models.Model):
 
     class Meta:
         default_permissions = ['read', 'add', 'delete', 'change', 'export', 'report']
-
+        verbose_name = 'tipo de actividad'
+        verbose_name_plural = 'tipos de actividades'
 
 class Tematica(BaseUrls, models.Model):
     nombre = models.CharField(max_length=150)
@@ -66,7 +68,8 @@ class ActividadCapacitacion(BaseUrls, models.Model):
 
     class Meta:
         default_permissions = ['read', 'add', 'delete', 'change', 'export', 'report']
-
+        verbose_name = 'actividad de capacitación'
+        verbose_name_plural = 'actividades de capacitación'
 
 class ActividadCapacitacionTrabajadores(BaseUrls, models.Model):
     actividad = models.ForeignKey(ActividadCapacitacion, on_delete=models.CASCADE)
@@ -95,3 +98,5 @@ class Ponencia(BaseUrls, models.Model):
 
     class Meta:
         default_permissions = ['read', 'add', 'delete', 'change', 'export', 'report']
+        verbose_name = 'ponencia'
+        verbose_name_plural = 'ponencias'
