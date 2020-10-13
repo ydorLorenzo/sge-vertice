@@ -55,15 +55,10 @@ class ActividadCapacitacion(BaseUrls, models.Model):
     institucion = models.CharField('institución', max_length=150, null=True)
     lugar = models.CharField(max_length=100, null=True)
     profesor = models.CharField(max_length=150, null=True)
-    fecha_ini = models.CharField('fecha de inicio', max_length=30)  # todo borrar despues de la migracion
     fecha_inicio = models.DateTimeField(null=True)
-    fecha_fin = models.CharField('fecha de fin', max_length=30)     # todo borrar despues de la migracion
     fecha_term = models.DateTimeField(null=True)
-    cant_horas = models.CharField('cantidad de horas', max_length=9, null=True)  # todo borrar despues de la migracion
     horas = models.PositiveIntegerField(null=True)
-    importe_MN = models.CharField(max_length=9, null=True)
     valor_mn = models.DecimalField(max_digits=10, decimal_places=2, null=True)
-    importe_USD = models.CharField(max_length=9, null=True)
     valor_usd = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     history = auditlog_models.AuditlogHistoryField()
 
