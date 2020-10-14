@@ -6,21 +6,21 @@
 {% endblock %}
 
 {% block table_header %}
-    <th style="width: 6%">Código</th>
-    <th style="width: 10%">Nombre</th>
-    <th style="width: 10%">Tipo Actividad</th>
-    <th style="width: 8%">Temática</th>
-    <th style="width: 6%">Fecha Inicio</th>
-    <th style="width: 6%">Fecha Fin</th>
+    <th>Código</th>
+    <th>Nombre</th>
+    <th>Tipo Actividad</th>
+    <th>Temática</th>
+    <th>Fecha Inicio</th>
+    <th>Fecha Fin</th>
 {% endblock table_header %}
 
 {% block table_body %}
-    <td style="width: 6%">{{ item.codigo }}</td>
-    <td style="width: 10%">{{ item.nombre }}</td>
-    <td style="width: 10%">{{ item.tipo_actividad }}</td>
-    <td style="width: 8%">{% if item.tematica != None %}{{ item.tematica }}{% endif %}</td>
-    <td style="width: 6%">{{ item.fecha_inicio|date:"d/m/Y" }}</td>
-    <td style="width: 6%">{{ item.fecha_term|date:"d/m/Y" }}</td>
+    <td>{{ item.codigo }}</td>
+    <td>{{ item.nombre }}</td>
+    <td>{% if item.tipo_actividad != None %}{{ item.tipo_actividad }}{% endif %}</td>
+    <td>{% if item.tematica != None %}{{ item.tematica }}{% endif %}</td>
+    <td data-sort="{{item.fecha_inicio|date:'Ymd'}}">{{ item.fecha_inicio|date:"d/m/Y" }}</td>
+    <td data-sort="{{item.fecha_term|date:'Ymd'}}">{{ item.fecha_term|date:"d/m/Y" }}</td>
     {% submit_row %}
 {% endblock table_body %}
 
