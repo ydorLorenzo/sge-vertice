@@ -14,7 +14,7 @@ def home(request):
 # Actividad Capacitación
 # Listar
 class ActCapListView(SgeListView):
-    permission_required = 'adm.read_actividadcapacitacion'
+    permission_required = 'capacitacion.read_actividadcapacitacion'
     raise_exception = True
     model = ActividadCapacitacion
     template_name = 'act-cap/list.html'
@@ -22,33 +22,33 @@ class ActCapListView(SgeListView):
 
 # Crear
 class ActCapCreateView(SgeCreateView):
-    permission_required = 'adm.add_actividadcapacitacion'
+    permission_required = 'capacitacion.add_actividadcapacitacion'
     model = ActividadCapacitacion
-    fields = ['nombre']
+    fields = '__all__'
     template_name = 'act-cap/create.html'
     success_url = reverse_lazy('actividadcapacitacion_create')
 
 
 # Editar
 class ActCapUpdateView(SgeUpdateView):
+    permission_required = 'capacitacion.change_actividadcapacitacion'
     model = ActividadCapacitacion
-    fields = ['nombre']
+    fields = '__all__'
     template_name = 'act-cap/create.html'
-    permission_required = 'adm.change_actividadcapacitacion'
     success_url = reverse_lazy('actividadcapacitacion_list')
 
 
 # Detalle
 class ActCapDetailView(SgeDetailView):
+    permission_required = 'capacitacion.read_actividadcapacitacion'
     model = ActividadCapacitacion
     template_name = 'act-cap/detail.html'
-    permission_required = 'adm.read_actividadcapacitacion'
 
 
 # Delete
 class ActCapDeleteView(SgeDeleteView):
+    permission_required = 'capacitacion.delete_actividadcapacitacion'
     model = ActividadCapacitacion
-    permission_required = 'adm.delete_actividadcapacitacion'
     success_url = reverse_lazy('actividadcapacitacion_list')
 
 
