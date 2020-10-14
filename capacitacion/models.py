@@ -20,6 +20,7 @@ class ModoFormacion(BaseUrls, models.Model):
         verbose_name_plural = 'modos de formación'
 
 class TipoActividadCapacitacion(BaseUrls, models.Model):
+    id = models.AutoField(auto_created=True, primary_key=False, serialize=False, verbose_name='ID')
     nombre = models.CharField(max_length=150)
     codigo = models.CharField('código', max_length=3, primary_key=True)
     modo_formacion = models.ForeignKey(ModoFormacion, on_delete=models.CASCADE, null=True)
