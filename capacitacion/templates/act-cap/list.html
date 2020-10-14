@@ -1,0 +1,40 @@
+{% extends 'layouts/_base_list_datatable.html' %}
+{% load sge_url sge_inclusion %}
+
+{% block delete_error_message %}
+    Imposible eliminar Actividad
+{% endblock %}
+
+{% block table_header %}
+    <th>Código</th>
+    <th>Nombre</th>
+    <th>Tipo Actividad</th>
+    <th>Temática</th>
+    <th>Institución</th>
+    <th>Lugar</th>
+    <th>Fecha Inicio</th>
+    <th>Fecha Fin</th>
+{% endblock table_header %}
+
+{% block table_body %}
+    <td>{{ item.codigo }}</td>
+    <td>{{ item.nombre }}</td>
+    <td>{{ item.tipo_actividad }}</td>
+    <td>{{ item.tematica }}</td>
+    <td>{{ item.institucion }}</td>
+    <td>{{ item.lugar }}</td>
+    <td>{{ item.fecha_inicio }}</td>
+    <td>{{ item.fecha_term }}</td>
+    {% submit_row %}
+{% endblock table_body %}
+
+{% block table_foot %}
+    <th>Código</th>
+    <th>Nombre</th>
+    <th>Tipo Actividad</th>
+    <th>Temática</th>
+    <th>Institución</th>
+    <th>Lugar</th>
+    <th>Fecha Inicio</th>
+    <th>Fecha Fin</th>
+{% endblock table_foot %}

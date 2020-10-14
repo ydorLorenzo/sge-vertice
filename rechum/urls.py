@@ -13,6 +13,7 @@ urlpatterns = [
         path('', decorator_include(login_required, 'adm.urls')),
         path('', decorator_include(login_required, 'ges_trab.urls')),
         path('', decorator_include(login_required, 'plantilla.urls')),
+        path('', decorator_include(login_required, 'capacitacion.urls')),
         path('parte-tiempo/', decorator_include(login_required, 'parte_tiempo.urls')),
         path('subsidios/', decorator_include(login_required, 'subsidio.urls')),
         path('datos-prenomina/', decorator_include(login_required, 'datos_prenom.urls')),

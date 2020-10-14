@@ -1,0 +1,22 @@
+{% extends 'layouts/crud/_base_detail.html' %}
+
+{% block detail_elements %}
+    <dt class="col-md-4 col-sm-12">Actividad:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.codigo }} - {{ object.nombre }}</dd>
+    <dt class="col-md-4 col-sm-12">Tipo de Actividad:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.tipo_actividad }}</dd>
+    <dt class="col-md-4 col-sm-12">Temática:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.tematica }}</dd>
+    <dt class="col-md-4 col-sm-12">Institución:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.institucion }}</dd>
+    <dt class="col-md-4 col-sm-12">Lugar:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.lugar }}</dd>
+    <dt class="col-md-4 col-sm-12">Profesor:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.profesor }}</dd>
+    <dt class="col-md-4 col-sm-12">Fecha inicio - Fecha fin:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.fecha_inicio|date:"Y/m/d" }}-{{ object.fecha_term|date:"Y/m/d" }}</dd>
+    <dt class="col-md-4 col-sm-12">Horas:</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.horas }}</dd>
+    <dt class="col-md-4 col-sm-12">Valor MN - USD</dt>
+    <dd class="col-md-8 col-sm-12">{{ object.valor_mn|default:"--" }} / {{ object.valor_usd|default:"--" }}</dd>
+{% endblock %}

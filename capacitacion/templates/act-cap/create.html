@@ -1,0 +1,66 @@
+{% extends 'layouts/crud/_base_create-update.html' %}
+{% load widget_tweaks %}
+
+{% block form_elements %}
+    {{ form.non_field_errors }}
+    <div class="col-lg-4 col-12">
+        {{ form.codigo.label_tag }}
+        {{ form.codigo.errors }}
+        {{ form.codigo }}
+    </div>
+    <div class="col-lg-8 col-12 pt-lg-0 pt-2">
+        {{ form.nombre.label_tag }}
+        {{ form.nombre.errors }}
+        {{ form.nombre }}
+    </div>
+    <div class="col-lg-6 col-12">
+        {{ form.tipo_actividad.label_tag }}
+        {{ form.tipo_actividad.errors }}
+        {{ form.tipo_actividad }}
+    </div>
+    <div class="col-lg-6 col-12">
+        {{ form.tematica.label_tag }}
+        {{ form.tematica.error }}
+        {{ form.tematica }}
+    </div>
+    <div class="col-lg-6 col-12">
+        {{ form.lugar.label_tag }}
+        {{ form.lugar.errors }}
+        {{ form.lugar }}
+    </div>
+    <div class="col-lg-6 col-12">
+        {{ form.institucion.label_tag }}
+        {{ form.institucion.errors }}
+        {{ form.institucion }}
+    </div>
+    <div class="col-lg-6 col-12">
+        {{ form.profesor.label_tag }}
+        {{ form.profesor.errors }}
+        {{ form.profesor }}
+    </div>
+    <div class="col-lg-6 col-12">
+        {{ form.horas.label_tag }}
+        {{ form.horas.errors }}
+        {{ form.horas }}
+    </div>
+    <div class="col-lg-3 col-6">
+        {{ form.fecha_inicio.label_tag }}
+        {{ form.fecha_inicio.errors }}
+        {{ form.fecha_inicio }}
+    </div>
+    <div class="col-lg-3 col-6">
+        {{ form.fecha_term.label_tag }}
+        {{ form.fecha_term.errors }}
+        {{ form.fecha_term }}
+    </div>
+    <div class="col-lg-3 col-6">
+        {{ form.valor_mn.label_tag }}
+        {{ form.valor_mn.errors }}
+        {{ form.valor_mn }}
+    </div>
+    <div class="col-lg-3 col-6">
+        {{ form.valor_usd }}
+        {{ form.valor_usd }}
+        {{ form.valor_usd }}
+    </div>
+{% endblock %}
