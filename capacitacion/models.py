@@ -21,7 +21,7 @@ class ModoFormacion(BaseUrls, models.Model):
 
 class TipoActividadCapacitacion(BaseUrls, models.Model):
     nombre = models.CharField(max_length=150)
-    id = models.CharField('código', max_length=3, primary_key=True)
+    codigo = models.CharField('código', max_length=3, primary_key=True)
     modo_formacion = models.ForeignKey(ModoFormacion, on_delete=models.CASCADE, null=True)
     history = auditlog_models.AuditlogHistoryField()
 
