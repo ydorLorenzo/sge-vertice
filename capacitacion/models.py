@@ -72,9 +72,7 @@ class ActividadCapacitacion(BaseUrls, models.Model):
 
 class ActividadCapacitacionTrabajadores(BaseUrls, models.Model):
     actividad = models.ForeignKey(ActividadCapacitacion, on_delete=models.CASCADE)
-    codigo_trabajador = models.CharField(max_length=3, null=True)  # todo cambiar por ref a trabajador
     trabajador = models.ForeignKey(Trabajador, on_delete=models.SET_NULL, null=True)
-    nombre_trabajador = models.CharField(max_length=60, null=True)
     evaluacion = models.CharField('evaluación', max_length=30, null=True)
     tomo = models.CharField(max_length=20, null=True)
     folio = models.CharField(max_length=20, null=True)
