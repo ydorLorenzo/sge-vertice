@@ -6,35 +6,31 @@
 {% endblock %}
 
 {% block table_header %}
-    <th>Código</th>
-    <th>Nombre</th>
-    <th>Tipo Actividad</th>
-    <th>Temática</th>
-    <th>Institución</th>
-    <th>Lugar</th>
-    <th>Fecha Inicio</th>
-    <th>Fecha Fin</th>
+    <th style="width: 6%">Código</th>
+    <th style="width: 10%">Nombre</th>
+    <th style="width: 10%">Tipo Actividad</th>
+    <th style="width: 8%">Temática</th>
+    <th style="width: 6%">Fecha Inicio</th>
+    <th style="width: 6%">Fecha Fin</th>
 {% endblock table_header %}
 
-{% block table_body %}
-    <td>{{ item.codigo }}</td>
-    <td>{{ item.nombre }}</td>
-    <td>{{ item.tipo_actividad }}</td>
-    <td>{{ item.tematica }}</td>
-    <td>{{ item.institucion }}</td>
-    <td>{{ item.lugar }}</td>
-    <td>{{ item.fecha_inicio }}</td>
-    <td>{{ item.fecha_term }}</td>
+{% block table_body_outside %}
+    <tr>
+    <td style="width: 6%">{{ item.codigo }}</td>
+    <td style="width: 10%">{{ item.nombre }}</td>
+    <td style="width: 10%">{{ item.tipo_actividad }}</td>
+    <td style="width: 8%">{% if item.tematica != None %}{{ item.tematica }}{% endif %}</td>
+    <td style="width: 6%">{{ item.fecha_inicio|date:"d/m/Y" }}</td>
+    <td style="width: 6%">{{ item.fecha_term|date:"d/m/Y" }}</td>
     {% submit_row %}
-{% endblock table_body %}
+    </tr>
+{% endblock table_body_outside %}
 
 {% block table_foot %}
     <th>Código</th>
     <th>Nombre</th>
     <th>Tipo Actividad</th>
     <th>Temática</th>
-    <th>Institución</th>
-    <th>Lugar</th>
     <th>Fecha Inicio</th>
     <th>Fecha Fin</th>
 {% endblock table_foot %}

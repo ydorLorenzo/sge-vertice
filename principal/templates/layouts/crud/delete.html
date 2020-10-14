@@ -2,17 +2,17 @@
 
 <div class="modal-dialog">
     <div class="modal-content">
-        <form method="post" action="{% url model_name|add:'_delete' object.id %}">
+        <form method="post" action="{% url model_name|add:'_delete' object.pk %}">
             {% csrf_token %}
             <div class="modal-header">
                 <div class="row w-100 pl-3">
                     <div class="col-9">
-                        <h3 class="mb-0">Eliminar {{ verbose_name|title }} #{{ object.id }}</h3>
+                        <h3 class="mb-0">Eliminar {{ verbose_name|title }} #{{ object.pk }}</h3>
                     </div>
                     <div class="col-3 text-right" style="font-size: 1.3rem">
                         {% if request.current_app|read_perm:model_name in perms %}
                             <a class="mr-1"
-                               onclick="open_re_useful_modal(`{% url model_name|add:'_detail' object.id %}`)">
+                               onclick="open_re_useful_modal(`{% url model_name|add:'_detail' object.pk %}`)">
                                 <i class="fa fa-file text-secondary"></i>
                             </a>
                         {% endif %}

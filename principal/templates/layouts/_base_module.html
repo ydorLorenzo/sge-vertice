@@ -58,7 +58,7 @@
 
 {% block navbar_up %}
     <nav class="navbar navbar-expand-md navbar-dark navbar-modules light-gray py-0 mb-0" style="font-size: .6rem">
-        <a class="btn btn-sm {% if request.current_app == 'adm' or request.current_app == 'ges_trab' %}active{% endif %}" href="{% url 'rechum_home' %}">Capital Humano</a>
+        <a class="btn btn-sm {% if request.current_app == 'adm' or request.current_app == 'ges_trab' or request.current_app == 'capacitacion' %}active{% endif %}" href="{% url 'rechum_home' %}">Capital Humano</a>
         <a class="btn btn-sm {% if request.current_app == 'prenomina15' %}active{% endif %}" href="{% url 'home_pren15' %}">Prenómina 15</a>
         <a class="btn btn-sm {% if request.current_app == 'entrada_datos' %}active{% endif %}" href="{% url 'home_ent_dat' %}">Entrada de Datos</a>
         <a class="btn btn-sm {% if request.current_app == 'pr3' %}active{% endif %}" href="{% url 'home_pr3' %}">PR3</a>
