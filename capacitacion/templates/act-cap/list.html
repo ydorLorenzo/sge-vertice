@@ -14,8 +14,7 @@
     <th style="width: 6%">Fecha Fin</th>
 {% endblock table_header %}
 
-{% block table_body_outside %}
-    <tr>
+{% block table_body %}
     <td style="width: 6%">{{ item.codigo }}</td>
     <td style="width: 10%">{{ item.nombre }}</td>
     <td style="width: 10%">{{ item.tipo_actividad }}</td>
@@ -23,8 +22,7 @@
     <td style="width: 6%">{{ item.fecha_inicio|date:"d/m/Y" }}</td>
     <td style="width: 6%">{{ item.fecha_term|date:"d/m/Y" }}</td>
     {% submit_row %}
-    </tr>
-{% endblock table_body_outside %}
+{% endblock table_body %}
 
 {% block table_foot %}
     <th>Código</th>

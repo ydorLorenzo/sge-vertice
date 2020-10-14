@@ -46,7 +46,7 @@
                                     <tbody>
                                     {% for item in object_list %}
                                         {% block table_body_outside %}
-                                            <tr onclick="open_re_useful_modal(`{% url model_name|add:'_detail' item.id %}`)">
+                                            <tr onclick="open_re_useful_modal(`{% url model_name|add:'_detail' item.pk %}`)">
                                                 {% block table_body %}{% endblock %}
                                             </tr>
                                         {% endblock %}
