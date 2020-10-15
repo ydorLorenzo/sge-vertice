@@ -1,0 +1,100 @@
+[
+  {
+    "model": "capacitacion.modoformacion",
+    "fields": {
+      "codigo": "30",
+      "nombre": "Habilitación"
+    }
+  },
+  {
+    "model": "capacitacion.modoformacion",
+    "fields": {
+      "codigo": "02",
+      "nombre": "Perfeccionamiento"
+    }
+  },
+  {
+    "model": "capacitacion.modoformacion",
+    "fields": {
+      "codigo": "03",
+      "nombre": "Adiestramiento"
+    }
+  },
+  {
+    "model": "capacitacion.modoformacion",
+    "fields": {
+      "codigo": "04",
+      "nombre": "Entrenam Puesto Trabajo"
+    }
+  },
+  {
+    "model": "capacitacion.modoformacion",
+    "fields": {
+      "codigo": "05",
+      "nombre": "Curso de Postgrado"
+    }
+  },
+  {
+    "model": "capacitacion.modoformacion",
+    "fields": {
+      "codigo": "06",
+      "nombre": "Diplomado"
+    }
+  },
+  {
+    "model": "capacitacion.modoformacion",
+    "fields": {
+      "codigo": "07",
+      "nombre": "Maestría"
+    }
+  },
+  {
+    "model": "capacitacion.modoformacion",
+    "fields": {
+      "codigo": "08",
+      "nombre": "Doctorado"
+    }
+  },
+  {
+    "model": "capacitacion.modoformacion",
+    "fields": {
+      "codigo": "09",
+      "nombre": "Curso FC MINED"
+    }
+  },
+  {
+    "model": "capacitacion.modoformacion",
+    "fields": {
+      "codigo": "10",
+      "nombre": "Curso FC MES"
+    }
+  },
+  {
+    "model": "capacitacion.modoformacion",
+    "fields": {
+      "codigo": "11",
+      "nombre": "Curso Idioma Extranjero"
+    }
+  },
+  {
+    "model": "capacitacion.modoformacion",
+    "fields": {
+      "codigo": "12",
+      "nombre": "Curso Computación"
+    }
+  },
+  {
+    "model": "capacitacion.modoformacion",
+    "fields": {
+      "codigo": "13",
+      "nombre": "Entrenam en el Extranjero"
+    }
+  },
+  {
+    "model": "capacitacion.modoformacion",
+    "fields": {
+      "codigo": "25",
+      "nombre": "Otras Acciones"
+    }
+  }
+]
