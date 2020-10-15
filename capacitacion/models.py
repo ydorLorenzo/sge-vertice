@@ -19,6 +19,7 @@ class ModoFormacion(BaseUrls, models.Model):
         verbose_name = 'modo de formación'
         verbose_name_plural = 'modos de formación'
 
+
 class TipoActividadCapacitacion(BaseUrls, models.Model):
     nombre = models.CharField(max_length=150)
     codigo = models.CharField('código', max_length=3, primary_key=True)
@@ -32,6 +33,7 @@ class TipoActividadCapacitacion(BaseUrls, models.Model):
         default_permissions = ['read', 'add', 'delete', 'change', 'export', 'report']
         verbose_name = 'tipo de actividad'
         verbose_name_plural = 'tipos de actividades'
+
 
 class Tematica(BaseUrls, models.Model):
     nombre = models.CharField(max_length=150)
@@ -51,24 +53,25 @@ class ActividadCapacitacion(BaseUrls, models.Model):
     nombre = models.CharField(max_length=150)
     codigo = models.CharField('código', max_length=10, primary_key=True)
     tipo_actividad = models.ForeignKey(TipoActividadCapacitacion, on_delete=models.CASCADE, null=True)
-    tematica = models.ForeignKey(Tematica, on_delete=models.CASCADE, null=True)
-    institucion = models.CharField('institución', max_length=150, null=True)
-    lugar = models.CharField(max_length=100, null=True)
-    profesor = models.CharField(max_length=150, null=True)
+    tematica = models.ForeignKey(Tematica, on_delete=models.CASCADE, null=True, blank=True)
+    institucion = models.CharField('institución', max_length=150, null=True, blank=True)
+    lugar = models.CharField(max_length=100, null=True, blank=True)
+    profesor = models.CharField(max_length=150, null=True, blank=True)
     fecha_inicio = models.DateTimeField(null=True)
     fecha_term = models.DateTimeField(null=True)
     horas = models.PositiveIntegerField(null=True)
-    valor_mn = models.DecimalField(max_digits=10, decimal_places=2, null=True)
-    valor_usd = models.DecimalField(max_digits=10, decimal_places=2, null=True)
+    valor_mn = models.DecimalField(max_digits=10, decimal_places=2, default=0, null=True)
+    valor_usd = models.DecimalField(max_digits=10, decimal_places=2, default=0, null=True)
     history = auditlog_models.AuditlogHistoryField()
 
     def __str__(self):
-        return ' {} - {} '.format(self.codigo, self.nombre)
+        return '{} - {} '.format(self.tematica, self.nombre)
 
     class Meta:
         default_permissions = ['read', 'add', 'delete', 'change', 'export', 'report']
         verbose_name = 'actividad capacitación'
         verbose_name_plural = 'actividades capacitación'
+
 
 class ActividadCapacitacionTrabajadores(BaseUrls, models.Model):
     actividad = models.ForeignKey(ActividadCapacitacion, on_delete=models.CASCADE)
@@ -77,6 +80,9 @@ class ActividadCapacitacionTrabajadores(BaseUrls, models.Model):
     tomo = models.CharField(max_length=20, null=True)
     folio = models.CharField(max_length=20, null=True)
     history = auditlog_models.AuditlogHistoryField()
+
+    def __str__(self):
+        return "Evaluación: " + self.evaluacion
 
     class Meta:
         default_permissions = ['read', 'add', 'delete', 'change', 'export', 'report']
