@@ -17,6 +17,7 @@ urlpatterns = [
         path('subsidios/', decorator_include(login_required, 'subsidio.urls')),
         path('datos-prenomina/', decorator_include(login_required, 'datos_prenom.urls')),
         path('ausentismo/', decorator_include(login_required, 'ausentismo.urls')),
+        path('capacitacion/', decorator_include(login_required, 'capacitacion.urls')),
     ])),
     path('entrada-datos/', decorator_include(login_required, 'entrada_datos.urls')),
     path('facturacion/', decorator_include(login_required, 'facturacion.urls')),

@@ -174,19 +174,19 @@
             </ul>
         </li>
     {% endif %}
-    {% if user|has_module_perm:'ausentismo' %}
+    {% if user|has_module_perm:'capacitacion' %}
         <li>
             <a href="#submenuCapacitacion" class="dropdown-toggle"
                data-toggle="collapse"
-               aria-expanded="{% if request.current_app == 'ausentismo' %}true{% else %}false{% endif %}">
+               aria-expanded="{% if request.current_app == 'capacitacion' %}true{% else %}false{% endif %}">
                 <i class="fa fa-address-book"></i>
                 Capacitación
             </a>
-            <ul class="collapse list-unstyled {% if request.current_app == 'ausentismo' %}show{% endif %}"
+            <ul class="collapse list-unstyled {% if request.current_app == 'capacitacion' %}show{% endif %}"
                 id="submenuCapacitacion">
                 <li>
-                    <a class="{% if model_name == 'ausentismo' %}active{% endif %}"
-                       href="{% url 'trabajador_list' %}">
+                    <a class="{% if model_name == 'TipoActividadCapacitacion' %}active{% endif %}"
+                       href="{% url 'tipoactividadcapacitacion_list' %}">
                         Tipos de Actividad
                     </a>
                 </li>

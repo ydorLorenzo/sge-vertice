@@ -1,0 +1,159 @@
+{% extends base_module %}
+{% load sge_perms %}
+
+{% block content %}
+    {% with add_perm=request.current_app|add_perm:model_name delete_perm=request.current_app|delete_perm:model_name change_perm=request.current_app|change_perm:model_name read_perm=request.current_app|read_perm:model_name %}
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card shadow">
+                    <div class="card-header bg-white border-0">
+                        <div class="row align-items-center">
+                            <div class="col-6">
+                                <h3 class="mb-0">Listado de {{ verbose_name_plural|title }} {% block extra_title %}{% endblock %}</h3>
+                            </div>
+                            <div class="col-6 text-right">
+                                {% if add_perm in perms %}
+                                    <a href="{% url model_name|add:'_create' %}"
+                                       class="btn btn-sm btn-success font-smaller">
+                                        <i class="fa fa-plus mr-1"></i> Agregar
+                                    </a>
+                                {% endif %}
+                                {% block extra_buttons %}{% endblock %}
+                            </div>
+                        </div>
+                    </div>
+                    {% block filters %}{% endblock %}
+                    <div class="table-responsive">
+                        <div class="row">
+                            {% if errores %}
+                                <div class="alert alert-dismissible alert-danger mx-5">
+                                    <a class="ml-5 close" type="button" href="{% url model_name|add:'_list' %}">
+                                        <strong>&times;</strong>
+                                    </a>
+                                    <strong>Error:</strong> {% block delete_error_message %}{% endblock %}
+                                </div>
+                            {% endif %}
+                            <div class="col-12">
+                                <table id="table_list" class="display w-100" cellspacing="0">
+                                    <thead>
+                                    <tr>
+                                        {% block table_header %}{% endblock %}
+                                        {% if change_perm in perms or delete_perm in perms %}
+                                            <th scope="col" class="text-center" width="10%">Acciones</th>
+                                        {% endif %}
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for item in object_list %}
+                                        {% block table_body_outside %}
+                                            <tr onclick="open_re_useful_modal(`{% url model_name|add:'_detail' item.codigo %}`)">
+                                                {% block table_body %}{% endblock %}
+                                            </tr>
+                                        {% endblock %}
+                                    {% endfor %}
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        {% block table_foot %}{% endblock %}
+                                        {% if change_perm in perms or delete_perm in perms %}
+                                            <td></td>
+                                        {% endif %}
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endwith %}
+{% endblock %}
+
+{% block modals %}
+    <div id="re-useful" class="modal fade" role="dialog"></div>
+    {% block filter_modal %}{% endblock %}
+{% endblock %}
+
+{% block styles %}
+    {{ block.super }}
+
+    <style>
+
+        table.dataTable thead th, table.dataTable thead td {
+            padding: 5px 10px;
+        }
+
+        td a i.fa {
+            font-size: .7rem;
+        }
+
+        table th {
+            font-size: 1rem;
+        }
+
+        table td {
+            font-size: .9rem;
+        }
+
+        #table_list_wrapper {
+            border-color: #777;
+            background-color: #f6f9fc;
+            max-height: calc(100vh - 145px) !important;
+        }
+
+        .fg-toolbar.ui-toolbar.ui-widget-header.ui-helper-clearfix.ui-corner-tl.ui-corner-tr,
+        .fg-toolbar.ui-toolbar.ui-widget-header.ui-helper-clearfix.ui-corner-bl.ui-corner-br {
+            font-size: small;
+        }
+
+        .fg-toolbar.ui-toolbar.ui-widget-header.ui-helper-clearfix.ui-corner-bl.ui-corner-br > div {
+            margin-bottom: .8rem;
+        }
+    </style>
+{% endblock %}
+
+{% block javascript %}
+    {{ block.super }}
+
+    <script>
+        $(document).ready(function () {
+            // DataTable
+            var count = $("#table_list").find("tr:first td").length - 1;
+            var h = window.innerHeight;
+            console.log(h);
+            var table = $("#table_list").DataTable({
+                language: {
+                    url: '/static/localizacion/es_ES.json'
+                },
+                aaSorting: [],
+                scrollCollapse: true,
+                scrollY: h - 340,
+                paging: false,
+                columnDefs: [
+                    {searchable: false, orderable: false, targets: count}
+                ]
+            });
+
+            // Add bottom search
+            //$('#table_list').find('tfoot th').each(function () {
+            //    var title = $(this).text();
+            //    $(this).html('<input class="form-control p-1" type="text" style="font-size: small" placeholder="Buscar ' + title + '"/>');
+            //});
+
+            // Apply the search
+
+            table.columns().every(function () {
+                var that = this;
+
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
+        })
+    </script>
+{% endblock %}
