@@ -27,7 +27,7 @@ class TipoActividadCapacitacion(BaseUrls, models.Model):
     history = auditlog_models.AuditlogHistoryField()
 
     def __str__(self):
-        return self.nombre
+        return '{}'.format(self.nombre)
 
     class Meta:
         default_permissions = ['read', 'add', 'delete', 'change', 'export', 'report']
@@ -41,7 +41,7 @@ class Tematica(BaseUrls, models.Model):
     history = auditlog_models.AuditlogHistoryField()
 
     def __str__(self):
-        return self.nombre
+        return '{}'.format(self.nombre)
 
     class Meta:
         default_permissions = ['read', 'add', 'delete', 'change', 'export', 'report']

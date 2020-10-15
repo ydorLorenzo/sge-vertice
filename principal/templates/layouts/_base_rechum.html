@@ -182,17 +182,17 @@
                 <i class="fa fa-address-book"></i>
                 Capacitación
             </a>
-            <ul class="collapse list-unstyled {% if request.current_app == 'ausentismo' %}show{% endif %}"
+            <ul class="collapse list-unstyled {% if request.current_app == 'capacitacion' %}show{% endif %}"
                 id="submenuCapacitacion">
                 <li>
-                    <a class="{% if model_name == 'tipoactiviadcapacitacion' %}active{% endif %}"
-                       href="{% url 'unidadorg_list' %}">
+                    <a class="{% if model_name == 'tipoactividadcapacitacion' %}active{% endif %}"
+                       href="{% url 'tipoactividadcapacitacion_list' %}">
                         Tipos de Actividad
                     </a>
                 </li>
                 <li>
                     <a class="{% if model_name == 'modoformacion' %}active{% endif %}"
-                       href="{% url 'unidadorg_list' %}">
+                       href="{% url 'modoformacion_list' %}">
                         Modos de Formación
                     </a>
                 </li>
