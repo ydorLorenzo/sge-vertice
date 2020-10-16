@@ -37,8 +37,8 @@ class TipoActividadCapacitacion(BaseUrls, models.Model):
 
 class Tematica(BaseUrls, models.Model):
     nombre = models.CharField(max_length=150)
-    codigo = models.CharField('código', max_length=2, primary_key=True)
-    id = models.IntegerField('ID', default=1)
+    # codigo = models.CharField('código', max_length=2, primary_key=True)
+    id = models.AutoField('ID', null=False, unique=True, primary_key=True)
     history = auditlog_models.AuditlogHistoryField()
 
     def __str__(self):
