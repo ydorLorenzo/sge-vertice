@@ -51,6 +51,9 @@ class ModoFormacionDeleteView(SgeDeleteView):
     model = ModoFormacion
     success_url = reverse_lazy('modoformacion_list')
 
+# //////////////////////////////////////////////////////////////////////////
+# //////////////////////////////////////////////////////////////////////////
+# //////////////////////////////////////////////////////////////////////////
 
 # Tipos de Actividad de Capacitación
 # Listar
@@ -92,8 +95,9 @@ class TipoActividadCapacitacionDeleteView(SgeDeleteView):
     model = TipoActividadCapacitacion
     success_url = reverse_lazy('tipoactividadcapacitacion_list')
 
-
-
+# //////////////////////////////////////////////////////////////////////////
+# //////////////////////////////////////////////////////////////////////////
+# //////////////////////////////////////////////////////////////////////////
 
 # Actividad Capacitación
 # Listar
@@ -135,5 +139,51 @@ class ActividadCapacitacionDeleteView(SgeDeleteView):
     model = ActividadCapacitacion
     success_url = reverse_lazy('actividadcapacitacion_list')
 
+# //////////////////////////////////////////////////////////////////////////
+# //////////////////////////////////////////////////////////////////////////
+# //////////////////////////////////////////////////////////////////////////
 
+# Temática Capacitación
+# Listar
+class TematicaListView(SgeListView):
+    permission_required = 'capacitacion.read_tematica'
+    raise_exception = True
+    model = Tematica
+    template_name = 'tem-cap/list.html'
+
+
+# Crear
+class TematicaCreateView(SgeCreateView):
+    permission_required = 'capacitacion.add_tematica'
+    model = Tematica
+    fields = '__all__'
+    template_name = 'tem-cap/create.html'
+    success_url = reverse_lazy('tematica_create')
+
+
+# Editar
+class TematicaUpdateView(SgeUpdateView):
+    permission_required = 'capacitacion.change_tematica'
+    model = Tematica
+    fields = '__all__'
+    template_name = 'tem-cap/create.html'
+    success_url = reverse_lazy('tematica_list')
+
+
+# Detalle
+class TematicaDetailView(SgeDetailView):
+    permission_required = 'capacitacion.read_tematica'
+    model = Tematica
+    template_name = 'tem-cap/detail.html'
+
+
+# Delete
+class TematicaDeleteView(SgeDeleteView):
+    permission_required = 'capacitacion.delete_tematica'
+    model = Tematica
+    success_url = reverse_lazy('tematica_list')
+
+# //////////////////////////////////////////////////////////////////////////
+# //////////////////////////////////////////////////////////////////////////
+# //////////////////////////////////////////////////////////////////////////
 # todo Hacer el resto, más la lógica que pueda llevar!

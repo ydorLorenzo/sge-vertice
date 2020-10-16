@@ -25,6 +25,17 @@ urlpatterns = [
             path('<int:pk>/', views.TipoActividadCapacitacionDetailView.as_view(), name='tipoactividadcapacitacion_detail'),
             path('<int:pk>/actualizar/', views.TipoActividadCapacitacionUpdateView.as_view(), name='tipoactividadcapacitacion_update'),
             path('<int:pk>/eliminar/', views.TipoActividadCapacitacionDeleteView.as_view(), name='tipoactividadcapacitacion_delete')
+        ])),
+        path('tematica/', include([
+            path('', views.TematicaListView.as_view(), name='tematica_list'),
+            path('agregar/', views.TematicaCreateView.as_view(),
+                 name='tematica_create'),
+            path('<int:pk>/', views.TematicaDetailView.as_view(),
+                 name='tematica_detail'),
+            path('<int:pk>/actualizar/', views.TematicaUpdateView.as_view(),
+                 name='tematica_update'),
+            path('<int:pk>/eliminar/', views.TematicaDeleteView.as_view(),
+                 name='tematica_delete')
         ]))
     ]))
 ]
