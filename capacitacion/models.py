@@ -78,7 +78,7 @@ class Tematica(BaseUrls, models.Model):
 
 class Tematica_new(BaseUrls, models.Model):
     nombre = models.CharField(max_length=150)
-    codigo = models.PositiveIntegerField('código')
+    codigo = models.CharField('código', max_length=2)
     history = auditlog_models.AuditlogHistoryField()
 
     def __str__(self):
@@ -117,7 +117,7 @@ class ActividadCapacitacion_new(BaseUrls, models.Model):
     nombre = models.CharField(max_length=150)
     codigo = models.CharField('código', max_length=10)
     tipo_actividad = models.ForeignKey(TipoActividadCapacitacion_new, on_delete=models.CASCADE, null=True)
-    tematica = models.ForeignKey(Tematica_new, on_delete=models.CASCADE, null=True, blank=True)
+    tematica = models.ForeignKey(Tematica_new, on_delete=models.CASCADE, null=True)
     institucion = models.CharField('institución', max_length=150, null=True, blank=True)
     lugar = models.CharField(max_length=100, null=True, blank=True)
     profesor = models.CharField(max_length=150, null=True, blank=True)
@@ -127,6 +127,27 @@ class ActividadCapacitacion_new(BaseUrls, models.Model):
     valor_mn = models.DecimalField(max_digits=10, decimal_places=2, default=0, null=True)
     valor_usd = models.DecimalField(max_digits=10, decimal_places=2, default=0, null=True)
     history = auditlog_models.AuditlogHistoryField()
+
+    def __str__(self):
+        return '{} - {} '.format(self.tematica, self.nombre)
+
+    class Meta:
+        default_permissions = ['read', 'add', 'delete', 'change', 'export', 'report']
+        verbose_name = 'actividad capacitación'
+        verbose_name_plural = 'actividades capacitación'
+class ActividadCapacitacion_reload(BaseUrls, models.Model):
+    nombre = models.CharField(max_length=150, null=True, blank=True)
+    codigo = models.CharField(max_length=150, null=True, blank=True)
+    tipo_actividad = models.CharField(max_length=150, null=True, blank=True)
+    tematica = models.CharField(max_length=150, null=True, blank=True)
+    institucion = models.CharField(max_length=150, null=True, blank=True)
+    lugar = models.CharField(max_length=150, null=True, blank=True)
+    profesor = models.CharField(max_length=150, null=True, blank=True)
+    fecha_inicio = models.CharField(max_length=150, null=True, blank=True)
+    fecha_term = models.CharField(max_length=150, null=True, blank=True)
+    horas = models.CharField(max_length=150, null=True, blank=True)
+    valor_mn = models.CharField(max_length=150, null=True, blank=True)
+    valor_usd = models.CharField(max_length=150, null=True, blank=True)
 
     def __str__(self):
         return '{} - {} '.format(self.tematica, self.nombre)
