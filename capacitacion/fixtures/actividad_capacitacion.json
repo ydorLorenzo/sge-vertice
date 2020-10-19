@@ -1,6 +1,6 @@
 [
   {
-    "model": "capacitacion.actividadcapacitacion_new",
+    "model": "capacitacion.actividadcapacitacion",
     "fields": {
       "codigo": "2041",
       "tipo_actividad_id": "20",
