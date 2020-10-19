@@ -78,7 +78,7 @@ class Tematica(BaseUrls, models.Model):
 
 class Tematica_new(BaseUrls, models.Model):
     nombre = models.CharField(max_length=150)
-    codigo = models.CharField('código', max_length=2)
+    codigo = models.PositiveIntegerField('código')
     history = auditlog_models.AuditlogHistoryField()
 
     def __str__(self):
@@ -117,7 +117,7 @@ class ActividadCapacitacion_new(BaseUrls, models.Model):
     nombre = models.CharField(max_length=150)
     codigo = models.CharField('código', max_length=10)
     tipo_actividad = models.ForeignKey(TipoActividadCapacitacion_new, on_delete=models.CASCADE, null=True)
-    tematica = models.ForeignKey(Tematica_new, on_delete=models.CASCADE, null=True)
+    tematica = models.ForeignKey(Tematica_new, on_delete=models.CASCADE, null=True, blank=True)
     institucion = models.CharField('institución', max_length=150, null=True, blank=True)
     lugar = models.CharField(max_length=100, null=True, blank=True)
     profesor = models.CharField(max_length=150, null=True, blank=True)
