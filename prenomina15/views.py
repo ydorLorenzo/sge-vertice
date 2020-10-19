@@ -5,6 +5,7 @@ from .form import *
 from .models import Obra, Plano, Objeto, SalarioMax, Esp, Persona, Plan, Corte, Especial, Especialidad, Area, Trab, \
     Catalogo, Penalizaciones, Cortes_Penalizaciones, Cat, Obr, Etapas, Objetos
 import json
+from capacitacion.models import *
 from entrada_datos.models import Actividad
 from decimal import Decimal, ROUND_HALF_UP
 from .filters import PlanoFilter
