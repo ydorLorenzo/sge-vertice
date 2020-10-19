@@ -19,6 +19,19 @@ class ModoFormacion(BaseUrls, models.Model):
         verbose_name = 'modo de formación'
         verbose_name_plural = 'modos de formación'
 
+class ModoFormacion_new(BaseUrls, models.Model):
+    nombre = models.CharField(max_length=150)
+    codigo = models.CharField('código', max_length=5)
+    history = auditlog_models.AuditlogHistoryField()
+
+    def __str__(self):
+        return self.nombre
+
+    class Meta:
+        default_permissions = ['read', 'add', 'delete', 'change', 'export', 'report']
+        verbose_name = 'modo de formación'
+        verbose_name_plural = 'modos de formación'
+
 
 class TipoActividadCapacitacion(BaseUrls, models.Model):
     nombre = models.CharField(max_length=150)
