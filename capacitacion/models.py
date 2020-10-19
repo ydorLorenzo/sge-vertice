@@ -140,7 +140,7 @@ class ActividadCapacitacion_new(BaseUrls, models.Model):
 
 class ActividadCapacitacion_reload(BaseUrls, models.Model):
     nombre = models.CharField(max_length=150, null=True, blank=True)
-    codigo = models.CharField(max_length=150, null=True, blank=True)
+    codigo = models.CharField('código', max_length=10, primary_key=True)
     tipo_actividad = models.CharField(max_length=150, null=True, blank=True)
     tematica = models.CharField(max_length=150, null=True, blank=True)
     institucion = models.CharField(max_length=150, null=True, blank=True)
