@@ -78,7 +78,7 @@ class Tematica(BaseUrls, models.Model):
 
 class Tematica_new(BaseUrls, models.Model):
     nombre = models.CharField(max_length=150)
-    codigo = models.CharField('código', max_length=3)
+    codigo = models.CharField('código', max_length=2)
     history = auditlog_models.AuditlogHistoryField()
 
     def __str__(self):
