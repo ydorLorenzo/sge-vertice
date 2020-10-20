@@ -14,3 +14,4 @@ __pycache__/
 /principal/migrations/*
 /subsidio/migrations/*
 /capacitacion/migrations/*
+/capacitacion/fixtures/*
